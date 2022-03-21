@@ -1,0 +1,118 @@
+//? this screen is for holding the other main screen that will be controller by the bottom nav bar
+
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
+//! how to make my own icons using adobe xd then change the icon of menu to be one dash and a half
+
+import 'package:flutter/material.dart';
+import 'package:wallet_app/screens/home_screen/home_screen.dart';
+
+import '../../widgets/app_bar/my_app_bar.dart';
+import '../../widgets/bottom_nav_bar/bottom_nav_bar.dart';
+import 'home_screen/widgets/background.dart';
+
+const Duration _pageSliderDuration = Duration(milliseconds: 200);
+
+class HolderScreen extends StatefulWidget {
+  static const String routeName = '/holder-screen';
+  const HolderScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HolderScreen> createState() => _HolderScreenState();
+}
+
+class _HolderScreenState extends State<HolderScreen> {
+  //* these for controlling the current active tab on the bottom nav bar
+  int _activeBottomNavBarIndex = 2;
+  bool _apply = true;
+  void _setActiveNavBarIconIndex(int index) {
+    print('change active tab called with index $index');
+    if (_apply) {
+      _pageController.animateToPage(index,
+          duration: _pageSliderDuration, curve: Curves.easeIn);
+      setState(() {
+        _activeBottomNavBarIndex = index;
+        //* for changing the page when the current active index changes
+      });
+      //? this apply variable is to prevent another changing of the screens to happen before the animation finishes
+      //? cause when i change the page with the bottom nav bar the page viewer itself recall the changing of the active tab before the animation changes and that make a conflict
+      _apply = false;
+      Future.delayed(_pageSliderDuration).then((_) {
+        _apply = true;
+      });
+    }
+  }
+
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    _pageController = PageController(initialPage: _activeBottomNavBarIndex);
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+//* this is the build method of this widget
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      drawer: Drawer(
+        child: Container(
+          color: Colors.white,
+        ),
+      ),
+      //* this is the main stack that have all the content of home screen by showing every thing on each other as a stack
+      body: Stack(
+        children: [
+          Background(),
+          SafeArea(
+            child: Column(
+              children: [
+                //* this is a custom widget of app bar
+                //* not a real one but made of containers and paddings for more control
+                MyAppBar(),
+
+                Expanded(
+                  child: PageView(
+                    physics: BouncingScrollPhysics(),
+                    onPageChanged: (index) {
+                      return _setActiveNavBarIconIndex(index);
+                    },
+                    controller: _pageController,
+                    children: [
+                      Container(
+                        child: Text('Statistics page'),
+                      ),
+                      Container(
+                        child: Text('Profiles  page'),
+                      ),
+                      HomeScreen(),
+                      Container(
+                        child: Text('Transactions  page'),
+                      ),
+                      Container(
+                        child: Text('Settings  page'),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          //* this is the bottom nav bar that has all 5 main tabs
+          BottomNavBar(
+            activeIndex: _activeBottomNavBarIndex,
+            setActiveBottomNavBarIcon: _setActiveNavBarIconIndex,
+          ),
+        ],
+      ),
+    );
+  }
+}
