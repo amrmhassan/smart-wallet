@@ -27,7 +27,9 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
           child: Column(
             children: [
-              HomeHeading(),
+              HomeHeading(
+                title: 'Current Profile Name',
+              ),
               //* this has the summery of the current active profile like (outcome, income of this day or month or year..., and the current total amount that currently exist in the profile)
               ProfileSummary(),
               //? i commeted all of these but it is optional

@@ -6,6 +6,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:wallet_app/screens/home_screen/home_screen.dart';
+import 'package:wallet_app/screens/transactions_screen/transactions_screen.dart';
 
 import '../../widgets/app_bar/my_app_bar.dart';
 import '../../widgets/bottom_nav_bar/bottom_nav_bar.dart';
@@ -25,8 +26,9 @@ class _HolderScreenState extends State<HolderScreen> {
   //* these for controlling the current active tab on the bottom nav bar
   int _activeBottomNavBarIndex = 2;
   bool _apply = true;
+  late PageController _pageController;
+
   void _setActiveNavBarIconIndex(int index) {
-    print('change active tab called with index $index');
     if (_apply) {
       _pageController.animateToPage(index,
           duration: _pageSliderDuration, curve: Curves.easeIn);
@@ -42,8 +44,6 @@ class _HolderScreenState extends State<HolderScreen> {
       });
     }
   }
-
-  late PageController _pageController;
 
   @override
   void initState() {
@@ -80,6 +80,7 @@ class _HolderScreenState extends State<HolderScreen> {
                 MyAppBar(),
 
                 Expanded(
+                  //* main pages of the app
                   child: PageView(
                     physics: BouncingScrollPhysics(),
                     onPageChanged: (index) {
@@ -94,9 +95,7 @@ class _HolderScreenState extends State<HolderScreen> {
                         child: Text('Profiles  page'),
                       ),
                       HomeScreen(),
-                      Container(
-                        child: Text('Transactions  page'),
-                      ),
+                      TransactionsScreen(),
                       Container(
                         child: Text('Settings  page'),
                       ),

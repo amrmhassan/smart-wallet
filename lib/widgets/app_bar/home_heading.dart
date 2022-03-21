@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import '../../constants/styles.dart';
 
 class HomeHeading extends StatelessWidget {
+  final String title;
   const HomeHeading({
     Key? key,
+    required this.title,
   }) : super(key: key);
 
   @override
@@ -14,7 +16,7 @@ class HomeHeading extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       child: Text(
-        'Current Profile Name',
+        title,
         style: kHeadingTextStyle,
       ),
     );
