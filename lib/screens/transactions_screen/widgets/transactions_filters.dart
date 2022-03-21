@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../constants/sizes.dart';
 import 'choose_transaction_type_button.dart';
 
+const List<String> _transactionsFilters = ['All', 'Income', 'Outcome'];
+
 class TransactionsFilters extends StatelessWidget {
   final Function(int index) setActiveIcon;
   final int activeIconIndex;
@@ -22,29 +24,16 @@ class TransactionsFilters extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          ChooseTransactionTypeButton(
-            title: 'All',
+        children: _transactionsFilters.map((e) {
+          int index = _transactionsFilters.indexOf(e);
+          return ChooseTransactionTypeButton(
+            title: e,
             onTap: () {
-              setActiveIcon(0);
+              setActiveIcon(index);
             },
-            active: activeIconIndex == 0,
-          ),
-          ChooseTransactionTypeButton(
-            title: 'Income',
-            onTap: () {
-              setActiveIcon(1);
-            },
-            active: activeIconIndex == 1,
-          ),
-          ChooseTransactionTypeButton(
-            title: 'Outcome',
-            onTap: () {
-              setActiveIcon(2);
-            },
-            active: activeIconIndex == 2,
-          ),
-        ],
+            active: activeIconIndex == index,
+          );
+        }).toList(),
       ),
     );
   }
