@@ -1,10 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 import 'package:wallet_app/constants/colors.dart';
 import 'package:wallet_app/constants/sizes.dart';
 import 'package:wallet_app/constants/styles.dart';
 import 'package:wallet_app/constants/types.dart';
+import 'package:wallet_app/models/transaction_model.dart';
+import 'package:wallet_app/providers/transactions_provider.dart';
 import 'package:wallet_app/widgets/global/line.dart';
 
 import '../../widgets/app_bar/my_app_bar.dart';
@@ -28,6 +32,30 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     setState(() {
       currentActiveTransactionType = transactionType;
     });
+  }
+
+  void addTransaction() {
+    String title = _titleController.text;
+    double amount = double.tryParse(_priceController.text) ?? 0;
+    String description = _descriptionController.text;
+    DateTime createdAt = DateTime.now();
+    String id = Uuid().v4();
+    TransactionType transactionType = currentActiveTransactionType;
+    double totalMoney =
+        Provider.of<TransactionProvider>(context, listen: false).totalMoney;
+    double ratioToTotal = amount / totalMoney;
+    TransactionModel newTransaction = TransactionModel(
+      id: id,
+      title: title,
+      description: description,
+      amount: amount,
+      createdAt: createdAt,
+      transactionType: transactionType,
+      ratioToTotal: totalMoney == 0 ? 1 : ratioToTotal,
+    );
+
+    Provider.of<TransactionProvider>(context, listen: false)
+        .addTransaction(newTransaction);
   }
 
   //* text inputs controller
@@ -101,9 +129,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     height: 60,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(primary: kMainColor),
-                      onPressed: () {
-                        //? here i will add the adding new transaction logic (for the providers)
-                      },
+                      onPressed: addTransaction,
                       child: Text(
                         'Save',
                         style: TextStyle(

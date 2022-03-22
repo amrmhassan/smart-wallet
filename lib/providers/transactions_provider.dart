@@ -27,8 +27,22 @@ class TransactionProvider extends ChangeNotifier {
 
 //* for adding new transaction
   void addTransaction(TransactionModel transaction) {
+    print('Now we have ${_transactions.length} transactions');
     _transactions.add(transaction);
+
     notifyListeners();
+  }
+
+  //* for getting the current money in the profile
+  double get totalMoney {
+    double totalAmount = _transactions.fold<double>(
+      0,
+      (previousValue, element) =>
+          element.transactionType == TransactionType.income
+              ? previousValue + element.amount
+              : previousValue - element.amount,
+    );
+    return totalAmount;
   }
 
 //* for getting the transactions from the database

@@ -1,4 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:wallet_app/providers/transactions_provider.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
@@ -10,8 +14,9 @@ class TotalAmountInProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'Total : 1,250 \$',
+    final totalAmount = Provider.of<TransactionProvider>(context).totalMoney;
+    return Text(
+      'Total : $totalAmount \$',
       style: TextStyle(
         color: kMainColor,
         fontSize: kDefaultInfoTextSize,
