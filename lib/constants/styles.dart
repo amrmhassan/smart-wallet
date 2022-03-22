@@ -47,3 +47,8 @@ BoxShadow kCardBoxShadow = BoxShadow(
   blurRadius: 6,
   color: kMainColor.withOpacity(0.2),
 );
+BoxShadow kCardHeavyBoxShadow = BoxShadow(
+  offset: const Offset(3, 3),
+  blurRadius: 6,
+  color: kMainColor.withOpacity(0.5),
+);

@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:wallet_app/constants/sizes.dart';
+import 'package:wallet_app/constants/styles.dart';
 import 'package:wallet_app/widgets/app_bar/home_heading.dart';
 
 import 'widgets/profile_summary.dart';
@@ -32,6 +33,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               //* this has the summery of the current active profile like (outcome, income of this day or month or year..., and the current total amount that currently exist in the profile)
               ProfileSummary(),
+              Container(
+                margin: EdgeInsets.only(bottom: 10, left: 15),
+                width: double.infinity,
+                child: Text(
+                  'Quick Actions',
+                  style: kParagraphTextStyle,
+                ),
+              ),
               //? i commeted all of these but it is optional
               //* this height is added as a separator between the profile summary and the horizontal line
               // SizedBox(

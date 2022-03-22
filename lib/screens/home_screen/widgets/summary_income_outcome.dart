@@ -1,8 +1,14 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:wallet_app/models/transaction_model.dart';
+import 'package:wallet_app/providers/transactions_provider.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
+import '../../../utils/transactions_utils.dart';
 
 class SummaryIncomeOutcome extends StatelessWidget {
   const SummaryIncomeOutcome({
@@ -11,6 +17,7 @@ class SummaryIncomeOutcome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final transactionData = Provider.of<TransactionProvider>(context);
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(
@@ -20,9 +27,9 @@ class SummaryIncomeOutcome extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
-                  '12,250 \$',
+                  '${doubleToString(transactionData.totalIncome)} \$',
                   style: TextStyle(
                     color: kIncomeColor,
                     fontWeight: FontWeight.bold,
@@ -42,9 +49,9 @@ class SummaryIncomeOutcome extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
-                  '11,000 \$',
+                  '${doubleToString(transactionData.totalOutcome)} \$',
                   style: TextStyle(
                     color: kOutcomeColor,
                     fontWeight: FontWeight.bold,

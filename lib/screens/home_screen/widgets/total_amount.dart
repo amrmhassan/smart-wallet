@@ -6,6 +6,7 @@ import 'package:wallet_app/providers/transactions_provider.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
+import '../../../utils/transactions_utils.dart';
 
 class TotalAmountInProfile extends StatelessWidget {
   const TotalAmountInProfile({
@@ -16,7 +17,7 @@ class TotalAmountInProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     final totalAmount = Provider.of<TransactionProvider>(context).totalMoney;
     return Text(
-      'Total : $totalAmount \$',
+      'Total : ${doubleToString(totalAmount)} \$',
       style: TextStyle(
         color: kMainColor,
         fontSize: kDefaultInfoTextSize,

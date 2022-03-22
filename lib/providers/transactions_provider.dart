@@ -1,36 +1,63 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:wallet_app/constants/types.dart';
 import 'package:wallet_app/models/transaction_model.dart';
 
-import '../constants/transactions_constant.dart';
-
 class TransactionProvider extends ChangeNotifier {
-  //? transactions stuff
+  //? a) transactions stuff
   List<TransactionModel> _transactions = [];
 
-//* transactions getter
+//? 1- getting transactions, with multiple possibilities
+//* for getting the income transactions only
+  List<TransactionModel> get _incomeTransactions {
+    return [
+      ..._transactions
+          .where((element) => element.transactionType == TransactionType.income)
+    ];
+  }
+
+//* for getting the outcome transactions only
+  List<TransactionModel> get _outcomeTransactions {
+    return [
+      ..._transactions.where(
+          (element) => element.transactionType == TransactionType.outcome)
+    ];
+  }
+
+//* for getting transactions depending on the current chosen transaction type
   List<TransactionModel> get displayedTransactions {
     if (currentActiveTransactionType == TransactionType.income) {
-      return [
-        ..._transactions.where(
-            (element) => element.transactionType == TransactionType.income)
-      ];
+      return _incomeTransactions;
     } else if (currentActiveTransactionType == TransactionType.outcome) {
-      return [
-        ..._transactions.where(
-            (element) => element.transactionType == TransactionType.outcome)
-      ];
+      return _outcomeTransactions;
     } else {
       return [..._transactions];
     }
   }
 
-//* for adding new transaction
-  void addTransaction(TransactionModel transaction) {
-    print('Now we have ${_transactions.length} transactions');
-    _transactions.add(transaction);
+//* for getting all transactions no matter it's type
+  List<TransactionModel> get getAllTransactions {
+    return [..._transactions];
+  }
 
-    notifyListeners();
+//? 2- for getting  calculations on the transactions
+  //* for getting the total income
+  double get totalIncome {
+    double totalIncomeAmount = _incomeTransactions.fold<double>(
+      0,
+      (previousValue, element) => previousValue + element.amount,
+    );
+    return totalIncomeAmount;
+  }
+
+  //* for getting the total outcome
+  double get totalOutcome {
+    double totalIncomeAmount = _outcomeTransactions.fold<double>(
+      0,
+      (previousValue, element) => previousValue + element.amount,
+    );
+    return totalIncomeAmount;
   }
 
   //* for getting the current money in the profile
@@ -45,11 +72,20 @@ class TransactionProvider extends ChangeNotifier {
     return totalAmount;
   }
 
-//* for getting the transactions from the database
-  void fetchAndUpdateTransactions() {
-    _transactions = transactionsConstant;
+  //? 3- methods to control the transactions
+//* for adding new transaction
+  void addTransaction(TransactionModel transaction) {
+    if (transaction.amount > totalMoney &&
+        transaction.transactionType == TransactionType.outcome) {
+      throw Exception(
+          'Outcome Transaction is larger than the total amount of the money');
+    }
+    _transactions.add(transaction);
     notifyListeners();
   }
+
+//* for getting the transactions from the database
+  void fetchAndUpdateTransactions() {}
 
 //* for deleting a transaction
   void deleteTransaction(String id) {
@@ -66,7 +102,7 @@ class TransactionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //? transaction type stuff
+  //? b) transaction type stuff
 
   TransactionType currentActiveTransactionType = TransactionType.all;
   void setCurrentActiveTransactionType(TransactionType transactionType) {

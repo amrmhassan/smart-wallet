@@ -18,7 +18,13 @@ import 'widgets/right_side_add_transaction.dart';
 
 class AddTransactionScreen extends StatefulWidget {
   static const String routeName = '/add-transaction-screen';
-  const AddTransactionScreen({Key? key}) : super(key: key);
+  //* to differentiate between adding new transaction and editting existing one
+  final bool addNewTransaction;
+
+  const AddTransactionScreen({
+    Key? key,
+    this.addNewTransaction = false,
+  }) : super(key: key);
 
   @override
   State<AddTransactionScreen> createState() => _AddTransactionScreenState();
@@ -35,15 +41,25 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   }
 
   void addTransaction() {
-    String title = _titleController.text;
+    String title =
+        _titleController.text.isEmpty ? 'Empty Title' : _titleController.text;
     double amount = double.tryParse(_priceController.text) ?? 0;
-    String description = _descriptionController.text;
+    String description = _descriptionController.text.isEmpty
+        ? 'Empty Description'
+        : _descriptionController.text;
     DateTime createdAt = DateTime.now();
     String id = Uuid().v4();
     TransactionType transactionType = currentActiveTransactionType;
     double totalMoney =
         Provider.of<TransactionProvider>(context, listen: false).totalMoney;
+    //* this line is to ensure
+    totalMoney = transactionType == TransactionType.income
+        ? totalMoney + amount
+        : totalMoney - amount;
     double ratioToTotal = amount / totalMoney;
+    //* this line is to ensure
+    ratioToTotal = ratioToTotal == double.infinity ? 1 : ratioToTotal;
+
     TransactionModel newTransaction = TransactionModel(
       id: id,
       title: title,
@@ -51,7 +67,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       amount: amount,
       createdAt: createdAt,
       transactionType: transactionType,
-      ratioToTotal: totalMoney == 0 ? 1 : ratioToTotal,
+      ratioToTotal: ratioToTotal,
     );
 
     Provider.of<TransactionProvider>(context, listen: false)

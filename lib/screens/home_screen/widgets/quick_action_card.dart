@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:wallet_app/constants/colors.dart';
 import 'package:wallet_app/constants/sizes.dart';
 import 'package:wallet_app/constants/types.dart';
+import 'package:wallet_app/utils/transactions_utils.dart';
 
 class QuickActionCard extends StatelessWidget {
   final TransactionType transactionType;
   final String title;
   final String description;
-  final String amount;
+  final double amount;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
 
@@ -85,7 +86,7 @@ class QuickActionCard extends StatelessWidget {
                     //   ),
                     // ),
                     Text(
-                      '$amount \$',
+                      '${doubleToString(amount)} \$',
                       style: TextStyle(
                         color: transactionType == TransactionType.income
                             ? kIncomeColor

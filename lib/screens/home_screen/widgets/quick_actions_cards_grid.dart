@@ -10,7 +10,7 @@ const List<Map<String, dynamic>> _demoQuickActions = [
   {
     'title': 'This is a title',
     'desc': 'This is a description, of the quick action',
-    'amount': 52,
+    'amount': 52.00,
     'type': TransactionType.income,
   },
   {
@@ -73,7 +73,8 @@ class QuickActionsCardsGrid extends StatelessWidget {
             itemCount: _demoQuickActions.length,
             itemBuilder: (ctx, index) {
               return QuickActionCard(
-                amount: _demoQuickActions[index]['amount'].toString(),
+                //* i tried 1.00 to convert it to a double
+                amount: _demoQuickActions[index]['amount'] * 1.00,
                 title: _demoQuickActions[index]['title'],
                 description: _demoQuickActions[index]['desc'],
                 transactionType: _demoQuickActions[index]['type'],

@@ -8,6 +8,7 @@ import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
 import '../../../constants/types.dart';
 import '../../../models/transaction_model.dart';
+import '../../../utils/transactions_utils.dart';
 import 'transaction_action_button.dart';
 
 class TranscationCard extends StatelessWidget {
@@ -51,6 +52,7 @@ class TranscationCard extends StatelessWidget {
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 transaction.title,
@@ -60,7 +62,7 @@ class TranscationCard extends StatelessWidget {
                 height: kDefaultPadding / 4,
               ),
               Text(
-                '${transaction.amount.toStringAsFixed(2)} \$',
+                '${doubleToString(transaction.amount)} \$',
                 style: kSmallTextPrimaryColorStyle,
               ),
             ],

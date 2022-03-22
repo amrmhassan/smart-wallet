@@ -1,12 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/constants/colors.dart';
 import 'package:wallet_app/constants/sizes.dart';
-import 'package:wallet_app/constants/styles.dart';
-import 'package:wallet_app/constants/types.dart';
 import 'package:wallet_app/models/transaction_model.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
 import 'package:wallet_app/widgets/app_bar/home_heading.dart';
@@ -26,9 +22,10 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   void initState() {
     super.initState();
     //* i needed the trick of duration zero here
-    Future.delayed(Duration.zero).then((value) =>
-        Provider.of<TransactionProvider>(context, listen: false)
-            .fetchAndUpdateTransactions());
+    Future.delayed(Duration.zero).then(
+      (value) => Provider.of<TransactionProvider>(context, listen: false)
+          .fetchAndUpdateTransactions(),
+    );
   }
 
 //* this is the build method of this widget
@@ -36,7 +33,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   Widget build(BuildContext context) {
     List<TransactionModel> _transactions = Provider.of<TransactionProvider>(
       context,
-    ).displayedTransactions;
+    ).displayedTransactions.reversed.toList();
 
     return Stack(
       children: [

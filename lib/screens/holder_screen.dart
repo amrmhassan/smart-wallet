@@ -5,11 +5,15 @@
 //! how to make my own icons using adobe xd then change the icon of menu to be one dash and a half
 
 import 'package:flutter/material.dart';
+import 'package:wallet_app/constants/colors.dart';
+import 'package:wallet_app/constants/sizes.dart';
+import 'package:wallet_app/constants/styles.dart';
 import 'package:wallet_app/screens/home_screen/home_screen.dart';
 import 'package:wallet_app/screens/transactions_screen/transactions_screen.dart';
 
 import '../../widgets/app_bar/my_app_bar.dart';
 import '../../widgets/bottom_nav_bar/bottom_nav_bar.dart';
+import '../widgets/global/add_quick_action_button.dart';
 import 'home_screen/widgets/background.dart';
 
 const Duration _pageSliderDuration = Duration(milliseconds: 200);
@@ -63,6 +67,7 @@ class _HolderScreenState extends State<HolderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
+
       drawer: Drawer(
         child: Container(
           color: Colors.white,
@@ -94,7 +99,15 @@ class _HolderScreenState extends State<HolderScreen> {
                       Container(
                         child: Text('Profiles  page'),
                       ),
-                      HomeScreen(),
+                      Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          HomeScreen(),
+                          //? this floating action button will be hidden when scrolling down
+                          //* floating action button for adding new quick action
+                          AddQuickActionButton(),
+                        ],
+                      ),
                       TransactionsScreen(),
                       Container(
                         child: Text('Settings  page'),
