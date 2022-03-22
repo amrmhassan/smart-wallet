@@ -26,7 +26,7 @@ class ChooseTransactionTypeButton extends StatelessWidget {
           vertical: kDefaultVerticalPadding / 3,
         ),
         decoration: BoxDecoration(
-          color: active ? kMainColor : null,
+          color: active ? kMainColor : Colors.white,
           borderRadius: BorderRadius.circular(
             kDefaultBorderRadius,
           ),

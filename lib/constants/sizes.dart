@@ -2,6 +2,7 @@
 const double kDefaultIconSize = 30;
 const double kMediumIconSize = 25;
 const double kSmallIconSize = 20;
+const double kUltraSmallIconSize = 18;
 
 //* padding default sizes
 const double kDefaultPadding = 30;

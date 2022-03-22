@@ -7,6 +7,8 @@ class TransactionModel {
   DateTime createdAt;
   double amount;
   TransactionType transactionType;
+  //* this property i will need to provide the ratio of this transaction to the total amount of money i have right now in this profile
+  double ratioToTotal;
 
   TransactionModel({
     required this.id,
@@ -15,5 +17,6 @@ class TransactionModel {
     required this.amount,
     required this.createdAt,
     required this.transactionType,
+    required this.ratioToTotal,
   });
 }

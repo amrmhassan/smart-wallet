@@ -1,22 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:wallet_app/constants/types.dart';
+import 'package:wallet_app/providers/transactions_provider.dart';
 
 import '../../../constants/sizes.dart';
 import 'choose_transaction_type_button.dart';
 
-const List<String> _transactionsFilters = ['All', 'Income', 'Outcome'];
+const List<Map<String, dynamic>> _transactionsFilters = [
+  {
+    'title': 'All',
+    'type': TransactionType.all,
+  },
+  {
+    'title': 'Income',
+    'type': TransactionType.income,
+  },
+  {
+    'title': 'Outcome',
+    'type': TransactionType.outcome,
+  },
+];
 
 class TransactionsFilters extends StatelessWidget {
-  final Function(int index) setActiveIcon;
-  final int activeIconIndex;
-
   const TransactionsFilters({
     Key? key,
-    required this.setActiveIcon,
-    required this.activeIconIndex,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final transactionData = Provider.of<TransactionProvider>(context);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: kDefaultHorizontalPadding,
@@ -25,13 +37,12 @@ class TransactionsFilters extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: _transactionsFilters.map((e) {
-          int index = _transactionsFilters.indexOf(e);
           return ChooseTransactionTypeButton(
-            title: e,
+            title: e['title'],
             onTap: () {
-              setActiveIcon(index);
+              transactionData.setCurrentActiveTransactionType(e['type']);
             },
-            active: activeIconIndex == index,
+            active: transactionData.currentActiveTransactionType == e['type'],
           );
         }).toList(),
       ),

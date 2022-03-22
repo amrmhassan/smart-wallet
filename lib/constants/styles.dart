@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'colors.dart';
 
+//* for text styles
 const TextStyle kHeadingTextStyle = TextStyle(
   color: kMainColor,
   fontSize: 20,
@@ -10,7 +10,7 @@ const TextStyle kHeadingTextStyle = TextStyle(
 );
 const TextStyle kParagraphTextStyle = TextStyle(
   color: kMainColor,
-  fontSize: 18,
+  fontSize: 16,
   fontWeight: FontWeight.bold,
 );
 const TextStyle kSmallTextPrimaryColorStyle = TextStyle(
@@ -24,6 +24,7 @@ const TextStyle kSmallTextWhiteColorStyle = TextStyle(
   fontWeight: FontWeight.normal,
 );
 
+//* for shadows
 BoxShadow kDefaultBoxShadow = BoxShadow(
   offset: const Offset(3, 3),
   blurRadius: 25,
