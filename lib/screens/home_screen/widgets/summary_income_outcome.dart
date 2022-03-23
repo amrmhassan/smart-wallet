@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/models/transaction_model.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
 
 import '../../../constants/colors.dart';

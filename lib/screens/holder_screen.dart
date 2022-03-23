@@ -5,14 +5,14 @@
 //! how to make my own icons using adobe xd then change the icon of menu to be one dash and a half
 
 import 'package:flutter/material.dart';
-import 'package:wallet_app/constants/colors.dart';
-import 'package:wallet_app/constants/sizes.dart';
-import 'package:wallet_app/constants/styles.dart';
+import 'package:provider/provider.dart';
+import 'package:wallet_app/providers/quick_actions_provider.dart';
 import 'package:wallet_app/screens/home_screen/home_screen.dart';
 import 'package:wallet_app/screens/transactions_screen/transactions_screen.dart';
 
 import '../../widgets/app_bar/my_app_bar.dart';
 import '../../widgets/bottom_nav_bar/bottom_nav_bar.dart';
+import '../providers/transactions_provider.dart';
 import '../widgets/global/add_quick_action_button.dart';
 import 'home_screen/widgets/background.dart';
 
@@ -52,7 +52,16 @@ class _HolderScreenState extends State<HolderScreen> {
   @override
   void initState() {
     _pageController = PageController(initialPage: _activeBottomNavBarIndex);
+    //* i needed the trick of duration zero here
+    //* here i will fetch and update the transactions
+    Future.delayed(Duration.zero).then((value) async {
+      //* i forgot to add the await
+      await Provider.of<TransactionProvider>(context, listen: false)
+          .fetchAndUpdateTransactions();
 
+      await Provider.of<QuickActionsProvider>(context, listen: false)
+          .fetchAndUpdateQuickActions();
+    });
     super.initState();
   }
 

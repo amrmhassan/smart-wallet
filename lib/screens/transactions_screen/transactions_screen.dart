@@ -19,16 +19,6 @@ class TransactionsScreen extends StatefulWidget {
 }
 
 class _TransactionsScreenState extends State<TransactionsScreen> {
-  @override
-  void initState() {
-    super.initState();
-    //* i needed the trick of duration zero here
-    Future.delayed(Duration.zero).then(
-      (value) => Provider.of<TransactionProvider>(context, listen: false)
-          .fetchAndUpdateTransactions(),
-    );
-  }
-
 //* this is the build method of this widget
   @override
   Widget build(BuildContext context) {

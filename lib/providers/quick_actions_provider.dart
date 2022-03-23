@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:wallet_app/constants/db_constants.dart';
 import 'package:wallet_app/constants/types.dart';
 import 'package:wallet_app/models/transaction_model.dart';
+
+import '../helpers/db_helper.dart';
 
 class QuickActionsProvider extends ChangeNotifier {
   //? a) quick actions stuff
@@ -42,14 +45,57 @@ class QuickActionsProvider extends ChangeNotifier {
 
   //? 3- methods to control the quickActions
 //* for adding new quick Actions
-  void addQuickAction(TransactionModel quickActionsModel) {
-    print('Adding quick action');
+  Future<void> addQuickAction(TransactionModel quickActionsModel) async {
+    //* here i will add the new transaction to the database
+    try {
+      await DBHelper.insert(quickActionsTableName, {
+        'id': quickActionsModel.id,
+        'title': quickActionsModel.title,
+        'description': quickActionsModel.description,
+        'amount': quickActionsModel.amount.toString(),
+        'createdAt': quickActionsModel.createdAt.toIso8601String(),
+        'transactionType':
+            quickActionsModel.transactionType == TransactionType.income
+                ? 'income'
+                : 'outcome',
+        'ratioToTotal': quickActionsModel.ratioToTotal.toString(),
+      });
+    } catch (error) {
+      print('Error inserting new transaction , check the transaction provider');
+      rethrow;
+    }
     _quickActions.add(quickActionsModel);
     notifyListeners();
   }
 
 //* for getting the quickActions from the database
-  void fetchAndUpdateQuickActions() {}
+  Future<void> fetchAndUpdateQuickActions() async {
+    try {
+      List<Map<String, dynamic>> data =
+          await DBHelper.getData(quickActionsTableName);
+
+      List<TransactionModel> fetchedQuickActions = data
+          .map((quickAction) => TransactionModel(
+                id: quickAction['id'],
+                title: quickAction['title'],
+                description: quickAction['description'],
+                amount: double.parse(quickAction['amount']),
+                createdAt: DateTime.parse(quickAction['createdAt']),
+                transactionType: quickAction['transactionType'] == 'income'
+                    ? TransactionType.income
+                    : TransactionType.outcome,
+                ratioToTotal: double.parse(
+                  quickAction['ratioToTotal'],
+                ),
+              ))
+          .toList();
+      _quickActions = fetchedQuickActions;
+      notifyListeners();
+    } catch (error) {
+      print('Error fetching quick actions from the database');
+      // rethrow;
+    }
+  }
 
 //* for deleting a quickActions
   void deleteQuickActions(String id) {

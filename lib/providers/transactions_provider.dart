@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
+import 'package:wallet_app/constants/db_constants.dart';
 import 'package:wallet_app/constants/types.dart';
+import 'package:wallet_app/helpers/db_helper.dart';
 import 'package:wallet_app/models/transaction_model.dart';
 
 class TransactionProvider extends ChangeNotifier {
@@ -75,24 +77,42 @@ class TransactionProvider extends ChangeNotifier {
 
   //? 3- methods to control the transactions
 //* for adding new transaction
-  void addTransaction(String title, String description, double amount,
-      TransactionType transactionType) {
+  Future<void> addTransaction(String title, String description, double amount,
+      TransactionType transactionType) async {
+    //* checking if the transaction added will make the current balance negative
     if (amount > totalMoney && transactionType == TransactionType.outcome) {
       throw Exception(
           'Outcome Transaction is larger than the total amount of the money');
     }
 
-    DateTime createdAt = DateTime.now();
+    //* initializing the transaction data like (createdAt, id, ratioToTotal...)
     String id = const Uuid().v4();
-
+    DateTime createdAt = DateTime.now();
     double newTotalMoney = totalMoney;
-    //* this line is to ensure
+    //* this line is to ensure that ......
     newTotalMoney = transactionType == TransactionType.income
         ? totalMoney + amount
         : totalMoney - amount;
     double ratioToTotal = amount / newTotalMoney;
-    //* this line is to ensure
+    //* this line is to ensure that .......
     ratioToTotal = ratioToTotal == double.infinity ? 1 : ratioToTotal;
+
+    //* here i will add the new transaction to the database
+    try {
+      await DBHelper.insert(transactionsTableName, {
+        'id': id,
+        'title': title,
+        'description': description,
+        'amount': amount.toString(),
+        'createdAt': createdAt.toIso8601String(),
+        'transactionType':
+            transactionType == TransactionType.income ? 'income' : 'outcome',
+        'ratioToTotal': ratioToTotal.toString(),
+      });
+    } catch (error) {
+      print('Error inserting new transaction , check the transaction provider');
+      rethrow;
+    }
 
     TransactionModel newTransaction = TransactionModel(
       id: id,
@@ -108,7 +128,28 @@ class TransactionProvider extends ChangeNotifier {
   }
 
 //* for getting the transactions from the database
-  void fetchAndUpdateTransactions() {}
+  Future<void> fetchAndUpdateTransactions() async {
+    List<Map<String, dynamic>> data =
+        await DBHelper.getData(transactionsTableName);
+
+    List<TransactionModel> fetchedTransactions = data
+        .map((transaction) => TransactionModel(
+              id: transaction['id'],
+              title: transaction['title'],
+              description: transaction['description'],
+              amount: double.parse(transaction['amount']),
+              createdAt: DateTime.parse(transaction['createdAt']),
+              transactionType: transaction['transactionType'] == 'income'
+                  ? TransactionType.income
+                  : TransactionType.outcome,
+              ratioToTotal: double.parse(
+                transaction['ratioToTotal'],
+              ),
+            ))
+        .toList();
+    _transactions = fetchedTransactions;
+    notifyListeners();
+  }
 
 //* for deleting a transaction
   void deleteTransaction(String id) {
