@@ -4,3 +4,5 @@
 # add a quick actions screen so the user can preview them in a separate screen with the income and outcome when clicking the quick actions Text above the quick actions
 
 # make the quick actions in the home screen to be income in a column and outcome in another column=> this is experimental and can be removed if needed
+
+# add the ability for a transaction to know if it was added by a quick action or not

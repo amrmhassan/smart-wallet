@@ -3,3 +3,9 @@ enum TransactionType {
   income,
   outcome,
 }
+
+enum SnackBarType {
+  info,
+  error,
+  success,
+}

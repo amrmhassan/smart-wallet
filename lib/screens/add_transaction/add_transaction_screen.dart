@@ -10,6 +10,7 @@ import 'package:wallet_app/constants/types.dart';
 import 'package:wallet_app/models/transaction_model.dart';
 import 'package:wallet_app/providers/quick_actions_provider.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
+import 'package:wallet_app/utils/transactions_utils.dart';
 import 'package:wallet_app/widgets/global/line.dart';
 
 import '../../widgets/app_bar/my_app_bar.dart';
@@ -40,7 +41,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   }
 
 //? this function may add a transaction or a quick action depending on the value of addQuickAction
-  void addTransaction(bool addQuickAction) {
+  void addTransaction(bool addQuickAction) async {
     String title =
         _titleController.text.isEmpty ? 'Empty Title' : _titleController.text;
     double amount = double.tryParse(_priceController.text) ?? 0;
@@ -73,12 +74,22 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         transactionType: transactionType,
         ratioToTotal: ratioToTotal,
       );
-      Provider.of<QuickActionsProvider>(context, listen: false)
-          .addQuickAction(newTransaction);
+      try {
+        await Provider.of<QuickActionsProvider>(context, listen: false)
+            .addQuickAction(newTransaction);
+        showSnackBar(context, 'Quick Action Added', SnackBarType.success);
+      } catch (error) {
+        showSnackBar(context, error.toString(), SnackBarType.error);
+      }
     } else {
-      //* here the code for adding a new transaction
-      Provider.of<TransactionProvider>(context, listen: false)
-          .addTransaction(title, description, amount, transactionType);
+      try {
+        //* here the code for adding a new transaction
+        await Provider.of<TransactionProvider>(context, listen: false)
+            .addTransaction(title, description, amount, transactionType);
+        showSnackBar(context, 'Transaction Added', SnackBarType.success);
+      } catch (error) {
+        showSnackBar(context, error.toString(), SnackBarType.error);
+      }
     }
   }
 

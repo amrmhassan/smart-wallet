@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet_app/constants/types.dart';
 import 'package:wallet_app/providers/quick_actions_provider.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
+import 'package:wallet_app/utils/transactions_utils.dart';
 import 'package:wallet_app/widgets/global/empty_transactions.dart';
 
 import '../../../constants/sizes.dart';
@@ -16,15 +18,23 @@ class QuickActionsCardsGrid extends StatelessWidget {
   }) : super(key: key);
 
 //* in this method i will apply the quick action and add the transaction by clicking on the quick action card
-  void applyQuickAction(BuildContext context, TransactionModel quickAction) {
+  void applyQuickAction(
+      BuildContext context, TransactionModel quickAction) async {
     //? the problem here is that each quick action will have an id , so we can't add the same quick action with the same id to be multiple transactions with the same id
     //? so i will make the add transaction provider decide the id of the newly added transaction
-    Provider.of<TransactionProvider>(context, listen: false).addTransaction(
-      quickAction.title,
-      quickAction.description,
-      quickAction.amount,
-      quickAction.transactionType,
-    );
+
+    try {
+      await Provider.of<TransactionProvider>(context, listen: false)
+          .addTransaction(
+        quickAction.title,
+        quickAction.description,
+        quickAction.amount,
+        quickAction.transactionType,
+      );
+      showSnackBar(context, 'Transaction Added', SnackBarType.success, true);
+    } catch (error) {
+      showSnackBar(context, error.toString(), SnackBarType.error, true);
+    }
   }
 
   @override

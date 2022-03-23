@@ -18,6 +18,15 @@ class TranscationCard extends StatelessWidget {
     required this.transaction,
   }) : super(key: key);
 
+  void deleteTransaction(BuildContext context) async {
+    try {
+      await Provider.of<TransactionProvider>(context, listen: false)
+          .deleteTransaction(transaction.id);
+    } catch (error) {
+      showSnackBar(context, error.toString(), SnackBarType.error);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,6 +47,7 @@ class TranscationCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
+            alignment: Alignment.center,
             width: 50,
             height: 50,
             decoration: BoxDecoration(
@@ -49,6 +59,16 @@ class TranscationCard extends StatelessWidget {
                   : kOutcomeColor.withOpacity(transaction.ratioToTotal > 1
                       ? 1
                       : transaction.ratioToTotal),
+            ),
+            child: Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                color: transaction.transactionType == TransactionType.income
+                    ? kIncomeColor
+                    : kOutcomeColor,
+              ),
             ),
           ),
           const SizedBox(
@@ -86,10 +106,7 @@ class TranscationCard extends StatelessWidget {
                 TransactionActionButton(
                   iconData: FontAwesomeIcons.trash,
                   color: kDeleteColor,
-                  onTap: () {
-                    Provider.of<TransactionProvider>(context, listen: false)
-                        .deleteTransaction(transaction.id);
-                  },
+                  onTap: () => deleteTransaction(context),
                 ),
               ],
             ),

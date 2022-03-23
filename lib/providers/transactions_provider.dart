@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wallet_app/constants/db_constants.dart';
 import 'package:wallet_app/constants/types.dart';
+import 'package:wallet_app/helpers/custom_error.dart';
 import 'package:wallet_app/helpers/db_helper.dart';
 import 'package:wallet_app/models/transaction_model.dart';
 
@@ -79,8 +80,7 @@ class TransactionProvider extends ChangeNotifier {
       TransactionType transactionType) async {
     //* checking if the transaction added will make the current balance negative
     if (amount > totalMoney && transactionType == TransactionType.outcome) {
-      throw Exception(
-          'Outcome Transaction is larger than the total amount of the money');
+      throw CustomError('This expense is larger than your balance.');
     }
 
     //* initializing the transaction data like (createdAt, id, ratioToTotal...)
@@ -153,15 +153,24 @@ class TransactionProvider extends ChangeNotifier {
   }
 
 //* for deleting a transaction
-  void deleteTransaction(String id) {
-    //* if that transaction is income and deleting it will make the total by negative then throw an error that you can't delete that transaction , you can only edit it to a lower amount but not lower than the current total amount in that profile
+  Future<void> deleteTransaction(String id) async {
+    //* delete from the database first
+    try {
+      await DBHelper.deleteById(id, transactionsTableName);
+    } catch (error) {
+      if (kDebugMode) {
+        print(error);
+        print('An error occurred during deleting a transaction');
+      }
+    }
 
+    //* if that transaction is income and deleting it will make the total by negative then throw an error that you can't delete that transaction , you can only edit it to a lower amount but not lower than the current total amount in that profile
     _transactions.removeWhere((element) {
       if (element.transactionType == TransactionType.income &&
           element.amount > totalMoney &&
           element.id == id) {
-        throw Exception(
-            'You can\'t delete that transaction cause it is greater than the total amount you have in your profile');
+        throw CustomError(
+            'Your total balance will be negative, you can\'t delete it.');
       }
       return element.id == id;
     });
