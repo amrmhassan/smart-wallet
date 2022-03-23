@@ -35,7 +35,12 @@ class AddQuickActionButton extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () {
-              Navigator.pushNamed(context, AddTransactionScreen.routeName);
+              Navigator.pushNamed(
+                context,
+                AddTransactionScreen.routeName,
+                //* this is for informing the AddTransactionScreen that i need to add a quick action not a transaction
+                arguments: true,
+              );
             },
             child: Container(
               padding: const EdgeInsets.symmetric(

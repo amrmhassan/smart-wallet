@@ -9,10 +9,11 @@ import '../global/menu_icon.dart';
 import '../global/person_icon.dart';
 
 class MyAppBar extends StatelessWidget {
-  final bool mainAppBar;
+  final String? title;
+
   const MyAppBar({
     Key? key,
-    this.mainAppBar = true,
+    this.title,
   }) : super(key: key);
 
   @override
@@ -28,19 +29,19 @@ class MyAppBar extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              mainAppBar
+              title == null
                   ? MenuIcon(
                       onTap: () {
                         Scaffold.of(context).openDrawer();
                       },
                     )
                   : GoBackIcon(),
-              if (!mainAppBar)
+              if (title != null)
                 Expanded(
                   child: Container(
                     alignment: Alignment.center,
                     child: Text(
-                      'New Transaction',
+                      title as String,
                       style: kParagraphTextStyle,
                     ),
                   ),

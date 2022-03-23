@@ -3,8 +3,11 @@
 //! how to make my own icons using adobe xd then change the icon of menu to be one dash and a half
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wallet_app/constants/sizes.dart';
 import 'package:wallet_app/constants/styles.dart';
+import 'package:wallet_app/models/quick_action_model.dart';
+import 'package:wallet_app/providers/quick_actions_provider.dart';
 import 'package:wallet_app/widgets/app_bar/home_heading.dart';
 
 import 'widgets/profile_summary.dart';
@@ -33,14 +36,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               //* this has the summery of the current active profile like (outcome, income of this day or month or year..., and the current total amount that currently exist in the profile)
               ProfileSummary(),
-              Container(
-                margin: EdgeInsets.only(bottom: 10, left: 15),
-                width: double.infinity,
-                child: Text(
-                  'Quick Actions',
-                  style: kParagraphTextStyle,
+              if (Provider.of<QuickActionsProvider>(context)
+                  .getAllQuickActions
+                  .isNotEmpty)
+                Container(
+                  margin: EdgeInsets.only(bottom: 10, left: 15),
+                  width: double.infinity,
+                  child: Text(
+                    'Quick Actions',
+                    style: kParagraphTextStyle,
+                  ),
                 ),
-              ),
               //? i commeted all of these but it is optional
               //* this height is added as a separator between the profile summary and the horizontal line
               // SizedBox(

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet_app/providers/quick_actions_provider.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
 import 'package:wallet_app/screens/add_transaction/add_transaction_screen.dart';
 import 'package:wallet_app/screens/holder_screen.dart';
@@ -20,8 +21,15 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (ctx) => TransactionProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => TransactionProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => QuickActionsProvider(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         initialRoute: HolderScreen.routeName,

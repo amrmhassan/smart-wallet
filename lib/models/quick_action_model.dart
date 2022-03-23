@@ -1,6 +1,6 @@
 import 'package:wallet_app/constants/types.dart';
 
-class QuickAction {
+class QuickActionModel {
   String id;
   String title;
   String description;
@@ -8,7 +8,7 @@ class QuickAction {
   double amount;
   TransactionType transactionType;
 
-  QuickAction({
+  QuickActionModel({
     required this.id,
     required this.title,
     required this.description,

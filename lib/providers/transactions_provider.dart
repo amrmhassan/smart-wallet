@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:uuid/uuid.dart';
 import 'package:wallet_app/constants/types.dart';
 import 'package:wallet_app/models/transaction_model.dart';
 
@@ -74,13 +75,35 @@ class TransactionProvider extends ChangeNotifier {
 
   //? 3- methods to control the transactions
 //* for adding new transaction
-  void addTransaction(TransactionModel transaction) {
-    if (transaction.amount > totalMoney &&
-        transaction.transactionType == TransactionType.outcome) {
+  void addTransaction(String title, String description, double amount,
+      TransactionType transactionType) {
+    if (amount > totalMoney && transactionType == TransactionType.outcome) {
       throw Exception(
           'Outcome Transaction is larger than the total amount of the money');
     }
-    _transactions.add(transaction);
+
+    DateTime createdAt = DateTime.now();
+    String id = const Uuid().v4();
+
+    double newTotalMoney = totalMoney;
+    //* this line is to ensure
+    newTotalMoney = transactionType == TransactionType.income
+        ? totalMoney + amount
+        : totalMoney - amount;
+    double ratioToTotal = amount / newTotalMoney;
+    //* this line is to ensure
+    ratioToTotal = ratioToTotal == double.infinity ? 1 : ratioToTotal;
+
+    TransactionModel newTransaction = TransactionModel(
+      id: id,
+      title: title,
+      description: description,
+      amount: amount,
+      createdAt: createdAt,
+      transactionType: transactionType,
+      ratioToTotal: ratioToTotal,
+    );
+    _transactions.add(newTransaction);
     notifyListeners();
   }
 
@@ -89,7 +112,17 @@ class TransactionProvider extends ChangeNotifier {
 
 //* for deleting a transaction
   void deleteTransaction(String id) {
-    _transactions.removeWhere((element) => element.id == id);
+    //* if that transaction is income and deleting it will make the total by negative then throw an error that you can't delete that transaction , you can only edit it to a lower amount but not lower than the current total amount in that profile
+
+    _transactions.removeWhere((element) {
+      if (element.transactionType == TransactionType.income &&
+          element.amount > totalMoney &&
+          element.id == id) {
+        throw Exception(
+            'You can\'t delete that transaction cause it is greater than the total amount you have in your profile');
+      }
+      return element.id == id;
+    });
     notifyListeners();
   }
 

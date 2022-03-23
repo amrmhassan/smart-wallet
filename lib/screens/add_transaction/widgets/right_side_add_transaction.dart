@@ -4,7 +4,7 @@ import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/types.dart';
 import '../../../widgets/global/stylized_text_field.dart';
-import 'add_transaction_type.dart';
+import 'add_transaction_type_button.dart';
 
 class RightSideAddTransaction extends StatelessWidget {
   //* this is for controlling the transaction type

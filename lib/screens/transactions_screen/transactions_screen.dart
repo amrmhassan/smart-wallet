@@ -6,6 +6,7 @@ import 'package:wallet_app/constants/sizes.dart';
 import 'package:wallet_app/models/transaction_model.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
 import 'package:wallet_app/widgets/app_bar/home_heading.dart';
+import 'package:wallet_app/widgets/global/empty_transactions.dart';
 
 import 'widgets/transaction_card.dart';
 import 'widgets/transactions_filters.dart';
@@ -62,31 +63,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                           transaction: _transactions[index],
                         ),
                       )
-                    : Column(
-                        children: [
-                          // Text(
-                          //   'No Transaction Here',
-                          //   style: TextStyle(
-                          //     color: kMainColor.withOpacity(0.8),
-                          //     fontWeight: FontWeight.bold,
-                          //     fontSize: 22,
-                          //   ),
-                          // ),
-                          SizedBox(
-                            height: kDefaultPadding,
-                          ),
-                          SizedBox(
-                            width: 300,
-                            child: Opacity(
-                              opacity: 0.6,
-                              child: Image.asset(
-                                'assets/icons/empty.png',
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                    : EmptyTransactions(),
               ),
             ),
           ],

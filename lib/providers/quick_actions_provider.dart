@@ -43,6 +43,7 @@ class QuickActionsProvider extends ChangeNotifier {
   //? 3- methods to control the quickActions
 //* for adding new quick Actions
   void addQuickAction(TransactionModel quickActionsModel) {
+    print('Adding quick action');
     _quickActions.add(quickActionsModel);
     notifyListeners();
   }

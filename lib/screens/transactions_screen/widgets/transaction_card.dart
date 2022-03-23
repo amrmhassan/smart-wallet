@@ -43,8 +43,12 @@ class TranscationCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(1000),
               color: transaction.transactionType == TransactionType.income
-                  ? kIncomeColor.withOpacity(transaction.ratioToTotal)
-                  : kOutcomeColor.withOpacity(transaction.ratioToTotal),
+                  ? kIncomeColor.withOpacity(transaction.ratioToTotal > 1
+                      ? 1
+                      : transaction.ratioToTotal)
+                  : kOutcomeColor.withOpacity(transaction.ratioToTotal > 1
+                      ? 1
+                      : transaction.ratioToTotal),
             ),
           ),
           const SizedBox(

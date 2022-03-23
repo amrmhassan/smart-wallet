@@ -8,6 +8,7 @@ class AddTransactionTypeButton extends StatelessWidget {
   final bool active;
   final TransactionType transactionType;
   final Function(TransactionType transactionType) onTap;
+
   const AddTransactionTypeButton({
     Key? key,
     required this.transactionType,

@@ -8,6 +8,7 @@ import 'package:wallet_app/constants/sizes.dart';
 import 'package:wallet_app/constants/styles.dart';
 import 'package:wallet_app/constants/types.dart';
 import 'package:wallet_app/models/transaction_model.dart';
+import 'package:wallet_app/providers/quick_actions_provider.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
 import 'package:wallet_app/widgets/global/line.dart';
 
@@ -19,11 +20,9 @@ import 'widgets/right_side_add_transaction.dart';
 class AddTransactionScreen extends StatefulWidget {
   static const String routeName = '/add-transaction-screen';
   //* to differentiate between adding new transaction and editting existing one
-  final bool addNewTransaction;
 
   const AddTransactionScreen({
     Key? key,
-    this.addNewTransaction = false,
   }) : super(key: key);
 
   @override
@@ -40,38 +39,47 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     });
   }
 
-  void addTransaction() {
+//? this function may add a transaction or a quick action depending on the value of addQuickAction
+  void addTransaction(bool addQuickAction) {
     String title =
         _titleController.text.isEmpty ? 'Empty Title' : _titleController.text;
     double amount = double.tryParse(_priceController.text) ?? 0;
     String description = _descriptionController.text.isEmpty
         ? 'Empty Description'
         : _descriptionController.text;
-    DateTime createdAt = DateTime.now();
-    String id = Uuid().v4();
     TransactionType transactionType = currentActiveTransactionType;
-    double totalMoney =
-        Provider.of<TransactionProvider>(context, listen: false).totalMoney;
-    //* this line is to ensure
-    totalMoney = transactionType == TransactionType.income
-        ? totalMoney + amount
-        : totalMoney - amount;
-    double ratioToTotal = amount / totalMoney;
-    //* this line is to ensure
-    ratioToTotal = ratioToTotal == double.infinity ? 1 : ratioToTotal;
 
-    TransactionModel newTransaction = TransactionModel(
-      id: id,
-      title: title,
-      description: description,
-      amount: amount,
-      createdAt: createdAt,
-      transactionType: transactionType,
-      ratioToTotal: ratioToTotal,
-    );
+    if (addQuickAction) {
+      //* here the code for adding a quick action
+      DateTime createdAt = DateTime.now();
+      String id = const Uuid().v4();
 
-    Provider.of<TransactionProvider>(context, listen: false)
-        .addTransaction(newTransaction);
+      double totalMoney =
+          Provider.of<TransactionProvider>(context, listen: false).totalMoney;
+      //* this line is to ensure
+      totalMoney = transactionType == TransactionType.income
+          ? totalMoney + amount
+          : totalMoney - amount;
+      double ratioToTotal = amount / totalMoney;
+      //* this line is to ensure
+      ratioToTotal = ratioToTotal == double.infinity ? 1 : ratioToTotal;
+
+      TransactionModel newTransaction = TransactionModel(
+        id: id,
+        title: title,
+        description: description,
+        amount: amount,
+        createdAt: createdAt,
+        transactionType: transactionType,
+        ratioToTotal: ratioToTotal,
+      );
+      Provider.of<QuickActionsProvider>(context, listen: false)
+          .addQuickAction(newTransaction);
+    } else {
+      //* here the code for adding a new transaction
+      Provider.of<TransactionProvider>(context, listen: false)
+          .addTransaction(title, description, amount, transactionType);
+    }
   }
 
   //* text inputs controller
@@ -81,6 +89,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //* this argument to inform this widget that i need to add a quick action not a transaction
+    //* when needing to add a quick action i will add the argument to this with the argument:true like in the add_quick_action_button.dart file
+
+    bool? addQuickAction = ModalRoute.of(context)?.settings.arguments as bool?;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       //* this is the drawer
@@ -101,7 +114,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 children: [
                   //* my custom app bar and the mainAppBar is equal to false for adding the back button and remove the menu icon(side bar opener)
                   MyAppBar(
-                    mainAppBar: false,
+                    title: addQuickAction != null
+                        ? 'Add Quick Action'
+                        : 'Add Transaction',
                   ),
                   //* space between the app bar and the next widget
                   SizedBox(
@@ -145,9 +160,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     height: 60,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(primary: kMainColor),
-                      onPressed: addTransaction,
+                      onPressed: () => addTransaction(addQuickAction != null),
                       child: Text(
-                        'Save',
+                        addQuickAction != null
+                            ? 'Add Quick Action'
+                            : 'Save Transaction',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
