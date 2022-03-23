@@ -1,9 +1,10 @@
 //? this screen is for holding the other main screen that will be controller by the bottom nav bar
 
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers
 
 //! how to make my own icons using adobe xd then change the icon of menu to be one dash and a half
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/providers/quick_actions_provider.dart';
@@ -92,6 +93,10 @@ class _HolderScreenState extends State<HolderScreen> {
                 //* this is a custom widget of app bar
                 //* not a real one but made of containers and paddings for more control
                 MyAppBar(),
+                //* here i showed that you can know which environment you are on (development or production)
+                //* and i worked successfully
+                // if (kDebugMode) Text('In debug Mode'),
+                // if (kReleaseMode) Text('In release  Mode'),
 
                 Expanded(
                   //* main pages of the app

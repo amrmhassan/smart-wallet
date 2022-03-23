@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wallet_app/constants/db_constants.dart';
 import 'package:wallet_app/constants/types.dart';
@@ -110,7 +108,10 @@ class TransactionProvider extends ChangeNotifier {
         'ratioToTotal': ratioToTotal.toString(),
       });
     } catch (error) {
-      print('Error inserting new transaction , check the transaction provider');
+      if (kDebugMode) {
+        print(
+            'Error inserting new transaction , check the transaction provider');
+      }
       rethrow;
     }
 

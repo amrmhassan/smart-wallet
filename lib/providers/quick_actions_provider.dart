@@ -1,4 +1,6 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: unused_element
+
+import 'package:flutter/foundation.dart';
 import 'package:wallet_app/constants/db_constants.dart';
 import 'package:wallet_app/constants/types.dart';
 import 'package:wallet_app/models/transaction_model.dart';
@@ -61,7 +63,10 @@ class QuickActionsProvider extends ChangeNotifier {
         'ratioToTotal': quickActionsModel.ratioToTotal.toString(),
       });
     } catch (error) {
-      print('Error inserting new transaction , check the transaction provider');
+      if (kDebugMode) {
+        print(
+            'Error inserting new transaction , check the transaction provider');
+      }
       rethrow;
     }
     _quickActions.add(quickActionsModel);
@@ -92,7 +97,9 @@ class QuickActionsProvider extends ChangeNotifier {
       _quickActions = fetchedQuickActions;
       notifyListeners();
     } catch (error) {
-      print('Error fetching quick actions from the database');
+      if (kDebugMode) {
+        print('Error fetching quick actions from the database');
+      }
       // rethrow;
     }
   }
