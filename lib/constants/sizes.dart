@@ -19,3 +19,4 @@ const double kDefaultHeadingTextSize = 22;
 
 //* bottom nav bar sizes
 const double bottomNavBarHeight = 90;
+const double kFiltersRowHeight = 50;

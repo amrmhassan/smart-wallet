@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
-import 'package:wallet_app/screens/add_transaction/add_transaction_screen.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
@@ -10,7 +9,8 @@ import '../../../constants/styles.dart';
 import '../../../constants/types.dart';
 import '../../../models/transaction_model.dart';
 import '../../../utils/transactions_utils.dart';
-import 'transaction_action_button.dart';
+import '../../add_transaction_screen/add_transaction_screen.dart';
+import '../../../widgets/global/card_action_button.dart';
 
 class TranscationCard extends StatelessWidget {
   final TransactionModel transaction;
@@ -113,9 +113,10 @@ class TranscationCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 //* for opening the screen to edit the transactions
-                TransactionActionButton(
+                CardActionButton(
                   iconData: FontAwesomeIcons.pen,
                   color: kMainColor,
+                  backgroundColor: Colors.grey[100],
                   onTap: () {
                     Navigator.push(
                       context,
@@ -133,9 +134,10 @@ class TranscationCard extends StatelessWidget {
                   width: kDefaultPadding / 4,
                 ),
                 //* for deleting a transactions
-                TransactionActionButton(
+                CardActionButton(
                   iconData: FontAwesomeIcons.trash,
                   color: kDeleteColor,
+                  backgroundColor: Colors.grey[100],
                   //? here i need to show dialog before actually deleting a transaction
                   onTap: () => deleteTransaction(context),
                 ),

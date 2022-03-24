@@ -9,3 +9,11 @@
  
 
 # before adding a new transaction check the last added transaction and if they are the same amount show dialog that warns the user that (are you sure to add transaction again) whether it is added normally or by a quick action
+
+# allow the user to favorite quick actions from the main quick actions screen( they will be shown as a list or a grid)
+# the quick actions in the quick actions screen can be deleted , updated, be favourite
+# you may want to change the appearance of them in the quick action screen , or leave it the same as the main screen
+
+# only favorite quick actions would be shown in the main screen
+
+# never delete a transaction but flag it as deleted And add a deleted attribute to the transaction model

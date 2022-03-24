@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/constants/colors.dart';
 import 'package:wallet_app/constants/sizes.dart';
 import 'package:wallet_app/constants/styles.dart';
 import 'package:wallet_app/constants/types.dart';
@@ -15,6 +14,7 @@ import 'package:wallet_app/widgets/global/line.dart';
 
 import '../../widgets/app_bar/my_app_bar.dart';
 import '../home_screen/widgets/background.dart';
+import 'widgets/add_transaction_button.dart';
 import 'widgets/left_side_add_transaction.dart';
 import 'widgets/right_side_add_transaction.dart';
 
@@ -54,7 +54,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     });
   }
 
-//? this function may add a transaction or a quick action depending on the value of addQuickAction
   void addTransaction() async {
     //* preparing the needed info to add the new thing(transaction or quick action)
     String title =
@@ -112,6 +111,28 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       } catch (error) {
         showSnackBar(context, error.toString(), SnackBarType.error);
       }
+    } else if (widget.addTransactionScreenOperations ==
+        AddTransactionScreenOperations.editQuickAction) {
+      String id = editedQuickAction!.id;
+      DateTime createdAt = editedQuickAction!.createdAt;
+      QuickActionModel newQuickAction = QuickActionModel(
+        id: id,
+        title: title,
+        description: description,
+        amount: amount,
+        createdAt: createdAt,
+        transactionType: transactionType,
+      );
+
+      try {
+        //* sending the updating info to the provider
+        await Provider.of<QuickActionsProvider>(context, listen: false)
+            .editQuickAction(id, newQuickAction);
+        showSnackBar(context, 'Quick Action Updated', SnackBarType.success);
+        Navigator.pop(context);
+      } catch (error) {
+        showSnackBar(context, error.toString(), SnackBarType.error);
+      }
     }
   }
 
@@ -137,6 +158,19 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       _descriptionController.text = editedTransaction!.description;
       _priceController.text = editedTransaction!.amount.toString();
       setcurrentActiveTransactionType(editedTransaction!.transactionType);
+    } else if (widget.editingId != null &&
+        widget.addTransactionScreenOperations ==
+            AddTransactionScreenOperations.editQuickAction) {
+      //* setting the transaction to edit
+      editedQuickAction =
+          Provider.of<QuickActionsProvider>(context, listen: false)
+              .getQuickById(widget.editingId as String);
+
+      //* setting the text controllers to the transaction info
+      _titleController.text = editedQuickAction!.title;
+      _descriptionController.text = editedQuickAction!.description;
+      _priceController.text = editedQuickAction!.amount.toString();
+      setcurrentActiveTransactionType(editedQuickAction!.transactionType);
     }
   }
 
@@ -204,22 +238,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   SizedBox(
                     height: kDefaultPadding,
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 60,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(primary: kMainColor),
-                      onPressed: addTransaction,
-                      child: Text(
-                        saveButtonText,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  )
+                  AddTransactionButton(
+                    addTransaction: addTransaction,
+                    saveButtonText: saveButtonText,
+                  ),
                 ],
               ),
             ),

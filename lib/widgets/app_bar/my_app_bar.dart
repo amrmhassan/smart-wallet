@@ -18,42 +18,44 @@ class MyAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.only(
-            top: kDefaultVerticalPadding,
-            right: kDefaultHorizontalPadding,
-            left: kDefaultHorizontalPadding,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              title == null
-                  ? MenuIcon(
-                      onTap: () {
-                        Scaffold.of(context).openDrawer();
-                      },
-                    )
-                  : GoBackIcon(),
-              if (title != null)
-                Expanded(
-                  child: Container(
+    //* the main container of my app bar
+    return Container(
+      padding: EdgeInsets.only(
+        // * this title == null allows me to check if the screen abb bar will have a horizontal padding or not
+        top: kDefaultVerticalPadding,
+        right: title == null ? kDefaultHorizontalPadding : 0,
+        left: title == null ? kDefaultHorizontalPadding : 0,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          //* showing the menuicon or go back icon
+          title == null
+              ? MenuIcon(
+                  onTap: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                )
+              : GoBackIcon(),
+          //* showing the title of given
+
+          Expanded(
+            child: title != null
+                ? Container(
                     alignment: Alignment.center,
                     child: Text(
                       title as String,
                       style: kParagraphTextStyle,
                     ),
-                  ),
-                ),
-              PersonIcon(
-                onTap: () {},
-              ),
-            ],
+                  )
+                : Container(),
           ),
-        ),
-        // if (mainAppBar) HomeHeading(),
-      ],
+          //* showing the person icon for allowing the user to edit his profile data
+          PersonIcon(
+            onTap: () {},
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,4 +1,4 @@
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, prefer_const_constructors
 
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
@@ -29,17 +29,21 @@ class QuickActionsProvider extends ChangeNotifier {
     ];
   }
 
-//? i won't use this now (cause i may not need it and it will need info from another provider so i will need to use proxy provider)
-// //* for getting transactions depending on the current chosen quickActions type
-//   List<TransactionModel> get displayedQuickActions {
-//     if (currentActiveTransactionType == TransactionType.income) {
-//       return _incomeQuickActions;
-//     } else if (currentActiveTransactionType == TransactionType.outcome) {
-//       return _outcomeQuickActions;
-//     } else {
-//       return [..._quickActions];
-//     }
-//   }
+//* for getting transactions depending on the current chosen quickActions type
+  List<QuickActionModel> get displayedQuickActions {
+    if (currentActiveQuickActionType == TransactionType.income) {
+      return _incomeQuickActions;
+    } else if (currentActiveQuickActionType == TransactionType.outcome) {
+      return _outcomeQuickActions;
+    } else {
+      return [..._quickActions];
+    }
+  }
+
+  //* for getting a quick actions by its id
+  QuickActionModel getQuickById(String id) {
+    return _quickActions.firstWhere((element) => element.id == id);
+  }
 
 //* for getting all quick actions no matter it's type
   List<QuickActionModel> get getAllQuickActions {
@@ -112,17 +116,45 @@ class QuickActionsProvider extends ChangeNotifier {
   }
 
 //* for deleting a quickActions
-  void deleteQuickActions(String id) {
+  Future<void> deleteQuickActions(String id) async {
     _quickActions.removeWhere((element) => element.id == id);
     notifyListeners();
   }
 
 //* for editing a quick action
-  void editQuickAction(String quickActionId, QuickActionModel newQuickActions) {
-    int quickActionIndex =
+  Future<void> editQuickAction(
+      String quickActionId, QuickActionModel newQuickActions) async {
+    //* editing quick action on database first
+    try {
+      await DBHelper.insert(quickActionsTableName, {
+        'id': newQuickActions.id,
+        'title': newQuickActions.title,
+        'description': newQuickActions.description,
+        'amount': newQuickActions.amount.toString(),
+        'createdAt': newQuickActions.createdAt.toIso8601String(),
+        'transactionType':
+            newQuickActions.transactionType == TransactionType.income
+                ? 'income'
+                : 'outcome',
+      });
+    } catch (error) {
+      if (kDebugMode) {
+        print('Error Editing quick Action , check the quickAction provider');
+      }
+      rethrow;
+    }
+    int transactionIndex =
         _quickActions.indexWhere((element) => element.id == quickActionId);
     _quickActions.removeWhere((element) => element.id == quickActionId);
-    _quickActions.insert(quickActionIndex, newQuickActions);
+    _quickActions.insert(transactionIndex, newQuickActions);
+    notifyListeners();
+  }
+
+  //? quick transactions type stuff
+
+  TransactionType currentActiveQuickActionType = TransactionType.all;
+  void setcurrentActiveQuickActionType(TransactionType transactionType) {
+    currentActiveQuickActionType = transactionType;
     notifyListeners();
   }
 }

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants/sizes.dart';
+import '../../constants/sizes.dart';
 
-class TransactionActionButton extends StatelessWidget {
+class CardActionButton extends StatelessWidget {
   final IconData iconData;
   final Color color;
+  final Color? backgroundColor;
   final VoidCallback onTap;
-  const TransactionActionButton({
+
+  const CardActionButton({
     Key? key,
     required this.color,
     required this.iconData,
     required this.onTap,
+    this.backgroundColor,
   }) : super(key: key);
 
   @override
@@ -21,7 +24,7 @@ class TransactionActionButton extends StatelessWidget {
         width: 45,
         height: 45,
         decoration: BoxDecoration(
-          color: Colors.grey[100],
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(
             1000,
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const Color kMainColor = Color(0xff565D94);
+const Color kInactiveColor = Color(0xffC3C3C3);
 const List<Color> kBottomNavBarColors = [
   Color(0xffF8F8F8),
   Color.fromARGB(255, 229, 231, 255),

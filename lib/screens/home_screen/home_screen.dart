@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:wallet_app/constants/sizes.dart';
 import 'package:wallet_app/constants/styles.dart';
 import 'package:wallet_app/providers/quick_actions_provider.dart';
+import 'package:wallet_app/screens/quick_actions_screen/quick_actions_screen.dart';
 import 'package:wallet_app/widgets/app_bar/home_heading.dart';
 
 import 'widgets/profile_summary.dart';
@@ -23,53 +24,52 @@ class _HomeScreenState extends State<HomeScreen> {
 //* this is the build method of this widget
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        //* this is the main content of the home screen in the safe area
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
-          child: Column(
-            children: [
-              HomeHeading(
-                title: 'Current Profile Name',
-              ),
-              //* this has the summery of the current active profile like (outcome, income of this day or month or year..., and the current total amount that currently exist in the profile)
-              ProfileSummary(),
-              if (Provider.of<QuickActionsProvider>(context)
-                  .getAllQuickActions
-                  .isNotEmpty)
-                Container(
-                  margin: EdgeInsets.only(bottom: 10, left: 15),
-                  width: double.infinity,
-                  child: Text(
-                    'Quick Actions',
-                    style: kParagraphTextStyle,
-                  ),
-                ),
-              //? i commeted all of these but it is optional
-              //* this height is added as a separator between the profile summary and the horizontal line
-              // SizedBox(
-              //   height: 20,
-              // ),
-              // //* this is a horizontal line to be added between the profile summary and the quick Actions cards
-              // Container(
-              //   padding: EdgeInsets.symmetric(
-              //     horizontal: kDefaultPadding,
-              //   ),
-              //   child: Line(lineType: LineType.horizontal),
-              // ),
-              // //* this static height is to be added as a separator between the horizontal line and the quick actions cards
-              // SizedBox(
-              //   height: 20,
-              // ),
-              // //* these are the quick actions cards container
-
-              QuickActionsCardsGrid(),
-            ],
+    //* the main container of the home screen
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+      child: Column(
+        children: [
+          HomeHeading(
+            title: 'Current Profile Name',
           ),
-        ),
-        //* this is the bottom nav bar that has all 5 main tabs
-      ],
+          //* this has the summery of the current active profile like (outcome, income of this day or month or year..., and the current total amount that currently exist in the profile)
+          ProfileSummary(),
+          if (Provider.of<QuickActionsProvider>(context)
+              .getAllQuickActions
+              .isNotEmpty)
+            Container(
+              margin: EdgeInsets.only(bottom: 10, left: 15),
+              width: double.infinity,
+              child: InkWell(
+                onTap: () =>
+                    Navigator.pushNamed(context, QuickActionsScreen.routeName),
+                child: Text(
+                  'Quick Actions',
+                  style: kParagraphTextStyle,
+                ),
+              ),
+            ),
+          //? i commeted all of these but it is optional
+          //* this height is added as a separator between the profile summary and the horizontal line
+          // SizedBox(
+          //   height: 20,
+          // ),
+          // //* this is a horizontal line to be added between the profile summary and the quick Actions cards
+          // Container(
+          //   padding: EdgeInsets.symmetric(
+          //     horizontal: kDefaultPadding,
+          //   ),
+          //   child: Line(lineType: LineType.horizontal),
+          // ),
+          // //* this static height is to be added as a separator between the horizontal line and the quick actions cards
+          // SizedBox(
+          //   height: 20,
+          // ),
+          // //* these are the quick actions cards container
+
+          QuickActionsCardsGrid(),
+        ],
+      ),
     );
   }
 }

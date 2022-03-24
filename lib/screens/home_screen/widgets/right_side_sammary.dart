@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:wallet_app/screens/add_transaction/add_transaction_screen.dart';
 
+import '../../add_transaction_screen/add_transaction_screen.dart';
 import 'add_new_transaction_icon.dart';
 import 'total_amount.dart';
 

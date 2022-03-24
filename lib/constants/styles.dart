@@ -13,6 +13,11 @@ const TextStyle kParagraphTextStyle = TextStyle(
   fontSize: 16,
   fontWeight: FontWeight.bold,
 );
+const TextStyle kInActiveParagraphTextStyle = TextStyle(
+  color: kInactiveColor,
+  fontSize: 16,
+  fontWeight: FontWeight.bold,
+);
 const TextStyle kSmallTextPrimaryColorStyle = TextStyle(
   color: kMainColor,
   fontSize: 14,

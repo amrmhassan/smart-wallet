@@ -4,7 +4,6 @@
 
 //! how to make my own icons using adobe xd then change the icon of menu to be one dash and a half
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/providers/quick_actions_provider.dart';

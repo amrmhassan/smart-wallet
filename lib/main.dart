@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/providers/quick_actions_provider.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
-import 'package:wallet_app/screens/add_transaction/add_transaction_screen.dart';
 import 'package:wallet_app/screens/holder_screen.dart';
+import 'package:wallet_app/screens/quick_actions_screen/quick_actions_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,6 +35,7 @@ class _MyAppState extends State<MyApp> {
         initialRoute: HolderScreen.routeName,
         routes: {
           HolderScreen.routeName: (ctx) => HolderScreen(),
+          QuickActionsScreen.routeName: (ctx) => QuickActionsScreen(),
         },
       ),
     );

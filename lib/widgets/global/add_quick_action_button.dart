@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:wallet_app/screens/add_transaction/add_transaction_screen.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../constants/styles.dart';
+import '../../screens/add_transaction_screen/add_transaction_screen.dart';
 
 class AddQuickActionButton extends StatelessWidget {
   const AddQuickActionButton({

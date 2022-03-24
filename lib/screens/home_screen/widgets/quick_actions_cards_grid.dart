@@ -10,7 +10,6 @@ import 'package:wallet_app/utils/transactions_utils.dart';
 import 'package:wallet_app/widgets/global/empty_transactions.dart';
 
 import '../../../constants/sizes.dart';
-import '../../../models/transaction_model.dart';
 import 'quick_action_card.dart';
 
 class QuickActionsCardsGrid extends StatelessWidget {

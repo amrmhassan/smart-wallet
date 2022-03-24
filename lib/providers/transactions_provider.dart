@@ -81,6 +81,12 @@ class TransactionProvider extends ChangeNotifier {
     return _transactions.firstWhere((element) => element.id == id);
   }
 
+  //* for getting the last added transaction
+
+  TransactionModel getLastTransaction() {
+    return _transactions[_transactions.length - 1];
+  }
+
 //* for adding new transaction
   Future<void> addTransaction(String title, String description, double amount,
       TransactionType transactionType) async {

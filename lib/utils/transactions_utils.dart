@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet_app/constants/colors.dart';
 import 'package:wallet_app/constants/types.dart';
