@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:wallet_app/screens/add_transaction/add_transaction_screen.dart';
 
@@ -35,11 +37,13 @@ class AddQuickActionButton extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () {
-              Navigator.pushNamed(
+              Navigator.push(
                 context,
-                AddTransactionScreen.routeName,
-                //* this is for informing the AddTransactionScreen that i need to add a quick action not a transaction
-                arguments: true,
+                MaterialPageRoute(
+                  builder: (ctx) => AddTransactionScreen(
+                      addTransactionScreenOperations:
+                          AddTransactionScreenOperations.addQuickAction),
+                ),
               );
             },
             child: Container(

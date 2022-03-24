@@ -1,19 +1,20 @@
 // ignore_for_file: unused_element
 
 import 'package:flutter/foundation.dart';
+import 'package:uuid/uuid.dart';
 import 'package:wallet_app/constants/db_constants.dart';
 import 'package:wallet_app/constants/types.dart';
-import 'package:wallet_app/models/transaction_model.dart';
+import 'package:wallet_app/models/quick_action_model.dart';
 
 import '../helpers/db_helper.dart';
 
 class QuickActionsProvider extends ChangeNotifier {
   //? a) quick actions stuff
-  List<TransactionModel> _quickActions = [];
+  List<QuickActionModel> _quickActions = [];
 
 //? 1- getting quick actions, with multiple possibilities
 //* for getting the income quick actions only
-  List<TransactionModel> get _incomeQuickActions {
+  List<QuickActionModel> get _incomeQuickActions {
     return [
       ..._quickActions
           .where((element) => element.transactionType == TransactionType.income)
@@ -21,7 +22,7 @@ class QuickActionsProvider extends ChangeNotifier {
   }
 
 //* for getting the outcome quick actions only
-  List<TransactionModel> get _outcomeQuickActions {
+  List<QuickActionModel> get _outcomeQuickActions {
     return [
       ..._quickActions.where(
           (element) => element.transactionType == TransactionType.outcome)
@@ -41,26 +42,27 @@ class QuickActionsProvider extends ChangeNotifier {
 //   }
 
 //* for getting all quick actions no matter it's type
-  List<TransactionModel> get getAllQuickActions {
+  List<QuickActionModel> get getAllQuickActions {
     return [..._quickActions];
   }
 
   //? 3- methods to control the quickActions
 //* for adding new quick Actions
-  Future<void> addQuickAction(TransactionModel quickActionsModel) async {
+  Future<void> addQuickAction(String title, String description, double amount,
+      TransactionType transactionType) async {
+    String id = Uuid().v4();
+    DateTime createdAt = DateTime.now();
+
     //* here i will add the new transaction to the database
     try {
       await DBHelper.insert(quickActionsTableName, {
-        'id': quickActionsModel.id,
-        'title': quickActionsModel.title,
-        'description': quickActionsModel.description,
-        'amount': quickActionsModel.amount.toString(),
-        'createdAt': quickActionsModel.createdAt.toIso8601String(),
+        'id': id,
+        'title': title,
+        'description': description,
+        'amount': amount.toString(),
+        'createdAt': createdAt.toIso8601String(),
         'transactionType':
-            quickActionsModel.transactionType == TransactionType.income
-                ? 'income'
-                : 'outcome',
-        'ratioToTotal': quickActionsModel.ratioToTotal.toString(),
+            transactionType == TransactionType.income ? 'income' : 'outcome',
       });
     } catch (error) {
       if (kDebugMode) {
@@ -69,7 +71,15 @@ class QuickActionsProvider extends ChangeNotifier {
       }
       rethrow;
     }
-    _quickActions.add(quickActionsModel);
+    QuickActionModel quickActionModel = QuickActionModel(
+      id: id,
+      title: title,
+      description: description,
+      amount: amount,
+      createdAt: createdAt,
+      transactionType: transactionType,
+    );
+    _quickActions.add(quickActionModel);
     notifyListeners();
   }
 
@@ -79,8 +89,8 @@ class QuickActionsProvider extends ChangeNotifier {
       List<Map<String, dynamic>> data =
           await DBHelper.getData(quickActionsTableName);
 
-      List<TransactionModel> fetchedQuickActions = data
-          .map((quickAction) => TransactionModel(
+      List<QuickActionModel> fetchedQuickActions = data
+          .map((quickAction) => QuickActionModel(
                 id: quickAction['id'],
                 title: quickAction['title'],
                 description: quickAction['description'],
@@ -89,9 +99,6 @@ class QuickActionsProvider extends ChangeNotifier {
                 transactionType: quickAction['transactionType'] == 'income'
                     ? TransactionType.income
                     : TransactionType.outcome,
-                ratioToTotal: double.parse(
-                  quickAction['ratioToTotal'],
-                ),
               ))
           .toList();
       _quickActions = fetchedQuickActions;
@@ -111,7 +118,7 @@ class QuickActionsProvider extends ChangeNotifier {
   }
 
 //* for editing a quick action
-  void editQuickAction(String quickActionId, TransactionModel newQuickActions) {
+  void editQuickAction(String quickActionId, QuickActionModel newQuickActions) {
     int quickActionIndex =
         _quickActions.indexWhere((element) => element.id == quickActionId);
     _quickActions.removeWhere((element) => element.id == quickActionId);

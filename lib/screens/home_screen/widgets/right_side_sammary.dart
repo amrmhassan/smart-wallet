@@ -20,7 +20,15 @@ class RightSideSammary extends StatelessWidget {
         children: [
           Expanded(
             child: AddNewTransactionIcon(onTap: () {
-              Navigator.pushNamed(context, AddTransactionScreen.routeName);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (ctx) => AddTransactionScreen(
+                    addTransactionScreenOperations:
+                        AddTransactionScreenOperations.addTransaction,
+                  ),
+                ),
+              );
             }),
           ),
           SizedBox(height: 20),

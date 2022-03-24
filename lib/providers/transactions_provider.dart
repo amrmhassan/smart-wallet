@@ -75,6 +75,12 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   //? 3- methods to control the transactions
+
+  //* for getting a transaction by its id
+  TransactionModel getTransactionById(String id) {
+    return _transactions.firstWhere((element) => element.id == id);
+  }
+
 //* for adding new transaction
   Future<void> addTransaction(String title, String description, double amount,
       TransactionType transactionType) async {
@@ -178,7 +184,52 @@ class TransactionProvider extends ChangeNotifier {
   }
 
 //* for editing a transaction
-  void editTransaction(String transactionId, TransactionModel newTransaction) {
+  Future<void> editTransaction(
+      String transactionId, TransactionModel newTransaction) async {
+    //* i commented this cause it has no value
+    // //* first checking if the transaction exist in the _transactions
+
+    // TransactionModel? oldTransaction;
+    // try {
+    //   oldTransaction =
+    //       _transactions.firstWhere((element) => element.id == transactionId);
+    // } catch (error) {
+    //   //* this transaction doesn't exist in the transactions
+    //   rethrow;
+    // }
+    // //* return if the transaction doesn't exist
+    // if (oldTransaction == null) {
+    //   throw CustomError('This transaction doesn\'t exit to be deleted');
+    // }
+
+    //* checking if the transactin is outcome and the it is greater than the current total money
+    //* this is the amount that should be compared to the amount of the newTransaction
+    double newAmount = totalMoney - newTransaction.amount;
+    if (newTransaction.amount > newAmount &&
+        newTransaction.transactionType == TransactionType.outcome) {
+      throw CustomError('This expense is larger than your balance.');
+    }
+
+    //* editing transaction on database first
+    try {
+      await DBHelper.insert(transactionsTableName, {
+        'id': newTransaction.id,
+        'title': newTransaction.title,
+        'description': newTransaction.description,
+        'amount': newTransaction.amount.toString(),
+        'createdAt': newTransaction.createdAt.toIso8601String(),
+        'transactionType':
+            newTransaction.transactionType == TransactionType.income
+                ? 'income'
+                : 'outcome',
+        'ratioToTotal': newTransaction.ratioToTotal.toString(),
+      });
+    } catch (error) {
+      if (kDebugMode) {
+        print('Error Editing transaction , check the transaction provider');
+      }
+      rethrow;
+    }
     int transactionIndex =
         _transactions.indexWhere((element) => element.id == transactionId);
     _transactions.removeWhere((element) => element.id == transactionId);

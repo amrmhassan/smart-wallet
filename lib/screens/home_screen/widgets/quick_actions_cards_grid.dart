@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/constants/types.dart';
+import 'package:wallet_app/models/quick_action_model.dart';
 import 'package:wallet_app/providers/quick_actions_provider.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
 import 'package:wallet_app/utils/transactions_utils.dart';
@@ -19,7 +20,7 @@ class QuickActionsCardsGrid extends StatelessWidget {
 
 //* in this method i will apply the quick action and add the transaction by clicking on the quick action card
   void applyQuickAction(
-      BuildContext context, TransactionModel quickAction) async {
+      BuildContext context, QuickActionModel quickAction) async {
     //? the problem here is that each quick action will have an id , so we can't add the same quick action with the same id to be multiple transactions with the same id
     //? so i will make the add transaction provider decide the id of the newly added transaction
 
@@ -39,7 +40,7 @@ class QuickActionsCardsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<TransactionModel> quickActions =
+    List<QuickActionModel> quickActions =
         Provider.of<QuickActionsProvider>(context).getAllQuickActions;
 
     return Expanded(

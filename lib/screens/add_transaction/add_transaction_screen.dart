@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 import 'package:wallet_app/constants/colors.dart';
 import 'package:wallet_app/constants/sizes.dart';
 import 'package:wallet_app/constants/styles.dart';
 import 'package:wallet_app/constants/types.dart';
+import 'package:wallet_app/models/quick_action_model.dart';
 import 'package:wallet_app/models/transaction_model.dart';
 import 'package:wallet_app/providers/quick_actions_provider.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
@@ -18,12 +18,23 @@ import '../home_screen/widgets/background.dart';
 import 'widgets/left_side_add_transaction.dart';
 import 'widgets/right_side_add_transaction.dart';
 
+enum AddTransactionScreenOperations {
+  addTransaction,
+  addQuickAction,
+  editTransaction,
+  editQuickAction,
+}
+
 class AddTransactionScreen extends StatefulWidget {
   static const String routeName = '/add-transaction-screen';
   //* to differentiate between adding new transaction and editting existing one
+  final AddTransactionScreenOperations addTransactionScreenOperations;
+  final String? editingId;
 
   const AddTransactionScreen({
     Key? key,
+    required this.addTransactionScreenOperations,
+    this.editingId,
   }) : super(key: key);
 
   @override
@@ -33,6 +44,9 @@ class AddTransactionScreen extends StatefulWidget {
 class _AddTransactionScreenState extends State<AddTransactionScreen> {
   //* That is the default active transaction type (outcome) cause it is the common one
   TransactionType currentActiveTransactionType = TransactionType.outcome;
+  TransactionModel? editedTransaction;
+  QuickActionModel? editedQuickAction;
+
   //* for setting the current active transaction type and it will be passed down to the widget that will use it
   void setcurrentActiveTransactionType(TransactionType transactionType) {
     setState(() {
@@ -41,7 +55,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   }
 
 //? this function may add a transaction or a quick action depending on the value of addQuickAction
-  void addTransaction(bool addQuickAction) async {
+  void addTransaction() async {
+    //* preparing the needed info to add the new thing(transaction or quick action)
     String title =
         _titleController.text.isEmpty ? 'Empty Title' : _titleController.text;
     double amount = double.tryParse(_priceController.text) ?? 0;
@@ -50,21 +65,34 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         : _descriptionController.text;
     TransactionType transactionType = currentActiveTransactionType;
 
-    if (addQuickAction) {
-      //* here the code for adding a quick action
-      DateTime createdAt = DateTime.now();
-      String id = const Uuid().v4();
-
-      double totalMoney =
-          Provider.of<TransactionProvider>(context, listen: false).totalMoney;
-      //* this line is to ensure
-      totalMoney = transactionType == TransactionType.income
-          ? totalMoney + amount
-          : totalMoney - amount;
-      double ratioToTotal = amount / totalMoney;
-      //* this line is to ensure
-      ratioToTotal = ratioToTotal == double.infinity ? 1 : ratioToTotal;
-
+    //* adding quick action
+    if (widget.addTransactionScreenOperations ==
+        AddTransactionScreenOperations.addQuickAction) {
+      try {
+        //* here i will add the new quick action
+        await Provider.of<QuickActionsProvider>(context, listen: false)
+            .addQuickAction(title, description, amount, transactionType);
+        showSnackBar(context, 'Quick Action Added', SnackBarType.success);
+      } catch (error) {
+        showSnackBar(context, error.toString(), SnackBarType.error);
+      }
+      //* adding transaction
+    } else if (widget.addTransactionScreenOperations ==
+        AddTransactionScreenOperations.addTransaction) {
+      try {
+        //* here the code for adding a new transaction
+        await Provider.of<TransactionProvider>(context, listen: false)
+            .addTransaction(title, description, amount, transactionType);
+        showSnackBar(context, 'Transaction Added', SnackBarType.success);
+      } catch (error) {
+        showSnackBar(context, error.toString(), SnackBarType.error);
+      }
+      //* editting transaction
+    } else if (widget.addTransactionScreenOperations ==
+        AddTransactionScreenOperations.editTransaction) {
+      String id = editedTransaction!.id;
+      DateTime createdAt = editedTransaction!.createdAt;
+      double ratioToTotal = editedTransaction!.ratioToTotal;
       TransactionModel newTransaction = TransactionModel(
         id: id,
         title: title,
@@ -74,19 +102,13 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         transactionType: transactionType,
         ratioToTotal: ratioToTotal,
       );
+
       try {
-        await Provider.of<QuickActionsProvider>(context, listen: false)
-            .addQuickAction(newTransaction);
-        showSnackBar(context, 'Quick Action Added', SnackBarType.success);
-      } catch (error) {
-        showSnackBar(context, error.toString(), SnackBarType.error);
-      }
-    } else {
-      try {
-        //* here the code for adding a new transaction
+        //* sending the updating info to the provider
         await Provider.of<TransactionProvider>(context, listen: false)
-            .addTransaction(title, description, amount, transactionType);
-        showSnackBar(context, 'Transaction Added', SnackBarType.success);
+            .editTransaction(id, newTransaction);
+        showSnackBar(context, 'Transaction Updated', SnackBarType.success);
+        Navigator.pop(context);
       } catch (error) {
         showSnackBar(context, error.toString(), SnackBarType.error);
       }
@@ -98,12 +120,30 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
 
+//* this initState will provide the required data for this scree to edit
+  @override
+  void initState() {
+    super.initState();
+    //* checking if the widget that opened this screen wants to edit a transaction
+    if (widget.editingId != null &&
+        widget.addTransactionScreenOperations ==
+            AddTransactionScreenOperations.editTransaction) {
+      //* setting the transaction to edit
+      editedTransaction =
+          Provider.of<TransactionProvider>(context, listen: false)
+              .getTransactionById(widget.editingId as String);
+      //* setting the text controllers to the transaction info
+      _titleController.text = editedTransaction!.title;
+      _descriptionController.text = editedTransaction!.description;
+      _priceController.text = editedTransaction!.amount.toString();
+      setcurrentActiveTransactionType(editedTransaction!.transactionType);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     //* this argument to inform this widget that i need to add a quick action not a transaction
     //* when needing to add a quick action i will add the argument to this with the argument:true like in the add_quick_action_button.dart file
-
-    bool? addQuickAction = ModalRoute.of(context)?.settings.arguments as bool?;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -125,9 +165,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 children: [
                   //* my custom app bar and the mainAppBar is equal to false for adding the back button and remove the menu icon(side bar opener)
                   MyAppBar(
-                    title: addQuickAction != null
-                        ? 'Add Quick Action'
-                        : 'Add Transaction',
+                    title: appBarTitle,
                   ),
                   //* space between the app bar and the next widget
                   SizedBox(
@@ -171,11 +209,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     height: 60,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(primary: kMainColor),
-                      onPressed: () => addTransaction(addQuickAction != null),
+                      onPressed: addTransaction,
                       child: Text(
-                        addQuickAction != null
-                            ? 'Add Quick Action'
-                            : 'Save Transaction',
+                        saveButtonText,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -191,5 +227,35 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         ],
       ),
     );
+  }
+
+  String get saveButtonText {
+    if (widget.addTransactionScreenOperations ==
+        AddTransactionScreenOperations.addQuickAction) {
+      return 'Add Quick Action';
+    } else if (widget.addTransactionScreenOperations ==
+        AddTransactionScreenOperations.addTransaction) {
+      return 'Add Transaction';
+    } else if (widget.addTransactionScreenOperations ==
+        AddTransactionScreenOperations.editQuickAction) {
+      return 'Edit Quick Action';
+    } else {
+      return 'Edit Transaction';
+    }
+  }
+
+  String get appBarTitle {
+    if (widget.addTransactionScreenOperations ==
+        AddTransactionScreenOperations.addQuickAction) {
+      return 'Add Quick Action';
+    } else if (widget.addTransactionScreenOperations ==
+        AddTransactionScreenOperations.addTransaction) {
+      return 'Add Transaction';
+    } else if (widget.addTransactionScreenOperations ==
+        AddTransactionScreenOperations.editQuickAction) {
+      return 'Edit Quick Action';
+    } else {
+      return 'Edit Transaction';
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
+import 'package:wallet_app/screens/add_transaction/add_transaction_screen.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
@@ -29,6 +30,7 @@ class TranscationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //* the main container of the card
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: kDefaultPadding / 2),
@@ -43,15 +45,24 @@ class TranscationCard extends StatelessWidget {
           kCardBoxShadow,
         ],
       ),
+      //* the row that hold the main components of the card, ( circular leading, title buttons etc...)
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          //* circular icon that represent the transaction type and its ratio to the total of the time the transaction added
+          //* and have the border radius and the background color
           Container(
             alignment: Alignment.center,
             width: 50,
             height: 50,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(1000),
+              border: Border.all(
+                width: 2,
+                color: transaction.transactionType == TransactionType.income
+                    ? kIncomeColor
+                    : kOutcomeColor,
+              ),
               color: transaction.transactionType == TransactionType.income
                   ? kIncomeColor.withOpacity(transaction.ratioToTotal > 1
                       ? 1
@@ -60,6 +71,8 @@ class TranscationCard extends StatelessWidget {
                       ? 1
                       : transaction.ratioToTotal),
             ),
+            //* the small circular icon that represents the original color of the transaction type
+            //* to make it easy to differentiate between colors
             child: Container(
               width: 20,
               height: 20,
@@ -74,10 +87,12 @@ class TranscationCard extends StatelessWidget {
           const SizedBox(
             width: kDefaultPadding / 3,
           ),
+          //* title and price column
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              //* title text widget
               Text(
                 transaction.title,
                 style: kParagraphTextStyle,
@@ -85,6 +100,7 @@ class TranscationCard extends StatelessWidget {
               const SizedBox(
                 height: kDefaultPadding / 4,
               ),
+              //* price text widget
               Text(
                 '${doubleToString(transaction.amount)} \$',
                 style: kSmallTextPrimaryColorStyle,
@@ -92,20 +108,35 @@ class TranscationCard extends StatelessWidget {
             ],
           ),
           Expanded(
+            //* the container of the actions button
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                //* for opening the screen to edit the transactions
                 TransactionActionButton(
                   iconData: FontAwesomeIcons.pen,
                   color: kMainColor,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (ctx) => AddTransactionScreen(
+                          addTransactionScreenOperations:
+                              AddTransactionScreenOperations.editTransaction,
+                          editingId: transaction.id,
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(
                   width: kDefaultPadding / 4,
                 ),
+                //* for deleting a transactions
                 TransactionActionButton(
                   iconData: FontAwesomeIcons.trash,
                   color: kDeleteColor,
+                  //? here i need to show dialog before actually deleting a transaction
                   onTap: () => deleteTransaction(context),
                 ),
               ],

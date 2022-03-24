@@ -4,8 +4,8 @@ class QuickActionModel {
   String id;
   String title;
   String description;
-  DateTime createdAt;
   double amount;
+  DateTime createdAt;
   TransactionType transactionType;
 
   QuickActionModel({

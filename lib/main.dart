@@ -35,7 +35,6 @@ class _MyAppState extends State<MyApp> {
         initialRoute: HolderScreen.routeName,
         routes: {
           HolderScreen.routeName: (ctx) => HolderScreen(),
-          AddTransactionScreen.routeName: (ctx) => AddTransactionScreen(),
         },
       ),
     );

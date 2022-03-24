@@ -6,3 +6,6 @@
 # make the quick actions in the home screen to be income in a column and outcome in another column=> this is experimental and can be removed if needed
 
 # add the ability for a transaction to know if it was added by a quick action or not
+ 
+
+# before adding a new transaction check the last added transaction and if they are the same amount show dialog that warns the user that (are you sure to add transaction again) whether it is added normally or by a quick action
