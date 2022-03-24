@@ -134,6 +134,16 @@ class QuickActionsProvider extends ChangeNotifier {
 
 //* for deleting a quickActions
   Future<void> deleteQuickActions(String id) async {
+    //* delete from the database first
+    try {
+      await DBHelper.deleteById(id, quickActionsTableName);
+    } catch (error) {
+      if (kDebugMode) {
+        print(error);
+        print('An error occurred during deleting a quick action');
+      }
+    }
+
     _quickActions.removeWhere((element) => element.id == id);
     notifyListeners();
   }

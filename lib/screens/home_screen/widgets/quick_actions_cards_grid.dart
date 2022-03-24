@@ -1,11 +1,13 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet_app/constants/styles.dart';
 import 'package:wallet_app/constants/types.dart';
 import 'package:wallet_app/models/quick_action_model.dart';
 import 'package:wallet_app/providers/quick_actions_provider.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
+import 'package:wallet_app/screens/quick_actions_screen/quick_actions_screen.dart';
 import 'package:wallet_app/utils/transactions_utils.dart';
 import 'package:wallet_app/widgets/global/empty_transactions.dart';
 
@@ -53,8 +55,36 @@ class QuickActionsCardsGrid extends StatelessWidget {
           top: kDefaultPadding / 4,
         ),
         child: quickActions.isEmpty
-            ? EmptyTransactions(
-                title: 'No Quick Actions',
+            ? Column(
+                children: [
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, QuickActionsScreen.routeName);
+                    },
+                    child: EmptyTransactions(
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'No Favorite ',
+                            style: kParagraphTextStyle,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Quick Actions ',
+                            style: kLinkTextStyle,
+                          ),
+                        ],
+                      ),
+                      imagePath: 'assets/icons/box.png',
+                    ),
+                  ),
+                ],
               )
             : NotificationListener<ScrollUpdateNotification>(
                 onNotification: ((notification) {

@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/constants/colors.dart';
+import 'package:wallet_app/constants/styles.dart';
 import 'package:wallet_app/providers/quick_actions_provider.dart';
 import 'package:wallet_app/screens/quick_actions_screen/widgets/all_quick_actions_card.dart';
+import 'package:wallet_app/widgets/global/empty_transactions.dart';
 
 import '../../constants/sizes.dart';
 import '../../widgets/app_bar/my_app_bar.dart';
@@ -77,16 +79,21 @@ class _QuickActionsScreenState extends State<QuickActionsScreen> {
                     height: kDefaultPadding / 2,
                   ),
                   Expanded(
-                    child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      itemCount: quickActions.length,
-                      itemBuilder: (ctx, index) => ChangeNotifierProvider.value(
-                        value: quickActions[index],
-                        child: AllQuickActionsCard(
-                          quickAction: quickActions[index],
-                        ),
-                      ),
-                    ),
+                    child: quickActions.isEmpty
+                        ? EmptyTransactions(
+                            imagePath: 'assets/icons/box.png',
+                            trainling: Text(
+                              'No Quick Actions Here',
+                              style: kSmallTextOpaqueColorStyle,
+                            ),
+                          )
+                        : ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            itemCount: quickActions.length,
+                            itemBuilder: (ctx, index) => AllQuickActionsCard(
+                              quickAction: quickActions[index],
+                            ),
+                          ),
                   ),
                 ],
               ),

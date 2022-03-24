@@ -8,6 +8,11 @@ const TextStyle kHeadingTextStyle = TextStyle(
   fontSize: 20,
   fontWeight: FontWeight.bold,
 );
+const TextStyle kLinkTextStyle = TextStyle(
+  color: kMainColor,
+  decoration: TextDecoration.underline,
+  fontSize: 16,
+);
 const TextStyle kParagraphTextStyle = TextStyle(
   color: kMainColor,
   fontSize: 16,
@@ -26,6 +31,11 @@ const TextStyle kSmallTextPrimaryColorStyle = TextStyle(
 const TextStyle kSmallTextWhiteColorStyle = TextStyle(
   color: Colors.white,
   fontSize: 14,
+  fontWeight: FontWeight.normal,
+);
+TextStyle kSmallTextOpaqueColorStyle = TextStyle(
+  color: kMainColor.withOpacity(0.6),
+  fontSize: 18,
   fontWeight: FontWeight.normal,
 );
 

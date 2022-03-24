@@ -115,15 +115,7 @@ class _HolderScreenState extends State<HolderScreen> {
                       Container(
                         child: Text('Profiles  page'),
                       ),
-                      Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          HomeScreen(),
-                          //? this floating action button will be hidden when scrolling down
-                          //* floating action button for adding new quick action
-                          AddQuickActionButton(),
-                        ],
-                      ),
+                      HomeScreen(),
                       TransactionsScreen(),
                       Container(
                         child: Text('Settings  page'),

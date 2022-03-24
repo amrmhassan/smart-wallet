@@ -1,30 +1,27 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
-import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 
 class EmptyTransactions extends StatelessWidget {
-  final String? title;
+  final Widget? title;
   final bool showImage;
+  final String imagePath;
+  final Widget? trainling;
   const EmptyTransactions({
     Key? key,
     this.title,
     this.showImage = true,
+    this.imagePath = 'assets/icons/empty.png',
+    this.trainling,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (title != null)
-          Text(
-            title.toString(),
-            style: TextStyle(
-              color: kMainColor.withOpacity(0.8),
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-            ),
-          ),
+        title ?? SizedBox(),
         const SizedBox(
           height: kDefaultPadding,
         ),
@@ -34,11 +31,12 @@ class EmptyTransactions extends StatelessWidget {
             child: Opacity(
               opacity: 0.6,
               child: Image.asset(
-                'assets/icons/empty.png',
+                imagePath,
                 fit: BoxFit.contain,
               ),
             ),
           ),
+        if (trainling != null) trainling ?? SizedBox(),
       ],
     );
   }
