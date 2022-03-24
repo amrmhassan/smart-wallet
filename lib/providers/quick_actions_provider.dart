@@ -13,6 +13,14 @@ class QuickActionsProvider extends ChangeNotifier {
   List<QuickActionModel> _quickActions = [];
 
 //? 1- getting quick actions, with multiple possibilities
+
+//* for getting the favorite quick actions only
+  List<QuickActionModel> get getFavoriteQuickActions {
+    return [
+      ..._quickActions.where((element) => element.isFavorite == true),
+    ];
+  }
+
 //* for getting the income quick actions only
   List<QuickActionModel> get _incomeQuickActions {
     return [
@@ -67,6 +75,7 @@ class QuickActionsProvider extends ChangeNotifier {
         'createdAt': createdAt.toIso8601String(),
         'transactionType':
             transactionType == TransactionType.income ? 'income' : 'outcome',
+        'isFavorite': 'false',
       });
     } catch (error) {
       if (kDebugMode) {
@@ -82,6 +91,7 @@ class QuickActionsProvider extends ChangeNotifier {
       amount: amount,
       createdAt: createdAt,
       transactionType: transactionType,
+      isFavorite: false,
     );
     _quickActions.add(quickActionModel);
     notifyListeners();
@@ -103,6 +113,13 @@ class QuickActionsProvider extends ChangeNotifier {
                 transactionType: quickAction['transactionType'] == 'income'
                     ? TransactionType.income
                     : TransactionType.outcome,
+
+                //? sqlite doesn't support bool datatype so i will store it as string then fetch it and decide
+                isFavorite: quickAction['isFavorite'] == null
+                    ? false
+                    : quickAction['isFavorite'] == 'true'
+                        ? true
+                        : false,
               ))
           .toList();
       _quickActions = fetchedQuickActions;
@@ -123,19 +140,20 @@ class QuickActionsProvider extends ChangeNotifier {
 
 //* for editing a quick action
   Future<void> editQuickAction(
-      String quickActionId, QuickActionModel newQuickActions) async {
+      String quickActionId, QuickActionModel newQuickAction) async {
     //* editing quick action on database first
     try {
       await DBHelper.insert(quickActionsTableName, {
-        'id': newQuickActions.id,
-        'title': newQuickActions.title,
-        'description': newQuickActions.description,
-        'amount': newQuickActions.amount.toString(),
-        'createdAt': newQuickActions.createdAt.toIso8601String(),
+        'id': newQuickAction.id,
+        'title': newQuickAction.title,
+        'description': newQuickAction.description,
+        'amount': newQuickAction.amount.toString(),
+        'createdAt': newQuickAction.createdAt.toIso8601String(),
         'transactionType':
-            newQuickActions.transactionType == TransactionType.income
+            newQuickAction.transactionType == TransactionType.income
                 ? 'income'
                 : 'outcome',
+        'isFavorite': newQuickAction.isFavorite.toString(),
       });
     } catch (error) {
       if (kDebugMode) {
@@ -146,8 +164,16 @@ class QuickActionsProvider extends ChangeNotifier {
     int transactionIndex =
         _quickActions.indexWhere((element) => element.id == quickActionId);
     _quickActions.removeWhere((element) => element.id == quickActionId);
-    _quickActions.insert(transactionIndex, newQuickActions);
+    _quickActions.insert(transactionIndex, newQuickAction);
     notifyListeners();
+  }
+
+//* for making a quick action favorite
+  Future<void> toggleFavouriteQuickAction(String quickActionId) async {
+    QuickActionModel newQuickAction = getQuickById(quickActionId);
+    newQuickAction.isFavorite = !newQuickAction.isFavorite;
+
+    return editQuickAction(quickActionId, newQuickAction);
   }
 
   //? quick transactions type stuff

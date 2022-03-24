@@ -80,8 +80,12 @@ class _QuickActionsScreenState extends State<QuickActionsScreen> {
                     child: ListView.builder(
                       physics: BouncingScrollPhysics(),
                       itemCount: quickActions.length,
-                      itemBuilder: (ctx, index) =>
-                          AllQuickActionsCard(quickAction: quickActions[index]),
+                      itemBuilder: (ctx, index) => ChangeNotifierProvider.value(
+                        value: quickActions[index],
+                        child: AllQuickActionsCard(
+                          quickAction: quickActions[index],
+                        ),
+                      ),
                     ),
                   ),
                 ],

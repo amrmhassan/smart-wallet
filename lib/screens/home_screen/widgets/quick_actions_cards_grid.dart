@@ -40,7 +40,7 @@ class QuickActionsCardsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<QuickActionModel> quickActions =
-        Provider.of<QuickActionsProvider>(context).getAllQuickActions;
+        Provider.of<QuickActionsProvider>(context).getFavoriteQuickActions;
 
     return Expanded(
       child: Container(

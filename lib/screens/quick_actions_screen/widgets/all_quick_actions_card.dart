@@ -104,7 +104,7 @@ class AllQuickActionsCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  //* for opening the screen to edit the transactions
+                  //* for opening the screen to edit the quick action
                   CardActionButton(
                     iconData: FontAwesomeIcons.pen,
                     color: kMainColor,
@@ -124,12 +124,21 @@ class AllQuickActionsCard extends StatelessWidget {
                   const SizedBox(
                     width: kDefaultPadding / 4,
                   ),
-                  //* for deleting a transactions
+                  //* for making a quick action favorite
+                  //* this consumer will provide the data for knowing if it is favorite or not
+                  //* and the toggle favorite
+
                   CardActionButton(
-                    iconData: FontAwesomeIcons.heart,
+                    iconData: quickAction.isFavorite
+                        ? FontAwesomeIcons.solidHeart
+                        : FontAwesomeIcons.heart,
                     color: kDeleteColor,
-                    //? here i need to add the code to make the quick action favorite
-                    onTap: () => {},
+                    //* this will toggle the favorite for each quick action
+                    onTap: () async {
+                      await Provider.of<QuickActionsProvider>(context,
+                              listen: false)
+                          .toggleFavouriteQuickAction(quickAction.id);
+                    },
                   ),
                 ],
               ),
