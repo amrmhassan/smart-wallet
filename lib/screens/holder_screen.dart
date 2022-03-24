@@ -105,7 +105,10 @@ class _HolderScreenState extends State<HolderScreen> {
                     onPageChanged: (index) {
                       return _setActiveNavBarIconIndex(index);
                     },
+                    //! try this attribute now
+                    allowImplicitScrolling: false,
                     controller: _pageController,
+
                     children: [
                       Container(
                         child: Text('Statistics page'),

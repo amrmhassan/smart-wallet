@@ -16,12 +16,15 @@ class TotalAmountInProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final totalAmount = Provider.of<TransactionProvider>(context).totalMoney;
-    return Text(
-      'Total : ${doubleToString(totalAmount)} \$',
-      style: TextStyle(
-        color: kMainColor,
-        fontSize: kDefaultInfoTextSize,
-        fontWeight: FontWeight.bold,
+    return FittedBox(
+      fit: BoxFit.contain,
+      child: Text(
+        'Total : ${doubleToString(totalAmount)} \$',
+        style: TextStyle(
+          color: kMainColor,
+          fontSize: kDefaultInfoTextSize,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

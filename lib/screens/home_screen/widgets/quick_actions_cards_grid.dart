@@ -56,31 +56,45 @@ class QuickActionsCardsGrid extends StatelessWidget {
             ? EmptyTransactions(
                 title: 'No Quick Actions',
               )
-            : GridView.builder(
-                clipBehavior: Clip.none,
-                //* this is so impressive for adding a different animation to the scrolling effect
-                physics: BouncingScrollPhysics(),
-                //? SOLVED
-                //* this is a problem :: when making the clip none the cards overflow the grid and get out of it
-                //* when it is hards edges the shadow of the cards gets cut and look bad
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: kDefaultPadding / 2,
-                  mainAxisSpacing: kDefaultPadding / 2,
-                  childAspectRatio: 1,
-                ),
-                itemCount: quickActions.length,
-                itemBuilder: (ctx, index) {
-                  return QuickActionCard(
-                    //* i tried 1.00 to convert it to a double
-                    amount: quickActions[index].amount * 1.00,
-                    title: quickActions[index].title,
-                    description: quickActions[index].description,
-                    transactionType: quickActions[index].transactionType,
-                    onTap: () => applyQuickAction(context, quickActions[index]),
-                  );
+            : NotificationListener<ScrollUpdateNotification>(
+                onNotification: ((notification) {
+                  double scrollingPosition = notification.metrics.pixels;
+                  if (scrollingPosition > 50) {
+                    //? here i will add the code to hide the the add quick action floating action button
+                  } else {
+                    //? here i will add the code to show the the add quick action floating action button
+
+                  }
+                  return true;
                 }),
+                child: GridView.builder(
+                    clipBehavior: Clip.none,
+                    //* this is so impressive for adding a different animation to the scrolling effect
+                    physics: BouncingScrollPhysics(),
+                    //? SOLVED
+                    //* this is a problem :: when making the clip none the cards overflow the grid and get out of it
+                    //* when it is hards edges the shadow of the cards gets cut and look bad
+                    shrinkWrap: true,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: kDefaultPadding / 2,
+                      mainAxisSpacing: kDefaultPadding / 2,
+                      childAspectRatio: 1,
+                    ),
+                    itemCount: quickActions.length,
+                    itemBuilder: (ctx, index) {
+                      return QuickActionCard(
+                        //* i tried 1.00 to convert it to a double
+                        amount: quickActions[index].amount * 1.00,
+                        title: quickActions[index].title,
+                        description: quickActions[index].description,
+                        transactionType: quickActions[index].transactionType,
+                        onTap: () =>
+                            applyQuickAction(context, quickActions[index]),
+                      );
+                    }),
+              ),
       ),
     );
   }

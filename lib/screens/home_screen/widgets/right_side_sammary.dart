@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:wallet_app/screens/add_transaction/add_transaction_screen.dart';
 
@@ -16,11 +18,18 @@ class RightSideSammary extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          AddNewTransactionIcon(onTap: () {
-            Navigator.pushNamed(context, AddTransactionScreen.routeName);
-          }),
-          const SizedBox(height: 20),
-          const TotalAmountInProfile(),
+          Expanded(
+            child: AddNewTransactionIcon(onTap: () {
+              Navigator.pushNamed(context, AddTransactionScreen.routeName);
+            }),
+          ),
+          SizedBox(height: 20),
+          Expanded(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 100),
+              child: TotalAmountInProfile(),
+            ),
+          ),
         ],
       ),
     );

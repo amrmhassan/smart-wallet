@@ -9,6 +9,9 @@ import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 import '../../../utils/transactions_utils.dart';
 
+//* this is to ensure that the money container won't exceed the specified height
+const double _maxHeightConstrains = 40;
+
 class SummaryIncomeOutcome extends StatelessWidget {
   const SummaryIncomeOutcome({
     Key? key,
@@ -27,12 +30,21 @@ class SummaryIncomeOutcome extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  '${doubleToString(transactionData.totalIncome)} \$',
-                  style: TextStyle(
-                    color: kIncomeColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: kDefaultHeadingTextSize,
+                Expanded(
+                  child: ConstrainedBox(
+                    constraints:
+                        BoxConstraints(maxHeight: _maxHeightConstrains),
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Text(
+                        '${doubleToString(transactionData.totalIncome)} \$',
+                        style: TextStyle(
+                          color: kIncomeColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: kDefaultHeadingTextSize,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 SizedBox(width: 5),
@@ -49,12 +61,21 @@ class SummaryIncomeOutcome extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  '${doubleToString(transactionData.totalOutcome)} \$',
-                  style: TextStyle(
-                    color: kOutcomeColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: kDefaultHeadingTextSize,
+                Expanded(
+                  child: ConstrainedBox(
+                    constraints:
+                        BoxConstraints(maxHeight: _maxHeightConstrains),
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Text(
+                        '${doubleToString(transactionData.totalOutcome)} \$',
+                        style: TextStyle(
+                          color: kOutcomeColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: kDefaultHeadingTextSize,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 SizedBox(width: 5),
