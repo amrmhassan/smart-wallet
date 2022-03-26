@@ -8,6 +8,17 @@ const TextStyle kHeadingTextStyle = TextStyle(
   fontSize: 20,
   fontWeight: FontWeight.bold,
 );
+
+const TextStyle kCalcTextStyle = TextStyle(
+  color: kMainColor,
+  fontSize: 26,
+  fontWeight: FontWeight.bold,
+);
+const TextStyle kWhiteTextStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 22,
+  fontWeight: FontWeight.bold,
+);
 const TextStyle kLinkTextStyle = TextStyle(
   color: kMainColor,
   decoration: TextDecoration.underline,

@@ -13,7 +13,6 @@ import 'package:wallet_app/screens/transactions_screen/transactions_screen.dart'
 import '../../widgets/app_bar/my_app_bar.dart';
 import '../../widgets/bottom_nav_bar/bottom_nav_bar.dart';
 import '../providers/transactions_provider.dart';
-import '../widgets/global/add_quick_action_button.dart';
 import 'home_screen/widgets/background.dart';
 
 const Duration _pageSliderDuration = Duration(milliseconds: 200);
