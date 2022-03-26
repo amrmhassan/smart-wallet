@@ -9,6 +9,13 @@ import '../../widgets/app_bar/my_app_bar.dart';
 import '../home_screen/widgets/background.dart';
 import 'widgets/calculator_buttons_fixed.dart';
 
+enum Operations {
+  add,
+  minus,
+  multiply,
+  divide,
+}
+
 class CalculatorScreen extends StatefulWidget {
   static const String routeName = '/add-transaction-screen';
   //* to differentiate between adding new transaction and editting existing one
@@ -22,9 +29,146 @@ class CalculatorScreen extends StatefulWidget {
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
+  //* this is a temp variable that will hold the result of an operation after an operation button is clicked
+  //* after executing the calculate method
   double calcRes = 0;
-  String get calcResBeatified {
-    return calcRes.toString();
+  //* this will hold the numbers that are currently clicked
+  List<int> currentNumberList = [];
+  //* this will hold the current operation
+  Operations? currentOperation;
+
+  //* this will hold the value of the number entered before an operation button is clicked
+  double firstNumber = 0;
+
+//* when clicking for the first time => i will set the numbers list to the numbers being clicked
+//* when clicking an operation i will set the current operation and then set the first number to the current numbers list and clear the numbers list
+//* when clicking another numbers i will keep the operation as it is i won't change it now cause i want to wait until the user finishes entering numbers
+//* when clicking another operation i will replace it with the current operation then
+//* making the calcRes to be firstNumber to be (+-*/) the double.parse(numbersString)
+//* so now in the very first time to enter numbers ( there is no operation and there is no first number)
+//* after first operation clicked there is operation and firstNumber
+//* after this there will be always firstNumber and operation
+//* the calculation will happen when clicking an operation button i will calculate the last firstNumber and the last operation and the currentNumbersList
+//? finished integers calculating
+//? next step is to add the double calculating and then change the calculator layout to have the equal button
+//? the save button will be just an icon (save)
+//? you can remove the percent button but wait ... you can use it as it is important in buying stuff
+//? you can make it
+
+//?---------------
+//? i might need to add a small screen over the calculator and when clicking the equal button the result will be shown in the priceInput next to the title and the description
+
+  void setcurrentNumberList(String value) {
+    if (calcRes != 0) {
+      setState(() {
+        calcRes = 0;
+      });
+    }
+    setState(() {
+      currentNumberList.add(int.parse(value));
+    });
+  }
+
+  //* this will be executed after clicking an operation button
+  //* and i checks if it the first time to click an operation button or not
+  //* to deal will the first number if it is there or not
+  //*
+  void setCurrentOperation(Operations? operation) {
+    if (firstNumber != 0 && currentOperation != null) {
+      calculate();
+    } else {
+      //* this mean that it is the first time to press an operation button
+      //* so i will clear the currentNumberList outside the current state cause i need something to be shown in the text screen(blueGrey)
+      //* and i will set the firstNumber to the content of the currentNumberList
+
+      setState(() {
+        firstNumber = double.parse(currentNumberString);
+      });
+    }
+    currentNumberList = [];
+    //* then i will set the currentOparation to the operation
+    currentOperation = operation;
+  }
+
+  String get currentNumberString {
+    String viewedNumber = '';
+    for (var element in currentNumberList) {
+      viewedNumber += element.toString();
+    }
+    if (viewedNumber == '') {
+      viewedNumber = '0';
+    }
+    return viewedNumber;
+  }
+
+//* this will only calculate the output of the firstNumber , operation, currentNumberlist
+//* then changing the value of the calcRes
+
+  void calculate() {
+    if (currentOperation == Operations.add) {
+      firstNumber = firstNumber + double.parse(currentNumberString);
+    } else if (currentOperation == Operations.minus) {
+      firstNumber = firstNumber - double.parse(currentNumberString);
+    } else if (currentOperation == Operations.divide) {
+      firstNumber = firstNumber / double.parse(currentNumberString);
+    } else {
+      firstNumber = firstNumber * double.parse(currentNumberString);
+    }
+    setState(() {
+      calcRes = firstNumber;
+      currentNumberList = [];
+    });
+  }
+
+  String get operationToString {
+    if (currentOperation == Operations.add) {
+      return '+';
+    } else if (currentOperation == Operations.minus) {
+      return '-';
+    } else if (currentOperation == Operations.multiply) {
+      return 'x';
+    } else if (currentOperation == Operations.divide) {
+      return '/';
+    } else {
+      return '';
+    }
+  }
+
+  String get output {
+    //* this var will be viewed on the screen
+    String value = '';
+    //* these three variables to fix some issues with zeros and these stuff
+    String currentNumberToView =
+        currentNumberString == '0' ? '' : currentNumberString;
+    String firstNumberToView = firstNumber.toString().endsWith('.0')
+        ? firstNumber.toString().replaceAll('.0', '')
+        : firstNumber.toString();
+    String calcResToView = calcRes.toString().endsWith('.0')
+        ? calcRes.toString().replaceAll('.0', '')
+        : calcRes.toString();
+
+    if (calcRes != 0) {
+      value = value = '$calcResToView $operationToString $currentNumberToView';
+    } else if (calcRes == 0 && firstNumber == 0) {
+      value = currentNumberString;
+    } else {
+      value = '$firstNumberToView $operationToString $currentNumberToView';
+    }
+
+    if (value.endsWith('.0')) {
+      value = value.replaceAll('.0', '');
+    }
+
+    return value;
+  }
+
+  void clearAll() {
+    currentOperation = null;
+    firstNumber = 0;
+    setState(() {
+      calcRes = 0;
+      currentNumberList = [];
+    });
   }
 
   @override
@@ -66,7 +210,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      calcResBeatified,
+                      output,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 30,
@@ -91,7 +235,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                             BorderRadius.circular(kDefaultBorderRadius),
                         boxShadow: [kDefaultBoxShadow],
                       ),
-                      child: CalculatorButtonsFixed(),
+                      child: CalculatorButtonsFixed(
+                        setCurrentNumber: setcurrentNumberList,
+                        setCurrentOperation: setCurrentOperation,
+                        clearAll: clearAll,
+                        calculate: calculate,
+                      ),
                     ),
                   )
                 ],

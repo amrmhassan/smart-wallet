@@ -39,7 +39,9 @@ class NumberButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            calculate(number);
+          },
           child: Container(
               alignment: Alignment.center,
               child: Text(

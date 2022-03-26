@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wallet_app/constants/sizes.dart';
+import 'package:wallet_app/screens/calculator_screen/calculator_screen.dart';
 import 'package:wallet_app/screens/calculator_screen/widgets/save_button.dart';
 
 import 'heading_calc_button.dart';
@@ -10,8 +11,17 @@ import 'math_operation_button.dart';
 import 'number_button.dart';
 
 class CalculatorButtonsFixed extends StatelessWidget {
+  final Function(String value) setCurrentNumber;
+  final Function(Operations? value) setCurrentOperation;
+  final VoidCallback clearAll;
+  final VoidCallback calculate;
+
   const CalculatorButtonsFixed({
     Key? key,
+    required this.setCurrentNumber,
+    required this.setCurrentOperation,
+    required this.clearAll,
+    required this.calculate,
   }) : super(key: key);
 
   @override
@@ -26,7 +36,9 @@ class CalculatorButtonsFixed extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   HeadingCalcButton(
-                    calculate: (value) {},
+                    calculate: (value) {
+                      clearAll();
+                    },
                     title: 'C',
                   ),
                   HeadingCalcButton(
@@ -39,11 +51,15 @@ class CalculatorButtonsFixed extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   NumberButton(
-                    calculate: (value) {},
+                    calculate: (value) {
+                      setCurrentNumber(value);
+                    },
                     number: '7',
                   ),
                   NumberButton(
-                    calculate: (value) {},
+                    calculate: (value) {
+                      setCurrentNumber(value);
+                    },
                     number: '8',
                   ),
                 ],
@@ -52,11 +68,15 @@ class CalculatorButtonsFixed extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   NumberButton(
-                    calculate: (value) {},
+                    calculate: (value) {
+                      setCurrentNumber(value);
+                    },
                     number: '4',
                   ),
                   NumberButton(
-                    calculate: (value) {},
+                    calculate: (value) {
+                      setCurrentNumber(value);
+                    },
                     number: '5',
                   ),
                 ],
@@ -65,11 +85,15 @@ class CalculatorButtonsFixed extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   NumberButton(
-                    calculate: (value) {},
+                    calculate: (value) {
+                      setCurrentNumber(value);
+                    },
                     number: '1',
                   ),
                   NumberButton(
-                    calculate: (value) {},
+                    calculate: (value) {
+                      setCurrentNumber(value);
+                    },
                     number: '2',
                   ),
                 ],
@@ -78,11 +102,15 @@ class CalculatorButtonsFixed extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   NumberButton(
-                    calculate: (value) {},
+                    calculate: (value) {
+                      setCurrentNumber(value);
+                    },
                     number: '.',
                   ),
                   NumberButton(
-                    calculate: (value) {},
+                    calculate: (value) {
+                      setCurrentNumber(value);
+                    },
                     number: '0',
                   ),
                 ],
@@ -105,8 +133,11 @@ class CalculatorButtonsFixed extends StatelessWidget {
                     iconData: Icons.percent,
                   ),
                   MathOperationBtn(
-                    calculate: (value) {},
+                    setOperation: (value) {
+                      setCurrentOperation(value);
+                    },
                     iconData: FontAwesomeIcons.divide,
+                    operation: Operations.divide,
                   ),
                 ],
               ),
@@ -114,11 +145,16 @@ class CalculatorButtonsFixed extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   NumberButton(
-                    calculate: (value) {},
+                    calculate: (value) {
+                      setCurrentNumber(value);
+                    },
                     number: '9',
                   ),
                   MathOperationBtn(
-                    calculate: (value) {},
+                    setOperation: (value) {
+                      setCurrentOperation(value);
+                    },
+                    operation: Operations.multiply,
                     title: 'x',
                   ),
                 ],
@@ -127,11 +163,16 @@ class CalculatorButtonsFixed extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   NumberButton(
-                    calculate: (value) {},
+                    calculate: (value) {
+                      setCurrentNumber(value);
+                    },
                     number: '6',
                   ),
                   MathOperationBtn(
-                    calculate: (value) {},
+                    setOperation: (value) {
+                      setCurrentOperation(value);
+                    },
+                    operation: Operations.minus,
                     iconData: FontAwesomeIcons.minus,
                   ),
                 ],
@@ -140,21 +181,30 @@ class CalculatorButtonsFixed extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   NumberButton(
-                    calculate: (value) {},
+                    calculate: (value) {
+                      setCurrentNumber(value);
+                    },
                     number: '3',
                   ),
                   MathOperationBtn(
-                    calculate: (value) {},
+                    setOperation: (value) {
+                      setCurrentOperation(value);
+                    },
                     iconData: FontAwesomeIcons.plus,
+                    operation: Operations.add,
                   ),
                 ],
               ),
               Row(
                 children: [
                   Expanded(
-                      child: SaveButton(
-                    onTap: () {},
-                  )),
+                    child: SaveButton(
+                      onTap: () {
+                        calculate();
+                        setCurrentOperation(null);
+                      },
+                    ),
+                  ),
                 ],
               ),
             ],

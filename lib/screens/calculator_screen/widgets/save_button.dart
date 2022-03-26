@@ -37,7 +37,9 @@ class SaveButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            onTap();
+          },
           child: Container(
               alignment: Alignment.center,
               child: Row(

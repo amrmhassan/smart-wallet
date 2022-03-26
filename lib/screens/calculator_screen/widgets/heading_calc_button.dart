@@ -41,7 +41,9 @@ class HeadingCalcButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            calculate('');
+          },
           child: Container(
             alignment: Alignment.center,
             child: iconData == null

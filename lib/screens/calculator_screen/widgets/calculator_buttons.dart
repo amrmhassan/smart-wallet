@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:wallet_app/screens/calculator_screen/calculator_screen.dart';
 import 'package:wallet_app/screens/calculator_screen/widgets/save_button.dart';
 
 import 'heading_calc_button.dart';
@@ -35,8 +36,9 @@ class CalculatorButtons extends StatelessWidget {
               iconData: Icons.percent,
             ),
             MathOperationBtn(
-              calculate: (value) {},
+              setOperation: (value) {},
               iconData: FontAwesomeIcons.divide,
+              operation: Operations.divide,
             ),
           ],
         ),
@@ -58,8 +60,9 @@ class CalculatorButtons extends StatelessWidget {
             ),
             //? search for the cross icon for the multiplication operation
             MathOperationBtn(
-              calculate: (value) {},
+              setOperation: (value) {},
               title: 'x',
+              operation: Operations.multiply,
             ),
           ],
         ),
@@ -81,8 +84,9 @@ class CalculatorButtons extends StatelessWidget {
             ),
             //? search for the cross icon for the multiplication operation
             MathOperationBtn(
-              calculate: (value) {},
+              setOperation: (value) {},
               iconData: FontAwesomeIcons.minus,
+              operation: Operations.minus,
             ),
           ],
         ),
@@ -104,8 +108,9 @@ class CalculatorButtons extends StatelessWidget {
             ),
             //? search for the cross icon for the multiplication operation
             MathOperationBtn(
-              calculate: (value) {},
+              setOperation: (value) {},
               iconData: FontAwesomeIcons.plus,
+              operation: Operations.add,
             ),
           ],
         ),

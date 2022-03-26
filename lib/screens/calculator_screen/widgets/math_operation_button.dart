@@ -5,17 +5,21 @@ import 'package:wallet_app/constants/colors.dart';
 import 'package:wallet_app/constants/sizes.dart';
 import 'package:wallet_app/constants/styles.dart';
 import 'package:wallet_app/helpers/responsive.dart';
+import 'package:wallet_app/screens/calculator_screen/calculator_screen.dart';
 
 class MathOperationBtn extends StatelessWidget {
   final IconData? iconData;
   final String? title;
+  final Operations operation;
 
-  final Function(String value) calculate;
+  final Function(Operations value) setOperation;
+
   const MathOperationBtn({
     Key? key,
     this.title,
     this.iconData,
-    required this.calculate,
+    required this.setOperation,
+    required this.operation,
   }) : super(key: key);
 
   @override
@@ -35,7 +39,9 @@ class MathOperationBtn extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            setOperation(operation);
+          },
           child: Container(
             alignment: Alignment.center,
             child: iconData == null
