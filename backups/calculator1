@@ -1,5 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+//! this is a backup of the calculator that can calc any int operations 
+//! it can't calc double operations yet
+
 import 'package:flutter/material.dart';
 import 'package:wallet_app/constants/sizes.dart';
 import 'package:wallet_app/constants/styles.dart';
@@ -16,6 +19,7 @@ enum Operations {
   divide,
 }
 
+//! never add any line here without backing this file up first
 class CalculatorScreen extends StatefulWidget {
   static const String routeName = '/add-transaction-screen';
   //* to differentiate between adding new transaction and editting existing one
@@ -33,7 +37,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   //* after executing the calculate method
   double calcRes = 0;
   //* this will hold the numbers that are currently clicked
-  List<String> currentNumberList = [];
+  List<int> currentNumberList = [];
   //* this will hold the current operation
   Operations? currentOperation;
 
@@ -49,8 +53,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 //* after first operation clicked there is operation and firstNumber
 //* after this there will be always firstNumber and operation
 //* the calculation will happen when clicking an operation button i will calculate the last firstNumber and the last operation and the currentNumbersList
-//* finished integers calculating
-//* next step is to add the double calculating and then change the calculator layout to have the equal button
+//? finished integers calculating
+//? next step is to add the double calculating and then change the calculator layout to have the equal button
 //? the save button will be just an icon (save)
 //? you can remove the percent button but wait ... you can use it as it is important in buying stuff
 //? you can make it
@@ -59,20 +63,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 //? i might need to add a small screen over the calculator and when clicking the equal button the result will be shown in the priceInput next to the title and the description
 
   void setcurrentNumberList(String value) {
-    //* this will clear ensure that if the user clicked equal button then clicked a number without clicking an operation first to start over and clear the first number and start calculating from the start
-    if (currentOperation == null && firstNumber != 0) {
-      setState(() {
-        firstNumber = 0;
-      });
-    }
-    //*
     if (calcRes != 0) {
       setState(() {
         calcRes = 0;
       });
     }
     setState(() {
-      currentNumberList.add(value);
+      currentNumberList.add(int.parse(value));
     });
   }
 
