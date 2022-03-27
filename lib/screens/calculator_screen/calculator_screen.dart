@@ -150,35 +150,40 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     }
   }
 
+  //* this will deal with the empty list to view 0 instead of ' '
+  String get currentNumberToView {
+    return currentNumberString == '0' ? '' : currentNumberString;
+  }
+
+  //* this will remove the .0 from the firstNumber only to be viewed
+  String get firstNumberToView {
+    return firstNumber.toString().endsWith('.0')
+        ? firstNumber.toString().replaceAll('.0', '')
+        : firstNumber.toString();
+  }
+
+  //* this will remove the .0 from the calcRes only to be viewed
+  String get calcResToView {
+    return calcRes.toString().endsWith('.0')
+        ? calcRes.toString().replaceAll('.0', '')
+        : calcRes.toString();
+  }
+
   String get output {
     //* this var will be viewed on the screen
     String value = '';
-    //* these three variables to fix some issues with zeros and these stuff
-    String currentNumberToView =
-        currentNumberString == '0' ? '' : currentNumberString;
-    String firstNumberToView = firstNumber.toString().endsWith('.0')
-        ? firstNumber.toString().replaceAll('.0', '')
-        : firstNumber.toString();
-    String calcResToView = calcRes.toString().endsWith('.0')
-        ? calcRes.toString().replaceAll('.0', '')
-        : calcRes.toString();
 
     if (calcRes != 0) {
-      print('setting the calcRes to be viewed');
       value = value = '$calcResToView $operationToString $currentNumberToView';
     } else if (calcRes == 0 && firstNumber == 0) {
-      print('setting the curretNumberList to be viewed');
-
       value = currentNumberString;
     } else {
-      print('setting the first number to be viewed');
-
       value = '$firstNumberToView $operationToString $currentNumberToView';
     }
 
-    if (value.endsWith('.0')) {
-      value = value.replaceAll('.0', '');
-    }
+    // if (value.endsWith('.0')) {
+    //   value = value.replaceAll('.0', '');
+    // }
 
     return value;
   }
