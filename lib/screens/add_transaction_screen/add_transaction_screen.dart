@@ -10,11 +10,11 @@ import 'package:wallet_app/models/transaction_model.dart';
 import 'package:wallet_app/providers/quick_actions_provider.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
 import 'package:wallet_app/utils/transactions_utils.dart';
+import 'package:wallet_app/widgets/calculator/calculator.dart';
 import 'package:wallet_app/widgets/global/line.dart';
 
 import '../../widgets/app_bar/my_app_bar.dart';
 import '../home_screen/widgets/background.dart';
-import 'widgets/add_transaction_button.dart';
 import 'widgets/left_side_add_transaction.dart';
 import 'widgets/right_side_add_transaction.dart';
 
@@ -46,6 +46,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   TransactionType currentActiveTransactionType = TransactionType.outcome;
   TransactionModel? editedTransaction;
   QuickActionModel? editedQuickAction;
+  double amount = 0;
 
   //* for setting the current active transaction type and it will be passed down to the widget that will use it
   void setcurrentActiveTransactionType(TransactionType transactionType) {
@@ -58,7 +59,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     //* preparing the needed info to add the new thing(transaction or quick action)
     String title =
         _titleController.text.isEmpty ? 'Empty Title' : _titleController.text;
-    double amount = double.tryParse(_priceController.text) ?? 0;
     String description = _descriptionController.text.isEmpty
         ? 'Empty Description'
         : _descriptionController.text;
@@ -139,7 +139,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   //* text inputs controller
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
+  // final TextEditingController _priceController = TextEditingController();
 
 //* this initState will provide the required data for this scree to edit
   @override
@@ -156,7 +156,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       //* setting the text controllers to the transaction info
       _titleController.text = editedTransaction!.title;
       _descriptionController.text = editedTransaction!.description;
-      _priceController.text = editedTransaction!.amount.toString();
+      setState(() {
+        amount = editedTransaction!.amount;
+      });
       setcurrentActiveTransactionType(editedTransaction!.transactionType);
     } else if (widget.editingId != null &&
         widget.addTransactionScreenOperations ==
@@ -169,7 +171,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       //* setting the text controllers to the transaction info
       _titleController.text = editedQuickAction!.title;
       _descriptionController.text = editedQuickAction!.description;
-      _priceController.text = editedQuickAction!.amount.toString();
+      setState(() {
+        amount = editedQuickAction!.amount;
+      });
       setcurrentActiveTransactionType(editedQuickAction!.transactionType);
     }
   }
@@ -230,7 +234,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                               currentActiveTransactionType,
                           setCurrentActiveTransactionType:
                               setcurrentActiveTransactionType,
-                          priceController: _priceController,
+                          amount: amount,
                         ),
                       ],
                     ),
@@ -238,9 +242,15 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   SizedBox(
                     height: kDefaultPadding,
                   ),
-                  AddTransactionButton(
-                    addTransaction: addTransaction,
-                    saveButtonText: saveButtonText,
+                  Expanded(
+                    child: Calculator(
+                      setResults: (result) {
+                        setState(() {
+                          amount = result;
+                        });
+                      },
+                      saveTransaction: addTransaction,
+                    ),
                   ),
                 ],
               ),

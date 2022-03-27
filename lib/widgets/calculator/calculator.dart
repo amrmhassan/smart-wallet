@@ -20,10 +20,13 @@ enum Operations {
 class Calculator extends StatefulWidget {
   //? this function is responsible for setting the state of the parent widget of this widget
   //? to give it the result of the calculated results
-  final Function(double result)? setResults;
+  final VoidCallback saveTransaction;
+  final Function(double result) setResults;
+
   const Calculator({
     Key? key,
-    this.setResults,
+    required this.saveTransaction,
+    required this.setResults,
   }) : super(key: key);
 
   @override
@@ -225,14 +228,24 @@ class _CalculatorState extends State<Calculator> {
     });
   }
 
+  void sendResultToParent() {
+    String result = '0';
+    if (firstNumber == 0) {
+      result = double.parse(currentNumberString).toStringAsFixed(2);
+    } else {
+      result = firstNumber.toStringAsFixed(2);
+    }
+    widget.setResults(double.parse(result));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(
-        //? if you added this container into Expanded then remove this constrains
-        maxHeight: 500,
-        minHeight: 200,
-      ),
+      // constraints: BoxConstraints(
+      //   //? if you added this container into Expanded then remove this constrains
+      //   maxHeight: 500,
+      //   minHeight: 200,
+      // ),
       clipBehavior: Clip.hardEdge,
       width: double.infinity,
       margin: EdgeInsets.only(
@@ -391,14 +404,23 @@ class _CalculatorState extends State<Calculator> {
 
                       //? search for the cross icon for the multiplication operation
                       HeadingCalcButton(
+                        //! these functions are still experimental
                         calculate: (String value) {
                           calculate();
+                          sendResultToParent();
                           deleteCurrenOperation();
                         },
                         iconData: FontAwesomeIcons.equals,
                       ),
                       SaveButton(
-                        onTap: () {},
+                        onTap: () {
+                          //! these functions are still experimental
+
+                          calculate();
+                          sendResultToParent();
+                          deleteCurrenOperation();
+                          widget.saveTransaction();
+                        },
                       ),
                     ],
                   ),

@@ -1,9 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
+import '../../../constants/styles.dart';
 import '../../../constants/types.dart';
-import '../../../widgets/global/stylized_text_field.dart';
 import 'add_transaction_type_button.dart';
 
 class RightSideAddTransaction extends StatelessWidget {
@@ -13,14 +15,22 @@ class RightSideAddTransaction extends StatelessWidget {
       setCurrentActiveTransactionType;
 
 //* for the price controller given by the parent
-  final TextEditingController priceController;
+  final double amount;
 
   const RightSideAddTransaction({
     Key? key,
     required this.currentActiveTransactionType,
     required this.setCurrentActiveTransactionType,
-    required this.priceController,
+    required this.amount,
   }) : super(key: key);
+
+  String get amountToString {
+    String value = amount.toString();
+    if (value.endsWith('.0')) {
+      value = amount.toString().replaceAll('.0', '');
+    }
+    return value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,26 +52,17 @@ class RightSideAddTransaction extends StatelessWidget {
               Container(
                 alignment: Alignment.center,
                 width: 100,
+                height: 60,
+                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 4),
+                decoration: BoxDecoration(
+                  color: kTextFieldInputColor,
+                  borderRadius: BorderRadius.circular(kDefaultBorderRadius / 2),
+                ),
                 //* price text field
-                child: StylizedTextField(
-                  controller: priceController,
-                  hintText: '0,0',
-                  onChanged: (value) {},
-                  keyboardType: TextInputType.number,
-                  fillColor: kTextFieldInputColor,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(kDefaultBorderRadius),
-                    borderSide: BorderSide(
-                      color: Colors.white.withOpacity(0.3),
-                      width: 1,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(kDefaultBorderRadius),
-                    borderSide: BorderSide(
-                      color: Colors.white.withOpacity(0.3),
-                      width: 1,
-                    ),
+                child: FittedBox(
+                  child: Text(
+                    amountToString,
+                    style: kCalcTextStyle,
                   ),
                 ),
               ),
