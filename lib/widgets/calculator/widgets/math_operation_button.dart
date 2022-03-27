@@ -5,7 +5,8 @@ import 'package:wallet_app/constants/colors.dart';
 import 'package:wallet_app/constants/sizes.dart';
 import 'package:wallet_app/constants/styles.dart';
 import 'package:wallet_app/helpers/responsive.dart';
-import 'package:wallet_app/screens/calculator_screen/calculator_screen.dart';
+
+import '../calculator.dart';
 
 class MathOperationBtn extends StatelessWidget {
   final IconData? iconData;

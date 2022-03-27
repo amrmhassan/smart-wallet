@@ -142,26 +142,34 @@ class TransactionProvider extends ChangeNotifier {
 
 //* for getting the transactions from the database
   Future<void> fetchAndUpdateTransactions() async {
-    List<Map<String, dynamic>> data =
-        await DBHelper.getData(transactionsTableName);
+    try {
+      List<Map<String, dynamic>> data =
+          await DBHelper.getData(transactionsTableName);
 
-    List<TransactionModel> fetchedTransactions = data
-        .map((transaction) => TransactionModel(
-              id: transaction['id'],
-              title: transaction['title'],
-              description: transaction['description'],
-              amount: double.parse(transaction['amount']),
-              createdAt: DateTime.parse(transaction['createdAt']),
-              transactionType: transaction['transactionType'] == 'income'
-                  ? TransactionType.income
-                  : TransactionType.outcome,
-              ratioToTotal: double.parse(
-                transaction['ratioToTotal'],
-              ),
-            ))
-        .toList();
-    _transactions = fetchedTransactions;
-    notifyListeners();
+      List<TransactionModel> fetchedTransactions = data
+          .map((transaction) => TransactionModel(
+                id: transaction['id'],
+                title: transaction['title'],
+                description: transaction['description'],
+                amount: double.parse(transaction['amount']),
+                createdAt: DateTime.parse(transaction['createdAt']),
+                transactionType: transaction['transactionType'] == 'income'
+                    ? TransactionType.income
+                    : TransactionType.outcome,
+                ratioToTotal: double.parse(
+                  transaction['ratioToTotal'],
+                ),
+              ))
+          .toList();
+      _transactions = fetchedTransactions;
+      notifyListeners();
+    } catch (error) {
+      if (kDebugMode) {
+        print('An error occurred fetching transactions form database');
+      }
+      //! in the final version activate that line
+      // rethrow;
+    }
   }
 
 //* for deleting a transaction

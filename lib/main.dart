@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/providers/quick_actions_provider.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
-import 'package:wallet_app/screens/calculator_screen/calculator_screen.dart';
 import 'package:wallet_app/screens/holder_screen.dart';
 import 'package:wallet_app/screens/quick_actions_screen/quick_actions_screen.dart';
 
@@ -33,11 +32,10 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: CalculatorScreen.routeName,
+        initialRoute: HolderScreen.routeName,
         routes: {
           HolderScreen.routeName: (ctx) => HolderScreen(),
           QuickActionsScreen.routeName: (ctx) => QuickActionsScreen(),
-          CalculatorScreen.routeName: (ctx) => CalculatorScreen(),
         },
       ),
     );

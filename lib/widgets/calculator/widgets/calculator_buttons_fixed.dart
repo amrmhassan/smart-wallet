@@ -3,12 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wallet_app/constants/sizes.dart';
-import 'package:wallet_app/screens/calculator_screen/calculator_screen.dart';
-import 'package:wallet_app/screens/calculator_screen/widgets/save_button.dart';
 
+import '../calculator.dart';
 import 'heading_calc_button.dart';
 import 'math_operation_button.dart';
 import 'number_button.dart';
+import 'save_button.dart';
 
 class CalculatorButtonsFixed extends StatelessWidget {
   final Function(String value) setCurrentNumber;
@@ -143,9 +143,7 @@ class CalculatorButtonsFixed extends StatelessWidget {
                     iconData: Icons.percent,
                   ),
                   MathOperationBtn(
-                    setOperation: (value) {
-                      setCurrentOperation(value);
-                    },
+                    setOperation: setCurrentOperation,
                     iconData: FontAwesomeIcons.divide,
                     operation: Operations.divide,
                   ),
@@ -161,9 +159,7 @@ class CalculatorButtonsFixed extends StatelessWidget {
                     number: '9',
                   ),
                   MathOperationBtn(
-                    setOperation: (value) {
-                      setCurrentOperation(value);
-                    },
+                    setOperation: setCurrentOperation,
                     operation: Operations.multiply,
                     title: 'x',
                   ),
@@ -179,9 +175,7 @@ class CalculatorButtonsFixed extends StatelessWidget {
                     number: '6',
                   ),
                   MathOperationBtn(
-                    setOperation: (value) {
-                      setCurrentOperation(value);
-                    },
+                    setOperation: setCurrentOperation,
                     operation: Operations.minus,
                     iconData: FontAwesomeIcons.minus,
                   ),
@@ -197,9 +191,7 @@ class CalculatorButtonsFixed extends StatelessWidget {
                     number: '3',
                   ),
                   MathOperationBtn(
-                    setOperation: (value) {
-                      setCurrentOperation(value);
-                    },
+                    setOperation: setCurrentOperation,
                     iconData: FontAwesomeIcons.plus,
                     operation: Operations.add,
                   ),
