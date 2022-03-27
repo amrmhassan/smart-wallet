@@ -113,8 +113,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       }
     } else if (widget.addTransactionScreenOperations ==
         AddTransactionScreenOperations.editQuickAction) {
+      //* here i will add edit a quick action
       String id = editedQuickAction!.id;
       DateTime createdAt = editedQuickAction!.createdAt;
+      bool isFavorite = editedQuickAction!.isFavorite;
       QuickActionModel newQuickAction = QuickActionModel(
         id: id,
         title: title,
@@ -122,6 +124,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         amount: amount,
         createdAt: createdAt,
         transactionType: transactionType,
+        isFavorite: isFavorite,
+        // isFavorite:
       );
 
       try {
@@ -250,6 +254,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         });
                       },
                       saveTransaction: addTransaction,
+                      initialAmount: amount.toString(),
                     ),
                   ),
                 ],

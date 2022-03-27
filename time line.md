@@ -14,5 +14,6 @@ search for an arrow entering a wallet icon
 search for an arrow going out from a wallet icon
 make these two icons to be instead of arrow up for outcome and arrow down for income
 
-search how to make the keyboard not to reduce the size of the screen flutter 
-or how to handle keyboard in flutter
+search how to make the keyboard not to reduce the size of the screen flutter or how to handle keyboard in flutter
+
+search for how to cancel any opened snackbar to remove any snackbars if another is clicked

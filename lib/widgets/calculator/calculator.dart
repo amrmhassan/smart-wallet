@@ -22,11 +22,13 @@ class Calculator extends StatefulWidget {
   //? to give it the result of the calculated results
   final VoidCallback saveTransaction;
   final Function(double result) setResults;
+  final String initialAmount;
 
   const Calculator({
     Key? key,
     required this.saveTransaction,
     required this.setResults,
+    required this.initialAmount,
   }) : super(key: key);
 
   @override
@@ -41,6 +43,7 @@ class _CalculatorState extends State<Calculator> {
 
   //* this will hold the value of the number entered before an operation button is clicked
   double firstNumber = 0;
+  bool firstTimeOpened = true;
 
 //* when clicking for the first time => i will set the numbers list to the numbers being clicked
 //* when clicking an operation i will set the current operation and then set the first number to the current numbers list and clear the numbers list
@@ -61,6 +64,17 @@ class _CalculatorState extends State<Calculator> {
 //* i might need to add a small screen over the calculator and when clicking the equal button the result will be shown in the priceInput next to the title and the description
 
   void setcurrentNumberList(String value) {
+    //* this line is for checking if the calculator clicked for the first time or not
+    //* that is because i will assign the list to the initial amount from the parent widget
+    //* and i will delete the list and start typing from the start
+    if (firstTimeOpened) {
+      firstTimeOpened = false;
+      setState(() {
+        currentNumberList.clear();
+        currentNumberList.add(value);
+      });
+      return;
+    }
     //* this will clear ensure that if the user clicked equal button then clicked a number without clicking an operation first to start over and clear the first number and start calculating from the start
     if (currentOperation == null && firstNumber != 0) {
       setState(() {
@@ -236,6 +250,18 @@ class _CalculatorState extends State<Calculator> {
       result = firstNumber.toStringAsFixed(2);
     }
     widget.setResults(double.parse(result));
+  }
+
+  @override
+  void initState() {
+    String initialAmountString = widget.initialAmount;
+    if (initialAmountString.endsWith('.0')) {
+      initialAmountString = initialAmountString.replaceAll('.0', '');
+    }
+    for (var i = 0; i < initialAmountString.length; i++) {
+      currentNumberList.add(initialAmountString[i]);
+    }
+    super.initState();
   }
 
   @override
