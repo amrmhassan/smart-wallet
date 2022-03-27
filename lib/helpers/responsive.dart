@@ -30,6 +30,7 @@ enum Device {
   pc,
   tv,
 }
+
 //* these are the breakpoints of the screen sizes
 const Map<Device, List<double>> breakpoints = {
   Device.smallMobile: [0, 319],

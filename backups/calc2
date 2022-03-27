@@ -31,7 +31,7 @@ class CalculatorScreen extends StatefulWidget {
 class _CalculatorScreenState extends State<CalculatorScreen> {
   //* this is a temp variable that will hold the result of an operation after an operation button is clicked
   //* after executing the calculate method
-  // double calcRes = 0;
+  double calcRes = 0;
   //* this will hold the numbers that are currently clicked
   List<String> currentNumberList = [];
   //* this will hold the current operation
@@ -66,23 +66,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       });
     }
     //*
-    // if (calcRes != 0) {
-    //   setState(() {
-    //     calcRes = 0;
-    //   });
-    // }
-    if (value == '.' && currentNumberList.contains('.')) {
-      return;
+    if (calcRes != 0) {
+      setState(() {
+        calcRes = 0;
+      });
     }
-
-    if (currentNumberList.length == 1 && currentNumberList[0] == '0') {
-      if (value == '0') {
-        return;
-      } else {
-        currentNumberList.clear();
-      }
-    }
-
     setState(() {
       currentNumberList.add(value);
     });
@@ -133,22 +121,17 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 //* then changing the value of the calcRes
 
   void calculate() {
-    if (currentOperation == null) {
-      firstNumber == double.parse(currentNumberString);
-      return;
-    }
     if (currentOperation == Operations.add) {
       firstNumber = firstNumber + double.parse(currentNumberString);
     } else if (currentOperation == Operations.minus) {
       firstNumber = firstNumber - double.parse(currentNumberString);
     } else if (currentOperation == Operations.divide) {
-      if (double.parse(currentNumberString) == 0) {}
       firstNumber = firstNumber / double.parse(currentNumberString);
     } else if (currentOperation == Operations.multiply) {
       firstNumber = firstNumber * double.parse(currentNumberString);
     }
     setState(() {
-      // calcRes = firstNumber;
+      calcRes = firstNumber;
       currentNumberList = [];
     });
   }
@@ -167,8 +150,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     }
   }
 
-  void calcPercent() {}
-
   //* this will deal with the empty list to view 0 instead of ' '
   String get currentNumberToView {
     return currentNumberString == '0' ? '' : currentNumberString;
@@ -182,35 +163,23 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   }
 
   //* this will remove the .0 from the calcRes only to be viewed
-  // String get calcResToView {
-  //   return calcRes.toString().endsWith('.0')
-  //       ? calcRes.toString().replaceAll('.0', '')
-  //       : calcRes.toString();
-  // }
+  String get calcResToView {
+    return calcRes.toString().endsWith('.0')
+        ? calcRes.toString().replaceAll('.0', '')
+        : calcRes.toString();
+  }
 
   String get output {
     //* this var will be viewed on the screen
     String value = '';
 
-    if (firstNumber == 0) {
+    if (calcRes != 0) {
+      value = value = '$calcResToView $operationToString $currentNumberToView';
+    } else if (calcRes == 0 && firstNumber == 0) {
       value = currentNumberString;
-    } else if (firstNumber != 0 &&
-        currentOperation != null &&
-        currentNumberList.isNotEmpty) {
-      value = '$firstNumberToView $operationToString $currentNumberString';
-    } else if (firstNumber != 0 && currentOperation != null) {
-      value = '$firstNumberToView $operationToString';
     } else {
-      value = firstNumberToView;
+      value = '$firstNumberToView $operationToString $currentNumberToView';
     }
-
-    // if (calcRes != 0) {
-    //   value = value = '$calcResToView $operationToString $currentNumberToView';
-    // } else if (calcRes == 0 && firstNumber == 0) {
-    //   value = currentNumberString;
-    // } else {
-    //   value = '$firstNumberToView $operationToString $currentNumberToView';
-    // }
 
     // if (value.endsWith('.0')) {
     //   value = value.replaceAll('.0', '');
@@ -223,14 +192,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     currentOperation = null;
     firstNumber = 0;
     setState(() {
-      // calcRes = 0;
+      calcRes = 0;
       currentNumberList = [];
-    });
-  }
-
-  void backspace() {
-    setState(() {
-      currentNumberList.removeLast();
     });
   }
 
@@ -268,7 +231,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     children: [
                       Text('firstNumber = $firstNumber'),
                       Text('currentNumberList = $currentNumberList'),
-                      // Text('calcRes = $calcRes'),
+                      Text('calcRes = $calcRes'),
                       Text('currentOperation = ${currentOperation.toString()}'),
                     ],
                   ),
@@ -312,8 +275,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         clearAll: clearAll,
                         calculate: calculate,
                         deleteCurrenOperation: deleteCurrenOperation,
-                        backspace: backspace,
-                        calcPercent: calcPercent,
                       ),
                     ),
                   )

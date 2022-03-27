@@ -16,6 +16,8 @@ class CalculatorButtonsFixed extends StatelessWidget {
   final VoidCallback clearAll;
   final VoidCallback calculate;
   final VoidCallback deleteCurrenOperation;
+  final VoidCallback backspace;
+  final VoidCallback calcPercent;
 
   const CalculatorButtonsFixed({
     Key? key,
@@ -24,6 +26,8 @@ class CalculatorButtonsFixed extends StatelessWidget {
     required this.clearAll,
     required this.calculate,
     required this.deleteCurrenOperation,
+    required this.backspace,
+    required this.calcPercent,
   }) : super(key: key);
 
   @override
@@ -44,7 +48,9 @@ class CalculatorButtonsFixed extends StatelessWidget {
                     title: 'C',
                   ),
                   HeadingCalcButton(
-                    calculate: (value) {},
+                    calculate: (value) {
+                      backspace();
+                    },
                     iconData: Icons.backspace,
                   ),
                 ],
@@ -131,7 +137,9 @@ class CalculatorButtonsFixed extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   HeadingCalcButton(
-                    calculate: (value) {},
+                    calculate: (value) {
+                      calcPercent();
+                    },
                     iconData: Icons.percent,
                   ),
                   MathOperationBtn(
