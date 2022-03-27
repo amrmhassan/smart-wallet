@@ -2,14 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/constants/styles.dart';
-import 'package:wallet_app/constants/types.dart';
-import 'package:wallet_app/models/quick_action_model.dart';
-import 'package:wallet_app/providers/quick_actions_provider.dart';
-import 'package:wallet_app/providers/transactions_provider.dart';
-import 'package:wallet_app/screens/quick_actions_screen/quick_actions_screen.dart';
-import 'package:wallet_app/utils/transactions_utils.dart';
-import 'package:wallet_app/widgets/global/empty_transactions.dart';
+import '../../../constants/styles.dart';
+import '../../../constants/types.dart';
+import '../../../models/quick_action_model.dart';
+import '../../../providers/quick_actions_provider.dart';
+import '../../../providers/transactions_provider.dart';
+import '../../../screens/quick_actions_screen/quick_actions_screen.dart';
+import '../../../utils/transactions_utils.dart';
+import '../../../widgets/global/empty_transactions.dart';
 
 import '../../../constants/sizes.dart';
 import 'quick_action_card.dart';

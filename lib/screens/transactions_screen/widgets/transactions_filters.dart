@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/constants/types.dart';
-import 'package:wallet_app/providers/transactions_provider.dart';
+import '../../../constants/types.dart';
+import '../../../providers/transactions_provider.dart';
 
 import '../../../constants/sizes.dart';
 import 'choose_transaction_type_button.dart';

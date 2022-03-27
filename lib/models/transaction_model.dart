@@ -1,4 +1,4 @@
-import 'package:wallet_app/constants/types.dart';
+import '../constants/types.dart';
 
 class TransactionModel {
   String id;

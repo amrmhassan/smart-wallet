@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:wallet_app/constants/sizes.dart';
+import '../../../constants/sizes.dart';
 
 import '../calculator.dart';
 import 'heading_calc_button.dart';

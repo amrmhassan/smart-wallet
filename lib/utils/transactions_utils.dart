@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallet_app/constants/colors.dart';
-import 'package:wallet_app/constants/types.dart';
+import '../constants/colors.dart';
+import '../constants/types.dart';
 
 String doubleToString(double amount) {
   try {

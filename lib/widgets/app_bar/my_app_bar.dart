@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:wallet_app/constants/styles.dart';
+import '../../constants/styles.dart';
 
 import '../../constants/sizes.dart';
 import '../global/go_back_icon.dart';

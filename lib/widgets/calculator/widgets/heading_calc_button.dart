@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:wallet_app/constants/colors.dart';
-import 'package:wallet_app/constants/sizes.dart';
-import 'package:wallet_app/constants/styles.dart';
-import 'package:wallet_app/helpers/responsive.dart';
+import '../../../constants/colors.dart';
+import '../../../constants/sizes.dart';
+import '../../../constants/styles.dart';
+import '../../../helpers/responsive.dart';
 
 class HeadingCalcButton extends StatelessWidget {
   final IconData? iconData;

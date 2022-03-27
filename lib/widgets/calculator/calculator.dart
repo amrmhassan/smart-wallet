@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:wallet_app/constants/sizes.dart';
-import 'package:wallet_app/constants/styles.dart';
+import '../../constants/sizes.dart';
+import '../../constants/styles.dart';
 import 'widgets/heading_calc_button.dart';
 import 'widgets/math_operation_button.dart';
 import 'widgets/number_button.dart';

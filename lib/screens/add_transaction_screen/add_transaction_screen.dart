@@ -2,16 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/constants/sizes.dart';
-import 'package:wallet_app/constants/styles.dart';
-import 'package:wallet_app/constants/types.dart';
-import 'package:wallet_app/models/quick_action_model.dart';
-import 'package:wallet_app/models/transaction_model.dart';
-import 'package:wallet_app/providers/quick_actions_provider.dart';
-import 'package:wallet_app/providers/transactions_provider.dart';
-import 'package:wallet_app/utils/transactions_utils.dart';
-import 'package:wallet_app/widgets/calculator/calculator.dart';
-import 'package:wallet_app/widgets/global/line.dart';
+import '../../constants/sizes.dart';
+import '../../constants/styles.dart';
+import '../../constants/types.dart';
+import '../../models/quick_action_model.dart';
+import '../../models/transaction_model.dart';
+import '../../providers/quick_actions_provider.dart';
+import '../../providers/transactions_provider.dart';
+import '../../utils/transactions_utils.dart';
+import '../../widgets/calculator/calculator.dart';
+import '../../widgets/global/line.dart';
 
 import '../../widgets/app_bar/my_app_bar.dart';
 import '../home_screen/widgets/background.dart';

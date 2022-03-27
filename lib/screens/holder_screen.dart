@@ -6,9 +6,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/providers/quick_actions_provider.dart';
-import 'package:wallet_app/screens/home_screen/home_screen.dart';
-import 'package:wallet_app/screens/transactions_screen/transactions_screen.dart';
+import '../providers/quick_actions_provider.dart';
+import '../screens/home_screen/home_screen.dart';
+import '../screens/transactions_screen/transactions_screen.dart';
 
 import '../../widgets/app_bar/my_app_bar.dart';
 import '../../widgets/bottom_nav_bar/bottom_nav_bar.dart';

@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:wallet_app/constants/colors.dart';
-import 'package:wallet_app/constants/sizes.dart';
-import 'package:wallet_app/constants/types.dart';
-import 'package:wallet_app/utils/transactions_utils.dart';
+import '../../../constants/colors.dart';
+import '../../../constants/sizes.dart';
+import '../../../constants/types.dart';
+import '../../../utils/transactions_utils.dart';
 
 class QuickActionCard extends StatelessWidget {
   final TransactionType transactionType;

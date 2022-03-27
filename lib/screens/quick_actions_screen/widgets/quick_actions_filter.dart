@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/providers/quick_actions_provider.dart';
+import '../../../providers/quick_actions_provider.dart';
 
 import '../../../constants/sizes.dart';
 import '../../../constants/types.dart';

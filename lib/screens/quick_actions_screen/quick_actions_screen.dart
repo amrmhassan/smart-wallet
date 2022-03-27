@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/constants/colors.dart';
-import 'package:wallet_app/constants/styles.dart';
-import 'package:wallet_app/providers/quick_actions_provider.dart';
-import 'package:wallet_app/screens/quick_actions_screen/widgets/all_quick_actions_card.dart';
-import 'package:wallet_app/widgets/global/empty_transactions.dart';
+import '../../constants/colors.dart';
+import '../../constants/styles.dart';
+import '../../providers/quick_actions_provider.dart';
+import '../../screens/quick_actions_screen/widgets/all_quick_actions_card.dart';
+import '../../widgets/global/empty_transactions.dart';
 
 import '../../constants/sizes.dart';
 import '../../widgets/app_bar/my_app_bar.dart';

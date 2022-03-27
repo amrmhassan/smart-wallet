@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
-import 'package:wallet_app/constants/db_constants.dart';
-import 'package:wallet_app/constants/types.dart';
-import 'package:wallet_app/helpers/custom_error.dart';
-import 'package:wallet_app/helpers/db_helper.dart';
-import 'package:wallet_app/models/transaction_model.dart';
+import '../constants/db_constants.dart';
+import '../constants/types.dart';
+import '../helpers/custom_error.dart';
+import '../helpers/db_helper.dart';
+import '../models/transaction_model.dart';
 
 class TransactionProvider extends ChangeNotifier {
   //? a) transactions stuff

@@ -4,11 +4,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/constants/sizes.dart';
-import 'package:wallet_app/constants/styles.dart';
-import 'package:wallet_app/providers/quick_actions_provider.dart';
-import 'package:wallet_app/screens/quick_actions_screen/quick_actions_screen.dart';
-import 'package:wallet_app/widgets/app_bar/home_heading.dart';
+import '../../constants/sizes.dart';
+import '../../constants/styles.dart';
+import '../../providers/quick_actions_provider.dart';
+import '../../screens/quick_actions_screen/quick_actions_screen.dart';
+import '../../widgets/app_bar/home_heading.dart';
 
 import '../../widgets/global/add_quick_action_button.dart';
 import 'widgets/profile_summary.dart';

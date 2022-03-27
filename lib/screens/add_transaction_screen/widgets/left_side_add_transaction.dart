@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wallet_app/constants/colors.dart';
-import 'package:wallet_app/constants/sizes.dart';
-import 'package:wallet_app/screens/home_screen/widgets/summary_period_icon.dart';
-import 'package:wallet_app/widgets/global/stylized_text_field.dart';
+import '../../../constants/colors.dart';
+import '../../../constants/sizes.dart';
+import '../../../screens/home_screen/widgets/summary_period_icon.dart';
+import '../../../widgets/global/stylized_text_field.dart';
 
 class LeftSideAddTransaction extends StatelessWidget {
   //* widget needed controllers from the parent

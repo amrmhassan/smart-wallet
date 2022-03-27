@@ -2,9 +2,9 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
-import 'package:wallet_app/constants/db_constants.dart';
-import 'package:wallet_app/constants/types.dart';
-import 'package:wallet_app/models/quick_action_model.dart';
+import '../constants/db_constants.dart';
+import '../constants/types.dart';
+import '../models/quick_action_model.dart';
 
 import '../helpers/db_helper.dart';
 

@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/models/quick_action_model.dart';
-import 'package:wallet_app/providers/quick_actions_provider.dart';
+import '../../../models/quick_action_model.dart';
+import '../../../providers/quick_actions_provider.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
