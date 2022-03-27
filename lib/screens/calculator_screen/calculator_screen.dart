@@ -69,25 +69,34 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     });
   }
 
+  void deleteCurrenOperation() {
+    setState(() {
+      currentOperation = null;
+    });
+  }
+
   //* this will be executed after clicking an operation button
   //* and i checks if it the first time to click an operation button or not
   //* to deal will the first number if it is there or not
   //*
-  void setCurrentOperation(Operations? operation) {
+  void setCurrentOperation(Operations operation) {
     if (firstNumber != 0 && currentOperation != null) {
       calculate();
     } else {
       //* this mean that it is the first time to press an operation button
       //* so i will clear the currentNumberList outside the current state cause i need something to be shown in the text screen(blueGrey)
       //* and i will set the firstNumber to the content of the currentNumberList
-
-      setState(() {
-        firstNumber = double.parse(currentNumberString);
-      });
+      if (currentNumberString != '0') {
+        setState(() {
+          firstNumber = double.parse(currentNumberString);
+        });
+      }
     }
     currentNumberList = [];
     //* then i will set the currentOparation to the operation
-    currentOperation = operation;
+    setState(() {
+      currentOperation = operation;
+    });
   }
 
   String get currentNumberString {
@@ -111,7 +120,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       firstNumber = firstNumber - double.parse(currentNumberString);
     } else if (currentOperation == Operations.divide) {
       firstNumber = firstNumber / double.parse(currentNumberString);
-    } else {
+    } else if (currentOperation == Operations.multiply) {
       firstNumber = firstNumber * double.parse(currentNumberString);
     }
     setState(() {
@@ -148,10 +157,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         : calcRes.toString();
 
     if (calcRes != 0) {
+      print('setting the calcRes to be viewed');
       value = value = '$calcResToView $operationToString $currentNumberToView';
     } else if (calcRes == 0 && firstNumber == 0) {
+      print('setting the curretNumberList to be viewed');
+
       value = currentNumberString;
     } else {
+      print('setting the first number to be viewed');
+
       value = '$firstNumberToView $operationToString $currentNumberToView';
     }
 
@@ -201,6 +215,14 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   SizedBox(
                     height: 40,
                   ),
+                  Column(
+                    children: [
+                      Text('firstNumber = $firstNumber'),
+                      Text('currentNumberList = $currentNumberList'),
+                      Text('calcRes = $calcRes'),
+                      Text('currentOperation = ${currentOperation.toString()}'),
+                    ],
+                  ),
                   Container(
                     alignment: Alignment.center,
                     width: double.infinity,
@@ -240,6 +262,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         setCurrentOperation: setCurrentOperation,
                         clearAll: clearAll,
                         calculate: calculate,
+                        deleteCurrenOperation: deleteCurrenOperation,
                       ),
                     ),
                   )

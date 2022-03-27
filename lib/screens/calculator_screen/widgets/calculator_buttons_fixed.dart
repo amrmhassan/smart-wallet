@@ -12,9 +12,10 @@ import 'number_button.dart';
 
 class CalculatorButtonsFixed extends StatelessWidget {
   final Function(String value) setCurrentNumber;
-  final Function(Operations? value) setCurrentOperation;
+  final Function(Operations value) setCurrentOperation;
   final VoidCallback clearAll;
   final VoidCallback calculate;
+  final VoidCallback deleteCurrenOperation;
 
   const CalculatorButtonsFixed({
     Key? key,
@@ -22,6 +23,7 @@ class CalculatorButtonsFixed extends StatelessWidget {
     required this.setCurrentOperation,
     required this.clearAll,
     required this.calculate,
+    required this.deleteCurrenOperation,
   }) : super(key: key);
 
   @override
@@ -201,7 +203,7 @@ class CalculatorButtonsFixed extends StatelessWidget {
                     child: SaveButton(
                       onTap: () {
                         calculate();
-                        setCurrentOperation(null);
+                        deleteCurrenOperation();
                       },
                     ),
                   ),

@@ -7,3 +7,4 @@ DONE - fix the app bar and make it clean code
 DONE - make the quick actions screen design
 DONE - make the quick action cards
 DONE - make the quick action operations possible through the quick actions screen 
+make to calculator to handle the float values with the period (.)
