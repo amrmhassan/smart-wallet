@@ -21,6 +21,7 @@ List<ProfileModel> profiles = [
     name: 'Private Account',
     income: 200,
     outcome: 200,
+    activated: true,
   ),
   ProfileModel(
     id: Uuid().v4(),

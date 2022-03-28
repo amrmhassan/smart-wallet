@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import '../../constants/sizes.dart';
 import '../../widgets/app_bar/home_heading.dart';
+import '../../widgets/global/add_quick_action_button.dart';
 import 'widgets/profiles_grid.dart';
 
 class MoneyAccountsScreen extends StatefulWidget {
@@ -33,6 +34,8 @@ class _MoneyAccountsScreenState extends State<MoneyAccountsScreen> {
             ),
           ],
         ),
+        //? i will add an add button here
+        // AddQuickActionButton(),
       ],
     );
   }

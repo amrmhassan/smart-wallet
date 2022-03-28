@@ -24,6 +24,16 @@ const TextStyle kWhiteProfileStatusTextStyle = TextStyle(
   fontSize: 20,
   fontWeight: FontWeight.bold,
 );
+const TextStyle kActivateProfileTextStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 18,
+  fontWeight: FontWeight.bold,
+);
+TextStyle kActivatedProfileTextStyle = TextStyle(
+  color: kMainColor.withOpacity(0.5),
+  fontSize: 18,
+  fontWeight: FontWeight.bold,
+);
 const TextStyle kLinkTextStyle = TextStyle(
   color: kMainColor,
   decoration: TextDecoration.underline,

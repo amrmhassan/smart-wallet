@@ -8,6 +8,7 @@ class ProfileModel {
   String name;
   double income;
   double outcome;
+  bool activated;
 
   late MoneyAccountStatus moneyAccountStatus;
   late double totalMoney;
@@ -19,6 +20,7 @@ class ProfileModel {
     required this.name,
     required this.income,
     required this.outcome,
+    this.activated = false,
   }) {
     //? for setting the total money
     //* the total money equals to income - outcome

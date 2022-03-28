@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:wallet_app/constants/colors.dart';
 import 'package:wallet_app/constants/styles.dart';
 import 'package:wallet_app/models/profile_model.dart';
 
@@ -53,10 +54,15 @@ class MoneyAccountCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       //* these constrains are for the card holder
-      constraints: BoxConstraints(minHeight: 300, maxHeight: 450),
-      padding: EdgeInsets.symmetric(
-        horizontal: kDefaultPadding / 4,
-        vertical: kDefaultPadding / 2,
+      constraints: BoxConstraints(
+        minHeight: 300,
+        maxHeight: 460,
+      ),
+      padding: EdgeInsets.only(
+        right: kDefaultPadding / 4,
+        left: kDefaultPadding / 4,
+        top: kDefaultPadding / 2,
+        bottom: 0,
       ),
       margin: EdgeInsets.only(bottom: kDefaultPadding / 2),
       decoration: BoxDecoration(
@@ -89,6 +95,13 @@ class MoneyAccountCard extends StatelessWidget {
           SizedBox(
             height: kDefaultPadding / 2,
           ),
+          ActivateProfileButton(
+            onTap: () {},
+            activated: profileModel.activated,
+          ),
+          SizedBox(
+            height: kDefaultPadding / 2,
+          ),
           ProfileStatusProgressBar(
             profileStatusColor: profileModel.profileStatusColor,
             incomeRatio: profileModel.incomeRatio,
@@ -102,6 +115,48 @@ class MoneyAccountCard extends StatelessWidget {
             totalMoney: profileModel.totalMoney,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ActivateProfileButton extends StatelessWidget {
+  final VoidCallback onTap;
+  final bool activated;
+
+  const ActivateProfileButton({
+    Key? key,
+    required this.activated,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          color: activated ? kInactiveColor.withOpacity(0.3) : kMainColor,
+          borderRadius: BorderRadius.circular(kDefaultBorderRadius / 4),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: activated ? null : onTap,
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: kDefaultPadding / 3),
+              alignment: Alignment.center,
+              child: Text(
+                activated ? 'Activated' : 'Activate',
+                style: activated
+                    ? kActivatedProfileTextStyle
+                    : kActivateProfileTextStyle,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
