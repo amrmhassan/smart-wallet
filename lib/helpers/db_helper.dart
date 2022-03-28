@@ -12,11 +12,15 @@ class DBHelper {
       finalPath,
       //! this is when creating the database itself so create all your tables here
       onCreate: (db, version) async {
+        //* creating transactions table
         await db.execute(
-            'CREATE TABLE $transactionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT, ratioToTotal TEXT )');
-
+            'CREATE TABLE $transactionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT, ratioToTotal TEXT, profileId TEXT )');
+        //* creating profiles table
+        await db.execute(
+            'CREATE TABLE $profilesTableName (id TEXT PRIMARY KEY,name TEXT, income TEXT, outcome TEXT, activated TEXT, createdAt TEXT)');
+        //* creating quick actions table
         return await db.execute(
-            'CREATE TABLE $quickActionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT, ratioToTotal TEXT, isFavorite TEXT )');
+            'CREATE TABLE $quickActionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT,  isFavorite TEXT, profileId TEXT  )');
       },
       version: 1,
     );

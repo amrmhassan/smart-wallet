@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet_app/providers/profiles_provider.dart';
 import '../../constants/sizes.dart';
 import '../../constants/styles.dart';
 import '../../constants/types.dart';
@@ -63,6 +64,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         ? 'Empty Description'
         : _descriptionController.text;
     TransactionType transactionType = currentActiveTransactionType;
+    String profileId = editedTransaction!.profileId;
 
     //* adding quick action
     if (widget.addTransactionScreenOperations ==
@@ -70,7 +72,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       try {
         //* here i will add the new quick action
         await Provider.of<QuickActionsProvider>(context, listen: false)
-            .addQuickAction(title, description, amount, transactionType);
+            .addQuickAction(
+                title, description, amount, transactionType, profileId);
         showSnackBar(context, 'Quick Action Added', SnackBarType.success);
       } catch (error) {
         showSnackBar(context, error.toString(), SnackBarType.error);
@@ -80,8 +83,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         AddTransactionScreenOperations.addTransaction) {
       try {
         //* here the code for adding a new transaction
+        String profileId =
+            Provider.of<ProfilesProvider>(context).activatedProfileId;
         await Provider.of<TransactionProvider>(context, listen: false)
-            .addTransaction(title, description, amount, transactionType);
+            .addTransaction(
+          title,
+          description,
+          amount,
+          transactionType,
+          profileId,
+        );
         showSnackBar(context, 'Transaction Added', SnackBarType.success);
       } catch (error) {
         showSnackBar(context, error.toString(), SnackBarType.error);
@@ -92,6 +103,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       String id = editedTransaction!.id;
       DateTime createdAt = editedTransaction!.createdAt;
       double ratioToTotal = editedTransaction!.ratioToTotal;
+
       TransactionModel newTransaction = TransactionModel(
         id: id,
         title: title,
@@ -100,6 +112,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         createdAt: createdAt,
         transactionType: transactionType,
         ratioToTotal: ratioToTotal,
+        profileId: profileId,
       );
 
       try {
@@ -125,6 +138,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         createdAt: createdAt,
         transactionType: transactionType,
         isFavorite: isFavorite,
+        profileId: profileId,
         // isFavorite:
       );
 

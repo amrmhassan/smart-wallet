@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../constants/styles.dart';
-import '../../screens/add_transaction_screen/add_transaction_screen.dart';
 
 class AddQuickActionButton extends StatelessWidget {
   final String title;

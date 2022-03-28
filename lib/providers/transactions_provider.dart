@@ -89,7 +89,7 @@ class TransactionProvider extends ChangeNotifier {
 
 //* for adding new transaction
   Future<void> addTransaction(String title, String description, double amount,
-      TransactionType transactionType) async {
+      TransactionType transactionType, String profileId) async {
     //* checking if the transaction added will make the current balance negative
     if (amount > totalMoney && transactionType == TransactionType.outcome) {
       throw CustomError('This expense is larger than your balance.');
@@ -118,6 +118,7 @@ class TransactionProvider extends ChangeNotifier {
         'transactionType':
             transactionType == TransactionType.income ? 'income' : 'outcome',
         'ratioToTotal': ratioToTotal.toString(),
+        'profileId': profileId,
       });
     } catch (error) {
       if (kDebugMode) {
@@ -128,14 +129,14 @@ class TransactionProvider extends ChangeNotifier {
     }
 
     TransactionModel newTransaction = TransactionModel(
-      id: id,
-      title: title,
-      description: description,
-      amount: amount,
-      createdAt: createdAt,
-      transactionType: transactionType,
-      ratioToTotal: ratioToTotal,
-    );
+        id: id,
+        title: title,
+        description: description,
+        amount: amount,
+        createdAt: createdAt,
+        transactionType: transactionType,
+        ratioToTotal: ratioToTotal,
+        profileId: profileId);
     _transactions.add(newTransaction);
     notifyListeners();
   }
@@ -148,18 +149,18 @@ class TransactionProvider extends ChangeNotifier {
 
       List<TransactionModel> fetchedTransactions = data
           .map((transaction) => TransactionModel(
-                id: transaction['id'],
-                title: transaction['title'],
-                description: transaction['description'],
-                amount: double.parse(transaction['amount']),
-                createdAt: DateTime.parse(transaction['createdAt']),
-                transactionType: transaction['transactionType'] == 'income'
-                    ? TransactionType.income
-                    : TransactionType.outcome,
-                ratioToTotal: double.parse(
-                  transaction['ratioToTotal'],
-                ),
-              ))
+              id: transaction['id'],
+              title: transaction['title'],
+              description: transaction['description'],
+              amount: double.parse(transaction['amount']),
+              createdAt: DateTime.parse(transaction['createdAt']),
+              transactionType: transaction['transactionType'] == 'income'
+                  ? TransactionType.income
+                  : TransactionType.outcome,
+              ratioToTotal: double.parse(
+                transaction['ratioToTotal'],
+              ),
+              profileId: transaction['profileId']))
           .toList();
       _transactions = fetchedTransactions;
       notifyListeners();
@@ -237,6 +238,7 @@ class TransactionProvider extends ChangeNotifier {
                 ? 'income'
                 : 'outcome',
         'ratioToTotal': newTransaction.ratioToTotal.toString(),
+        'profileId': newTransaction.profileId,
       });
     } catch (error) {
       if (kDebugMode) {

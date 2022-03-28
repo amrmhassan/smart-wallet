@@ -45,6 +45,7 @@ class QuickActionsCardsGrid extends StatelessWidget {
                   quickAction.description,
                   quickAction.amount,
                   quickAction.transactionType,
+                  quickAction.profileId,
                 );
                 showSnackBar(
                     context, 'Transaction Added', SnackBarType.success, true);

@@ -9,6 +9,7 @@ class QuickActionModel {
   TransactionType transactionType;
   bool isFavorite;
 
+  String profileId;
   QuickActionModel({
     required this.id,
     required this.title,
@@ -17,5 +18,6 @@ class QuickActionModel {
     required this.createdAt,
     required this.transactionType,
     this.isFavorite = false,
+    required this.profileId,
   });
 }

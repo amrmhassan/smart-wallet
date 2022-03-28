@@ -9,6 +9,7 @@ class ProfileModel {
   double income;
   double outcome;
   bool activated;
+  DateTime createdAt;
 
   late MoneyAccountStatus moneyAccountStatus;
   late double totalMoney;
@@ -21,6 +22,7 @@ class ProfileModel {
     required this.income,
     required this.outcome,
     this.activated = false,
+    required this.createdAt,
   }) {
     //? for setting the total money
     //* the total money equals to income - outcome

@@ -1,6 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:wallet_app/constants/types.dart';
+import 'package:wallet_app/providers/profiles_provider.dart';
+import 'package:wallet_app/utils/transactions_utils.dart';
+import 'package:wallet_app/widgets/global/stylized_text_field.dart';
 import '../../constants/sizes.dart';
 
 import '../../widgets/app_bar/my_app_bar.dart';
@@ -18,6 +23,8 @@ class AddProfileScreen extends StatefulWidget {
 }
 
 class _AddProfileScreenState extends State<AddProfileScreen> {
+  String profileName = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +53,23 @@ class _AddProfileScreenState extends State<AddProfileScreen> {
                   SizedBox(
                     height: 40,
                   ),
-                  //* the main container of the adding new transaction cart which will have the main padding around the edges of the screen
+                  StylizedTextField(onChanged: (value) {
+                    setState(() {
+                      profileName = value;
+                    });
+                  }),
+                  ElevatedButton(
+                    onPressed: () {
+                      Provider.of<ProfilesProvider>(
+                        context,
+                        listen: false,
+                      ).addProfile(profileName);
+                      Navigator.pop(context);
+                      showSnackBar(
+                          context, 'Profile Added', SnackBarType.success);
+                    },
+                    child: Text('Add Profile'),
+                  ),
 
                   SizedBox(
                     height: kDefaultPadding,

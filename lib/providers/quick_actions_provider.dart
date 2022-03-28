@@ -61,7 +61,7 @@ class QuickActionsProvider extends ChangeNotifier {
   //? 3- methods to control the quickActions
 //* for adding new quick Actions
   Future<void> addQuickAction(String title, String description, double amount,
-      TransactionType transactionType) async {
+      TransactionType transactionType, String profileId) async {
     String id = Uuid().v4();
     DateTime createdAt = DateTime.now();
 
@@ -76,6 +76,7 @@ class QuickActionsProvider extends ChangeNotifier {
         'transactionType':
             transactionType == TransactionType.income ? 'income' : 'outcome',
         'isFavorite': 'false',
+        'profileId': profileId,
       });
     } catch (error) {
       if (kDebugMode) {
@@ -92,6 +93,7 @@ class QuickActionsProvider extends ChangeNotifier {
       createdAt: createdAt,
       transactionType: transactionType,
       isFavorite: false,
+      profileId: profileId,
     );
     _quickActions.add(quickActionModel);
     notifyListeners();
@@ -120,6 +122,7 @@ class QuickActionsProvider extends ChangeNotifier {
                     : quickAction['isFavorite'] == 'true'
                         ? true
                         : false,
+                profileId: quickAction['profileId'],
               ))
           .toList();
       _quickActions = fetchedQuickActions;
@@ -164,6 +167,7 @@ class QuickActionsProvider extends ChangeNotifier {
                 ? 'income'
                 : 'outcome',
         'isFavorite': newQuickAction.isFavorite.toString(),
+        'profileId': newQuickAction.profileId,
       });
     } catch (error) {
       if (kDebugMode) {

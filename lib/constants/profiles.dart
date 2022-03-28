@@ -15,6 +15,7 @@ ProfileModel defaultProfile = ProfileModel(
   name: 'Default Money Profile',
   income: 0,
   outcome: 0,
+  createdAt: DateTime.now(),
 );
 
 List<ProfileModel> profilesConstant = [
@@ -23,12 +24,14 @@ List<ProfileModel> profilesConstant = [
     name: 'Empty Account',
     income: 0,
     outcome: 0,
+    createdAt: DateTime.now(),
   ),
   ProfileModel(
     id: Uuid().v4(),
     name: 'Suez Account',
     income: 600,
     outcome: 200,
+    createdAt: DateTime.now(),
   ),
   ProfileModel(
     id: Uuid().v4(),
@@ -36,11 +39,13 @@ List<ProfileModel> profilesConstant = [
     income: 200,
     outcome: 200,
     activated: true,
+    createdAt: DateTime.now(),
   ),
   ProfileModel(
     id: Uuid().v4(),
     name: 'Marsafa Account',
     income: 250,
     outcome: 200,
+    createdAt: DateTime.now(),
   ),
 ];
