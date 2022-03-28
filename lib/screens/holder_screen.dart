@@ -6,6 +6,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet_app/providers/profiles_provider.dart';
 import 'package:wallet_app/screens/money_accounts_screen/money_accounts_screen.dart';
 import '../providers/quick_actions_provider.dart';
 import '../screens/home_screen/home_screen.dart';
@@ -63,6 +64,8 @@ class _HolderScreenState extends State<HolderScreen> {
 
       await Provider.of<QuickActionsProvider>(context, listen: false)
           .fetchAndUpdateQuickActions();
+      Provider.of<ProfilesProvider>(context, listen: false)
+          .fetchAndUpdateProfiles();
     });
     super.initState();
   }

@@ -17,8 +17,10 @@ class ProfileStatus extends StatelessWidget {
       return 'Good';
     } else if (moneyAccountStatus == MoneyAccountStatus.moderate) {
       return 'Moderate';
-    } else {
+    } else if (moneyAccountStatus == MoneyAccountStatus.critical) {
       return 'Critical';
+    } else {
+      return 'Empty';
     }
   }
 

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:wallet_app/screens/add_profile_screen/add_profile_screen.dart';
 import '../../constants/sizes.dart';
 import '../../widgets/app_bar/home_heading.dart';
 import '../../widgets/global/add_quick_action_button.dart';
@@ -35,7 +36,17 @@ class _MoneyAccountsScreenState extends State<MoneyAccountsScreen> {
           ],
         ),
         //? i will add an add button here
-        // AddQuickActionButton(),
+        AddQuickActionButton(
+          title: 'Add Profile',
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (ctx) => AddProfileScreen(),
+              ),
+            );
+          },
+        ),
       ],
     );
   }

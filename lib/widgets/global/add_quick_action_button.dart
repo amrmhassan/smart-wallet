@@ -8,8 +8,12 @@ import '../../constants/styles.dart';
 import '../../screens/add_transaction_screen/add_transaction_screen.dart';
 
 class AddQuickActionButton extends StatelessWidget {
+  final String title;
+  final VoidCallback onTap;
   const AddQuickActionButton({
     Key? key,
+    required this.title,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -36,23 +40,14 @@ class AddQuickActionButton extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (ctx) => AddTransactionScreen(
-                      addTransactionScreenOperations:
-                          AddTransactionScreenOperations.addQuickAction),
-                ),
-              );
-            },
+            onTap: onTap,
             child: Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: kDefaultHorizontalPadding / 1.5,
                 vertical: kDefaultVerticalPadding / 1.2,
               ),
-              child: const Text(
-                'Add Quick Action',
+              child: Text(
+                title,
                 style: kSmallTextWhiteColorStyle,
               ),
             ),

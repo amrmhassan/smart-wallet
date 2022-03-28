@@ -11,6 +11,7 @@ import '../../screens/quick_actions_screen/quick_actions_screen.dart';
 import '../../widgets/app_bar/home_heading.dart';
 
 import '../../widgets/global/add_quick_action_button.dart';
+import '../add_transaction_screen/add_transaction_screen.dart';
 import 'widgets/profile_summary.dart';
 import 'widgets/quick_actions_cards_grid.dart';
 
@@ -82,7 +83,20 @@ class _HomeScreenState extends State<HomeScreen> {
         if (Provider.of<QuickActionsProvider>(context)
             .getFavoriteQuickActions
             .isNotEmpty)
-          AddQuickActionButton(),
+          AddQuickActionButton(
+            title: 'Add Quick Action',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (ctx) => AddTransactionScreen(
+                    addTransactionScreenOperations:
+                        AddTransactionScreenOperations.addQuickAction,
+                  ),
+                ),
+              );
+            },
+          ),
       ],
     );
   }

@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wallet_app/constants/colors.dart';
 import 'package:wallet_app/constants/styles.dart';
 import 'package:wallet_app/models/profile_model.dart';
+import 'package:wallet_app/providers/profiles_provider.dart';
 
 import '../../../constants/profiles.dart';
 import '../../../constants/sizes.dart';
@@ -19,6 +21,7 @@ class ProfilesGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var profilesData = Provider.of<ProfilesProvider>(context);
     //* this is the main container that will hold the profiles cards
     return Container(
       clipBehavior: Clip.hardEdge,
@@ -33,9 +36,9 @@ class ProfilesGrid extends StatelessWidget {
       child: ListView.builder(
         clipBehavior: Clip.none,
         physics: BouncingScrollPhysics(),
-        itemCount: profiles.length,
+        itemCount: profilesData.profiles.length,
         itemBuilder: (ctx, index) => MoneyAccountCard(
-          profileModel: profiles[index],
+          profileModel: profilesData.profiles[index],
         ),
       ),
     );
@@ -56,7 +59,9 @@ class MoneyAccountCard extends StatelessWidget {
       //* these constrains are for the card holder
       constraints: BoxConstraints(
         minHeight: 300,
-        maxHeight: 460,
+        maxHeight: profileModel.moneyAccountStatus == MoneyAccountStatus.empty
+            ? 350
+            : 460,
       ),
       padding: EdgeInsets.only(
         right: kDefaultPadding / 4,
@@ -100,20 +105,25 @@ class MoneyAccountCard extends StatelessWidget {
             activated: profileModel.activated,
           ),
           SizedBox(
-            height: kDefaultPadding / 2,
+            height: profileModel.moneyAccountStatus == MoneyAccountStatus.empty
+                ? kDefaultPadding
+                : kDefaultPadding / 2,
           ),
-          ProfileStatusProgressBar(
-            profileStatusColor: profileModel.profileStatusColor,
-            incomeRatio: profileModel.incomeRatio,
-          ),
-          SizedBox(
-            height: kDefaultPadding / 2,
-          ),
-          ProfileMoneySummary(
-            income: profileModel.income,
-            outcome: profileModel.outcome,
-            totalMoney: profileModel.totalMoney,
-          ),
+          if (profileModel.moneyAccountStatus != MoneyAccountStatus.empty)
+            ProfileStatusProgressBar(
+              profileStatusColor: profileModel.profileStatusColor,
+              incomeRatio: profileModel.incomeRatio,
+            ),
+          if (profileModel.moneyAccountStatus != MoneyAccountStatus.empty)
+            SizedBox(
+              height: kDefaultPadding / 2,
+            ),
+          if (profileModel.moneyAccountStatus != MoneyAccountStatus.empty)
+            ProfileMoneySummary(
+              income: profileModel.income,
+              outcome: profileModel.outcome,
+              totalMoney: profileModel.totalMoney,
+            ),
         ],
       ),
     );

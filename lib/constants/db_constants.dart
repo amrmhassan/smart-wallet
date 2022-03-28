@@ -10,3 +10,4 @@ String get dbName {
 
 const String transactionsTableName = 'transactions';
 const String quickActionsTableName = 'quickActions';
+const String profilesTableName = 'profilesTable';

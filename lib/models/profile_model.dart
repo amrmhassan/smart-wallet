@@ -33,7 +33,9 @@ class ProfileModel {
     //? for setting the incomeRatio
     incomeRatio = income / (outcome + income);
     //? for setting the moneyAccountStatus
-    if (incomeRatio >= 0.6) {
+    if (income == 0 && outcome == 0) {
+      moneyAccountStatus = MoneyAccountStatus.empty;
+    } else if (incomeRatio >= 0.6) {
       moneyAccountStatus = MoneyAccountStatus.good;
     } else if (incomeRatio > 0.5 && incomeRatio < 0.6) {
       moneyAccountStatus = MoneyAccountStatus.moderate;
@@ -46,8 +48,10 @@ class ProfileModel {
       profileStatusColor = kGoodProfileStatusColor;
     } else if (moneyAccountStatus == MoneyAccountStatus.moderate) {
       profileStatusColor = kModerateProfileStatusColor;
-    } else {
+    } else if (moneyAccountStatus == MoneyAccountStatus.critical) {
       profileStatusColor = kCriticalProfileStatusColor;
+    } else if (moneyAccountStatus == MoneyAccountStatus.empty) {
+      profileStatusColor = kMainColor.withOpacity(0.4);
     }
   }
 }
