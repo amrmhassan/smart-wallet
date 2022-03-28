@@ -6,6 +6,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet_app/screens/money_accounts_screen/money_accounts_screen.dart';
 import '../providers/quick_actions_provider.dart';
 import '../screens/home_screen/home_screen.dart';
 import '../screens/transactions_screen/transactions_screen.dart';
@@ -50,7 +51,9 @@ class _HolderScreenState extends State<HolderScreen> {
 
   @override
   void initState() {
-    _pageController = PageController(initialPage: _activeBottomNavBarIndex);
+    //! i am not sure about keepPage property if anything goes wrong just remove it
+    _pageController =
+        PageController(initialPage: _activeBottomNavBarIndex, keepPage: true);
     //* i needed the trick of duration zero here
     //* here i will fetch and update the transactions
     Future.delayed(Duration.zero).then((value) async {
@@ -111,9 +114,7 @@ class _HolderScreenState extends State<HolderScreen> {
                       Container(
                         child: Text('Statistics page'),
                       ),
-                      Container(
-                        child: Text('Profiles  page'),
-                      ),
+                      MoneyAccountsScreen(),
                       HomeScreen(),
                       TransactionsScreen(),
                       Container(

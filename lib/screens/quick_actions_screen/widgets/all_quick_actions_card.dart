@@ -62,18 +62,40 @@ class AllQuickActionsCard extends StatelessWidget {
     //? the problem here is that each quick action will have an id , so we can't add the same quick action with the same id to be multiple transactions with the same id
     //? so i will make the add transaction provider decide the id of the newly added transaction
 
-    try {
-      await Provider.of<TransactionProvider>(context, listen: false)
-          .addTransaction(
-        quickAction.title,
-        quickAction.description,
-        quickAction.amount,
-        quickAction.transactionType,
-      );
-      showSnackBar(context, 'Transaction Added', SnackBarType.success, true);
-    } catch (error) {
-      showSnackBar(context, error.toString(), SnackBarType.error, true);
-    }
+    await showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Apply Transaction?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              try {
+                await Provider.of<TransactionProvider>(context, listen: false)
+                    .addTransaction(
+                  quickAction.title,
+                  quickAction.description,
+                  quickAction.amount,
+                  quickAction.transactionType,
+                );
+                showSnackBar(
+                    context, 'Transaction Added', SnackBarType.success, true);
+              } catch (error) {
+                showSnackBar(
+                    context, error.toString(), SnackBarType.error, true);
+              }
+              Navigator.pop(context);
+            },
+            child: Text('Ok'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override

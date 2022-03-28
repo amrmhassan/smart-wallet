@@ -19,3 +19,5 @@
 # never delete a transaction but flag it as deleted And add a deleted attribute to the transaction model
 
 # the ability to add a debt -- there will be another section for debts i won't make them with the normal transactions , but i need to make it obvious to the user
+
+# on google play type(Only for Rich people- only for riches)

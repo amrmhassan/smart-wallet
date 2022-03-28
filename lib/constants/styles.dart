@@ -19,6 +19,11 @@ const TextStyle kWhiteTextStyle = TextStyle(
   fontSize: 22,
   fontWeight: FontWeight.bold,
 );
+const TextStyle kWhiteProfileStatusTextStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 20,
+  fontWeight: FontWeight.bold,
+);
 const TextStyle kLinkTextStyle = TextStyle(
   color: kMainColor,
   decoration: TextDecoration.underline,
@@ -34,9 +39,19 @@ const TextStyle kInActiveParagraphTextStyle = TextStyle(
   fontSize: 16,
   fontWeight: FontWeight.bold,
 );
+const TextStyle kSmallInActiveParagraphTextStyle = TextStyle(
+  color: kInactiveColor,
+  fontSize: 14,
+  fontWeight: FontWeight.normal,
+);
 const TextStyle kSmallTextPrimaryColorStyle = TextStyle(
   color: kMainColor,
   fontSize: 14,
+  fontWeight: FontWeight.normal,
+);
+const TextStyle kMediumTextPrimaryColorStyle = TextStyle(
+  color: kMainColor,
+  fontSize: 16,
   fontWeight: FontWeight.normal,
 );
 const TextStyle kSmallTextWhiteColorStyle = TextStyle(

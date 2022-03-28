@@ -17,3 +17,11 @@ make these two icons to be instead of arrow up for outcome and arrow down for in
 search how to make the keyboard not to reduce the size of the screen flutter or how to handle keyboard in flutter
 
 search for how to cancel any opened snackbar to remove any snackbars if another is clicked
+
+let the user add outcomes more than what he has in his income to let the current money be negative
+-- or let him add a debt
+
+----------------
+for the profiles
+-- in the fetchTransactions make it request only the transactions with the account profile id
+-- and make the _transactions only has the transactions of the activated profile
