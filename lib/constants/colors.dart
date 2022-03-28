@@ -11,3 +11,7 @@ const Color kIncomeColor = Color(0xff01AD01);
 const Color kTextFieldInputColor = Color(0xffDEDEEA);
 
 const Color kDeleteColor = Color.fromARGB(255, 204, 24, 11);
+
+const Color kGoodProfileStatusColor = Color(0xff65CE67);
+const Color kModerateProfileStatusColor = Color(0xffFFB224);
+const Color kCriticalProfileStatusColor = Color(0xffE66665);
