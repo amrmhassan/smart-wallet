@@ -100,10 +100,10 @@ class QuickActionsProvider extends ChangeNotifier {
   }
 
 //* for getting the quickActions from the database
-  Future<void> fetchAndUpdateQuickActions() async {
+  Future<void> fetchAndUpdateQuickActions(String activatedProfileId) async {
     try {
-      List<Map<String, dynamic>> data =
-          await DBHelper.getData(quickActionsTableName);
+      List<Map<String, dynamic>> data = await DBHelper.getDataWhere(
+          quickActionsTableName, 'profileId', activatedProfileId);
 
       List<QuickActionModel> fetchedQuickActions = data
           .map((quickAction) => QuickActionModel(

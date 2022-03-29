@@ -1,49 +1,74 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:wallet_app/providers/profiles_provider.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
 
-class ActivateProfileButton extends StatelessWidget {
+class NotActivateProfileButton extends StatelessWidget {
   final VoidCallback onTap;
-  final String profileId;
 
-  const ActivateProfileButton({
+  const NotActivateProfileButton({
     Key? key,
     required this.onTap,
-    required this.profileId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var activatedProfileId =
-        Provider.of<ProfilesProvider>(context).activatedProfileId;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          color: activatedProfileId == profileId
-              ? kInactiveColor.withOpacity(0.3)
-              : kMainColor,
+          color: kMainColor,
           borderRadius: BorderRadius.circular(kDefaultBorderRadius / 4),
         ),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: activatedProfileId == profileId ? null : onTap,
+            onTap: onTap,
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(vertical: kDefaultPadding / 3),
+              alignment: Alignment.center,
+              child: const Text(
+                'Activate',
+                style: kActivateProfileTextStyle,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ActivatedProfileButton extends StatelessWidget {
+  const ActivatedProfileButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          color: kInactiveColor.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(kDefaultBorderRadius / 4),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
             child: Container(
               padding:
                   const EdgeInsets.symmetric(vertical: kDefaultPadding / 3),
               alignment: Alignment.center,
               child: Text(
-                activatedProfileId == profileId ? 'Activated' : 'Activate',
-                style: activatedProfileId == profileId
-                    ? kActivatedProfileTextStyle
-                    : kActivateProfileTextStyle,
+                'Activated',
+                style: kActivatedProfileTextStyle,
               ),
             ),
           ),

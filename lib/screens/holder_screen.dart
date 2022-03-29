@@ -58,14 +58,21 @@ class _HolderScreenState extends State<HolderScreen> {
     //* i needed the trick of duration zero here
     //* here i will fetch and update the transactions
     Future.delayed(Duration.zero).then((value) async {
+      //! here show a loading screen for the whole app until loading the needed data
       //* i forgot to add the await
+      await Provider.of<ProfilesProvider>(context, listen: false)
+          .fetchAndUpdateProfiles();
+
+      await Provider.of<ProfilesProvider>(context, listen: false)
+          .fetchAndUpdateActivatedProfileId();
+      String activatedProfileId =
+          Provider.of<ProfilesProvider>(context, listen: false)
+              .activatedProfileId;
       await Provider.of<TransactionProvider>(context, listen: false)
-          .fetchAndUpdateTransactions();
+          .fetchAndUpdateTransactions(activatedProfileId);
 
       await Provider.of<QuickActionsProvider>(context, listen: false)
-          .fetchAndUpdateQuickActions();
-      Provider.of<ProfilesProvider>(context, listen: false)
-          .fetchAndUpdateProfiles();
+          .fetchAndUpdateQuickActions(activatedProfileId);
     });
     super.initState();
   }

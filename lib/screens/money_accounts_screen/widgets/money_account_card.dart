@@ -1,6 +1,8 @@
 //* this is the profile card
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet_app/providers/quick_actions_provider.dart';
+import 'package:wallet_app/providers/transactions_provider.dart';
 
 import '../../../constants/profiles.dart';
 import '../../../constants/sizes.dart';
@@ -15,10 +17,26 @@ import 'profile_status_progress_bar.dart';
 
 class MoneyAccountCard extends StatelessWidget {
   final ProfileModel profileModel;
+  final bool activated;
+
   const MoneyAccountCard({
     Key? key,
     required this.profileModel,
+    required this.activated,
   }) : super(key: key);
+  Future<void> changeActivatedProfile(BuildContext context) async {
+    //? here set the loading to true and
+    await Provider.of<ProfilesProvider>(context, listen: false)
+        .setActivatedProfile(profileModel.id);
+    String activatedProfileId =
+        Provider.of<ProfilesProvider>(context, listen: false)
+            .activatedProfileId;
+    await Provider.of<TransactionProvider>(context, listen: false)
+        .fetchAndUpdateTransactions(activatedProfileId);
+    await Provider.of<QuickActionsProvider>(context, listen: false)
+        .fetchAndUpdateQuickActions(activatedProfileId);
+    //? here set the loading to false
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,13 +85,11 @@ class MoneyAccountCard extends StatelessWidget {
           const SizedBox(
             height: kDefaultPadding / 2,
           ),
-          ActivateProfileButton(
-            onTap: () {
-              Provider.of<ProfilesProvider>(context, listen: false)
-                  .setActivatedProfile(profileModel.id);
-            },
-            profileId: profileModel.id,
-          ),
+          activated
+              ? const ActivatedProfileButton()
+              : NotActivateProfileButton(
+                  onTap: () async => await changeActivatedProfile(context),
+                ),
           SizedBox(
             height: profileModel.moneyAccountStatus == MoneyAccountStatus.empty
                 ? kDefaultPadding

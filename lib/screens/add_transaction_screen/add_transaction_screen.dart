@@ -64,12 +64,13 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         ? 'Empty Description'
         : _descriptionController.text;
     TransactionType transactionType = currentActiveTransactionType;
-    String profileId = editedTransaction!.profileId;
 
     //* adding quick action
     if (widget.addTransactionScreenOperations ==
         AddTransactionScreenOperations.addQuickAction) {
       try {
+        String profileId = Provider.of<ProfilesProvider>(context, listen: false)
+            .activatedProfileId;
         //* here i will add the new quick action
         await Provider.of<QuickActionsProvider>(context, listen: false)
             .addQuickAction(
@@ -83,8 +84,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         AddTransactionScreenOperations.addTransaction) {
       try {
         //* here the code for adding a new transaction
-        String profileId =
-            Provider.of<ProfilesProvider>(context).activatedProfileId;
+        String profileId = Provider.of<ProfilesProvider>(context, listen: false)
+            .activatedProfileId;
+
         await Provider.of<TransactionProvider>(context, listen: false)
             .addTransaction(
           title,
@@ -103,6 +105,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       String id = editedTransaction!.id;
       DateTime createdAt = editedTransaction!.createdAt;
       double ratioToTotal = editedTransaction!.ratioToTotal;
+      String profileId = editedTransaction!.profileId;
 
       TransactionModel newTransaction = TransactionModel(
         id: id,
@@ -130,6 +133,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       String id = editedQuickAction!.id;
       DateTime createdAt = editedQuickAction!.createdAt;
       bool isFavorite = editedQuickAction!.isFavorite;
+      String profileId = editedQuickAction!.profileId;
       QuickActionModel newQuickAction = QuickActionModel(
         id: id,
         title: title,

@@ -45,6 +45,12 @@ class DBHelper {
     return db.query(table);
   }
 
+  static Future<List<Map<String, dynamic>>> getDataWhere(
+      String table, String check, String profileId) async {
+    final db = await DBHelper.database(table);
+    return db.query(table, where: '$check = ?', whereArgs: [profileId]);
+  }
+
   static Future<void> deleteById(String id, String table) async {
     final db = await DBHelper.database(table);
     return db.execute("DELETE FROM $table WHERE id='$id'");

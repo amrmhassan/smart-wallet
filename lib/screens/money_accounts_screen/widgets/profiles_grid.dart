@@ -15,7 +15,8 @@ class ProfilesGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var profilesData = Provider.of<ProfilesProvider>(context);
-    var profiles = profilesData.profiles.reversed.toList();
+    var profiles = profilesData.profiles;
+
     //* this is the main container that will hold the profiles cards
     return Container(
       clipBehavior: Clip.hardEdge,
@@ -33,6 +34,7 @@ class ProfilesGrid extends StatelessWidget {
         itemCount: profiles.length,
         itemBuilder: (ctx, index) => MoneyAccountCard(
           profileModel: profiles[index],
+          activated: profilesData.activatedProfileId == profiles[index].id,
         ),
       ),
     );

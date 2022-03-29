@@ -129,26 +129,28 @@ class TransactionProvider extends ChangeNotifier {
     }
 
     TransactionModel newTransaction = TransactionModel(
-        id: id,
-        title: title,
-        description: description,
-        amount: amount,
-        createdAt: createdAt,
-        transactionType: transactionType,
-        ratioToTotal: ratioToTotal,
-        profileId: profileId);
+      id: id,
+      title: title,
+      description: description,
+      amount: amount,
+      createdAt: createdAt,
+      transactionType: transactionType,
+      ratioToTotal: ratioToTotal,
+      profileId: profileId,
+    );
     _transactions.add(newTransaction);
     notifyListeners();
   }
 
 //* for getting the transactions from the database
-  Future<void> fetchAndUpdateTransactions() async {
+  Future<void> fetchAndUpdateTransactions(String activatedProfileId) async {
     try {
-      List<Map<String, dynamic>> data =
-          await DBHelper.getData(transactionsTableName);
+      List<Map<String, dynamic>> data = await DBHelper.getDataWhere(
+          transactionsTableName, 'profileId', activatedProfileId);
 
       List<TransactionModel> fetchedTransactions = data
-          .map((transaction) => TransactionModel(
+          .map(
+            (transaction) => TransactionModel(
               id: transaction['id'],
               title: transaction['title'],
               description: transaction['description'],
@@ -160,7 +162,9 @@ class TransactionProvider extends ChangeNotifier {
               ratioToTotal: double.parse(
                 transaction['ratioToTotal'],
               ),
-              profileId: transaction['profileId']))
+              profileId: transaction['profileId'],
+            ),
+          )
           .toList();
       _transactions = fetchedTransactions;
       notifyListeners();
