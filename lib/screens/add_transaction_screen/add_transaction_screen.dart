@@ -57,6 +57,17 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     });
   }
 
+  void setAmount(double result) {
+    if (result == double.infinity) {
+      return showSnackBar(
+          context, 'You can\'t add infinity number', SnackBarType.error);
+    }
+
+    setState(() {
+      amount = result;
+    });
+  }
+
 //* 1] this method will add a new transaction
   Future<void> addTransaction({
     required String title,
@@ -297,80 +308,86 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
+      //? this will prevent the screen to resize whenever keyboard is opened
+      resizeToAvoidBottomInset: false,
+
       //* this is the drawer
       drawer: Drawer(
         child: Container(
           color: Colors.white,
         ),
       ),
-      body: Stack(
-        children: [
-          //* this is the background of the screen
-          Background(),
+      //? this gesture detector will remove the focus whenever anything else is clicked in the screen
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Stack(
+          children: [
+            //* this is the background of the screen
+            Background(),
 
-          SafeArea(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
-              child: Column(
-                children: [
-                  //* my custom app bar and the mainAppBar is equal to false for adding the back button and remove the menu icon(side bar opener)
-                  MyAppBar(
-                    title: appBarTitle,
-                  ),
-                  //* space between the app bar and the next widget
-                  SizedBox(
-                    height: 40,
-                  ),
-                  //* the main container of the adding new transaction cart which will have the main padding around the edges of the screen
-                  Container(
-                    padding: EdgeInsets.all(kDefaultPadding / 2),
-                    width: double.infinity,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(kDefaultBorderRadius),
-                      color: Colors.white,
-                      boxShadow: [kDefaultBoxShadow],
+            SafeArea(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+                child: Column(
+                  children: [
+                    //* my custom app bar and the mainAppBar is equal to false for adding the back button and remove the menu icon(side bar opener)
+                    MyAppBar(
+                      title: appBarTitle,
                     ),
-                    //* the row which will have the main sides of the cart
-                    child: Row(
-                      children: [
-                        //* the left side is for adding the title and description
-                        LeftSideAddTransaction(
-                          titleController: _titleController,
-                          descriptionController: _descriptionController,
-                        ),
-                        Line(lineType: LineType.vertical),
-                        //* the right side is for adding the price and transaction type
-                        RightSideAddTransaction(
-                          currentActiveTransactionType:
-                              currentActiveTransactionType,
-                          setCurrentActiveTransactionType:
-                              setcurrentActiveTransactionType,
-                          amount: amount,
-                        ),
-                      ],
+                    //* space between the app bar and the next widget
+                    SizedBox(
+                      height: 40,
                     ),
-                  ),
-                  SizedBox(
-                    height: kDefaultPadding,
-                  ),
-                  Expanded(
-                    child: Calculator(
-                      //? here editting the amount of get from the calculator
-                      setResults: (result) {
-                        setState(() {
-                          amount = result;
-                        });
-                      },
-                      saveTransaction: handleSaveButtonClick,
-                      initialAmount: amount.toString(),
+                    //* the main container of the adding new transaction cart which will have the main padding around the edges of the screen
+                    Container(
+                      padding: EdgeInsets.all(kDefaultPadding / 2),
+                      width: double.infinity,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(kDefaultBorderRadius),
+                        color: Colors.white,
+                        boxShadow: [kDefaultBoxShadow],
+                      ),
+                      //* the row which will have the main sides of the cart
+                      child: Row(
+                        children: [
+                          //* the left side is for adding the title and description
+                          LeftSideAddTransaction(
+                            titleController: _titleController,
+                            descriptionController: _descriptionController,
+                          ),
+                          Line(lineType: LineType.vertical),
+                          //* the right side is for adding the price and transaction type
+                          RightSideAddTransaction(
+                            currentActiveTransactionType:
+                                currentActiveTransactionType,
+                            setCurrentActiveTransactionType:
+                                setcurrentActiveTransactionType,
+                            amount: amount,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      height: kDefaultPadding,
+                    ),
+                    Expanded(
+                      child: Calculator(
+                        //? here editting the amount of get from the calculator
+                        setResults: (result) => setAmount(result),
+                        saveTransaction: handleSaveButtonClick,
+                        initialAmount: amount.toString(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

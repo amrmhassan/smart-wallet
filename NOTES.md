@@ -10,11 +10,11 @@
 
 # before adding a new transaction check the last added transaction and if they are the same amount show dialog that warns the user that (are you sure to add transaction again) whether it is added normally or by a quick action
 
-# allow the user to favorite quick actions from the main quick actions screen( they will be shown as a list or a grid)
-# the quick actions in the quick actions screen can be deleted , updated, be favourite
-# you may want to change the appearance of them in the quick action screen , or leave it the same as the main screen
+DONE -  allow the user to favorite quick actions from the main quick actions screen( they will be shown as a list or a grid)
+DONE - the quick actions in the quick actions screen can be deleted , updated, be favourite
+DONE - you may want to change the appearance of them in the quick action screen , or leave it the same as the main screen
 
-# only favorite quick actions would be shown in the main screen
+DONE - only favorite quick actions would be shown in the main screen
 
 # never delete a transaction but flag it as deleted And add a deleted attribute to the transaction model
 
@@ -26,9 +26,9 @@
 --search for an arrow going out from a wallet icon
 --make these two icons to be instead of arrow up for outcome and arrow down for income
 
-# search how to make the keyboard not to reduce the size of the screen flutter or how to handle keyboard in flutter
+DONE - search how to make the keyboard not to reduce the size of the screen flutter or how to handle keyboard in flutter
 
-# search for how to cancel any opened snackbar to remove any snackbars if another is clicked
+DONE - search for how to cancel any opened snackbar to remove any snackbars if another is clicked
 
 # let the user add outcomes more than what he has in his income to let the current money be negative
 `-- or let him add a debt

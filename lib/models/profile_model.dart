@@ -15,6 +15,7 @@ class ProfileModel {
   late double totalMoney;
   late double incomeRatio;
   late Color profileStatusColor;
+  DateTime? lastActivatedDate;
 
   ProfileModel({
     required this.id,
@@ -23,6 +24,7 @@ class ProfileModel {
     required this.outcome,
     this.activated = false,
     required this.createdAt,
+    this.lastActivatedDate,
   }) {
     //? for setting the total money
     //* the total money equals to income - outcome

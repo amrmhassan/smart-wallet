@@ -28,6 +28,7 @@ class MoneyAccountCard extends StatelessWidget {
     //? here set the loading to true and
     await Provider.of<ProfilesProvider>(context, listen: false)
         .setActivatedProfile(profileModel.id);
+
     String activatedProfileId =
         Provider.of<ProfilesProvider>(context, listen: false)
             .activatedProfileId;
@@ -45,7 +46,7 @@ class MoneyAccountCard extends StatelessWidget {
       constraints: BoxConstraints(
         minHeight: 300,
         maxHeight: profileModel.moneyAccountStatus == MoneyAccountStatus.empty
-            ? 360
+            ? 370
             : 460,
       ),
       padding: const EdgeInsets.only(
@@ -65,6 +66,11 @@ class MoneyAccountCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Text(
+            profileModel.lastActivatedDate == null
+                ? 'No'
+                : profileModel.lastActivatedDate!.toIso8601String(),
+          ),
           ProfileDetailsButton(
             profileId: profileModel.id,
           ),
@@ -88,7 +94,9 @@ class MoneyAccountCard extends StatelessWidget {
           activated
               ? const ActivatedProfileButton()
               : NotActivateProfileButton(
-                  onTap: () async => await changeActivatedProfile(context),
+                  onTap: () async {
+                    await changeActivatedProfile(context);
+                  },
                 ),
           SizedBox(
             height: profileModel.moneyAccountStatus == MoneyAccountStatus.empty

@@ -72,6 +72,10 @@ class Responsive extends StatelessWidget {
     return MediaQuery.of(context).size.width;
   }
 
+  static double getHeight(BuildContext context) {
+    return MediaQuery.of(context).size.height;
+  }
+
 //* that method will return the device type
 //* depending on the above sizes constant
   Device deviceType(BuildContext context) {

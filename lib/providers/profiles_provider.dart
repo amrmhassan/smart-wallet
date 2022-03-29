@@ -44,7 +44,7 @@ class ProfilesProvider extends ChangeNotifier {
           await SharedPrefHelper.getString(kActivatedProfileIdKey);
       if (savedActivatedId == null) {
         activatedId = profiles[0].id;
-        setActivatedProfile(activatedId);
+        await setActivatedProfile(activatedId);
       } else {
         activatedId = savedActivatedId;
       }
@@ -66,17 +66,37 @@ class ProfilesProvider extends ChangeNotifier {
         String id = await addProfile(defaultProfile.name);
         return setActivatedProfile(id);
       }
+      //? i will need to rearrange the profiles according to the lastActivated date then the createdAt date
 
       List<ProfileModel> fetchedProfiles = data
-          .map((profile) => ProfileModel(
-                id: profile['id'],
-                name: profile['name'],
-                income: double.parse(profile['income']),
-                outcome: double.parse(profile['outcome']),
-                createdAt: DateTime.parse(profile['createdAt']),
-                activated: profile['activated'] == 'false' ? false : true,
-              ))
+          .map(
+            (profile) => ProfileModel(
+              id: profile['id'],
+              name: profile['name'],
+              income: double.parse(profile['income']),
+              outcome: double.parse(profile['outcome']),
+              createdAt: DateTime.parse(profile['createdAt']),
+              activated: profile['activated'] == 'false' ? false : true,
+              lastActivatedDate: profile['lastActivatedDate'] == null
+                  ? null
+                  : DateTime.parse(profile['lastActivatedDate']),
+            ),
+          )
           .toList();
+      //? i was trying to make the activated profiles come first
+      //? it will need some more thinking and planning
+
+      // List<ProfileModel> activatedBefore = fetchedProfiles
+      //     .where((element) => element.lastActivatedDate != null)
+      //     .toList();
+      // List<ProfileModel> neverActivated = fetchedProfiles
+      //     .where((element) => element.lastActivatedDate == null)
+      //     .toList();
+
+      // activatedBefore.sort((a, b) {
+      //   return a.lastActivatedDate!.compareTo(b.lastActivatedDate!);
+      // });
+
       _profiles = fetchedProfiles;
       notifyListeners();
     } catch (error) {
@@ -123,9 +143,13 @@ class ProfilesProvider extends ChangeNotifier {
     String? name,
     double? income,
     double? outcome,
+    DateTime? lastActivatedDate,
   }) async {
     //* rejecting edit if no argument is provided
-    if (name == null && income == null && outcome == null) {
+    if (name == null &&
+        income == null &&
+        outcome == null &&
+        lastActivatedDate == null) {
       throw CustomError(
           'You must enter one argument at least to edit the profile');
     }
@@ -137,6 +161,8 @@ class ProfilesProvider extends ChangeNotifier {
     double newOutcome = outcome ?? editedProfile.outcome;
     DateTime createdAt = editedProfile.createdAt;
     bool activated = editedProfile.activated;
+    DateTime? newLastActiveDate =
+        lastActivatedDate ?? editedProfile.lastActivatedDate;
     //* edit the profile in database first
     try {
       await DBHelper.insert(profilesTableName, {
@@ -146,6 +172,9 @@ class ProfilesProvider extends ChangeNotifier {
         'outcome': newOutcome,
         'createdAt': createdAt.toIso8601String(),
         'activated': activated ? 'true' : 'false',
+        'lastActivatedDate': newLastActiveDate == null
+            ? 'null'
+            : newLastActiveDate.toIso8601String(),
       });
 
       //* edit it on the _profiles
@@ -158,6 +187,7 @@ class ProfilesProvider extends ChangeNotifier {
         outcome: newOutcome,
         createdAt: createdAt,
         activated: activated,
+        lastActivatedDate: newLastActiveDate,
       );
       _profiles.insert(index, newProfile);
       notifyListeners();
@@ -169,12 +199,34 @@ class ProfilesProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> editActiveProfile(
-      {String? name, double? income, double? outcome}) async {
+  Future<void> editActiveProfile({
+    String? name,
+    double? income,
+    double? outcome,
+    DateTime? lastActivatedDate,
+  }) async {
     //* setting the active profile to the current active profile
     ProfileModel activeProfile = getActiveProfile;
     String id = activeProfile.id;
-    return editProfile(id: id, name: name, income: income, outcome: outcome);
+    return editProfile(
+      id: id,
+      name: name,
+      income: income,
+      outcome: outcome,
+      lastActivatedDate: lastActivatedDate,
+    );
+  }
+
+  //* for setting the lastActivated property for the profile
+  Future<void> editLastActivatedForProfile() async {
+    try {
+      return editActiveProfile(lastActivatedDate: DateTime.now());
+    } catch (error) {
+      if (kDebugMode) {
+        print(error);
+        print('Error setting the lastActivated Property in the profile');
+      }
+    }
   }
 
   //* for setting the active profile id in the shared preferences
@@ -189,5 +241,9 @@ class ProfilesProvider extends ChangeNotifier {
       }
       rethrow;
     }
+
+    //* edit the lastActivated property in the profile
+    //! add that code to the first created profile
+    editLastActivatedForProfile();
   }
 }
