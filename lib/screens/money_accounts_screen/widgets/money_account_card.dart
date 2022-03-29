@@ -66,11 +66,12 @@ class MoneyAccountCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            profileModel.lastActivatedDate == null
-                ? 'No'
-                : profileModel.lastActivatedDate!.toIso8601String(),
-          ),
+          //? that was for previewing the lastActivated date on each profile card for testing
+          // Text(
+          //   profileModel.lastActivatedDate == null
+          //        ? 'No'
+          //       : profileModel.lastActivatedDate!.toIso8601String(),
+          // ),
           ProfileDetailsButton(
             profileId: profileModel.id,
           ),
