@@ -16,6 +16,6 @@ DONE - for the profiles
 DONE - -- in the fetchTransactions make it request only the transactions with the account profile id
 DONE - -- and make the _transactions only has the transactions of the activated profile
 
-add the update profile method in the profileProvider then use it to update the current profile states of the profile when adding new transaction 
+DONE - add the update profile method in the profileProvider then use it to update the current profile states of the profile when adding new transaction 
 
 add a lastActivatedDate to each profile then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)
