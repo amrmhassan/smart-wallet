@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:wallet_app/models/profile_model.dart';
 import 'package:wallet_app/providers/profiles_provider.dart';
 import '../../constants/sizes.dart';
 import '../../constants/styles.dart';
@@ -75,6 +77,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         await Provider.of<QuickActionsProvider>(context, listen: false)
             .addQuickAction(
                 title, description, amount, transactionType, profileId);
+
         showSnackBar(context, 'Quick Action Added', SnackBarType.success);
       } catch (error) {
         showSnackBar(context, error.toString(), SnackBarType.error);
@@ -95,6 +98,23 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
           transactionType,
           profileId,
         );
+
+        //* here i will edit the current active profile
+        ProfileModel activeProfile =
+            Provider.of<ProfilesProvider>(context, listen: false)
+                .getActiveProfile;
+        //* cheching the added transaction type and then update the profile depending on that
+
+        if (transactionType == TransactionType.income) {
+          //* if income then update income
+
+          await Provider.of<ProfilesProvider>(context, listen: false)
+              .editActiveProfile(income: activeProfile.income + amount);
+        } else if (transactionType == TransactionType.outcome) {
+          //* if outcome then update the outcome
+          await Provider.of<ProfilesProvider>(context, listen: false)
+              .editActiveProfile(outcome: activeProfile.outcome + amount);
+        }
         showSnackBar(context, 'Transaction Added', SnackBarType.success);
       } catch (error) {
         showSnackBar(context, error.toString(), SnackBarType.error);
@@ -102,6 +122,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       //* editting transaction
     } else if (widget.addTransactionScreenOperations ==
         AddTransactionScreenOperations.editTransaction) {
+      //! important here add updating the current profile
+      //! by minusing the current transaction amount
+      //! then add the new amount just like the add transaction part
       String id = editedTransaction!.id;
       DateTime createdAt = editedTransaction!.createdAt;
       double ratioToTotal = editedTransaction!.ratioToTotal;

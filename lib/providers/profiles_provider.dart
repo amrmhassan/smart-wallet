@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wallet_app/constants/db_constants.dart';
 import 'package:wallet_app/constants/shared_pref_constants.dart';
+import 'package:wallet_app/helpers/custom_error.dart';
 import 'package:wallet_app/helpers/shared_pref.dart';
 import 'package:wallet_app/models/profile_model.dart';
 
@@ -14,14 +15,22 @@ class ProfilesProvider extends ChangeNotifier {
   List<ProfileModel> _profiles = [];
   String _activatedProfileId = '';
 
+  //* for getting the activated profile id
   String get activatedProfileId {
     return _activatedProfileId;
   }
 
+  //* for getting the profiles
   List<ProfileModel> get profiles {
     return [..._profiles.reversed.toList()];
   }
 
+  //* for getting the current active profile
+  ProfileModel get getActiveProfile {
+    return _profiles.firstWhere((element) => element.id == activatedProfileId);
+  }
+
+  //* for fetching and update the activated profile id from shared preferences
   Future<void> fetchAndUpdateActivatedProfileId() async {
     String activatedId;
 
@@ -42,6 +51,7 @@ class ProfilesProvider extends ChangeNotifier {
     }
   }
 
+  //* for getting and updating the profiles from database
   Future<void> fetchAndUpdateProfiles() async {
     try {
       List<Map<String, dynamic>> data =
@@ -71,6 +81,7 @@ class ProfilesProvider extends ChangeNotifier {
     }
   }
 
+  //* for adding a profile to database and to the _profiles
   Future<void> addProfile(String name) async {
     //* initializing the transaction data like (createdAt, id, ratioToTotal...)
     String id = const Uuid().v4();
@@ -99,6 +110,67 @@ class ProfilesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  //* for editing a profile
+  Future<void> editProfile({
+    required String id,
+    String? name,
+    double? income,
+    double? outcome,
+  }) async {
+    //* rejecting edit if no argument is provided
+    if (name == null && income == null && outcome == null) {
+      throw CustomError(
+          'You must enter one argument at least to edit the profile');
+    }
+    //* setting the active profile to the current active profile
+    ProfileModel editedProfile =
+        _profiles.firstWhere((element) => element.id == id);
+    String newName = name ?? editedProfile.name;
+    double newIncome = income ?? editedProfile.income;
+    double newOutcome = outcome ?? editedProfile.outcome;
+    DateTime createdAt = editedProfile.createdAt;
+    bool activated = editedProfile.activated;
+    //* edit the profile in database first
+    try {
+      await DBHelper.insert(profilesTableName, {
+        'id': id,
+        'name': newName,
+        'income': newIncome,
+        'outcome': newOutcome,
+        'createdAt': createdAt.toIso8601String(),
+        'activated': activated ? 'true' : 'false',
+      });
+
+      //* edit it on the _profiles
+      int index = _profiles.indexOf(editedProfile);
+      _profiles.removeAt(index);
+      ProfileModel newProfile = ProfileModel(
+        id: id,
+        name: newName,
+        income: newIncome,
+        outcome: newOutcome,
+        createdAt: createdAt,
+        activated: activated,
+      );
+      _profiles.insert(index, newProfile);
+      notifyListeners();
+    } catch (error) {
+      if (kDebugMode) {
+        print('Error editting the profile new money profile');
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> editActiveProfile(
+      {String? name, double? income, double? outcome}) async {
+    //* setting the active profile to the current active profile
+    ProfileModel activeProfile = getActiveProfile;
+    String id = activeProfile.id;
+    return editProfile(id: id, name: name, income: income, outcome: outcome);
+  }
+
+  //* for setting the active profile id in the shared preferences
   Future<void> setActivatedProfile(String id) async {
     try {
       await SharedPrefHelper.setString(kActivatedProfileIdKey, id);

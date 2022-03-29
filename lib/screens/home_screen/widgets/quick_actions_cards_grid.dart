@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../constants/styles.dart';
 import '../../../constants/types.dart';
+import '../../../models/profile_model.dart';
 import '../../../models/quick_action_model.dart';
+import '../../../providers/profiles_provider.dart';
 import '../../../providers/quick_actions_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../screens/quick_actions_screen/quick_actions_screen.dart';
@@ -47,6 +49,26 @@ class QuickActionsCardsGrid extends StatelessWidget {
                   quickAction.transactionType,
                   quickAction.profileId,
                 );
+
+                //* here i will edit the current active profile
+                ProfileModel activeProfile =
+                    Provider.of<ProfilesProvider>(context, listen: false)
+                        .getActiveProfile;
+                //* cheching the added transaction type and then update the profile depending on that
+
+                if (quickAction.transactionType == TransactionType.income) {
+                  //* if income then update income
+
+                  await Provider.of<ProfilesProvider>(context, listen: false)
+                      .editActiveProfile(
+                          income: activeProfile.income + quickAction.amount);
+                } else if (quickAction.transactionType ==
+                    TransactionType.outcome) {
+                  //* if outcome then update the outcome
+                  await Provider.of<ProfilesProvider>(context, listen: false)
+                      .editActiveProfile(
+                          outcome: activeProfile.outcome + quickAction.amount);
+                }
                 showSnackBar(
                     context, 'Transaction Added', SnackBarType.success, true);
               } catch (error) {
