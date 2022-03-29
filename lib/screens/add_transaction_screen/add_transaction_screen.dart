@@ -79,9 +79,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       );
 
       //* here i will edit the current active profile
-
-      //* cheching the added transaction type and then update the profile depending on that
-
+      //* checking the added transaction type and then update the profile depending on that
       if (transactionType == TransactionType.income) {
         //* if income then update income
 
@@ -93,10 +91,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             .editActiveProfile(outcome: activeProfile.outcome + amount);
       }
       showSnackBar(context, 'Transaction Added', SnackBarType.success);
+      Navigator.pop(context);
     } catch (error) {
       showSnackBar(context, error.toString(), SnackBarType.error);
     }
-    Navigator.pop(context);
   }
 
 //* 2] this method will add a new quick action
@@ -114,10 +112,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               title, description, amount, transactionType, profileId);
 
       showSnackBar(context, 'Quick Action Added', SnackBarType.success);
+      Navigator.pop(context);
     } catch (error) {
       showSnackBar(context, error.toString(), SnackBarType.error);
     }
-    Navigator.pop(context);
   }
 
 //* 3] this method will edit an existing transaction
@@ -149,6 +147,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       //* sending the updating info to the provider
       await Provider.of<TransactionProvider>(context, listen: false)
           .editTransaction(id, newTransaction);
+
       //* editing the current money profile when editing a transaction
       if (transactionType == TransactionType.income) {
         await Provider.of<ProfilesProvider>(context, listen: false)
@@ -165,7 +164,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     } catch (error) {
       showSnackBar(context, error.toString(), SnackBarType.error);
     }
-    Navigator.pop(context);
   }
 
 //* 4] this method will edit an existing quick action
@@ -201,7 +199,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     } catch (error) {
       showSnackBar(context, error.toString(), SnackBarType.error);
     }
-    Navigator.pop(context);
   }
 
 //* this method will be executed whenever the save button in the calculator is clicked

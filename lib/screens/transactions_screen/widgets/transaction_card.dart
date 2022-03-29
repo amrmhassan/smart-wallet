@@ -25,22 +25,24 @@ class TranscationCard extends StatelessWidget {
   void deleteTransaction(BuildContext context) async {
     //? update the profile before delting the transaction
     //? getting the current deleted transaction amount and transaction type
-    //! check this code before executing
-    ProfileModel activeProfile =
-        Provider.of<ProfilesProvider>(context, listen: false).getActiveProfile;
-
-    if (transaction.transactionType == TransactionType.income) {
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .editActiveProfile(income: activeProfile.income - transaction.amount);
-    } else if (transaction.transactionType == TransactionType.outcome) {
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .editActiveProfile(
-              outcome: activeProfile.outcome - transaction.amount);
-    }
 
     try {
       await Provider.of<TransactionProvider>(context, listen: false)
           .deleteTransaction(transaction.id);
+
+      ProfileModel activeProfile =
+          Provider.of<ProfilesProvider>(context, listen: false)
+              .getActiveProfile;
+
+      if (transaction.transactionType == TransactionType.income) {
+        await Provider.of<ProfilesProvider>(context, listen: false)
+            .editActiveProfile(
+                income: activeProfile.income - transaction.amount);
+      } else if (transaction.transactionType == TransactionType.outcome) {
+        await Provider.of<ProfilesProvider>(context, listen: false)
+            .editActiveProfile(
+                outcome: activeProfile.outcome - transaction.amount);
+      }
     } catch (error) {
       showSnackBar(context, error.toString(), SnackBarType.error);
     }

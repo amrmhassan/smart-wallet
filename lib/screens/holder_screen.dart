@@ -29,7 +29,6 @@ class _HolderScreenState extends State<HolderScreen> {
   int _activeBottomNavBarIndex = 2;
   bool _apply = true;
   late PageController _pageController;
-  bool loadingData = false;
 
   void _setActiveNavBarIconIndex(int index) {
     if (_apply) {
@@ -71,59 +70,54 @@ class _HolderScreenState extends State<HolderScreen> {
 
       drawer: CustomAppDrawer(),
       //* this is the main stack that have all the content of home screen by showing every thing on each other as a stack
-      body: loadingData
-          ? Container(
-              alignment: Alignment.center,
-              child: Text('Loading'),
-            )
-          : Stack(
+      body: Stack(
+        children: [
+          Background(),
+          SafeArea(
+            child: Column(
               children: [
-                Background(),
-                SafeArea(
-                  child: Column(
+                //* this is a custom widget of app bar
+                //* not a real one but made of containers and paddings for more control
+                MyAppBar(),
+                //* here i showed that you can know which environment you are on (development or production)
+                //* and i worked successfully
+                // if (kDebugMode) Text('In debug Mode'),
+                // if (kReleaseMode) Text('In release  Mode'),
+
+                Expanded(
+                  //* main pages of the app
+                  child: PageView(
+                    physics: BouncingScrollPhysics(),
+                    onPageChanged: (index) {
+                      return _setActiveNavBarIconIndex(index);
+                    },
+                    //! try this attribute now
+                    allowImplicitScrolling: false,
+                    controller: _pageController,
+
                     children: [
-                      //* this is a custom widget of app bar
-                      //* not a real one but made of containers and paddings for more control
-                      MyAppBar(),
-                      //* here i showed that you can know which environment you are on (development or production)
-                      //* and i worked successfully
-                      // if (kDebugMode) Text('In debug Mode'),
-                      // if (kReleaseMode) Text('In release  Mode'),
-
-                      Expanded(
-                        //* main pages of the app
-                        child: PageView(
-                          physics: BouncingScrollPhysics(),
-                          onPageChanged: (index) {
-                            return _setActiveNavBarIconIndex(index);
-                          },
-                          //! try this attribute now
-                          allowImplicitScrolling: false,
-                          controller: _pageController,
-
-                          children: [
-                            Container(
-                              child: Text('Statistics page'),
-                            ),
-                            MoneyAccountsScreen(),
-                            HomeScreen(),
-                            TransactionsScreen(),
-                            Container(
-                              child: Text('Settings  page'),
-                            ),
-                          ],
-                        ),
+                      Container(
+                        child: Text('Statistics page'),
+                      ),
+                      MoneyAccountsScreen(),
+                      HomeScreen(),
+                      TransactionsScreen(),
+                      Container(
+                        child: Text('Settings  page'),
                       ),
                     ],
                   ),
                 ),
-                //* this is the bottom nav bar that has all 5 main tabs
-                BottomNavBar(
-                  activeIndex: _activeBottomNavBarIndex,
-                  setActiveBottomNavBarIcon: _setActiveNavBarIconIndex,
-                ),
               ],
             ),
+          ),
+          //* this is the bottom nav bar that has all 5 main tabs
+          BottomNavBar(
+            activeIndex: _activeBottomNavBarIndex,
+            setActiveBottomNavBarIcon: _setActiveNavBarIconIndex,
+          ),
+        ],
+      ),
     );
   }
 }
