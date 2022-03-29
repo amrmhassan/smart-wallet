@@ -27,6 +27,11 @@ class ProfilesProvider extends ChangeNotifier {
 
   //* for getting the current active profile
   ProfileModel get getActiveProfile {
+    //* fixed by setting the currentActiveId when fetching profile and there is no profiles
+    //* and by adding the loading to the holder screen to prevent showing the home screen that will ask for the current active id
+    //* before loading them from the database
+    // fix that error , this will create an error first time the app loads cause
+    // i think this is called before the profiles loads
     return _profiles.firstWhere((element) => element.id == activatedProfileId);
   }
 
@@ -58,7 +63,8 @@ class ProfilesProvider extends ChangeNotifier {
           await DBHelper.getData(profilesTableName);
       //* if there is no profile yet just create the default one and add it to the _profiles
       if (data.isEmpty) {
-        return await addProfile(defaultProfile.name);
+        String id = await addProfile(defaultProfile.name);
+        return setActivatedProfile(id);
       }
 
       List<ProfileModel> fetchedProfiles = data
@@ -82,7 +88,7 @@ class ProfilesProvider extends ChangeNotifier {
   }
 
   //* for adding a profile to database and to the _profiles
-  Future<void> addProfile(String name) async {
+  Future<String> addProfile(String name) async {
     //* initializing the transaction data like (createdAt, id, ratioToTotal...)
     String id = const Uuid().v4();
     DateTime createdAt = DateTime.now();
@@ -108,6 +114,7 @@ class ProfilesProvider extends ChangeNotifier {
         id: id, name: name, income: 0, outcome: 0, createdAt: createdAt);
     _profiles.add(newProfile);
     notifyListeners();
+    return id;
   }
 
   //* for editing a profile

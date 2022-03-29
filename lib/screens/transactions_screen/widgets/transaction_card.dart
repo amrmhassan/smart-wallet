@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet_app/models/profile_model.dart';
+import 'package:wallet_app/providers/profiles_provider.dart';
 import '../../../providers/transactions_provider.dart';
 
 import '../../../constants/colors.dart';
@@ -14,12 +16,28 @@ import '../../../widgets/global/card_action_button.dart';
 
 class TranscationCard extends StatelessWidget {
   final TransactionModel transaction;
+
   const TranscationCard({
     Key? key,
     required this.transaction,
   }) : super(key: key);
 
   void deleteTransaction(BuildContext context) async {
+    //? update the profile before delting the transaction
+    //? getting the current deleted transaction amount and transaction type
+    //! check this code before executing
+    ProfileModel activeProfile =
+        Provider.of<ProfilesProvider>(context, listen: false).getActiveProfile;
+
+    if (transaction.transactionType == TransactionType.income) {
+      await Provider.of<ProfilesProvider>(context, listen: false)
+          .editActiveProfile(income: activeProfile.income - transaction.amount);
+    } else if (transaction.transactionType == TransactionType.outcome) {
+      await Provider.of<ProfilesProvider>(context, listen: false)
+          .editActiveProfile(
+              outcome: activeProfile.outcome - transaction.amount);
+    }
+
     try {
       await Provider.of<TransactionProvider>(context, listen: false)
           .deleteTransaction(transaction.id);

@@ -18,4 +18,12 @@ DONE - -- and make the _transactions only has the transactions of the activated 
 
 DONE - add the update profile method in the profileProvider then use it to update the current profile states of the profile when adding new transaction 
 
+update the current active profile when editting a transaction 
+DONE - update the current active profile when deleting a transaction
+
+create a utils file for operation_on_transactions and put the add transaction method in there and the delete, edit then use them in the add transaction screen
+
+-- do the last step for the quick actions as well
+
+
 add a lastActivatedDate to each profile then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)

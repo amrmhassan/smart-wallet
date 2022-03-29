@@ -8,7 +8,7 @@ class DBHelper {
     final databasePathDir = await sql.getDatabasesPath();
     String finalPath = path.join(databasePathDir, dbName);
 
-    return await sql.openDatabase(
+    return sql.openDatabase(
       finalPath,
       //! this is when creating the database itself so create all your tables here
       onCreate: (db, version) async {
@@ -19,7 +19,7 @@ class DBHelper {
         await db.execute(
             'CREATE TABLE $profilesTableName (id TEXT PRIMARY KEY,name TEXT, income TEXT, outcome TEXT, activated TEXT, createdAt TEXT)');
         //* creating quick actions table
-        return await db.execute(
+        return db.execute(
             'CREATE TABLE $quickActionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT,  isFavorite TEXT, profileId TEXT  )');
       },
       version: 1,
@@ -49,6 +49,12 @@ class DBHelper {
       String table, String check, String profileId) async {
     final db = await DBHelper.database(table);
     return db.query(table, where: '$check = ?', whereArgs: [profileId]);
+  }
+
+  static Future<void> deleteDatabase(String dbName) async {
+    final databasePathDir = await sql.getDatabasesPath();
+    String finalPath = path.join(databasePathDir, dbName);
+    return sql.deleteDatabase(finalPath);
   }
 
   static Future<void> deleteById(String id, String table) async {

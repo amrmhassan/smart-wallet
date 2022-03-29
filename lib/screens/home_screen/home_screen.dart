@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet_app/providers/profiles_provider.dart';
 import '../../constants/sizes.dart';
 import '../../constants/styles.dart';
 import '../../providers/quick_actions_provider.dart';
@@ -24,6 +25,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 //* this is the build method of this widget
+
   @override
   Widget build(BuildContext context) {
     //* the main container of the home screen
@@ -35,7 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               HomeHeading(
-                title: 'Current Profile Name',
+                title: Provider.of<ProfilesProvider>(context)
+                    .getActiveProfile
+                    .name,
               ),
               //* this has the summery of the current active profile like (outcome, income of this day or month or year..., and the current total amount that currently exist in the profile)
               ProfileSummary(),

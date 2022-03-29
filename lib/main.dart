@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/providers/profiles_provider.dart';
+import 'package:wallet_app/screens/loading_data_screen.dart';
 import './providers/quick_actions_provider.dart';
 import './providers/transactions_provider.dart';
 import './screens/holder_screen.dart';
@@ -36,10 +37,11 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: HolderScreen.routeName,
+        initialRoute: LoadingDataScreen.routeName,
         routes: {
           HolderScreen.routeName: (ctx) => HolderScreen(),
           QuickActionsScreen.routeName: (ctx) => QuickActionsScreen(),
+          LoadingDataScreen.routeName: (ctx) => LoadingDataScreen(),
         },
       ),
     );

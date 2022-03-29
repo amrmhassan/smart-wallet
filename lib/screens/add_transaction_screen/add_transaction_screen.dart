@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:wallet_app/models/profile_model.dart';
 import 'package:wallet_app/providers/profiles_provider.dart';
 import '../../constants/sizes.dart';
@@ -58,7 +57,155 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     });
   }
 
-  void addTransaction() async {
+//* 1] this method will add a new transaction
+  Future<void> addTransaction({
+    required String title,
+    required String description,
+    required TransactionType transactionType,
+    required ProfileModel activeProfile,
+  }) async {
+    try {
+      //* here the code for adding a new transaction
+      String profileId = Provider.of<ProfilesProvider>(context, listen: false)
+          .activatedProfileId;
+
+      await Provider.of<TransactionProvider>(context, listen: false)
+          .addTransaction(
+        title,
+        description,
+        amount,
+        transactionType,
+        profileId,
+      );
+
+      //* here i will edit the current active profile
+
+      //* cheching the added transaction type and then update the profile depending on that
+
+      if (transactionType == TransactionType.income) {
+        //* if income then update income
+
+        await Provider.of<ProfilesProvider>(context, listen: false)
+            .editActiveProfile(income: activeProfile.income + amount);
+      } else if (transactionType == TransactionType.outcome) {
+        //* if outcome then update the outcome
+        await Provider.of<ProfilesProvider>(context, listen: false)
+            .editActiveProfile(outcome: activeProfile.outcome + amount);
+      }
+      showSnackBar(context, 'Transaction Added', SnackBarType.success);
+    } catch (error) {
+      showSnackBar(context, error.toString(), SnackBarType.error);
+    }
+    Navigator.pop(context);
+  }
+
+//* 2] this method will add a new quick action
+  Future<void> addQuickAction({
+    required String title,
+    required String description,
+    required TransactionType transactionType,
+  }) async {
+    try {
+      String profileId = Provider.of<ProfilesProvider>(context, listen: false)
+          .activatedProfileId;
+      //* here i will add the new quick action
+      await Provider.of<QuickActionsProvider>(context, listen: false)
+          .addQuickAction(
+              title, description, amount, transactionType, profileId);
+
+      showSnackBar(context, 'Quick Action Added', SnackBarType.success);
+    } catch (error) {
+      showSnackBar(context, error.toString(), SnackBarType.error);
+    }
+    Navigator.pop(context);
+  }
+
+//* 3] this method will edit an existing transaction
+  Future<void> editTransaction({
+    required String title,
+    required String description,
+    required TransactionType transactionType,
+    required ProfileModel activeProfile,
+  }) async {
+    String id = editedTransaction!.id;
+    DateTime createdAt = editedTransaction!.createdAt;
+    double ratioToTotal = editedTransaction!.ratioToTotal;
+    String profileId = editedTransaction!.profileId;
+    double oldAmount = editedTransaction!.amount;
+    double newAmount = amount;
+
+    TransactionModel newTransaction = TransactionModel(
+      id: id,
+      title: title,
+      description: description,
+      amount: amount,
+      createdAt: createdAt,
+      transactionType: transactionType,
+      ratioToTotal: ratioToTotal,
+      profileId: profileId,
+    );
+
+    try {
+      //* sending the updating info to the provider
+      await Provider.of<TransactionProvider>(context, listen: false)
+          .editTransaction(id, newTransaction);
+      //* editing the current money profile when editing a transaction
+      if (transactionType == TransactionType.income) {
+        await Provider.of<ProfilesProvider>(context, listen: false)
+            .editActiveProfile(
+                income: activeProfile.income - oldAmount + newAmount);
+      } else if (transactionType == TransactionType.outcome) {
+        await Provider.of<ProfilesProvider>(context, listen: false)
+            .editActiveProfile(
+                outcome: activeProfile.outcome - oldAmount + newAmount);
+      }
+
+      showSnackBar(context, 'Transaction Updated', SnackBarType.success);
+      Navigator.pop(context);
+    } catch (error) {
+      showSnackBar(context, error.toString(), SnackBarType.error);
+    }
+    Navigator.pop(context);
+  }
+
+//* 4] this method will edit an existing quick action
+  Future<void> editQuickAction({
+    required String title,
+    required String description,
+    required TransactionType transactionType,
+    required ProfileModel activeProfile,
+  }) async {
+    //* here i will add edit a quick action
+    String id = editedQuickAction!.id;
+    DateTime createdAt = editedQuickAction!.createdAt;
+    bool isFavorite = editedQuickAction!.isFavorite;
+    String profileId = editedQuickAction!.profileId;
+    QuickActionModel newQuickAction = QuickActionModel(
+      id: id,
+      title: title,
+      description: description,
+      amount: amount,
+      createdAt: createdAt,
+      transactionType: transactionType,
+      isFavorite: isFavorite,
+      profileId: profileId,
+      // isFavorite:
+    );
+
+    try {
+      //* sending the updating info to the provider
+      await Provider.of<QuickActionsProvider>(context, listen: false)
+          .editQuickAction(id, newQuickAction);
+      showSnackBar(context, 'Quick Action Updated', SnackBarType.success);
+      Navigator.pop(context);
+    } catch (error) {
+      showSnackBar(context, error.toString(), SnackBarType.error);
+    }
+    Navigator.pop(context);
+  }
+
+//* this method will be executed whenever the save button in the calculator is clicked
+  Future<void> handleSaveButtonClick() async {
     //* preparing the needed info to add the new thing(transaction or quick action)
     String title =
         _titleController.text.isEmpty ? 'Empty Title' : _titleController.text;
@@ -66,118 +213,41 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         ? 'Empty Description'
         : _descriptionController.text;
     TransactionType transactionType = currentActiveTransactionType;
+    ProfileModel activeProfile =
+        Provider.of<ProfilesProvider>(context, listen: false).getActiveProfile;
 
-    //* adding quick action
     if (widget.addTransactionScreenOperations ==
         AddTransactionScreenOperations.addQuickAction) {
-      try {
-        String profileId = Provider.of<ProfilesProvider>(context, listen: false)
-            .activatedProfileId;
-        //* here i will add the new quick action
-        await Provider.of<QuickActionsProvider>(context, listen: false)
-            .addQuickAction(
-                title, description, amount, transactionType, profileId);
-
-        showSnackBar(context, 'Quick Action Added', SnackBarType.success);
-      } catch (error) {
-        showSnackBar(context, error.toString(), SnackBarType.error);
-      }
-      //* adding transaction
+      //* add quick action
+      return addQuickAction(
+          title: title,
+          description: description,
+          transactionType: transactionType);
     } else if (widget.addTransactionScreenOperations ==
         AddTransactionScreenOperations.addTransaction) {
-      try {
-        //* here the code for adding a new transaction
-        String profileId = Provider.of<ProfilesProvider>(context, listen: false)
-            .activatedProfileId;
-
-        await Provider.of<TransactionProvider>(context, listen: false)
-            .addTransaction(
-          title,
-          description,
-          amount,
-          transactionType,
-          profileId,
-        );
-
-        //* here i will edit the current active profile
-        ProfileModel activeProfile =
-            Provider.of<ProfilesProvider>(context, listen: false)
-                .getActiveProfile;
-        //* cheching the added transaction type and then update the profile depending on that
-
-        if (transactionType == TransactionType.income) {
-          //* if income then update income
-
-          await Provider.of<ProfilesProvider>(context, listen: false)
-              .editActiveProfile(income: activeProfile.income + amount);
-        } else if (transactionType == TransactionType.outcome) {
-          //* if outcome then update the outcome
-          await Provider.of<ProfilesProvider>(context, listen: false)
-              .editActiveProfile(outcome: activeProfile.outcome + amount);
-        }
-        showSnackBar(context, 'Transaction Added', SnackBarType.success);
-      } catch (error) {
-        showSnackBar(context, error.toString(), SnackBarType.error);
-      }
-      //* editting transaction
+      //* add transaction
+      return addTransaction(
+          title: title,
+          description: description,
+          activeProfile: activeProfile,
+          transactionType: transactionType);
     } else if (widget.addTransactionScreenOperations ==
         AddTransactionScreenOperations.editTransaction) {
-      //! important here add updating the current profile
-      //! by minusing the current transaction amount
-      //! then add the new amount just like the add transaction part
-      String id = editedTransaction!.id;
-      DateTime createdAt = editedTransaction!.createdAt;
-      double ratioToTotal = editedTransaction!.ratioToTotal;
-      String profileId = editedTransaction!.profileId;
-
-      TransactionModel newTransaction = TransactionModel(
-        id: id,
+      //* edit transaction
+      return editTransaction(
         title: title,
         description: description,
-        amount: amount,
-        createdAt: createdAt,
         transactionType: transactionType,
-        ratioToTotal: ratioToTotal,
-        profileId: profileId,
+        activeProfile: activeProfile,
       );
-
-      try {
-        //* sending the updating info to the provider
-        await Provider.of<TransactionProvider>(context, listen: false)
-            .editTransaction(id, newTransaction);
-        showSnackBar(context, 'Transaction Updated', SnackBarType.success);
-        Navigator.pop(context);
-      } catch (error) {
-        showSnackBar(context, error.toString(), SnackBarType.error);
-      }
     } else if (widget.addTransactionScreenOperations ==
         AddTransactionScreenOperations.editQuickAction) {
-      //* here i will add edit a quick action
-      String id = editedQuickAction!.id;
-      DateTime createdAt = editedQuickAction!.createdAt;
-      bool isFavorite = editedQuickAction!.isFavorite;
-      String profileId = editedQuickAction!.profileId;
-      QuickActionModel newQuickAction = QuickActionModel(
-        id: id,
-        title: title,
-        description: description,
-        amount: amount,
-        createdAt: createdAt,
-        transactionType: transactionType,
-        isFavorite: isFavorite,
-        profileId: profileId,
-        // isFavorite:
-      );
-
-      try {
-        //* sending the updating info to the provider
-        await Provider.of<QuickActionsProvider>(context, listen: false)
-            .editQuickAction(id, newQuickAction);
-        showSnackBar(context, 'Quick Action Updated', SnackBarType.success);
-        Navigator.pop(context);
-      } catch (error) {
-        showSnackBar(context, error.toString(), SnackBarType.error);
-      }
+      //* edit quick action
+      return editQuickAction(
+          title: title,
+          description: description,
+          transactionType: transactionType,
+          activeProfile: activeProfile);
     }
   }
 
@@ -289,12 +359,13 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   ),
                   Expanded(
                     child: Calculator(
+                      //? here editting the amount of get from the calculator
                       setResults: (result) {
                         setState(() {
                           amount = result;
                         });
                       },
-                      saveTransaction: addTransaction,
+                      saveTransaction: handleSaveButtonClick,
                       initialAmount: amount.toString(),
                     ),
                   ),

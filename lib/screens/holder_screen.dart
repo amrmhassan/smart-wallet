@@ -5,16 +5,13 @@
 //! how to make my own icons using adobe xd then change the icon of menu to be one dash and a half
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:wallet_app/providers/profiles_provider.dart';
 import 'package:wallet_app/screens/money_accounts_screen/money_accounts_screen.dart';
-import '../providers/quick_actions_provider.dart';
 import '../screens/home_screen/home_screen.dart';
 import '../screens/transactions_screen/transactions_screen.dart';
 
 import '../../widgets/app_bar/my_app_bar.dart';
 import '../../widgets/bottom_nav_bar/bottom_nav_bar.dart';
-import '../providers/transactions_provider.dart';
+import '../widgets/custom_app_drawer/custom_app_drawer.dart';
 import 'home_screen/widgets/background.dart';
 
 const Duration _pageSliderDuration = Duration(milliseconds: 200);
@@ -32,6 +29,7 @@ class _HolderScreenState extends State<HolderScreen> {
   int _activeBottomNavBarIndex = 2;
   bool _apply = true;
   late PageController _pageController;
+  bool loadingData = false;
 
   void _setActiveNavBarIconIndex(int index) {
     if (_apply) {
@@ -52,28 +50,10 @@ class _HolderScreenState extends State<HolderScreen> {
 
   @override
   void initState() {
-    //! i am not sure about keepPage property if anything goes wrong just remove it
-    _pageController =
-        PageController(initialPage: _activeBottomNavBarIndex, keepPage: true);
-    //* i needed the trick of duration zero here
-    //* here i will fetch and update the transactions
-    Future.delayed(Duration.zero).then((value) async {
-      //! here show a loading screen for the whole app until loading the needed data
-      //* i forgot to add the await
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .fetchAndUpdateProfiles();
+    _pageController = PageController(
+      initialPage: _activeBottomNavBarIndex,
+    );
 
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .fetchAndUpdateActivatedProfileId();
-      String activatedProfileId =
-          Provider.of<ProfilesProvider>(context, listen: false)
-              .activatedProfileId;
-      await Provider.of<TransactionProvider>(context, listen: false)
-          .fetchAndUpdateTransactions(activatedProfileId);
-
-      await Provider.of<QuickActionsProvider>(context, listen: false)
-          .fetchAndUpdateQuickActions(activatedProfileId);
-    });
     super.initState();
   }
 
@@ -89,60 +69,61 @@ class _HolderScreenState extends State<HolderScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
 
-      drawer: Drawer(
-        child: Container(
-          color: Colors.white,
-        ),
-      ),
+      drawer: CustomAppDrawer(),
       //* this is the main stack that have all the content of home screen by showing every thing on each other as a stack
-      body: Stack(
-        children: [
-          Background(),
-          SafeArea(
-            child: Column(
+      body: loadingData
+          ? Container(
+              alignment: Alignment.center,
+              child: Text('Loading'),
+            )
+          : Stack(
               children: [
-                //* this is a custom widget of app bar
-                //* not a real one but made of containers and paddings for more control
-                MyAppBar(),
-                //* here i showed that you can know which environment you are on (development or production)
-                //* and i worked successfully
-                // if (kDebugMode) Text('In debug Mode'),
-                // if (kReleaseMode) Text('In release  Mode'),
-
-                Expanded(
-                  //* main pages of the app
-                  child: PageView(
-                    physics: BouncingScrollPhysics(),
-                    onPageChanged: (index) {
-                      return _setActiveNavBarIconIndex(index);
-                    },
-                    //! try this attribute now
-                    allowImplicitScrolling: false,
-                    controller: _pageController,
-
+                Background(),
+                SafeArea(
+                  child: Column(
                     children: [
-                      Container(
-                        child: Text('Statistics page'),
-                      ),
-                      MoneyAccountsScreen(),
-                      HomeScreen(),
-                      TransactionsScreen(),
-                      Container(
-                        child: Text('Settings  page'),
+                      //* this is a custom widget of app bar
+                      //* not a real one but made of containers and paddings for more control
+                      MyAppBar(),
+                      //* here i showed that you can know which environment you are on (development or production)
+                      //* and i worked successfully
+                      // if (kDebugMode) Text('In debug Mode'),
+                      // if (kReleaseMode) Text('In release  Mode'),
+
+                      Expanded(
+                        //* main pages of the app
+                        child: PageView(
+                          physics: BouncingScrollPhysics(),
+                          onPageChanged: (index) {
+                            return _setActiveNavBarIconIndex(index);
+                          },
+                          //! try this attribute now
+                          allowImplicitScrolling: false,
+                          controller: _pageController,
+
+                          children: [
+                            Container(
+                              child: Text('Statistics page'),
+                            ),
+                            MoneyAccountsScreen(),
+                            HomeScreen(),
+                            TransactionsScreen(),
+                            Container(
+                              child: Text('Settings  page'),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
+                //* this is the bottom nav bar that has all 5 main tabs
+                BottomNavBar(
+                  activeIndex: _activeBottomNavBarIndex,
+                  setActiveBottomNavBarIcon: _setActiveNavBarIconIndex,
+                ),
               ],
             ),
-          ),
-          //* this is the bottom nav bar that has all 5 main tabs
-          BottomNavBar(
-            activeIndex: _activeBottomNavBarIndex,
-            setActiveBottomNavBarIcon: _setActiveNavBarIconIndex,
-          ),
-        ],
-      ),
     );
   }
 }
