@@ -24,7 +24,7 @@ class ProfilesGrid extends StatelessWidget {
         top: kDefaultPadding / 4,
         right: kDefaultPadding * 1.5,
         left: kDefaultPadding * 1.5,
-        bottom: bottomNavBarHeight + kDefaultPadding / 4,
+        bottom: kCustomBottomNavBarHeight + kDefaultPadding / 4,
       ),
       decoration: BoxDecoration(),
       //* the list of profiles cards

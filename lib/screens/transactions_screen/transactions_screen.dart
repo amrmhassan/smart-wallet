@@ -41,7 +41,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                   top: kDefaultHorizontalPadding,
                   right: kDefaultPadding / 2,
                   left: kDefaultPadding / 2,
-                  bottom: bottomNavBarHeight,
+                  bottom: kCustomBottomNavBarHeight,
                 ),
                 decoration: BoxDecoration(),
                 child: _transactions.isNotEmpty

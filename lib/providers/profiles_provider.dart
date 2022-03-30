@@ -5,7 +5,7 @@ import 'package:uuid/uuid.dart';
 import 'package:wallet_app/constants/db_constants.dart';
 import 'package:wallet_app/constants/shared_pref_constants.dart';
 import 'package:wallet_app/helpers/custom_error.dart';
-import 'package:wallet_app/helpers/shared_pref.dart';
+import 'package:wallet_app/helpers/shared_pref_helper.dart';
 import 'package:wallet_app/models/profile_model.dart';
 
 import '../constants/profiles.dart';
@@ -109,6 +109,17 @@ class ProfilesProvider extends ChangeNotifier {
 
   //* for adding a profile to database and to the _profiles
   Future<String> addProfile(String name) async {
+    //* checking if the profile name already exists
+    bool profileNameExists = false;
+    for (var element in _profiles) {
+      if (name == element.name) {
+        profileNameExists = true;
+      }
+    }
+    if (profileNameExists) {
+      throw CustomError('Profile Name already exists');
+    }
+
     //* initializing the transaction data like (createdAt, id, ratioToTotal...)
     String id = const Uuid().v4();
     DateTime createdAt = DateTime.now();

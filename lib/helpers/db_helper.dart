@@ -10,7 +10,7 @@ class DBHelper {
 
     return sql.openDatabase(
       finalPath,
-      //! this is when creating the database itself so create all your tables here
+      //? this is when creating the database itself so create all your tables here
       onCreate: (db, version) async {
         //* creating transactions table
         await db.execute(

@@ -6,10 +6,10 @@ import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../constants/styles.dart';
 
-class AddQuickActionButton extends StatelessWidget {
+class CustomFloatingActionButton extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
-  const AddQuickActionButton({
+  const CustomFloatingActionButton({
     Key? key,
     required this.title,
     required this.onTap,
@@ -18,7 +18,7 @@ class AddQuickActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: bottomNavBarHeight + 10,
+      bottom: kCustomBottomNavBarHeight + 10,
       right: 20,
       child: Container(
         clipBehavior: Clip.hardEdge,

@@ -46,7 +46,7 @@ class BottomNavBar extends StatelessWidget {
           padding: const EdgeInsets.symmetric(
             horizontal: kDefaultPadding,
           ),
-          height: bottomNavBarHeight,
+          height: kCustomBottomNavBarHeight,
           decoration: BoxDecoration(
             gradient: const LinearGradient(
               begin: Alignment.topCenter,

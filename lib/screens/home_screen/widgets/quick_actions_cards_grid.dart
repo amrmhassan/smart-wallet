@@ -94,7 +94,7 @@ class QuickActionsCardsGrid extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(),
         padding: const EdgeInsets.only(
-          bottom: bottomNavBarHeight + kDefaultPadding / 4,
+          bottom: kCustomBottomNavBarHeight + kDefaultPadding / 4,
           right: kDefaultPadding / 4,
           left: kDefaultPadding / 4,
           top: kDefaultPadding / 4,

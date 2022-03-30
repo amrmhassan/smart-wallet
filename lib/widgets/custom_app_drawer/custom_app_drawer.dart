@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wallet_app/constants/db_constants.dart';
 import 'package:wallet_app/helpers/db_helper.dart';
+import 'package:wallet_app/helpers/shared_pref_helper.dart';
 
 class CustomAppDrawer extends StatelessWidget {
   const CustomAppDrawer({
@@ -13,7 +14,10 @@ class CustomAppDrawer extends StatelessWidget {
       child: Container(
         color: Colors.white,
         child: ElevatedButton(
-          onPressed: () async => await DBHelper.deleteDatabase(dbName),
+          onPressed: () async {
+            await DBHelper.deleteDatabase(dbName);
+            await SharedPrefHelper.removeAllSavedKeys();
+          },
           child: const Text(
             'Delete database',
           ),

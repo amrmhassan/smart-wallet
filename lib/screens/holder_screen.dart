@@ -67,7 +67,7 @@ class _HolderScreenState extends State<HolderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-
+      resizeToAvoidBottomInset: false,
       drawer: CustomAppDrawer(),
       //* this is the main stack that have all the content of home screen by showing every thing on each other as a stack
       body: Stack(
