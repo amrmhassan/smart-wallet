@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/types.dart';
-import '../../../utils/transactions_utils.dart';
+import '../../../utils/general_utils.dart';
 
 class QuickActionCard extends StatelessWidget {
   final TransactionType transactionType;

@@ -6,7 +6,7 @@ import '../../../providers/transactions_provider.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
-import '../../../utils/transactions_utils.dart';
+import '../../../utils/general_utils.dart';
 
 class TotalAmountInProfile extends StatelessWidget {
   const TotalAmountInProfile({

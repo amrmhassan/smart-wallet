@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/constants/types.dart';
 import 'package:wallet_app/providers/profiles_provider.dart';
-import 'package:wallet_app/utils/transactions_utils.dart';
 import 'package:wallet_app/widgets/global/stylized_text_field.dart';
 import '../../constants/sizes.dart';
 
+import '../../utils/general_utils.dart';
 import '../../widgets/app_bar/my_app_bar.dart';
 import '../home_screen/widgets/background.dart';
 

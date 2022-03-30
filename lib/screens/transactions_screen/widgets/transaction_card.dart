@@ -10,7 +10,7 @@ import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
 import '../../../constants/types.dart';
 import '../../../models/transaction_model.dart';
-import '../../../utils/transactions_utils.dart';
+import '../../../utils/general_utils.dart';
 import '../../add_transaction_screen/add_transaction_screen.dart';
 import '../../../widgets/global/card_action_button.dart';
 

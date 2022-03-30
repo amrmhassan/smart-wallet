@@ -7,7 +7,7 @@ import '../../../providers/transactions_provider.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
-import '../../../utils/transactions_utils.dart';
+import '../../../utils/general_utils.dart';
 
 //* this is to ensure that the money container won't exceed the specified height
 const double _maxHeightConstrains = 40;

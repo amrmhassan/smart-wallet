@@ -10,7 +10,7 @@ import '../../../providers/profiles_provider.dart';
 import '../../../providers/quick_actions_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../screens/quick_actions_screen/quick_actions_screen.dart';
-import '../../../utils/transactions_utils.dart';
+import '../../../utils/general_utils.dart';
 import '../../../widgets/global/empty_transactions.dart';
 
 import '../../../constants/sizes.dart';
