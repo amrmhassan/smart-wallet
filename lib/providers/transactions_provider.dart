@@ -91,8 +91,10 @@ class TransactionProvider extends ChangeNotifier {
   Future<void> addTransaction(String title, String description, double amount,
       TransactionType transactionType, String profileId) async {
     //* checking if the transaction added will make the current balance negative
+    //* i removed this cause i will ask the user to add this even it is greater than his current money
     if (amount > totalMoney && transactionType == TransactionType.outcome) {
-      throw CustomError('This expense is larger than your balance.');
+      throw CustomError(
+          'This expense is larger than your balance. You can add a debt instead.');
     }
 
     //* initializing the transaction data like (createdAt, id, ratioToTotal...)
@@ -103,7 +105,7 @@ class TransactionProvider extends ChangeNotifier {
     newTotalMoney = transactionType == TransactionType.income
         ? totalMoney + amount
         : totalMoney - amount;
-    double ratioToTotal = amount / newTotalMoney;
+    double ratioToTotal = (amount / newTotalMoney).abs();
     //* this line is to ensure that .......
     ratioToTotal = ratioToTotal == double.infinity ? 1 : ratioToTotal;
 
@@ -179,16 +181,6 @@ class TransactionProvider extends ChangeNotifier {
 
 //* for deleting a transaction
   Future<void> deleteTransaction(String id) async {
-    //* delete from the database first
-    try {
-      await DBHelper.deleteById(id, transactionsTableName);
-    } catch (error) {
-      if (kDebugMode) {
-        print(error);
-        print('An error occurred during deleting a transaction');
-      }
-    }
-
     //* if that transaction is income and deleting it will make the total by negative then throw an error that you can't delete that transaction , you can only edit it to a lower amount but not lower than the current total amount in that profile
     _transactions.removeWhere((element) {
       if (element.transactionType == TransactionType.income &&
@@ -199,13 +191,23 @@ class TransactionProvider extends ChangeNotifier {
       }
       return element.id == id;
     });
+
+    //* delete from the database second
+    try {
+      await DBHelper.deleteById(id, transactionsTableName);
+    } catch (error) {
+      if (kDebugMode) {
+        print(error);
+        print('An error occurred during deleting a transaction');
+      }
+    }
     notifyListeners();
   }
 
 //* for editing a transaction
   Future<void> editTransaction(
       String transactionId, TransactionModel newTransaction) async {
-    //* i commented this cause it has no value
+    //? i commented this cause it has no value
     // //* first checking if the transaction exist in the _transactions
 
     // TransactionModel? oldTransaction;

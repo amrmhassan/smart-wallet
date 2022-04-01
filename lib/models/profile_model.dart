@@ -3,6 +3,10 @@ import 'package:wallet_app/constants/profiles.dart';
 
 import '../constants/colors.dart';
 
+const double _goodLimit = .70; // when it is from 70% to 100% it will be good
+const double _moderateLimit =
+    .55; // when it is from 55% to 70% it will be moderate
+
 class ProfileModel {
   String id;
   String name;
@@ -39,9 +43,9 @@ class ProfileModel {
     //? for setting the moneyAccountStatus
     if (income == 0 && outcome == 0) {
       moneyAccountStatus = MoneyAccountStatus.empty;
-    } else if (incomeRatio >= 0.6) {
+    } else if (incomeRatio >= _goodLimit) {
       moneyAccountStatus = MoneyAccountStatus.good;
-    } else if (incomeRatio > 0.5 && incomeRatio < 0.6) {
+    } else if (incomeRatio > _moderateLimit && incomeRatio < _goodLimit) {
       moneyAccountStatus = MoneyAccountStatus.moderate;
     } else {
       moneyAccountStatus = MoneyAccountStatus.critical;

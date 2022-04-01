@@ -35,6 +35,7 @@ class LeftSideAddTransaction extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: kMainColor.withOpacity(0.7),
                   ),
+                  maxLines: 1,
                   hintText: 'Enter a title',
                   onChanged: (value) {},
                   keyboardType: TextInputType.text,
@@ -65,7 +66,7 @@ class LeftSideAddTransaction extends StatelessWidget {
                   ),
                   maxLines: 3,
                   onChanged: (value) {},
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.multiline,
                   fillColor: kTextFieldInputColor,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(borderRadius),

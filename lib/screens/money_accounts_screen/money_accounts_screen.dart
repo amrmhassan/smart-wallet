@@ -21,6 +21,10 @@ class MoneyAccountsScreen extends StatefulWidget {
 class _MoneyAccountsScreenState extends State<MoneyAccountsScreen> {
   final TextEditingController _profileNameController = TextEditingController();
 
+  void clearProfileName() {
+    _profileNameController.text = '';
+  }
+
   Future<void> showAddProfileModal() async {
     await showModalBottomSheet(
       context: context,
@@ -30,6 +34,7 @@ class _MoneyAccountsScreenState extends State<MoneyAccountsScreen> {
         context: context,
         profileNameController: _profileNameController,
         onTap: addProfile,
+        clearProfileNewName: clearProfileName,
       ),
     );
   }

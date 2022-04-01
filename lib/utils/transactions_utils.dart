@@ -1,4 +1,5 @@
 //* 1] this method will add a new transaction
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/models/quick_action_model.dart';
@@ -11,6 +12,50 @@ import '../providers/quick_actions_provider.dart';
 import '../providers/transactions_provider.dart';
 import 'general_utils.dart';
 
+Future<void> showAddHighTransactionDialog({
+  required BuildContext context,
+  required String title,
+  required String description,
+  required TransactionType transactionType,
+  required ProfileModel activeProfile,
+  required double amount,
+}) async {
+  double totalMoney = Provider.of<ProfilesProvider>(context, listen: false)
+      .getActiveProfile
+      .totalMoney;
+
+  if (transactionType == TransactionType.outcome && amount > totalMoney) {
+    await AwesomeDialog(
+      context: context,
+      dialogType: DialogType.WARNING,
+      animType: AnimType.BOTTOMSLIDE,
+      title: 'Your balance is lower, add a debt instead?',
+      btnCancelOnPress: () {},
+      btnOkOnPress: () async {
+        //? here i will add the ability to add a debt to the debts providers which will be shown in the debts screen in the sidebar
+        // addTransaction(
+        //   context: context,
+        //   title: title,
+        //   description: description,
+        //   transactionType: transactionType,
+        //   activeProfile: activeProfile,
+        //   amount: amount,
+        // );
+        showSnackBar(context, 'Dept added(Soon)', SnackBarType.success);
+      },
+    ).show();
+  } else {
+    addTransaction(
+        context: context,
+        title: title,
+        description: description,
+        transactionType: transactionType,
+        activeProfile: activeProfile,
+        amount: amount);
+  }
+}
+
+//* 1] add transaction
 Future<void> addTransaction({
   required BuildContext context,
   required String title,
@@ -19,11 +64,11 @@ Future<void> addTransaction({
   required ProfileModel activeProfile,
   required double amount,
 }) async {
-  try {
-    //* here the code for adding a new transaction
-    String profileId = Provider.of<ProfilesProvider>(context, listen: false)
-        .activatedProfileId;
+  //* here the code for adding a new transaction
+  String profileId =
+      Provider.of<ProfilesProvider>(context, listen: false).activatedProfileId;
 
+  try {
     await Provider.of<TransactionProvider>(context, listen: false)
         .addTransaction(
       title,
@@ -157,6 +202,33 @@ Future<void> editQuickAction(
         .editQuickAction(id, newQuickAction);
     showSnackBar(context, 'Quick Action Updated', SnackBarType.success);
     Navigator.pop(context);
+  } catch (error) {
+    showSnackBar(context, error.toString(), SnackBarType.error);
+  }
+}
+
+Future<void> deleteTransaction(
+    BuildContext context, TransactionModel transaction) async {
+  //* update the profile before deleting the transaction
+  //* getting the current deleted transaction amount and transaction type
+
+  try {
+    await Provider.of<TransactionProvider>(context, listen: false)
+        .deleteTransaction(transaction.id);
+    showSnackBar(context, 'Transaction Deleted', SnackBarType.info);
+
+    //* getting the curret active profile to update it
+    ProfileModel activeProfile =
+        Provider.of<ProfilesProvider>(context, listen: false).getActiveProfile;
+    //* checking the transaction type to update the profile according to that
+    if (transaction.transactionType == TransactionType.income) {
+      await Provider.of<ProfilesProvider>(context, listen: false)
+          .editActiveProfile(income: activeProfile.income - transaction.amount);
+    } else if (transaction.transactionType == TransactionType.outcome) {
+      await Provider.of<ProfilesProvider>(context, listen: false)
+          .editActiveProfile(
+              outcome: activeProfile.outcome - transaction.amount);
+    }
   } catch (error) {
     showSnackBar(context, error.toString(), SnackBarType.error);
   }

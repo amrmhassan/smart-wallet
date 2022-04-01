@@ -164,6 +164,18 @@ class ProfilesProvider extends ChangeNotifier {
       throw CustomError(
           'You must enter one argument at least to edit the profile');
     }
+
+    //* checking if the profile name already exists if the changing parameter is the name
+    bool profileNameExists = false;
+    for (var element in _profiles) {
+      if (name == element.name) {
+        profileNameExists = true;
+      }
+    }
+    if (profileNameExists) {
+      throw CustomError('Profile Name already exists');
+    }
+
     //* setting the active profile to the current active profile
     ProfileModel editedProfile =
         _profiles.firstWhere((element) => element.id == id);

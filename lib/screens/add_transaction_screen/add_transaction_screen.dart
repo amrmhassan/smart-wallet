@@ -59,6 +59,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   }
 
   void setAmount(double result) {
+    //? this is nonuseful cause i will show a dialog to the user to
+    //* setting the currentActiveTransactionType to be income if the amount is greater than the current total money in the transaction
+    // double activeProfileTotalMoney =
+    //     Provider.of<ProfilesProvider>(context, listen: false)
+    //         .getActiveProfile
+    //         .totalMoney;
+    // if (result > activeProfileTotalMoney) {
+
+    //   setcurrentActiveTransactionType(TransactionType.income);
+    // }
     if (result == double.infinity) {
       return showSnackBar(
           context, 'You can\'t add infinity number', SnackBarType.error);
@@ -94,7 +104,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     } else if (widget.addTransactionScreenOperations ==
         AddTransactionScreenOperations.addTransaction) {
       //* add transaction
-      return addTransaction(
+      return showAddHighTransactionDialog(
         title: title,
         description: description,
         activeProfile: activeProfile,
@@ -168,6 +178,15 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         amount = editedQuickAction!.amount;
       });
       setcurrentActiveTransactionType(editedQuickAction!.transactionType);
+    } else {
+      //* making the current active transaction type to be income if the current active profile total money is lower 0
+      double currentActiveProfileTotalMoney =
+          Provider.of<ProfilesProvider>(context, listen: false)
+              .getActiveProfile
+              .totalMoney;
+      if (currentActiveProfileTotalMoney <= 0) {
+        setcurrentActiveTransactionType(TransactionType.income);
+      }
     }
   }
 

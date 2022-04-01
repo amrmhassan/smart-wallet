@@ -1,9 +1,9 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:wallet_app/models/profile_model.dart';
-import 'package:wallet_app/providers/profiles_provider.dart';
-import '../../../providers/transactions_provider.dart';
+import 'package:wallet_app/helpers/responsive.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
@@ -11,6 +11,7 @@ import '../../../constants/styles.dart';
 import '../../../constants/types.dart';
 import '../../../models/transaction_model.dart';
 import '../../../utils/general_utils.dart';
+import '../../../utils/transactions_utils.dart';
 import '../../add_transaction_screen/add_transaction_screen.dart';
 import '../../../widgets/global/card_action_button.dart';
 
@@ -22,30 +23,21 @@ class TranscationCard extends StatelessWidget {
     required this.transaction,
   }) : super(key: key);
 
-  void deleteTransaction(BuildContext context) async {
-    //? update the profile before delting the transaction
-    //? getting the current deleted transaction amount and transaction type
+  Future<bool> showDeleteCustomDialog(BuildContext context) async {
+    bool confirmDelete = false;
+    await AwesomeDialog(
+      context: context,
+      dialogType: DialogType.WARNING,
+      animType: AnimType.BOTTOMSLIDE,
+      title: 'Delete Transaction?',
+      btnCancelOnPress: () {},
+      btnOkOnPress: () async {
+        deleteTransaction(context, transaction);
+        confirmDelete = true;
+      },
+    ).show();
 
-    try {
-      await Provider.of<TransactionProvider>(context, listen: false)
-          .deleteTransaction(transaction.id);
-
-      ProfileModel activeProfile =
-          Provider.of<ProfilesProvider>(context, listen: false)
-              .getActiveProfile;
-
-      if (transaction.transactionType == TransactionType.income) {
-        await Provider.of<ProfilesProvider>(context, listen: false)
-            .editActiveProfile(
-                income: activeProfile.income - transaction.amount);
-      } else if (transaction.transactionType == TransactionType.outcome) {
-        await Provider.of<ProfilesProvider>(context, listen: false)
-            .editActiveProfile(
-                outcome: activeProfile.outcome - transaction.amount);
-      }
-    } catch (error) {
-      showSnackBar(context, error.toString(), SnackBarType.error);
-    }
+    return confirmDelete;
   }
 
   @override
@@ -113,9 +105,14 @@ class TranscationCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //* title text widget
-              Text(
-                transaction.title,
-                style: kParagraphTextStyle,
+              //* i made this sizedbox trick to make the text take a definite width and prevent overflow of the text
+              SizedBox(
+                width: Responsive.getWidth(context) / 3,
+                child: Text(
+                  transaction.title,
+                  style: kParagraphTextStyle,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
               const SizedBox(
                 height: kDefaultPadding / 4,
@@ -159,7 +156,7 @@ class TranscationCard extends StatelessWidget {
                   color: kDeleteColor,
                   backgroundColor: Colors.grey[100],
                   //? here i need to show dialog before actually deleting a transaction
-                  onTap: () => deleteTransaction(context),
+                  onTap: () => showDeleteCustomDialog(context),
                 ),
               ],
             ),

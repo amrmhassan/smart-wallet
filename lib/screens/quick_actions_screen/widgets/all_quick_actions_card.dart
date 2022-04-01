@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet_app/helpers/responsive.dart';
 import '../../../models/profile_model.dart';
 import '../../../models/quick_action_model.dart';
 import '../../../providers/profiles_provider.dart';
@@ -26,36 +28,26 @@ class AllQuickActionsCard extends StatelessWidget {
 
 //* this function will show a dialog to delete and after confirming deleting it will be deleted
 //* or if cancel was clicked the card will come back and won't be deleted
-  Future<bool> deleteQuickAction(BuildContext context) async {
+
+  Future<bool> showDeleteCustomDialog(BuildContext context) async {
     bool confirmDelete = false;
-    await showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-              content: Text('Delete Quick Action?'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    try {
-                      await Provider.of<QuickActionsProvider>(context,
-                              listen: false)
-                          .deleteQuickActions(quickAction.id);
-                    } catch (error) {
-                      showSnackBar(
-                          context, error.toString(), SnackBarType.error);
-                    }
-                    confirmDelete = true;
-                    Navigator.pop(context);
-                  },
-                  child: Text('Delete'),
-                ),
-              ],
-            ));
+    await AwesomeDialog(
+      context: context,
+      dialogType: DialogType.WARNING,
+      animType: AnimType.BOTTOMSLIDE,
+      title: 'Delete Quick Action?',
+      btnCancelOnPress: () {},
+      btnOkOnPress: () async {
+        try {
+          await Provider.of<QuickActionsProvider>(context, listen: false)
+              .deleteQuickActions(quickAction.id);
+        } catch (error) {
+          showSnackBar(context, error.toString(), SnackBarType.error);
+        }
+        confirmDelete = true;
+      },
+    ).show();
+
     return confirmDelete;
   }
 
@@ -127,7 +119,7 @@ class AllQuickActionsCard extends StatelessWidget {
     return Dismissible(
       direction: DismissDirection.endToStart,
       // onDismissed: (direction) => deleteQuickAction(context),
-      confirmDismiss: (direction) => deleteQuickAction(context),
+      confirmDismiss: (direction) => showDeleteCustomDialog(context),
       background: QuickActionCardBackground(),
       key: Key(quickAction.id),
       child: Container(
@@ -190,9 +182,13 @@ class AllQuickActionsCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       //* title text widget
-                      Text(
-                        quickAction.title,
-                        style: kParagraphTextStyle,
+                      SizedBox(
+                        width: Responsive.getWidth(context) / 3,
+                        child: Text(
+                          quickAction.title,
+                          style: kParagraphTextStyle,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       const SizedBox(
                         height: kDefaultPadding / 4,
