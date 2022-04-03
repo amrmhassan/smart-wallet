@@ -39,16 +39,39 @@ convert the transaction card to dismissible
 
 
 
-implement the statistics page
-implement editing a profile name with the same adding profile modal
-implement deleting a profile
+implement the statistics page (this will have the current profile statistics and the debts , income, outcome)
+-- with time amounts and predictions and other stuff
+
+DONE - implement editing a profile name with the same adding profile modal
+implement deleting a profile from the profile details screen which
+-- deleting the last profile is'nt allowed 
+-- deleting the current active profile isn't allowed( may be changed)
 in the profile details page i will show a statistics page of that only profile
-the user can go to the statistcs page by clicking the profile card itself or the details button
+DONE - the user can go to the statistcs page by clicking the profile card itself or the details button
 make the profile name textField focus when it appears and show the keyboard
 when editing a profile the new profile is pushed to the start of the profiles(fix that by sorting them according to the lastActivated time and the createdAt time)
+
+make a profile statisctics widget which will show the statistics about a profile with it's id
+-- that will be added to the statistics page that in the holder page
 
 # the user can't add a transaction that is higher than his totalMoney
 # to add a debt the user will find that option in the sideBar 
 # the dept will have a seperate screen that can be accessed from the sideBar (Debts)
 # to fullfil a debt the can take it's amount from any current moey profile and it will be substracted from that profile
 # the ability to a debt also will be implemented in the add transaction screen after showing the add a debt instead dialog the debt will be added to the debts screen which will be accissible from the sidebar debts
+
+# ------------[Start] critical changes in the app 
+[HomeScreen] remove periods [D, W, M, Y]
+remove the income
+only show the outcome for the current day only and yesterday, the current money in the wallet
+you can also remove the yesterday outcome and only show the today outcome 
+[StatisticsScreen]
+show all the details their
+simple first like income, outcome with periods (D, W, M, Y , and All)and other custom periods 
+this will apply for all the statistics in the page
+-first card will show the (income, outcome, total current money in the wallet) for that period
+-second card will show the (current money in the wallet or income, or outcome charts) 
+# for small periods like only one day show the details of that day with each transaction happend
+the default period will be one day and when setting a new period that period will be saved for the next time opening the statistics page
+
+# ------------[End] critical changes in the app 

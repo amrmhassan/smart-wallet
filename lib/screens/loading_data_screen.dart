@@ -38,6 +38,9 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
               .activatedProfileId;
       await Provider.of<TransactionProvider>(context, listen: false)
           .fetchAndUpdateTransactions(activatedProfileId);
+      //? for loading dummy transaction, remove it , it is only for testing
+      Provider.of<TransactionProvider>(context, listen: false)
+          .loadDummyTransactions();
 
       await Provider.of<QuickActionsProvider>(context, listen: false)
           .fetchAndUpdateQuickActions(activatedProfileId);

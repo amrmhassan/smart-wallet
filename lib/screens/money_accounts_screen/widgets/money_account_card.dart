@@ -169,7 +169,7 @@ class MoneyAccountCard extends StatelessWidget {
               moneyAccountStatus: profileModel.moneyAccountStatus,
               profileStatusColor: profileModel.profileStatusColor,
             ),
-            const SizedBox(
+            SizedBox(
               height: kDefaultPadding / 2,
             ),
             FractionallySizedBox(
@@ -181,11 +181,11 @@ class MoneyAccountCard extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: kDefaultPadding / 2,
             ),
             activated
-                ? const ActivatedProfileButton()
+                ? ActivatedProfileButton()
                 : NotActivateProfileButton(
                     onTap: () async {
                       await changeActivatedProfile(context);
@@ -203,7 +203,7 @@ class MoneyAccountCard extends StatelessWidget {
                 incomeRatio: profileModel.incomeRatio,
               ),
             if (profileModel.moneyAccountStatus != MoneyAccountStatus.empty)
-              const SizedBox(
+              SizedBox(
                 height: kDefaultPadding / 2,
               ),
             if (profileModel.moneyAccountStatus != MoneyAccountStatus.empty)

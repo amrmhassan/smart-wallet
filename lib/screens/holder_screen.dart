@@ -13,6 +13,7 @@ import '../../widgets/app_bar/my_app_bar.dart';
 import '../../widgets/bottom_nav_bar/bottom_nav_bar.dart';
 import '../widgets/custom_app_drawer/custom_app_drawer.dart';
 import 'home_screen/widgets/background.dart';
+import 'statistics_screen/statistics_screen.dart';
 
 const Duration _pageSliderDuration = Duration(milliseconds: 200);
 
@@ -96,9 +97,7 @@ class _HolderScreenState extends State<HolderScreen> {
                     controller: _pageController,
 
                     children: [
-                      Container(
-                        child: Text('Statistics page'),
-                      ),
+                      StatisticsScreen(),
                       MoneyAccountsScreen(),
                       HomeScreen(),
                       TransactionsScreen(),

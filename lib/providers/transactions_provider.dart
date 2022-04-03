@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
+import 'package:wallet_app/constants/transactions_constants.dart';
 import '../constants/db_constants.dart';
 import '../constants/types.dart';
 import '../helpers/custom_error.dart';
@@ -75,6 +76,12 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   //? 3- methods to control the transactions
+
+  //* for loading the dummy transactions
+  void loadDummyTransactions() {
+    _transactions = _transactions + dummyTransactions;
+    notifyListeners();
+  }
 
   //* for getting a transaction by its id
   TransactionModel getTransactionById(String id) {
