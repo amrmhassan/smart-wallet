@@ -37,7 +37,7 @@ class _SammeryPeriodContainerState extends State<SammeryPeriodContainer> {
       PeriodIcon(
         transPeriod: TransPeriod.today,
         letter: 'D',
-        daysCount: 1,
+        daysCount: 0,
       ),
       PeriodIcon(
         transPeriod: TransPeriod.week,

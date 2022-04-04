@@ -36,7 +36,7 @@ List<ProfileModel> dummyProfiles = [
   ),
   ProfileModel(
     id: Uuid().v4(),
-    name: 'Marsafa Account',
+    name: 'Marsafas Account',
     income: 250,
     outcome: 200,
     createdAt: DateTime.now().subtract(Duration(days: 365)),

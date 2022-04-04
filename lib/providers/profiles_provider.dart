@@ -39,7 +39,7 @@ class ProfilesProvider extends ChangeNotifier {
     DateTime now = DateTime.now();
     DateTime createdAt = getActiveProfile.createdAt;
     var diff = now.difference(createdAt);
-    return diff.inDays + 1;
+    return diff.inDays;
   }
 
   //* for fetching and update the activated profile id from shared preferences

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/providers/profiles_provider.dart';
 import 'package:wallet_app/providers/statistics_provider.dart';
+import 'package:wallet_app/providers/transactions_provider.dart';
 import 'package:wallet_app/widgets/app_bar/home_heading.dart';
 import '../../constants/sizes.dart';
 import 'widgets/profile_summary_statistics.dart';
@@ -31,6 +32,13 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     //* this is for updating the transactions that will be used for creating statistics
     updatingTheTransactions();
 
+    bool showChart() {
+      return Provider.of<ProfilesProvider>(context).getProfileAgeInDays() > 0 &&
+          Provider.of<TransactionProvider>(context)
+              .getAllTransactions
+              .isNotEmpty;
+    }
+
     //* the main container of the home screen
     return Stack(
       alignment: Alignment.bottomRight,
@@ -49,10 +57,14 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               ),
               ProfileSummaryStatistics(),
               SizedBox(
-                height: 200,
-                width: double.infinity,
-                child: SummaryChart(),
+                height: kDefaultPadding,
               ),
+              if (showChart())
+                SizedBox(
+                  height: 250,
+                  width: double.infinity,
+                  child: SummaryChart(),
+                ),
             ],
           ),
         ),
