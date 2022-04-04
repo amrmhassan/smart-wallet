@@ -3,11 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:wallet_app/constants/charts_utils.dart';
+import 'package:wallet_app/utils/charts_utils.dart';
 import 'package:wallet_app/constants/sizes.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
-
-import '../../../constants/transactions_constants.dart';
 
 class SummaryChart extends StatefulWidget {
   const SummaryChart({Key? key}) : super(key: key);

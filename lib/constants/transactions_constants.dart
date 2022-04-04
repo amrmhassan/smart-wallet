@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:uuid/uuid.dart';
 
 import '../models/transaction_model.dart';

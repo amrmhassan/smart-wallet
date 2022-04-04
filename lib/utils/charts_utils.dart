@@ -1,10 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:intl/intl.dart';
-import 'package:wallet_app/constants/transactions_constants.dart';
 
 import '../models/transaction_model.dart';
-import 'types.dart';
+import '../constants/types.dart';
 
 class CustomChartData {
   final DateTime dateTime;

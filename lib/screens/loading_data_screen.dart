@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -38,9 +39,29 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
               .activatedProfileId;
       await Provider.of<TransactionProvider>(context, listen: false)
           .fetchAndUpdateTransactions(activatedProfileId);
-      //? for loading dummy transaction, remove it , it is only for testing
-      Provider.of<TransactionProvider>(context, listen: false)
-          .loadDummyTransactions();
+
+      //? for loading dummy transaction, only in debug mode and it is the first time to run the app
+      if (kDebugMode) {
+        Provider.of<TransactionProvider>(context, listen: false)
+            .loadDummyTransactions();
+      }
+
+      // if (kDebugMode && await SharedPrefHelper.firstTimeRunApp()) {
+      //   var activeProfileId =
+      //       Provider.of<ProfilesProvider>(context, listen: false)
+      //           .getActiveProfile;
+      //   for (var t in dummyTransactions) {
+      //     await addTransaction(
+      //       context: context,
+      //       title: t.title,
+      //       description: t.description,
+      //       transactionType: t.transactionType,
+      //       activeProfile: activeProfileId,
+      //       amount: t.amount,
+      //       allowSnackBar: false,
+      //     );
+      //   }
+      // }
 
       await Provider.of<QuickActionsProvider>(context, listen: false)
           .fetchAndUpdateQuickActions(activatedProfileId);
@@ -49,11 +70,12 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
 
       if (await SharedPrefHelper.firstTimeRunApp()) {
         //* loading the data after 3 seconds if it the first time to run the app
-        Future.delayed(Duration(seconds: 5)).then((value) =>
-            Navigator.pushReplacementNamed(context, HolderScreen.routeName));
+        await Future.delayed(Duration(seconds: 5)).then((value) async =>
+            await Navigator.pushReplacementNamed(
+                context, HolderScreen.routeName));
       } else {
         //* loading the app UI after finishing fetching data from the database immediately if it isn't the first time to run the app
-        Navigator.pushReplacementNamed(context, HolderScreen.routeName);
+        await Navigator.pushReplacementNamed(context, HolderScreen.routeName);
       }
     });
 

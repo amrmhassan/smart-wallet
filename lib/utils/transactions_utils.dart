@@ -46,12 +46,13 @@ Future<void> showAddHighTransactionDialog({
     ).show();
   } else {
     addTransaction(
-        context: context,
-        title: title,
-        description: description,
-        transactionType: transactionType,
-        activeProfile: activeProfile,
-        amount: amount);
+      context: context,
+      title: title,
+      description: description,
+      transactionType: transactionType,
+      activeProfile: activeProfile,
+      amount: amount,
+    );
   }
 }
 
@@ -63,6 +64,7 @@ Future<void> addTransaction({
   required TransactionType transactionType,
   required ProfileModel activeProfile,
   required double amount,
+  bool allowSnackBar = true,
 }) async {
   //* here the code for adding a new transaction
   String profileId =
@@ -90,10 +92,14 @@ Future<void> addTransaction({
       await Provider.of<ProfilesProvider>(context, listen: false)
           .editActiveProfile(outcome: activeProfile.outcome + amount);
     }
-    showSnackBar(context, 'Transaction Added', SnackBarType.success);
+    if (allowSnackBar) {
+      showSnackBar(context, 'Transaction Added', SnackBarType.success);
+    }
     Navigator.pop(context);
   } catch (error) {
-    showSnackBar(context, error.toString(), SnackBarType.error);
+    if (allowSnackBar) {
+      showSnackBar(context, error.toString(), SnackBarType.error);
+    }
   }
 }
 
