@@ -36,6 +36,12 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
       await Provider.of<ProfilesProvider>(context, listen: false)
           .fetchAndUpdateActivatedProfileId();
 
+      //? for loading dummy profiles, only in debug mode and it is the first time to run the app
+      if (kDebugMode) {
+        Provider.of<ProfilesProvider>(context, listen: false)
+            .fetchDummyProfiles();
+      }
+
       //* for setting the active profile id
       String activatedProfileId =
           Provider.of<ProfilesProvider>(context, listen: false)

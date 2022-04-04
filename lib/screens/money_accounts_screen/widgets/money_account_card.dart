@@ -8,7 +8,7 @@ import 'package:wallet_app/providers/quick_actions_provider.dart';
 import 'package:wallet_app/providers/transactions_provider.dart';
 import 'package:wallet_app/utils/general_utils.dart';
 
-import '../../../constants/profiles.dart';
+import '../../../constants/profiles_constants.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
 import '../../../models/profile_model.dart';

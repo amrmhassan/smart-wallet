@@ -181,8 +181,8 @@ class TransactionProvider extends ChangeNotifier {
       if (kDebugMode) {
         print('An error occurred fetching transactions form database');
       }
-      //! in the final version activate that line
-      // rethrow;
+      // in the final version activate that line
+      rethrow;
     }
   }
 

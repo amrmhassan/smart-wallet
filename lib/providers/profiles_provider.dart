@@ -8,7 +8,7 @@ import 'package:wallet_app/helpers/custom_error.dart';
 import 'package:wallet_app/helpers/shared_pref_helper.dart';
 import 'package:wallet_app/models/profile_model.dart';
 
-import '../constants/profiles.dart';
+import '../constants/profiles_constants.dart';
 import '../helpers/db_helper.dart';
 
 class ProfilesProvider extends ChangeNotifier {
@@ -33,6 +33,13 @@ class ProfilesProvider extends ChangeNotifier {
     // fix that error , this will create an error first time the app loads cause
     // i think this is called before the profiles loads
     return _profiles.firstWhere((element) => element.id == activatedProfileId);
+  }
+
+  int getProfileAgeInDays() {
+    DateTime now = DateTime.now();
+    DateTime createdAt = getActiveProfile.createdAt;
+    var diff = now.difference(createdAt);
+    return diff.inDays + 1;
   }
 
   //* for fetching and update the activated profile id from shared preferences
@@ -105,6 +112,11 @@ class ProfilesProvider extends ChangeNotifier {
       }
       // rethrow;
     }
+  }
+
+  void fetchDummyProfiles() {
+    _profiles = _profiles + dummyProfiles;
+    notifyListeners();
   }
 
   //* for adding a profile to database and to the _profiles
@@ -266,7 +278,7 @@ class ProfilesProvider extends ChangeNotifier {
     }
 
     //* edit the lastActivated property in the profile
-    //! add that code to the first created profile
+    // add that code to the first created profile
     editLastActivatedForProfile();
   }
 }

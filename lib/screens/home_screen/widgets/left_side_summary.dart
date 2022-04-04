@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../../../constants/sizes.dart';
 import 'summary_income_outcome.dart';
-import 'summary_period_container.dart';
 
 class LeftSideSummary extends StatelessWidget {
   const LeftSideSummary({
@@ -22,7 +21,6 @@ class LeftSideSummary extends StatelessWidget {
         ),
         child: Row(
           children: [
-            SammeryPeriodContainer(),
             SummaryIncomeOutcome(),
           ],
         ),

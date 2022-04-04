@@ -11,15 +11,30 @@ class SummaryPeriodIcon extends StatelessWidget {
   final String title;
   final bool active;
   final VoidCallback onTap;
+  final bool enabled;
+
   const SummaryPeriodIcon({
     Key? key,
     required this.title,
     this.active = false,
     required this.onTap,
+    this.enabled = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Color kIconColor() {
+      if (enabled) {
+        if (active) {
+          return Colors.white;
+        } else {
+          return kMainColor;
+        }
+      } else {
+        return kInactiveColor;
+      }
+    }
+
     return Container(
       clipBehavior: Clip.hardEdge,
       width: width,
@@ -32,7 +47,7 @@ class SummaryPeriodIcon extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onTap,
+          onTap: enabled ? onTap : null,
           child: Container(
             alignment: Alignment.center,
             width: 30,
@@ -40,7 +55,7 @@ class SummaryPeriodIcon extends StatelessWidget {
             child: Text(
               title,
               style: TextStyle(
-                color: active ? Colors.white : kMainColor,
+                color: kIconColor(),
                 fontSize: kDefaultInfoTextSize,
                 fontWeight: FontWeight.bold,
               ),

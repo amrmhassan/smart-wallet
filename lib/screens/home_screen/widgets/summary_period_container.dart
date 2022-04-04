@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet_app/providers/profiles_provider.dart';
 import 'package:wallet_app/providers/statistics_provider.dart';
 
 import 'summary_period_icon.dart';
@@ -27,12 +28,32 @@ class _SammeryPeriodContainerState extends State<SammeryPeriodContainer> {
   Widget build(BuildContext context) {
     TransPeriod currenActivePeriod =
         Provider.of<StatisticsProvider>(context).currentActivePeriod;
+    int profileAgeInDays = Provider.of<ProfilesProvider>(
+      context,
+      listen: false,
+    ).getProfileAgeInDays();
 
     List<PeriodIcon> periodIcons = [
-      PeriodIcon(transPeriod: TransPeriod.today, letter: 'D'),
-      PeriodIcon(transPeriod: TransPeriod.week, letter: 'W'),
-      PeriodIcon(transPeriod: TransPeriod.month, letter: 'M'),
-      PeriodIcon(transPeriod: TransPeriod.all, letter: 'A'),
+      PeriodIcon(
+        transPeriod: TransPeriod.today,
+        letter: 'D',
+        daysCount: 1,
+      ),
+      PeriodIcon(
+        transPeriod: TransPeriod.week,
+        letter: 'W',
+        daysCount: 7,
+      ),
+      PeriodIcon(
+        transPeriod: TransPeriod.month,
+        letter: 'M',
+        daysCount: 28,
+      ),
+      PeriodIcon(
+        transPeriod: TransPeriod.all,
+        letter: 'A',
+        daysCount: 0,
+      ),
     ];
     return SizedBox(
       width: 40,
@@ -43,6 +64,7 @@ class _SammeryPeriodContainerState extends State<SammeryPeriodContainer> {
             title: e.letter,
             onTap: () => setPeriod(e.transPeriod),
             active: currenActivePeriod == e.transPeriod,
+            enabled: profileAgeInDays >= e.daysCount,
           );
         }).toList(),
       ),
@@ -53,8 +75,11 @@ class _SammeryPeriodContainerState extends State<SammeryPeriodContainer> {
 class PeriodIcon {
   final TransPeriod transPeriod;
   final String letter;
+  final int daysCount;
+
   const PeriodIcon({
     required this.transPeriod,
     required this.letter,
+    required this.daysCount,
   });
 }

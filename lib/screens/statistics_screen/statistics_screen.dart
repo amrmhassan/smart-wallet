@@ -61,13 +61,13 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   }
 }
 
-//! the user will choose form presets durations in the right column
-//! or from  a custom duration in the bottom
-//! when the user checks the box in the bottom the right periods will be inactive and the bottom will be active
-//?  another method
-//! their will be a variable duration from , to
-//! when the day is clicked the from will be today and to will be today
-//! week is clicked , from will be (today-7 days) to will be today the same will be for month and a year
+// the user will choose form presets durations in the right column
+// or from  a custom duration in the bottom
+// when the user checks the box in the bottom the right periods will be inactive and the bottom will be active
+//  another method
+// their will be a variable duration from , to
+// when the day is clicked the from will be today and to will be today
+// week is clicked , from will be (today-7 days) to will be today the same will be for month and a year
 
-//! when there is no dates for a week only the day will be active and etc
+// when there is no dates for a week only the day will be active and etc
 

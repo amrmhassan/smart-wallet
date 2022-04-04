@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_app/helpers/custom_error.dart';
+import 'package:wallet_app/models/profile_model.dart';
 import 'package:wallet_app/models/transaction_model.dart';
 
 import '../constants/types.dart';
@@ -18,13 +20,18 @@ class StatisticsProvider extends ChangeNotifier {
   //* all profile transactions get from the main (the proxy provider)
   List<TransactionModel> allProfileTransactions;
   TransPeriod currentActivePeriod;
+  ProfileModel? activeProfile;
 
   StatisticsProvider({
     required this.allProfileTransactions,
     required this.currentActivePeriod,
+    this.activeProfile,
   });
 
   List<TransactionModel> _viewedTransactions = [];
+  late TransPeriodUtils transPeriodUtils;
+  DateTime startingDate = DateTime.now().subtract(const Duration(days: 1));
+  DateTime endDate = DateTime.now();
 
 //* the transactions that will be filtered by the periods
   //* this is the current active period
@@ -70,6 +77,9 @@ class StatisticsProvider extends ChangeNotifier {
     return totalIncomeAmount;
   }
 
+//! here calculate the total saving by a method that will calculate the savings for each day
+//! and it will be the (total income from the the first transaction ever to the current date transactions)-
+//! (total outcome from the the first transaction ever to the current date transactions)
   //* for getting the current money in the profile
   double get totalMoney {
     double totalAmount = _viewedTransactions.fold<double>(
@@ -84,41 +94,98 @@ class StatisticsProvider extends ChangeNotifier {
 
 //? methods
   //* for initializing the _viewedTransactions when opening the statistics screen
-  void fetchAndUpdateViewedTransactions() {
-    TransPeriodUtils transPeriodUtils =
-        TransPeriodUtils(transactions: allProfileTransactions);
+  void fetchAndUpdateViewedTransactions({bool notifyListers = true}) {
+    transPeriodUtils = TransPeriodUtils(
+      transactions: allProfileTransactions,
+      startDate: startingDate,
+      endDate: endDate,
+    );
+
     if (currentActivePeriod == TransPeriod.today) {
       //* for returning only the today's transactions
-      transPeriodUtils.setToday();
+      var date = transPeriodUtils.setToday();
       _viewedTransactions = transPeriodUtils.getTransactionsWithinPeriod();
+      setDatesPeriod(
+        newStartingDate: date['startDate'],
+        newEndDate: date['endDate'],
+      );
     } else if (currentActivePeriod == TransPeriod.yesterday) {
       //* for yesterday's transactions
-      transPeriodUtils.setYesterday();
+      var date = transPeriodUtils.setYesterday();
       _viewedTransactions = transPeriodUtils.getTransactionsWithinPeriod();
+      setDatesPeriod(
+        newStartingDate: date['startDate'],
+        newEndDate: date['endDate'],
+      );
     } else if (currentActivePeriod == TransPeriod.week) {
       //* for returning that week transactions
-      transPeriodUtils.setWeek();
+      var date = transPeriodUtils.setWeek();
       _viewedTransactions = transPeriodUtils.getTransactionsWithinPeriod();
+      setDatesPeriod(
+        newStartingDate: date['startDate'],
+        newEndDate: date['endDate'],
+      );
     } else if (currentActivePeriod == TransPeriod.month) {
       //* for returning that month transactions
-      transPeriodUtils.setMonth();
+      var date = transPeriodUtils.setMonth();
       _viewedTransactions = transPeriodUtils.getTransactionsWithinPeriod();
+      setDatesPeriod(
+        newStartingDate: date['startDate'],
+        newEndDate: date['endDate'],
+      );
     } else if (currentActivePeriod == TransPeriod.year) {
       //* for returning that year transactions
-      transPeriodUtils.setYear();
+      var date = transPeriodUtils.setYear();
       _viewedTransactions = transPeriodUtils.getTransactionsWithinPeriod();
+      setDatesPeriod(
+        newStartingDate: date['startDate'],
+        newEndDate: date['endDate'],
+      );
     } else if (currentActivePeriod == TransPeriod.all) {
       //* for returning that all transactions
       _viewedTransactions = allProfileTransactions;
+      setDatesPeriod(
+        newStartingDate: activeProfile!.createdAt,
+        newEndDate: DateTime.now(),
+      );
     } else {
-      //? here i will set the custom period for showing the transactions
+      //* i set the period to custom to disable the period buttons if there is another period is set by the user
+      //? set the currentActivePeriod to custom when picking a new date
+
+      //* for returning that year transactions
+      transPeriodUtils.setCustomPeriod(
+          newStartDate: startingDate, newEndDate: endDate);
+      _viewedTransactions = transPeriodUtils.getTransactionsWithinPeriod();
+      //* here i won't set call the setDatesPeriod like the above  cause the setDatesPeriod will call this method after updating the dates first
+
     }
-    notifyListeners();
+    if (notifyListers) {
+      notifyListeners();
+    }
   }
 
   //* for controlling the periods
   void setPeriod(TransPeriod period) {
     currentActivePeriod = period;
     fetchAndUpdateViewedTransactions();
+  }
+
+  //* for setting the periods(startingDate, endDate)
+  void setDatesPeriod({
+    DateTime? newStartingDate,
+    DateTime? newEndDate,
+    bool update = false,
+  }) {
+    if (newStartingDate == null && newEndDate == null) {
+      throw CustomError('You must specify one date at least');
+    }
+    if (newStartingDate != null) {
+      startingDate = newStartingDate;
+    }
+    if (newEndDate != null) {
+      endDate = newEndDate;
+    }
+    if (update) fetchAndUpdateViewedTransactions(notifyListers: false);
+    notifyListeners();
   }
 }

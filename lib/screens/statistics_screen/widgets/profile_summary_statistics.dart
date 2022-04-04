@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet_app/constants/colors.dart';
 import 'package:wallet_app/providers/statistics_provider.dart';
 
 import '../../../constants/sizes.dart';
@@ -67,15 +68,20 @@ class ProfileSummaryStatistics extends StatelessWidget {
                   ),
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     DatePickerButton(
-                      title: 'From',
+                      dateType: DateTypes.startDate,
                     ),
                     Expanded(
-                      child: SizedBox(),
+                      child: Icon(
+                        Icons.arrow_right_alt_sharp,
+                        color: kMainColor,
+                        size: kDefaultIconSize,
+                      ),
                     ),
                     DatePickerButton(
-                      title: 'To',
+                      dateType: DateTypes.endDate,
                     ),
                   ],
                 ),

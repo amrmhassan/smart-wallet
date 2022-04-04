@@ -35,25 +35,29 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (ctx) => ProfilesProvider(),
         ),
-        ChangeNotifierProxyProvider<TransactionProvider, StatisticsProvider>(
+        ChangeNotifierProxyProvider2<TransactionProvider, ProfilesProvider,
+            StatisticsProvider>(
           create: (
             ctx,
           ) {
             return StatisticsProvider(
               allProfileTransactions: [],
-              currentActivePeriod: TransPeriod.all,
+              currentActivePeriod: TransPeriod.today,
+              activeProfile: null,
             );
           },
           update: (
             ctx,
             transactions,
+            profileData,
             oldStatistics,
           ) {
             return StatisticsProvider(
               allProfileTransactions: transactions.getAllTransactions,
               currentActivePeriod: oldStatistics == null
-                  ? TransPeriod.all
+                  ? TransPeriod.today
                   : oldStatistics.currentActivePeriod,
+              activeProfile: profileData.getActiveProfile,
             );
           },
         ),
