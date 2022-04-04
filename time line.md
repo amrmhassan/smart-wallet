@@ -75,3 +75,11 @@ this will apply for all the statistics in the page
 the default period will be one day and when setting a new period that period will be saved for the next time opening the statistics page
 
 # ------------[End] critical changes in the app 
+
+
+# you might change the total Mony indication to the Savings indeication
+
+# the savings workd different 
+the saving of today isn't equal to the income of that day minus the outcome in the same day 
+it equals to the savings of the pervious days + income of that day - outcome of that day= totalIncome-totalOutcome
+# so the savings always equal to the total (income from the first day to the current day ) - (total outcome from the first day to the current day) it will make difference in the chart of the savings-- cause the savings of each day will equal to the income of the previous days - the outcome of the previous days

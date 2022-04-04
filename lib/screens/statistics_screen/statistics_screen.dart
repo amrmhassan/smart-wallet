@@ -2,16 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/constants/styles.dart';
-import 'package:wallet_app/constants/types.dart';
 import 'package:wallet_app/providers/profiles_provider.dart';
-import 'package:wallet_app/providers/transactions_provider.dart';
+import 'package:wallet_app/providers/statistics_provider.dart';
 import 'package:wallet_app/widgets/app_bar/home_heading.dart';
 import '../../constants/sizes.dart';
-import '../home_screen/widgets/summary_period_container.dart';
-import 'widgets/date_picker_button.dart';
+import 'widgets/profile_summary_statistics.dart';
 import 'widgets/summary_chart.dart';
-import 'widgets/summary_element.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({Key? key}) : super(key: key);
@@ -21,11 +17,20 @@ class StatisticsScreen extends StatefulWidget {
 }
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
-//* this is the build method of this widget
+  Future<void> updatingTheTransactions() async {
+    return Future.delayed(Duration.zero).then((value) {
+      //* for initializing the viewed transactions of the statistics page
+      Provider.of<StatisticsProvider>(context, listen: false)
+          .fetchAndUpdateViewedTransactions();
+    });
+  }
 
+//* this is the build method of this widget
   @override
   Widget build(BuildContext context) {
-    var transactionData = Provider.of<TransactionProvider>(context);
+    //* this is for updating the transactions that will be used for creating statistics
+    updatingTheTransactions();
+
     //* the main container of the home screen
     return Stack(
       alignment: Alignment.bottomRight,
@@ -42,7 +47,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               SizedBox(
                 height: kDefaultPadding,
               ),
-              ProfileSummaryStatistics(transactionData: transactionData),
+              ProfileSummaryStatistics(),
               SizedBox(
                 height: 200,
                 width: double.infinity,
@@ -66,81 +71,3 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 
 //! when there is no dates for a week only the day will be active and etc
 
-class ProfileSummaryStatistics extends StatelessWidget {
-  const ProfileSummaryStatistics({
-    Key? key,
-    required this.transactionData,
-  }) : super(key: key);
-
-  final TransactionProvider transactionData;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: kDefaultHorizontalPadding,
-        vertical: kDefaultVerticalPadding,
-      ),
-      width: double.infinity,
-      height: 200,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(kDefaultBorderRadius / 2),
-        boxShadow: [kDefaultBoxShadow],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SummaryElement(
-                  title: 'Income',
-                  amount: transactionData.totalIncome,
-                  transactionType: TransactionType.income,
-                ),
-                SizedBox(
-                  height: kDefaultPadding / 2,
-                ),
-                SummaryElement(
-                  title: 'Outcome',
-                  amount: transactionData.totalOutcome,
-                  transactionType: TransactionType.outcome,
-                ),
-                SizedBox(
-                  height: kDefaultPadding / 2,
-                ),
-                SummaryElement(
-                  title: 'Total',
-                  amount: transactionData.totalMoney,
-                ),
-                Expanded(
-                  child: SizedBox(
-                    height: kDefaultPadding / 2,
-                  ),
-                ),
-                Row(
-                  children: [
-                    DatePickerButton(
-                      title: 'From',
-                    ),
-                    Expanded(
-                      child: SizedBox(),
-                    ),
-                    DatePickerButton(
-                      title: 'To',
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: kDefaultPadding,
-          ),
-          SammeryPeriodContainer(),
-        ],
-      ),
-    );
-  }
-}

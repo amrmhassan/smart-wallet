@@ -6,6 +6,7 @@ import '../models/transaction_model.dart';
 import 'types.dart';
 
 List<TransactionModel> dummyTransactions = [
+  //? today transactions
   TransactionModel(
     id: Uuid().v4(),
     title: 'title',
@@ -36,7 +37,7 @@ List<TransactionModel> dummyTransactions = [
     ratioToTotal: 0,
     profileId: '0',
   ),
-  //************************************************** */ 130
+  //? yesterday transactions
   TransactionModel(
     id: Uuid().v4(),
     title: 'title',
@@ -67,7 +68,7 @@ List<TransactionModel> dummyTransactions = [
     ratioToTotal: 0,
     profileId: '0',
   ),
-  //************************************************** */ 400
+  //? before yesterday transactions
   TransactionModel(
     id: Uuid().v4(),
     title: 'title',
@@ -98,5 +99,193 @@ List<TransactionModel> dummyTransactions = [
     ratioToTotal: 0,
     profileId: '0',
   ),
-  //************************************************** */ 500
+];
+
+List<TransactionModel> dummyTransactionsFixedDate = [
+  //? today transactions
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 200,
+    createdAt: DateTime.parse('2022-04-04'),
+    transactionType: TransactionType.income,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 130,
+    createdAt: DateTime.parse('2022-04-04'),
+    transactionType: TransactionType.income,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 200,
+    createdAt: DateTime.parse('2022-04-04'),
+    transactionType: TransactionType.outcome,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  //? yesterday transactions
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 300,
+    createdAt: DateTime.parse('2022-04-03'),
+    transactionType: TransactionType.income,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 200,
+    createdAt: DateTime.parse('2022-04-03'),
+    transactionType: TransactionType.income,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 100,
+    createdAt: DateTime.parse('2022-04-03'),
+    transactionType: TransactionType.outcome,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  //? before yesterday transactions
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 500,
+    createdAt: DateTime.parse('2022-04-02'),
+    transactionType: TransactionType.income,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 200,
+    createdAt: DateTime.parse('2022-04-02'),
+    transactionType: TransactionType.income,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 200,
+    createdAt: DateTime.parse('2022-04-02'),
+    transactionType: TransactionType.outcome,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  //? this week transactions
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 200,
+    createdAt: DateTime.parse('2022-03-29'),
+    transactionType: TransactionType.outcome,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 200,
+    createdAt: DateTime.parse('2022-03-29'),
+    transactionType: TransactionType.outcome,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 200,
+    createdAt: DateTime.parse('2022-03-29'),
+    transactionType: TransactionType.outcome,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  //? this month transactions
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 200,
+    createdAt: DateTime.parse('2022-03-05'),
+    transactionType: TransactionType.outcome,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 200,
+    createdAt: DateTime.parse('2022-03-05'),
+    transactionType: TransactionType.outcome,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 200,
+    createdAt: DateTime.parse('2022-03-05'),
+    transactionType: TransactionType.outcome,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  //? more than one month
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 200,
+    createdAt: DateTime.parse('2022-03-01'),
+    transactionType: TransactionType.outcome,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 200,
+    createdAt: DateTime.parse('2022-03-01'),
+    transactionType: TransactionType.outcome,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
+  TransactionModel(
+    id: Uuid().v4(),
+    title: 'title',
+    description: 'description',
+    amount: 200,
+    createdAt: DateTime.parse('2022-03-01'),
+    transactionType: TransactionType.outcome,
+    ratioToTotal: 0,
+    profileId: '0',
+  ),
 ];

@@ -1,4 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:wallet_app/providers/statistics_provider.dart';
 
 import 'summary_period_icon.dart';
 
@@ -12,32 +16,45 @@ class SammeryPeriodContainer extends StatefulWidget {
 }
 
 class _SammeryPeriodContainerState extends State<SammeryPeriodContainer> {
-  int _currentActivePeriodIndex = 0;
+  void setPeriod(TransPeriod transPeriod) {
+    Provider.of<StatisticsProvider>(
+      context,
+      listen: false,
+    ).setPeriod(transPeriod);
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> summaryPeriodsTypes = [
-      {'title': 'D'},
-      {'title': 'W'},
-      {'title': 'M'},
-      {'title': 'Y'},
+    TransPeriod currenActivePeriod =
+        Provider.of<StatisticsProvider>(context).currentActivePeriod;
+
+    List<PeriodIcon> periodIcons = [
+      PeriodIcon(transPeriod: TransPeriod.today, letter: 'D'),
+      PeriodIcon(transPeriod: TransPeriod.week, letter: 'W'),
+      PeriodIcon(transPeriod: TransPeriod.month, letter: 'M'),
+      PeriodIcon(transPeriod: TransPeriod.all, letter: 'A'),
     ];
     return SizedBox(
       width: 40,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: summaryPeriodsTypes.map((e) {
-          int index = summaryPeriodsTypes.indexOf(e);
+        children: periodIcons.map((e) {
           return SummaryPeriodIcon(
-            title: e['title'],
-            onTap: () {
-              setState(() {
-                _currentActivePeriodIndex = index;
-              });
-            },
-            active: _currentActivePeriodIndex == index,
+            title: e.letter,
+            onTap: () => setPeriod(e.transPeriod),
+            active: currenActivePeriod == e.transPeriod,
           );
         }).toList(),
       ),
     );
   }
+}
+
+class PeriodIcon {
+  final TransPeriod transPeriod;
+  final String letter;
+  const PeriodIcon({
+    required this.transPeriod,
+    required this.letter,
+  });
 }

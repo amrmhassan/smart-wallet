@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/providers/profiles_provider.dart';
+import 'package:wallet_app/providers/statistics_provider.dart';
 import 'package:wallet_app/screens/loading_data_screen.dart';
 import './providers/quick_actions_provider.dart';
 import './providers/transactions_provider.dart';
@@ -33,7 +34,29 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (ctx) => ProfilesProvider(),
-        )
+        ),
+        ChangeNotifierProxyProvider<TransactionProvider, StatisticsProvider>(
+          create: (
+            ctx,
+          ) {
+            return StatisticsProvider(
+              allProfileTransactions: [],
+              currentActivePeriod: TransPeriod.all,
+            );
+          },
+          update: (
+            ctx,
+            transactions,
+            oldStatistics,
+          ) {
+            return StatisticsProvider(
+              allProfileTransactions: transactions.getAllTransactions,
+              currentActivePeriod: oldStatistics == null
+                  ? TransPeriod.all
+                  : oldStatistics.currentActivePeriod,
+            );
+          },
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

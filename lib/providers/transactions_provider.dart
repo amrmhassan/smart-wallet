@@ -79,7 +79,7 @@ class TransactionProvider extends ChangeNotifier {
 
   //* for loading the dummy transactions
   void loadDummyTransactions() {
-    _transactions = _transactions + dummyTransactions;
+    _transactions = _transactions + dummyTransactionsFixedDate;
     notifyListeners();
   }
 

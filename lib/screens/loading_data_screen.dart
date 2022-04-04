@@ -28,17 +28,26 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
     //* i needed the trick of duration zero here
     //* here i will fetch and update the transactions
     Future.delayed(Duration.zero).then((value) async {
-      //* i forgot to add the await
+      //* for getting the profiles and initialize one if empty
       await Provider.of<ProfilesProvider>(context, listen: false)
           .fetchAndUpdateProfiles();
 
+      //* foe getting the active profile id and default one if empty
       await Provider.of<ProfilesProvider>(context, listen: false)
           .fetchAndUpdateActivatedProfileId();
+
+      //* for setting the active profile id
       String activatedProfileId =
           Provider.of<ProfilesProvider>(context, listen: false)
               .activatedProfileId;
+
+      //* for getting the transactions of the active profile
       await Provider.of<TransactionProvider>(context, listen: false)
           .fetchAndUpdateTransactions(activatedProfileId);
+
+      //* for getting the quick actions of the active profile
+      await Provider.of<QuickActionsProvider>(context, listen: false)
+          .fetchAndUpdateQuickActions(activatedProfileId);
 
       //? for loading dummy transaction, only in debug mode and it is the first time to run the app
       if (kDebugMode) {
@@ -46,36 +55,14 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
             .loadDummyTransactions();
       }
 
-      // if (kDebugMode && await SharedPrefHelper.firstTimeRunApp()) {
-      //   var activeProfileId =
-      //       Provider.of<ProfilesProvider>(context, listen: false)
-      //           .getActiveProfile;
-      //   for (var t in dummyTransactions) {
-      //     await addTransaction(
-      //       context: context,
-      //       title: t.title,
-      //       description: t.description,
-      //       transactionType: t.transactionType,
-      //       activeProfile: activeProfileId,
-      //       amount: t.amount,
-      //       allowSnackBar: false,
-      //     );
-      //   }
-      // }
-
-      await Provider.of<QuickActionsProvider>(context, listen: false)
-          .fetchAndUpdateQuickActions(activatedProfileId);
-
-      //* check if it the first time to run the app
-
+      //* check if it the first time to run the app to make the animation last longer(5 sec)
       if (await SharedPrefHelper.firstTimeRunApp()) {
         //* loading the data after 3 seconds if it the first time to run the app
         await Future.delayed(Duration(seconds: 5)).then((value) async =>
-            await Navigator.pushReplacementNamed(
-                context, HolderScreen.routeName));
+            Navigator.pushReplacementNamed(context, HolderScreen.routeName));
       } else {
         //* loading the app UI after finishing fetching data from the database immediately if it isn't the first time to run the app
-        await Navigator.pushReplacementNamed(context, HolderScreen.routeName);
+        Navigator.pushReplacementNamed(context, HolderScreen.routeName);
       }
     });
 

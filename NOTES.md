@@ -32,3 +32,5 @@ DONE - search for how to cancel any opened snackbar to remove any snackbars if a
 
 # let the user add outcomes more than what he has in his income to let the current money be negative
 `-- or let him add a debt
+
+# you might change the total Mony indication to the Savings indeication
