@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../constants/colors.dart';
-import '../../../constants/sizes.dart';
 
 class AddNewTransactionIcon extends StatelessWidget {
   final VoidCallback onTap;
@@ -27,12 +25,15 @@ class AddNewTransactionIcon extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           child: Container(
-            padding: const EdgeInsets.all(
-              kDefaultPadding / 3,
-            ),
+            alignment: Alignment.center,
+            width: 50,
+            height: 50,
+            // padding: const EdgeInsets.all(
+            //   kDefaultPadding / 3,
+            // ),
             child: Icon(
-              FontAwesomeIcons.plus,
-              size: kDefaultIconSize,
+              Icons.add,
+              size: 45,
               color: kMainColor.withOpacity(0.5),
             ),
           ),

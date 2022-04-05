@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:wallet_app/constants/globals.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/types.dart';
@@ -86,7 +87,7 @@ class QuickActionCard extends StatelessWidget {
                     //   ),
                     // ),
                     Text(
-                      '${doubleToString(amount)} \$',
+                      '${doubleToString(amount)} $currency',
                       style: TextStyle(
                         color: transactionType == TransactionType.income
                             ? kIncomeColor

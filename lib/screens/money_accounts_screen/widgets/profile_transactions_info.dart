@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_app/constants/globals.dart';
 
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
@@ -30,7 +31,7 @@ class ProfileTransactionsInfo extends StatelessWidget {
               ),
             ),
             const Text(
-              '\$',
+              currency,
               style: TextStyle(
                 fontSize: 11,
                 color: Colors.black45,

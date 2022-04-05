@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet_app/constants/globals.dart';
 import '../../../providers/transactions_provider.dart';
 
 import '../../../constants/colors.dart';
@@ -19,7 +20,7 @@ class TotalAmountInProfile extends StatelessWidget {
     return FittedBox(
       fit: BoxFit.contain,
       child: Text(
-        'Total : ${doubleToString(totalAmount)} \$',
+        'Total : ${doubleToString(totalAmount)} $currency',
         style: TextStyle(
           color: kMainColor,
           fontSize: kDefaultInfoTextSize,

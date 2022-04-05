@@ -21,6 +21,7 @@ class BottomNavBarIcon extends StatefulWidget {
   final bool active;
   final IconData iconData;
   final VoidCallback onTap;
+
   const BottomNavBarIcon({
     Key? key,
     this.active = false,
@@ -74,9 +75,8 @@ class _BottomNavBarIconState extends State<BottomNavBarIcon>
           splashColor: Colors.transparent,
           overlayColor: MaterialStateProperty.all(Colors.transparent),
           onTap: widget.onTap,
-          child: Stack(
-            alignment: Alignment.center,
-            clipBehavior: Clip.none,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 width: _width,
@@ -101,20 +101,32 @@ class _BottomNavBarIconState extends State<BottomNavBarIcon>
                 ),
               ),
               if (widget.active)
-                Positioned(
-                  bottom: -25,
-                  child: Transform(
-                    transform: Matrix4.rotationZ((pi / 180) * 45),
-                    origin: Offset(25, 25),
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: kMainColor.withOpacity(0.5),
-                      ),
+                FractionallySizedBox(
+                  widthFactor: 0.6,
+                  child: Container(
+                    width: double.infinity,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: kMainColor,
+                      borderRadius: BorderRadius.circular(1000),
                     ),
                   ),
                 ),
+              // if (widget.active)
+              //   Positioned(
+              //     bottom: -25,
+              //     child: Transform(
+              //       transform: Matrix4.rotationZ((pi / 180) * 45),
+              //       origin: Offset(25, 25),
+              //       child: Container(
+              //         width: 50,
+              //         height: 50,
+              //         decoration: BoxDecoration(
+              //           color: kMainColor.withOpacity(0.5),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
               //* positioned backup
               // Positioned(
               //   bottom: -85,

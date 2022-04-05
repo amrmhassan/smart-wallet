@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import '../models/transaction_model.dart';
 
 class TransPeriodUtils {
@@ -12,8 +14,7 @@ class TransPeriodUtils {
   });
 
   Map<String, DateTime> setToday() {
-    DateTime nowDate = DateTime.now();
-    startDate = DateTime(nowDate.year, nowDate.month, nowDate.day - 1);
+    startDate = DateTime.now().subtract(Duration(days: 1));
     endDate = DateTime.now();
     return {
       'startDate': startDate,
@@ -22,9 +23,8 @@ class TransPeriodUtils {
   }
 
   Map<String, DateTime> setYesterday() {
-    DateTime nowDate = DateTime.now();
-    startDate = DateTime(nowDate.year, nowDate.month, nowDate.day - 2);
-    endDate = DateTime(nowDate.year, nowDate.month, nowDate.day - 1);
+    startDate = DateTime.now().subtract(Duration(days: 2));
+    endDate = DateTime.now().subtract(Duration(days: 1));
     return {
       'startDate': startDate,
       'endDate': endDate,

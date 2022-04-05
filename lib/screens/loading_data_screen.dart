@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -37,10 +36,10 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
           .fetchAndUpdateActivatedProfileId();
 
       //? for loading dummy profiles, only in debug mode and it is the first time to run the app
-      if (kDebugMode) {
-        Provider.of<ProfilesProvider>(context, listen: false)
-            .fetchDummyProfiles();
-      }
+      // if (kDebugMode) {
+      //   Provider.of<ProfilesProvider>(context, listen: false)
+      //       .fetchDummyProfiles();
+      // }
 
       //* for setting the active profile id
       String activatedProfileId =
@@ -56,10 +55,10 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
           .fetchAndUpdateQuickActions(activatedProfileId);
 
       //? for loading dummy transaction, only in debug mode and it is the first time to run the app
-      if (kDebugMode) {
-        Provider.of<TransactionProvider>(context, listen: false)
-            .loadDummyTransactions();
-      }
+      // if (kDebugMode) {
+      //   Provider.of<TransactionProvider>(context, listen: false)
+      //       .loadDummyTransactions();
+      // }
 
       //* check if it the first time to run the app to make the animation last longer(5 sec)
       if (await SharedPrefHelper.firstTimeRunApp()) {

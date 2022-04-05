@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../../add_transaction_screen/add_transaction_screen.dart';
 import 'add_new_transaction_icon.dart';
-import 'total_amount.dart';
 
 class RightSideSammary extends StatelessWidget {
   const RightSideSammary({
@@ -19,25 +18,29 @@ class RightSideSammary extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
-            child: AddNewTransactionIcon(onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (ctx) => AddTransactionScreen(
-                    addTransactionScreenOperations:
-                        AddTransactionScreenOperations.addTransaction,
-                  ),
-                ),
-              );
-            }),
-          ),
-          SizedBox(height: 20),
-          Expanded(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 100),
-              child: TotalAmountInProfile(),
+            child: Center(
+              child: AddNewTransactionIcon(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => AddTransactionScreen(
+                        addTransactionScreenOperations:
+                            AddTransactionScreenOperations.addTransaction,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
+          // SizedBox(height: 20),
+          // Expanded(
+          //   child: ConstrainedBox(
+          //     constraints: BoxConstraints(maxWidth: 100),
+          //     child: TotalAmountInProfile(),
+          //   ),
+          // ),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wallet_app/constants/transactions_constants.dart';
+import 'package:wallet_app/utils/trans_periods_utils.dart';
 import '../constants/db_constants.dart';
 import '../constants/types.dart';
 import '../helpers/custom_error.dart';
@@ -8,11 +9,10 @@ import '../helpers/db_helper.dart';
 import '../models/transaction_model.dart';
 
 class TransactionProvider extends ChangeNotifier {
-  //? a) transactions stuff
+  //? all profile transactions
   List<TransactionModel> _transactions = [];
 
-//? 1- getting transactions, with multiple possibilities
-//* for getting the income transactions only
+//? getting income transactions
   List<TransactionModel> get _incomeTransactions {
     return [
       ..._transactions
@@ -20,7 +20,7 @@ class TransactionProvider extends ChangeNotifier {
     ];
   }
 
-//* for getting the outcome transactions only
+//? getting outcome transactions
   List<TransactionModel> get _outcomeTransactions {
     return [
       ..._transactions.where(
@@ -28,7 +28,7 @@ class TransactionProvider extends ChangeNotifier {
     ];
   }
 
-//* for getting transactions depending on the current chosen transaction type
+//? transactions depending on the activeTransactionsType
   List<TransactionModel> get displayedTransactions {
     if (currentActiveTransactionType == TransactionType.income) {
       return _incomeTransactions;
@@ -39,62 +39,76 @@ class TransactionProvider extends ChangeNotifier {
     }
   }
 
-//* for getting all transactions no matter it's type
+//? getting all transactions
   List<TransactionModel> get getAllTransactions {
     return [..._transactions];
   }
 
-//? 2- for getting  calculations on the transactions
-  //* for getting the total income
+//? getting total income for a profile
   double get totalIncome {
-    double totalIncomeAmount = _incomeTransactions.fold<double>(
-      0,
-      (previousValue, element) => previousValue + element.amount,
-    );
-    return totalIncomeAmount;
+    return foldTransactions(_incomeTransactions);
   }
 
-  //* for getting the total outcome
+//? getting total outcome for a profile
   double get totalOutcome {
-    double totalIncomeAmount = _outcomeTransactions.fold<double>(
-      0,
-      (previousValue, element) => previousValue + element.amount,
-    );
-    return totalIncomeAmount;
+    return foldTransactions(_outcomeTransactions);
   }
 
-  //* for getting the current money in the profile
+//? getting today's outcome only
+  double get todayOutcome {
+    TransPeriodUtils transPeriodUtils = TransPeriodUtils(
+      startDate: DateTime.now(),
+      endDate: DateTime.now(),
+      transactions: _outcomeTransactions,
+    );
+    transPeriodUtils.setToday();
+    double todayAmount =
+        foldTransactions(transPeriodUtils.getTransactionsWithinPeriod());
+    return todayAmount;
+  }
+
+//? getting yesterday's outcome only
+  double get yesterdayOutcome {
+    TransPeriodUtils transPeriodUtils = TransPeriodUtils(
+      startDate: DateTime.now(),
+      endDate: DateTime.now(),
+      transactions: _outcomeTransactions,
+    );
+    transPeriodUtils.setYesterday();
+    double yesterdayAmount =
+        foldTransactions(transPeriodUtils.getTransactionsWithinPeriod());
+    return yesterdayAmount;
+  }
+
+//? getting total money for a profile, (savings)
   double get totalMoney {
-    double totalAmount = _transactions.fold<double>(
-      0,
-      (previousValue, element) =>
-          element.transactionType == TransactionType.income
-              ? previousValue + element.amount
-              : previousValue - element.amount,
-    );
-    return totalAmount;
+    return totalIncome - totalOutcome;
   }
 
-  //? 3- methods to control the transactions
+//? for folding a list of transactions and sum it's amount
+  double foldTransactions(List<TransactionModel> transactions) {
+    return transactions.fold(
+        0, (previousValue, element) => previousValue + element.amount);
+  }
 
-  //* for loading the dummy transactions
+//? loading dummy transactions for testing
   void loadDummyTransactions() {
     _transactions = _transactions + dummyTransactionsFixedDate;
     notifyListeners();
   }
 
-  //* for getting a transaction by its id
+//? getting a transaction by id
   TransactionModel getTransactionById(String id) {
     return _transactions.firstWhere((element) => element.id == id);
   }
 
-  //* for getting the last added transaction
-
+//? getting the last transaction in the list
+//* this will be used to check if the current added transaction has the same amount and transaction type as the last transaction in the list
   TransactionModel getLastTransaction() {
     return _transactions[_transactions.length - 1];
   }
 
-//* for adding new transaction
+//? adding new transaction
   Future<void> addTransaction(String title, String description, double amount,
       TransactionType transactionType, String profileId) async {
     //* checking if the transaction added will make the current balance negative
@@ -151,7 +165,7 @@ class TransactionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-//* for getting the transactions from the database
+//? getting transaction from the database and adding them
   Future<void> fetchAndUpdateTransactions(String activatedProfileId) async {
     try {
       List<Map<String, dynamic>> data = await DBHelper.getDataWhere(
@@ -186,7 +200,7 @@ class TransactionProvider extends ChangeNotifier {
     }
   }
 
-//* for deleting a transaction
+//? deleting a transaction by id
   Future<void> deleteTransaction(String id) async {
     //* if that transaction is income and deleting it will make the total by negative then throw an error that you can't delete that transaction , you can only edit it to a lower amount but not lower than the current total amount in that profile
     _transactions.removeWhere((element) {
@@ -211,10 +225,10 @@ class TransactionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-//* for editing a transaction
+//? editing a transaction
   Future<void> editTransaction(
       String transactionId, TransactionModel newTransaction) async {
-    //? i commented this cause it has no value
+    //* i commented this cause it has no value
     // //* first checking if the transaction exist in the _transactions
 
     // TransactionModel? oldTransaction;
@@ -266,9 +280,9 @@ class TransactionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //? b) transaction type stuff
-
+  //? current active transaction type
   TransactionType currentActiveTransactionType = TransactionType.all;
+  //? setting the current active transaction type
   void setCurrentActiveTransactionType(TransactionType transactionType) {
     currentActiveTransactionType = transactionType;
     notifyListeners();

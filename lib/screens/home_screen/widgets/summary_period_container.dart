@@ -37,22 +37,22 @@ class _SammeryPeriodContainerState extends State<SammeryPeriodContainer> {
       PeriodIcon(
         transPeriod: TransPeriod.today,
         letter: 'D',
-        daysCount: 0,
+        showFrom: 0,
       ),
       PeriodIcon(
         transPeriod: TransPeriod.week,
         letter: 'W',
-        daysCount: 7,
+        showFrom: 1,
       ),
       PeriodIcon(
         transPeriod: TransPeriod.month,
         letter: 'M',
-        daysCount: 28,
+        showFrom: 8,
       ),
       PeriodIcon(
         transPeriod: TransPeriod.all,
         letter: 'A',
-        daysCount: 0,
+        showFrom: 0,
       ),
     ];
     return SizedBox(
@@ -64,7 +64,7 @@ class _SammeryPeriodContainerState extends State<SammeryPeriodContainer> {
             title: e.letter,
             onTap: () => setPeriod(e.transPeriod),
             active: currenActivePeriod == e.transPeriod,
-            enabled: profileAgeInDays >= e.daysCount,
+            enabled: profileAgeInDays >= e.showFrom,
           );
         }).toList(),
       ),
@@ -75,11 +75,11 @@ class _SammeryPeriodContainerState extends State<SammeryPeriodContainer> {
 class PeriodIcon {
   final TransPeriod transPeriod;
   final String letter;
-  final int daysCount;
+  final double showFrom;
 
   const PeriodIcon({
     required this.transPeriod,
     required this.letter,
-    required this.daysCount,
+    required this.showFrom,
   });
 }
