@@ -6,16 +6,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/constants/globals.dart';
 import 'package:wallet_app/helpers/responsive.dart';
-import '../../../models/profile_model.dart';
+import 'package:wallet_app/utils/transactions_utils.dart';
 import '../../../models/quick_action_model.dart';
-import '../../../providers/profiles_provider.dart';
 import '../../../providers/quick_actions_provider.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
 import '../../../constants/types.dart';
-import '../../../providers/transactions_provider.dart';
 import '../../../utils/general_utils.dart';
 import '../../add_transaction_screen/add_transaction_screen.dart';
 import '../../../widgets/global/card_action_button.dart';
@@ -52,68 +50,6 @@ class AllQuickActionsCard extends StatelessWidget {
     return confirmDelete;
   }
 
-  //* in this method i will apply the quick action and add the transaction by clicking on the quick action card
-  void applyQuickAction(BuildContext context) async {
-    //? the problem here is that each quick action will have an id , so we can't add the same quick action with the same id to be multiple transactions with the same id
-    //? so i will make the add transaction provider decide the id of the newly added transaction
-
-    await showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text('Apply Transaction?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () async {
-              try {
-                await Provider.of<TransactionProvider>(context, listen: false)
-                    .addTransaction(
-                  quickAction.title,
-                  quickAction.description,
-                  quickAction.amount,
-                  quickAction.transactionType,
-                  quickAction.profileId,
-                );
-
-                //* here i will edit the current active profile
-                ProfileModel activeProfile =
-                    Provider.of<ProfilesProvider>(context, listen: false)
-                        .getActiveProfile;
-                //* cheching the added transaction type and then update the profile depending on that
-
-                if (quickAction.transactionType == TransactionType.income) {
-                  //* if income then update income
-
-                  await Provider.of<ProfilesProvider>(context, listen: false)
-                      .editActiveProfile(
-                          income: activeProfile.income + quickAction.amount);
-                } else if (quickAction.transactionType ==
-                    TransactionType.outcome) {
-                  //* if outcome then update the outcome
-                  await Provider.of<ProfilesProvider>(context, listen: false)
-                      .editActiveProfile(
-                          outcome: activeProfile.outcome + quickAction.amount);
-                }
-                showSnackBar(
-                    context, 'Transaction Added', SnackBarType.success, true);
-              } catch (error) {
-                showSnackBar(
-                    context, error.toString(), SnackBarType.error, true);
-              }
-              Navigator.pop(context);
-            },
-            child: Text('Ok'),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     //* the main container of the card
@@ -139,7 +75,7 @@ class AllQuickActionsCard extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () => applyQuickAction(context),
+            onTap: () => showApplyQuickActionDialog(context, quickAction),
             child: Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: kDefaultHorizontalPadding / 2,

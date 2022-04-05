@@ -1,6 +1,6 @@
 //* 1] this method will add a new transaction
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/models/quick_action_model.dart';
 import 'package:wallet_app/models/transaction_model.dart';
@@ -12,6 +12,7 @@ import '../providers/quick_actions_provider.dart';
 import '../providers/transactions_provider.dart';
 import 'general_utils.dart';
 
+//? showing add transaction dialog(will appear if it is high)
 Future<void> showAddHighTransactionDialog({
   required BuildContext context,
   required String title,
@@ -32,15 +33,7 @@ Future<void> showAddHighTransactionDialog({
       title: 'Your balance is lower, add a debt instead?',
       btnCancelOnPress: () {},
       btnOkOnPress: () async {
-        //? here i will add the ability to add a debt to the debts providers which will be shown in the debts screen in the sidebar
-        // addTransaction(
-        //   context: context,
-        //   title: title,
-        //   description: description,
-        //   transactionType: transactionType,
-        //   activeProfile: activeProfile,
-        //   amount: amount,
-        // );
+        //! here i will add the ability to add a debt to the debts providers which will be shown in the debts screen in the sidebar
         showSnackBar(context, 'Dept added(Soon)', SnackBarType.success);
       },
     ).show();
@@ -56,7 +49,23 @@ Future<void> showAddHighTransactionDialog({
   }
 }
 
-//* 1] add transaction
+//? showing apply quick action dialog
+Future<void> showApplyQuickActionDialog(
+    BuildContext context, QuickActionModel quickAction) async {
+  // the problem here is that each quick action will have an id , so we can't add the same quick action with the same id to be multiple transactions with the same id
+  // so i will make the add transaction provider decide the id of the newly added transaction
+
+  await AwesomeDialog(
+    context: context,
+    dialogType: DialogType.SUCCES,
+    animType: AnimType.BOTTOMSLIDE,
+    title: 'Apply Quick Action?',
+    btnCancelOnPress: () {},
+    btnOkOnPress: () async => applyQuickAction(context, quickAction),
+  ).show();
+}
+
+//? 1] adding transaction
 Future<void> addTransaction({
   required BuildContext context,
   required String title,
@@ -103,7 +112,7 @@ Future<void> addTransaction({
   }
 }
 
-//* 2] this method will add a new quick action
+//? 2] adding quick action
 Future<void> addQuickAction({
   required String title,
   required String description,
@@ -125,7 +134,7 @@ Future<void> addQuickAction({
   }
 }
 
-//* 3] this method will edit an existing transaction
+//? 3] editing transaction
 Future<void> editTransaction({
   required String title,
   required String description,
@@ -176,7 +185,7 @@ Future<void> editTransaction({
   }
 }
 
-//* 4] this method will edit an existing quick action
+//? 4] editing a quick action
 Future<void> editQuickAction(
     {required String title,
     required String description,
@@ -213,6 +222,7 @@ Future<void> editQuickAction(
   }
 }
 
+//? 5] deleting a transaction
 Future<void> deleteTransaction(
     BuildContext context, TransactionModel transaction) async {
   //* update the profile before deleting the transaction
@@ -237,5 +247,40 @@ Future<void> deleteTransaction(
     }
   } catch (error) {
     showSnackBar(context, error.toString(), SnackBarType.error);
+  }
+}
+
+//? 6] applying a quick action
+Future<void> applyQuickAction(
+    BuildContext context, QuickActionModel quickAction) async {
+  try {
+    await Provider.of<TransactionProvider>(context, listen: false)
+        .addTransaction(
+      quickAction.title,
+      quickAction.description,
+      quickAction.amount,
+      quickAction.transactionType,
+      quickAction.profileId,
+    );
+
+    //* here i will edit the current active profile
+    ProfileModel activeProfile =
+        Provider.of<ProfilesProvider>(context, listen: false).getActiveProfile;
+    //* cheching the added transaction type and then update the profile depending on that
+
+    if (quickAction.transactionType == TransactionType.income) {
+      //* if income then update income
+
+      await Provider.of<ProfilesProvider>(context, listen: false)
+          .editActiveProfile(income: activeProfile.income + quickAction.amount);
+    } else if (quickAction.transactionType == TransactionType.outcome) {
+      //* if outcome then update the outcome
+      await Provider.of<ProfilesProvider>(context, listen: false)
+          .editActiveProfile(
+              outcome: activeProfile.outcome + quickAction.amount);
+    }
+    showSnackBar(context, 'Transaction Added', SnackBarType.success, true);
+  } catch (error) {
+    showSnackBar(context, error.toString(), SnackBarType.error, true);
   }
 }
