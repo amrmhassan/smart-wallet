@@ -13,8 +13,8 @@ class TransPeriodUtils {
 
   Map<String, DateTime> setToday() {
     DateTime now = DateTime.now();
-    startDate = DateTime(now.year, now.month, now.day - 1);
-    endDate = DateTime.now();
+    startDate = now.subtract(const Duration(days: 1));
+    endDate = now;
     return {
       'startDate': startDate,
       'endDate': endDate,
@@ -23,8 +23,8 @@ class TransPeriodUtils {
 
   Map<String, DateTime> setYesterday() {
     DateTime now = DateTime.now();
-    startDate = DateTime(now.year, now.month, now.day - 2);
-    endDate = DateTime(now.year, now.month, now.day - 1);
+    startDate = now.subtract(const Duration(days: 2));
+    endDate = now.subtract(const Duration(days: 1));
     return {
       'startDate': startDate,
       'endDate': endDate,
@@ -33,8 +33,8 @@ class TransPeriodUtils {
 
   Map<String, DateTime> setWeek() {
     DateTime nowDate = DateTime.now();
-    startDate = DateTime(nowDate.year, nowDate.month, nowDate.day - 7);
-    endDate = DateTime.now();
+    startDate = nowDate.subtract(const Duration(days: 7));
+    endDate = nowDate;
     return {
       'startDate': startDate,
       'endDate': endDate,
@@ -43,8 +43,8 @@ class TransPeriodUtils {
 
   Map<String, DateTime> setMonth() {
     DateTime nowDate = DateTime.now();
-    startDate = DateTime(nowDate.year, nowDate.month - 1, nowDate.day);
-    endDate = DateTime.now();
+    startDate = nowDate.subtract(const Duration(days: 30));
+    endDate = nowDate;
     return {
       'startDate': startDate,
       'endDate': endDate,
@@ -53,7 +53,7 @@ class TransPeriodUtils {
 
   Map<String, DateTime> setYear() {
     DateTime nowDate = DateTime.now();
-    startDate = DateTime(nowDate.year - 1, nowDate.month, nowDate.day);
+    startDate = nowDate.subtract(const Duration(days: 365));
     endDate = DateTime.now();
     return {
       'startDate': startDate,
@@ -90,9 +90,8 @@ class TransPeriodUtils {
   List<TransactionModel> getTransactionsWithinPeriod() {
     return transactions
         .where(
-          (transaction) =>
-              transaction.createdAt.isBefore(endDate) &&
-              transaction.createdAt.isAfter(startDate),
+          (transaction) => (transaction.createdAt.isBefore(endDate) &&
+              transaction.createdAt.isAfter(startDate)),
         )
         .toList();
   }
