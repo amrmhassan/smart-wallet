@@ -32,7 +32,8 @@ class QuickActionsFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     final quickActionsData = Provider.of<QuickActionsProvider>(context);
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: kDefaultHorizontalPadding),
+      padding:
+          const EdgeInsets.symmetric(horizontal: kDefaultHorizontalPadding),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: _transactionsFilters

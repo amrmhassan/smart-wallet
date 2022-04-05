@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../constants/sizes.dart';
@@ -30,30 +28,30 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
       children: [
         Column(
           children: [
-            HomeHeading(
+            const HomeHeading(
               title: 'Transactions',
             ),
-            TransactionsFilters(),
+            const TransactionsFilters(),
             Expanded(
               child: Container(
                 clipBehavior: Clip.hardEdge,
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: kDefaultHorizontalPadding,
                   right: kDefaultPadding / 2,
                   left: kDefaultPadding / 2,
                   bottom: kCustomBottomNavBarHeight,
                 ),
-                decoration: BoxDecoration(),
+                decoration: const BoxDecoration(),
                 child: _transactions.isNotEmpty
                     ? ListView.builder(
-                        physics: BouncingScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         clipBehavior: Clip.none,
                         itemCount: _transactions.length,
                         itemBuilder: (ctx, index) => TranscationCard(
                           transaction: _transactions[index],
                         ),
                       )
-                    : EmptyTransactions(),
+                    : const EmptyTransactions(),
               ),
             ),
           ],

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -63,7 +61,7 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
       //* check if it the first time to run the app to make the animation last longer(5 sec)
       if (await SharedPrefHelper.firstTimeRunApp()) {
         //* loading the data after 3 seconds if it the first time to run the app
-        await Future.delayed(Duration(seconds: 5)).then((value) async =>
+        await Future.delayed(const Duration(seconds: 5)).then((value) async =>
             Navigator.pushReplacementNamed(context, HolderScreen.routeName));
       } else {
         //* loading the app UI after finishing fetching data from the database immediately if it isn't the first time to run the app
@@ -80,7 +78,7 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             'Smart Wallet',
             style: TextStyle(
               color: kMainColor,
@@ -88,12 +86,12 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: kDefaultPadding * 2,
           ),
           Container(
             alignment: Alignment.center,
-            child: SpinKitCubeGrid(
+            child: const SpinKitCubeGrid(
               color: kMainColor,
               size: 100,
               duration: Duration(seconds: 1),

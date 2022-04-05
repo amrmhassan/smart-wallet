@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/providers/profiles_provider.dart';
@@ -44,7 +42,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       alignment: Alignment.bottomRight,
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
           child: Column(
             children: [
               HomeHeading(
@@ -52,15 +50,15 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     .getActiveProfile
                     .name,
               ),
-              SizedBox(
+              const SizedBox(
                 height: kDefaultPadding,
               ),
-              ProfileSummaryStatistics(),
-              SizedBox(
+              const ProfileSummaryStatistics(),
+              const SizedBox(
                 height: kDefaultPadding,
               ),
               if (showChart())
-                SizedBox(
+                const SizedBox(
                   height: 250,
                   width: double.infinity,
                   child: SummaryChart(),

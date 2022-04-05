@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../constants/sizes.dart';
@@ -274,10 +272,10 @@ class _CalculatorState extends State<Calculator> {
       // ),
       clipBehavior: Clip.hardEdge,
       width: double.infinity,
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         bottom: kDefaultPadding,
       ),
-      padding: EdgeInsets.only(bottom: kDefaultPadding),
+      padding: const EdgeInsets.only(bottom: kDefaultPadding),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(kDefaultBorderRadius / 2),
@@ -287,7 +285,7 @@ class _CalculatorState extends State<Calculator> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            padding: EdgeInsets.symmetric(vertical: kDefaultPadding / 3),
+            padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 3),
             alignment: Alignment.center,
             width: double.infinity,
             // height: 150,
@@ -299,13 +297,13 @@ class _CalculatorState extends State<Calculator> {
               style: kCalcTextStyle,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: kDefaultPadding,
           ),
           //? this row will have the heading buttons which will control the other operations and the divide button
           Expanded(
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+              padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

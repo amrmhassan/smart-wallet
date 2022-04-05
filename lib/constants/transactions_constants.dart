@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:uuid/uuid.dart';
 
 import '../models/transaction_model.dart';
@@ -8,93 +6,93 @@ import 'types.dart';
 List<TransactionModel> dummyTransactions = [
   //? today transactions
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
-    createdAt: DateTime.now().subtract(Duration(days: 0)),
+    createdAt: DateTime.now().subtract(const Duration(days: 0)),
     transactionType: TransactionType.income,
     ratioToTotal: 0,
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 130,
-    createdAt: DateTime.now().subtract(Duration(days: 0)),
+    createdAt: DateTime.now().subtract(const Duration(days: 0)),
     transactionType: TransactionType.income,
     ratioToTotal: 0,
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
-    createdAt: DateTime.now().subtract(Duration(days: 0)),
+    createdAt: DateTime.now().subtract(const Duration(days: 0)),
     transactionType: TransactionType.outcome,
     ratioToTotal: 0,
     profileId: '0',
   ),
   //? yesterday transactions
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 300,
-    createdAt: DateTime.now().subtract(Duration(days: 1)),
+    createdAt: DateTime.now().subtract(const Duration(days: 1)),
     transactionType: TransactionType.income,
     ratioToTotal: 0,
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
-    createdAt: DateTime.now().subtract(Duration(days: 1)),
+    createdAt: DateTime.now().subtract(const Duration(days: 1)),
     transactionType: TransactionType.income,
     ratioToTotal: 0,
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 100,
-    createdAt: DateTime.now().subtract(Duration(days: 1)),
+    createdAt: DateTime.now().subtract(const Duration(days: 1)),
     transactionType: TransactionType.outcome,
     ratioToTotal: 0,
     profileId: '0',
   ),
   //? before yesterday transactions
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 500,
-    createdAt: DateTime.now().subtract(Duration(days: 2)),
+    createdAt: DateTime.now().subtract(const Duration(days: 2)),
     transactionType: TransactionType.income,
     ratioToTotal: 0,
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
-    createdAt: DateTime.now().subtract(Duration(days: 2)),
+    createdAt: DateTime.now().subtract(const Duration(days: 2)),
     transactionType: TransactionType.income,
     ratioToTotal: 0,
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
-    createdAt: DateTime.now().subtract(Duration(days: 2)),
+    createdAt: DateTime.now().subtract(const Duration(days: 2)),
     transactionType: TransactionType.outcome,
     ratioToTotal: 0,
     profileId: '0',
@@ -104,7 +102,7 @@ List<TransactionModel> dummyTransactions = [
 List<TransactionModel> dummyTransactionsFixedDate = [
   //? today transactions
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
@@ -114,7 +112,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 130,
@@ -124,7 +122,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
@@ -135,7 +133,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
   ),
   //? yesterday transactions
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 300,
@@ -145,7 +143,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
@@ -155,7 +153,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 100,
@@ -166,7 +164,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
   ),
   //? before yesterday transactions
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 500,
@@ -176,7 +174,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
@@ -186,7 +184,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
@@ -197,7 +195,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
   ),
   //? this week transactions
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
@@ -207,7 +205,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
@@ -217,7 +215,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
@@ -228,7 +226,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
   ),
   //? this month transactions
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
@@ -238,7 +236,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
@@ -248,7 +246,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
@@ -259,7 +257,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
   ),
   //? more than one month
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
@@ -269,7 +267,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,
@@ -279,7 +277,7 @@ List<TransactionModel> dummyTransactionsFixedDate = [
     profileId: '0',
   ),
   TransactionModel(
-    id: Uuid().v4(),
+    id: const Uuid().v4(),
     title: 'title',
     description: 'description',
     amount: 200,

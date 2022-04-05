@@ -1,7 +1,5 @@
 //? this screen is for holding the other main screen that will be controller by the bottom nav bar
 
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers
-
 //! how to make my own icons using adobe xd then change the icon of menu to be one dash and a half
 
 import 'package:flutter/material.dart';
@@ -69,17 +67,17 @@ class _HolderScreenState extends State<HolderScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
-      drawer: CustomAppDrawer(),
+      drawer: const CustomAppDrawer(),
       //* this is the main stack that have all the content of home screen by showing every thing on each other as a stack
       body: Stack(
         children: [
-          Background(),
+          const Background(),
           SafeArea(
             child: Column(
               children: [
                 //* this is a custom widget of app bar
                 //* not a real one but made of containers and paddings for more control
-                MyAppBar(),
+                const MyAppBar(),
                 //* here i showed that you can know which environment you are on (development or production)
                 //* and i worked successfully
                 // if (kDebugMode) Text('In debug Mode'),
@@ -88,7 +86,7 @@ class _HolderScreenState extends State<HolderScreen> {
                 Expanded(
                   //* main pages of the app
                   child: PageView(
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     onPageChanged: (index) {
                       return _setActiveNavBarIconIndex(index);
                     },
@@ -96,14 +94,12 @@ class _HolderScreenState extends State<HolderScreen> {
                     allowImplicitScrolling: false,
                     controller: _pageController,
 
-                    children: [
+                    children: const [
                       StatisticsScreen(),
                       MoneyAccountsScreen(),
                       HomeScreen(),
                       TransactionsScreen(),
-                      Container(
-                        child: Text('Settings  page'),
-                      ),
+                      Text('Settings  page'),
                     ],
                   ),
                 ),

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/models/profile_model.dart';
@@ -214,11 +212,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         child: Stack(
           children: [
             //* this is the background of the screen
-            Background(),
+            const Background(),
 
             SafeArea(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
                 child: Column(
                   children: [
                     //* my custom app bar and the mainAppBar is equal to false for adding the back button and remove the menu icon(side bar opener)
@@ -226,12 +225,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       title: appBarTitle,
                     ),
                     //* space between the app bar and the next widget
-                    SizedBox(
+                    const SizedBox(
                       height: 40,
                     ),
                     //* the main container of the adding new transaction cart which will have the main padding around the edges of the screen
                     Container(
-                      padding: EdgeInsets.all(kDefaultPadding / 2),
+                      padding: const EdgeInsets.all(kDefaultPadding / 2),
                       width: double.infinity,
                       height: 200,
                       decoration: BoxDecoration(
@@ -248,7 +247,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                             titleController: _titleController,
                             descriptionController: _descriptionController,
                           ),
-                          Line(lineType: LineType.vertical),
+                          const Line(lineType: LineType.vertical),
                           //* the right side is for adding the price and transaction type
                           RightSideAddTransaction(
                             currentActiveTransactionType:
@@ -260,7 +259,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: kDefaultPadding,
                     ),
                     Expanded(

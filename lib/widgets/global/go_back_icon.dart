@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
@@ -28,7 +26,7 @@ class GoBackIcon extends StatelessWidget {
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back,
             color: kMainColor,
             size: kDefaultIconSize,

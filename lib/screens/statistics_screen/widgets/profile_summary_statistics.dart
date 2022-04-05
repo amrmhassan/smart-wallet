@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/constants/colors.dart';
@@ -22,7 +20,7 @@ class ProfileSummaryStatistics extends StatelessWidget {
     var transactionData = Provider.of<StatisticsProvider>(context);
 
     return Container(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: kDefaultHorizontalPadding,
         vertical: kDefaultVerticalPadding,
       ),
@@ -46,7 +44,7 @@ class ProfileSummaryStatistics extends StatelessWidget {
                   amount: transactionData.totalIncome,
                   transactionType: TransactionType.income,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: kDefaultPadding / 2,
                 ),
                 SummaryElement(
@@ -55,21 +53,21 @@ class ProfileSummaryStatistics extends StatelessWidget {
                   amount: transactionData.totalOutcome,
                   transactionType: TransactionType.outcome,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: kDefaultPadding / 2,
                 ),
                 SummaryElement(
                   title: 'Total',
                   amount: transactionData.totalMoney,
                 ),
-                Expanded(
+                const Expanded(
                   child: SizedBox(
                     height: kDefaultPadding / 2,
                   ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: const [
                     DatePickerButton(
                       dateType: DateTypes.startDate,
                     ),
@@ -88,10 +86,10 @@ class ProfileSummaryStatistics extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: kDefaultPadding,
           ),
-          SammeryPeriodContainer(),
+          const SammeryPeriodContainer(),
         ],
       ),
     );

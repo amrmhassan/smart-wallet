@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 
 import '../../../constants/sizes.dart';
@@ -21,12 +19,12 @@ class ProfileSummary extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: height,
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         vertical: kDefaultVerticalPadding,
       ),
       child: Container(
         clipBehavior: Clip.hardEdge,
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: kDefaultVerticalPadding,
         ),
         alignment: Alignment.topCenter,

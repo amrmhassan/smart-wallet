@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 import '../../../constants/colors.dart';
@@ -53,7 +51,8 @@ class RightSideAddTransaction extends StatelessWidget {
                 alignment: Alignment.center,
                 width: 100,
                 height: 60,
-                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: kDefaultPadding / 4),
                 decoration: BoxDecoration(
                   color: kTextFieldInputColor,
                   borderRadius: BorderRadius.circular(kDefaultBorderRadius / 2),

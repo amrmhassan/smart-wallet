@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unused_element
+// ignore_for_file: unused_element
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -122,7 +122,7 @@ class _StylizedTextFieldState extends State<StylizedTextField> {
         //   height: 5,
         // ),
         // Container(
-        //   padding: EdgeInsets.only(left: 25),
+        //   padding:const EdgeInsets.only(left: 25),
         //   child: Text(
         //     widget.errorMsg,
         //     style: _Defaults.errorMessageStyle(widget),
@@ -157,7 +157,7 @@ class _Defaults {
   static InputBorder enabledBorder = focusedBorder;
   static InputBorder errorBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(100),
-      borderSide: BorderSide(
+      borderSide: const BorderSide(
         color: Colors.red,
         width: 1,
       ));

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 import '../../add_transaction_screen/add_transaction_screen.dart';
@@ -24,7 +22,7 @@ class RightSideSammary extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (ctx) => AddTransactionScreen(
+                      builder: (ctx) => const AddTransactionScreen(
                         addTransactionScreenOperations:
                             AddTransactionScreenOperations.addTransaction,
                       ),

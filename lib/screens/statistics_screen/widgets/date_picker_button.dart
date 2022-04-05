@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -58,7 +56,7 @@ class DatePickerButton extends StatelessWidget {
     return GestureDetector(
       onTap: () async => await pickCustomDate(context),
       child: Container(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: kDefaultHorizontalPadding / 5,
         ),
         alignment: Alignment.center,
@@ -79,7 +77,7 @@ class DatePickerButton extends StatelessWidget {
           fit: BoxFit.contain,
           child: Text(
             formattedDate,
-            style: TextStyle(
+            style: const TextStyle(
               color: kMainColor,
               fontSize: 14,
               fontWeight: FontWeight.bold,

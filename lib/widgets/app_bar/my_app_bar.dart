@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import '../../constants/styles.dart';
 
@@ -36,7 +34,7 @@ class MyAppBar extends StatelessWidget {
                     Scaffold.of(context).openDrawer();
                   },
                 )
-              : GoBackIcon(),
+              : const GoBackIcon(),
           //* showing the title of given
 
           Expanded(

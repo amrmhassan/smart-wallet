@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/providers/profiles_provider.dart';
@@ -20,17 +18,17 @@ class ProfilesGrid extends StatelessWidget {
     //* this is the main container that will hold the profiles cards
     return Container(
       clipBehavior: Clip.hardEdge,
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         top: kDefaultPadding / 4,
         right: kDefaultPadding * 1.5,
         left: kDefaultPadding * 1.5,
         bottom: kCustomBottomNavBarHeight + kDefaultPadding / 4,
       ),
-      decoration: BoxDecoration(),
+      decoration: const BoxDecoration(),
       //* the list of profiles cards
       child: ListView.builder(
         clipBehavior: Clip.none,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         itemCount: profiles.length,
         itemBuilder: (ctx, index) => MoneyAccountCard(
           profileModel: profiles[index],

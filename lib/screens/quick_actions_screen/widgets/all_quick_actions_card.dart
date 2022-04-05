@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -57,7 +55,7 @@ class AllQuickActionsCard extends StatelessWidget {
       direction: DismissDirection.endToStart,
       // onDismissed: (direction) => deleteQuickAction(context),
       confirmDismiss: (direction) => showDeleteCustomDialog(context),
-      background: QuickActionCardBackground(),
+      background: const QuickActionCardBackground(),
       key: Key(quickAction.id),
       child: Container(
         clipBehavior: Clip.hardEdge,
@@ -201,13 +199,13 @@ class QuickActionCardBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerRight,
-      padding: EdgeInsets.only(right: kDefaultPadding / 2),
+      padding: const EdgeInsets.only(right: kDefaultPadding / 2),
       margin: const EdgeInsets.only(bottom: kDefaultPadding / 2),
       decoration: BoxDecoration(
         color: Colors.red,
         borderRadius: BorderRadius.circular(kDefaultBorderRadius),
       ),
-      child: Icon(
+      child: const Icon(
         Icons.delete,
         color: Colors.white,
         size: kDefaultIconSize,

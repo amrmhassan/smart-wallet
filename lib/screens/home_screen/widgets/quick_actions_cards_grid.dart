@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../constants/styles.dart';
@@ -27,7 +25,7 @@ class QuickActionsCardsGrid extends StatelessWidget {
     return Expanded(
       child: Container(
         clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(),
+        decoration: const BoxDecoration(),
         padding: const EdgeInsets.only(
           bottom: kCustomBottomNavBarHeight + kDefaultPadding / 4,
           right: kDefaultPadding / 4,
@@ -47,7 +45,7 @@ class QuickActionsCardsGrid extends StatelessWidget {
                     child: EmptyTransactions(
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                        children: const [
                           Text(
                             'No Favorite ',
                             style: kParagraphTextStyle,
@@ -80,7 +78,7 @@ class QuickActionsCardsGrid extends StatelessWidget {
                 child: GridView.builder(
                     clipBehavior: Clip.none,
                     //* this is so impressive for adding a different animation to the scrolling effect
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     //? SOLVED
                     //* this is a problem :: when making the clip none the cards overflow the grid and get out of it
                     //* when it is hards edges the shadow of the cards gets cut and look bad

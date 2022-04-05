@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 
 import '../../../constants/sizes.dart';
@@ -15,12 +13,12 @@ class LeftSideSummary extends StatelessWidget {
     return Expanded(
       flex: 2,
       child: Container(
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           left: kDefaultHorizontalPadding,
           right: kDefaultHorizontalPadding / 2,
         ),
         child: Row(
-          children: [
+          children: const [
             SummaryIncomeOutcome(),
           ],
         ),

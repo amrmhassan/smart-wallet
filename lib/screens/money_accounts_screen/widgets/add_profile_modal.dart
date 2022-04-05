@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 import '../../../constants/colors.dart';
@@ -120,7 +118,7 @@ class ClearProfileNameIcon extends StatelessWidget {
       children: [
         Container(
           clipBehavior: Clip.hardEdge,
-          margin: EdgeInsets.only(
+          margin: const EdgeInsets.only(
             right: kDefaultPadding / 4,
           ),
           decoration: BoxDecoration(
@@ -135,7 +133,7 @@ class ClearProfileNameIcon extends StatelessWidget {
                 alignment: Alignment.center,
                 width: 40,
                 height: 40,
-                child: Icon(
+                child: const Icon(
                   Icons.close,
                   color: kOutcomeColor,
                 ),

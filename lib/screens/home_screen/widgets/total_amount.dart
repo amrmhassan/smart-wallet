@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/constants/globals.dart';
@@ -21,7 +19,7 @@ class TotalAmountInProfile extends StatelessWidget {
       fit: BoxFit.contain,
       child: Text(
         'Total : ${doubleToString(totalAmount)} $currency',
-        style: TextStyle(
+        style: const TextStyle(
           color: kMainColor,
           fontSize: kDefaultInfoTextSize,
           fontWeight: FontWeight.bold,

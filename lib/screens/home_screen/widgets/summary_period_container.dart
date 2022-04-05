@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/providers/profiles_provider.dart';
@@ -34,22 +32,22 @@ class _SammeryPeriodContainerState extends State<SammeryPeriodContainer> {
     ).getProfileAgeInDays();
 
     List<PeriodIcon> periodIcons = [
-      PeriodIcon(
+      const PeriodIcon(
         transPeriod: TransPeriod.today,
         letter: 'D',
         showFrom: 0,
       ),
-      PeriodIcon(
+      const PeriodIcon(
         transPeriod: TransPeriod.week,
         letter: 'W',
         showFrom: 1,
       ),
-      PeriodIcon(
+      const PeriodIcon(
         transPeriod: TransPeriod.month,
         letter: 'M',
         showFrom: 8,
       ),
-      PeriodIcon(
+      const PeriodIcon(
         transPeriod: TransPeriod.all,
         letter: 'A',
         showFrom: 0,

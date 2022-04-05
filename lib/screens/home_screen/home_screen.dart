@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 //! how to make my own icons using adobe xd then change the icon of menu to be one dash and a half
 
 import 'package:flutter/material.dart';
@@ -33,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
       alignment: Alignment.bottomRight,
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
           child: Column(
             children: [
               HomeHeading(
@@ -42,17 +40,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     .name,
               ),
               //* this has the summery of the current active profile like (outcome, income of this day or month or year..., and the current total amount that currently exist in the profile)
-              ProfileSummary(),
+              const ProfileSummary(),
               if (Provider.of<QuickActionsProvider>(context)
                   .getFavoriteQuickActions
                   .isNotEmpty)
                 Container(
-                  margin: EdgeInsets.only(bottom: 10, left: 15),
+                  margin: const EdgeInsets.only(bottom: 10, left: 15),
                   width: double.infinity,
                   child: InkWell(
                     onTap: () => Navigator.pushNamed(
                         context, QuickActionsScreen.routeName),
-                    child: Text(
+                    child: const Text(
                       'Quick Actions',
                       style: kParagraphTextStyle,
                     ),
@@ -65,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // ),
               // //* this is a horizontal line to be added between the profile summary and the quick Actions cards
               // Container(
-              //   padding: EdgeInsets.symmetric(
+              //   padding:const EdgeInsets.symmetric(
               //     horizontal: kDefaultPadding,
               //   ),
               //   child: Line(lineType: LineType.horizontal),
@@ -76,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // ),
               // //* these are the quick actions cards container
 
-              QuickActionsCardsGrid(),
+              const QuickActionsCardsGrid(),
             ],
           ),
         ),
@@ -93,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (ctx) => AddTransactionScreen(
+                  builder: (ctx) => const AddTransactionScreen(
                     addTransactionScreenOperations:
                         AddTransactionScreenOperations.addQuickAction,
                   ),

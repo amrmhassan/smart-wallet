@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -30,7 +28,7 @@ class _SummaryChartState extends State<SummaryChart> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: kDefaultHorizontalPadding,
         vertical: kDefaultVerticalPadding,
       ),
@@ -45,13 +43,13 @@ class _SummaryChartState extends State<SummaryChart> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
+            children: const [
               Text('Income'),
               Text('Outcone'),
               Text('Savings'),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: kDefaultPadding / 2,
           ),
           Expanded(

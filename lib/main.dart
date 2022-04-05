@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_app/providers/profiles_provider.dart';
@@ -11,7 +9,7 @@ import './screens/holder_screen.dart';
 import './screens/quick_actions_screen/quick_actions_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -66,9 +64,9 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         initialRoute: LoadingDataScreen.routeName,
         routes: {
-          HolderScreen.routeName: (ctx) => HolderScreen(),
-          QuickActionsScreen.routeName: (ctx) => QuickActionsScreen(),
-          LoadingDataScreen.routeName: (ctx) => LoadingDataScreen(),
+          HolderScreen.routeName: (ctx) => const HolderScreen(),
+          QuickActionsScreen.routeName: (ctx) => const QuickActionsScreen(),
+          LoadingDataScreen.routeName: (ctx) => const LoadingDataScreen(),
         },
       ),
     );

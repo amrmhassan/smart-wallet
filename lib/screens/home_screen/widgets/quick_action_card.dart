@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:wallet_app/constants/globals.dart';
 import '../../../constants/colors.dart';
@@ -34,7 +32,7 @@ class QuickActionCard extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            offset: Offset(0, 0),
+            offset: const Offset(0, 0),
             color: kMainColor.withOpacity(0.2),
             blurRadius: 10,
           ),
@@ -46,7 +44,7 @@ class QuickActionCard extends StatelessWidget {
           onTap: onTap ?? () {},
           onLongPress: onLongPress ?? () {},
           child: Container(
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: kDefaultHorizontalPadding / 2,
               vertical: kDefaultVerticalPadding / 2,
             ),
@@ -98,29 +96,29 @@ class QuickActionCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Text(
                   title,
                   maxLines: 1,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: kMainColor,
                     fontSize: kDefaultInfoTextSize,
                     fontWeight: FontWeight.bold,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Text(
                   description,
                   maxLines: 3,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: kMainColor,
                     fontSize: kDefaultParagraphTextSize,
                     fontWeight: FontWeight.w400,

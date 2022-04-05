@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 import '../../constants/sizes.dart';
@@ -21,7 +19,7 @@ class EmptyTransactions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        title ?? SizedBox(),
+        title ?? const SizedBox(),
         const SizedBox(
           height: kDefaultPadding,
         ),
@@ -36,7 +34,7 @@ class EmptyTransactions extends StatelessWidget {
               ),
             ),
           ),
-        if (trainling != null) trainling ?? SizedBox(),
+        if (trainling != null) trainling ?? const SizedBox(),
       ],
     );
   }

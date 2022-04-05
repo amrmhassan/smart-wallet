@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../constants/colors.dart';
@@ -35,7 +33,7 @@ class _QuickActionsScreenState extends State<QuickActionsScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (ctx) => AddTransactionScreen(
+              builder: (ctx) => const AddTransactionScreen(
                 addTransactionScreenOperations:
                     AddTransactionScreenOperations.addQuickAction,
               ),
@@ -43,7 +41,7 @@ class _QuickActionsScreenState extends State<QuickActionsScreen> {
           );
         },
         backgroundColor: kMainColor,
-        child: Icon(
+        child: const Icon(
           Icons.add,
           size: kDefaultIconSize,
         ),
@@ -57,24 +55,25 @@ class _QuickActionsScreenState extends State<QuickActionsScreen> {
       body: Stack(
         children: [
           //* this is the background of the screen
-          Background(),
+          const Background(),
 
           SafeArea(
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
               child: Column(
                 children: [
                   //* my custom app bar and the mainAppBar is equal to false for adding the back button and remove the menu icon(side bar opener)
-                  MyAppBar(
+                  const MyAppBar(
                     title: 'Quick Actions',
                   ),
                   //* space between the app bar and the next widget
-                  SizedBox(
+                  const SizedBox(
                     height: 40,
                   ),
                   //* quick actions filter
-                  QuickActionsFilter(),
-                  SizedBox(
+                  const QuickActionsFilter(),
+                  const SizedBox(
                     height: kDefaultPadding / 2,
                   ),
                   Expanded(
@@ -87,7 +86,7 @@ class _QuickActionsScreenState extends State<QuickActionsScreen> {
                             ),
                           )
                         : ListView.builder(
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             itemCount: quickActions.length,
                             itemBuilder: (ctx, index) => AllQuickActionsCard(
                               quickAction: quickActions[index],

@@ -1,5 +1,4 @@
 //* this is the profile card
-// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -152,7 +151,7 @@ class MoneyAccountCard extends StatelessWidget {
                     await showEditProfileModal(context);
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   width: kDefaultPadding / 2,
                 ),
                 ProfileDetailsButton(
@@ -169,7 +168,7 @@ class MoneyAccountCard extends StatelessWidget {
               moneyAccountStatus: profileModel.moneyAccountStatus,
               profileStatusColor: profileModel.profileStatusColor,
             ),
-            SizedBox(
+            const SizedBox(
               height: kDefaultPadding / 2,
             ),
             FractionallySizedBox(
@@ -181,11 +180,11 @@ class MoneyAccountCard extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: kDefaultPadding / 2,
             ),
             activated
-                ? ActivatedProfileButton()
+                ? const ActivatedProfileButton()
                 : NotActivateProfileButton(
                     onTap: () async {
                       await changeActivatedProfile(context);
@@ -203,7 +202,7 @@ class MoneyAccountCard extends StatelessWidget {
                 incomeRatio: profileModel.incomeRatio,
               ),
             if (profileModel.moneyAccountStatus != MoneyAccountStatus.empty)
-              SizedBox(
+              const SizedBox(
                 height: kDefaultPadding / 2,
               ),
             if (profileModel.moneyAccountStatus != MoneyAccountStatus.empty)

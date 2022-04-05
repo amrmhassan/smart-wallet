@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:wallet_app/constants/globals.dart';
 
@@ -38,7 +36,7 @@ class SummaryElement extends StatelessWidget {
                     : kMainColor,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: kDefaultPadding,
         ),
         Text(
