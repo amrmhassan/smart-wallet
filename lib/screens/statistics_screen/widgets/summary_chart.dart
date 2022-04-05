@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:wallet_app/providers/profiles_provider.dart';
-import 'package:wallet_app/utils/charts_utils.dart';
-import 'package:wallet_app/constants/sizes.dart';
-import 'package:wallet_app/providers/transactions_provider.dart';
+import 'package:smart_wallet/providers/profiles_provider.dart';
+import 'package:smart_wallet/utils/charts_utils.dart';
+import 'package:smart_wallet/constants/sizes.dart';
+import 'package:smart_wallet/providers/transactions_provider.dart';
 
 import '../../../constants/styles.dart';
 

@@ -1,8 +1,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:wallet_app/constants/globals.dart';
-import 'package:wallet_app/helpers/responsive.dart';
+import 'package:smart_wallet/constants/globals.dart';
+import 'package:smart_wallet/helpers/responsive.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';

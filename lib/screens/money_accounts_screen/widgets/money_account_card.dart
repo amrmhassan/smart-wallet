@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/constants/types.dart';
-import 'package:wallet_app/providers/quick_actions_provider.dart';
-import 'package:wallet_app/providers/transactions_provider.dart';
-import 'package:wallet_app/utils/general_utils.dart';
+import 'package:smart_wallet/constants/types.dart';
+import 'package:smart_wallet/providers/quick_actions_provider.dart';
+import 'package:smart_wallet/providers/transactions_provider.dart';
+import 'package:smart_wallet/utils/general_utils.dart';
 
 import '../../../constants/profiles_constants.dart';
 import '../../../constants/sizes.dart';

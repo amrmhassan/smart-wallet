@@ -12,7 +12,8 @@ class TransPeriodUtils {
   });
 
   Map<String, DateTime> setToday() {
-    startDate = DateTime.now().subtract(const Duration(days: 1));
+    DateTime now = DateTime.now();
+    startDate = DateTime(now.year, now.month, now.day - 1);
     endDate = DateTime.now();
     return {
       'startDate': startDate,
@@ -21,8 +22,9 @@ class TransPeriodUtils {
   }
 
   Map<String, DateTime> setYesterday() {
-    startDate = DateTime.now().subtract(const Duration(days: 2));
-    endDate = DateTime.now().subtract(const Duration(days: 1));
+    DateTime now = DateTime.now();
+    startDate = DateTime(now.year, now.month, now.day - 2);
+    endDate = DateTime(now.year, now.month, now.day - 1);
     return {
       'startDate': startDate,
       'endDate': endDate,
@@ -72,7 +74,8 @@ class TransPeriodUtils {
   }
 
   Map<String, DateTime> setWithinLastDays(int days) {
-    DateTime newStartDate = DateTime.now().subtract(Duration(days: days));
+    DateTime now = DateTime.now();
+    DateTime newStartDate = DateTime(now.year, now.month, now.day - days);
     DateTime newEndDate = DateTime.now();
 
     startDate = newStartDate;

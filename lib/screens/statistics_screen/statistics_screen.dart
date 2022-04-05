@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/providers/profiles_provider.dart';
-import 'package:wallet_app/providers/statistics_provider.dart';
-import 'package:wallet_app/providers/transactions_provider.dart';
-import 'package:wallet_app/widgets/app_bar/home_heading.dart';
+import 'package:smart_wallet/providers/profiles_provider.dart';
+import 'package:smart_wallet/providers/statistics_provider.dart';
+import 'package:smart_wallet/providers/transactions_provider.dart';
+import 'package:smart_wallet/widgets/app_bar/home_heading.dart';
 import '../../constants/sizes.dart';
 import 'widgets/profile_summary_statistics.dart';
 import 'widgets/summary_chart.dart';

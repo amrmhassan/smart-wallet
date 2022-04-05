@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wallet_app/helpers/custom_error.dart';
-import 'package:wallet_app/models/profile_model.dart';
-import 'package:wallet_app/models/transaction_model.dart';
+import 'package:smart_wallet/helpers/custom_error.dart';
+import 'package:smart_wallet/models/profile_model.dart';
+import 'package:smart_wallet/models/transaction_model.dart';
 
 import '../constants/types.dart';
 import '../utils/trans_periods_utils.dart';

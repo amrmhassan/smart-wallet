@@ -2,8 +2,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/models/quick_action_model.dart';
-import 'package:wallet_app/models/transaction_model.dart';
+import 'package:smart_wallet/models/quick_action_model.dart';
+import 'package:smart_wallet/models/transaction_model.dart';
 
 import '../constants/types.dart';
 import '../models/profile_model.dart';

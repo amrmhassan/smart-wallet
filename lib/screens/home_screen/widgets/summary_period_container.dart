@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/providers/profiles_provider.dart';
-import 'package:wallet_app/providers/statistics_provider.dart';
+import 'package:smart_wallet/providers/profiles_provider.dart';
+import 'package:smart_wallet/providers/statistics_provider.dart';
 
 import 'summary_period_icon.dart';
 

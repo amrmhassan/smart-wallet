@@ -1,5 +1,5 @@
 import 'package:uuid/uuid.dart';
-import 'package:wallet_app/models/profile_model.dart';
+import 'package:smart_wallet/models/profile_model.dart';
 
 enum MoneyAccountStatus {
   empty,

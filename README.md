@@ -1,4 +1,4 @@
-# wallet_app
+# smart_wallet
 
 A new Flutter project.
 

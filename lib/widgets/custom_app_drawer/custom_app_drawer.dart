@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wallet_app/constants/db_constants.dart';
-import 'package:wallet_app/helpers/db_helper.dart';
-import 'package:wallet_app/helpers/shared_pref_helper.dart';
+import 'package:smart_wallet/constants/db_constants.dart';
+import 'package:smart_wallet/helpers/db_helper.dart';
+import 'package:smart_wallet/helpers/shared_pref_helper.dart';
 
 class CustomAppDrawer extends StatelessWidget {
   const CustomAppDrawer({

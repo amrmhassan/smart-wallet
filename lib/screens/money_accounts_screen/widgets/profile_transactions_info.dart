@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallet_app/constants/globals.dart';
+import 'package:smart_wallet/constants/globals.dart';
 
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';

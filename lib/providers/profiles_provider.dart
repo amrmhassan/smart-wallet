@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
-import 'package:wallet_app/constants/db_constants.dart';
-import 'package:wallet_app/constants/shared_pref_constants.dart';
-import 'package:wallet_app/helpers/custom_error.dart';
-import 'package:wallet_app/helpers/shared_pref_helper.dart';
-import 'package:wallet_app/models/profile_model.dart';
+import 'package:smart_wallet/constants/db_constants.dart';
+import 'package:smart_wallet/constants/shared_pref_constants.dart';
+import 'package:smart_wallet/helpers/custom_error.dart';
+import 'package:smart_wallet/helpers/shared_pref_helper.dart';
+import 'package:smart_wallet/models/profile_model.dart';
 
 import '../constants/profiles_constants.dart';
 import '../helpers/db_helper.dart';

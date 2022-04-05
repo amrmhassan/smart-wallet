@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:wallet_app/constants/profiles_constants.dart';
+import 'package:smart_wallet/constants/profiles_constants.dart';
 
 import '../constants/colors.dart';
 

@@ -39,15 +39,15 @@ convert the transaction card to dismissible
 
 
 
-implement the statistics page (this will have the current profile statistics and the debts , income, outcome)
--- with time amounts and predictions and other stuff
+DONE - implement the statistics page (this will have the current profile statistics and the debts , income, outcome)
+DONE -- with time amounts and predictions and other stuff
 
 DONE - implement editing a profile name with the same adding profile modal
 implement deleting a profile from the profile details screen which
 -- deleting the last profile is'nt allowed 
 -- deleting the current active profile isn't allowed( may be changed)
 in the profile details page i will show a statistics page of that only profile
-DONE - the user can go to the statistcs page by clicking the profile card itself or the details button
+the user can go to the statistcs page by clicking the profile card itself or the details button
 make the profile name textField focus when it appears and show the keyboard
 when editing a profile the new profile is pushed to the start of the profiles(fix that by sorting them according to the lastActivated time and the createdAt time)
 

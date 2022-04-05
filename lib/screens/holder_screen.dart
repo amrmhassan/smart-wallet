@@ -1,9 +1,7 @@
 //? this screen is for holding the other main screen that will be controller by the bottom nav bar
 
-//! how to make my own icons using adobe xd then change the icon of menu to be one dash and a half
-
 import 'package:flutter/material.dart';
-import 'package:wallet_app/screens/money_accounts_screen/money_accounts_screen.dart';
+import 'package:smart_wallet/screens/money_accounts_screen/money_accounts_screen.dart';
 import '../screens/home_screen/home_screen.dart';
 import '../screens/transactions_screen/transactions_screen.dart';
 

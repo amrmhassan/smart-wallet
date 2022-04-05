@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
-import 'package:wallet_app/constants/transactions_constants.dart';
-import 'package:wallet_app/utils/trans_periods_utils.dart';
+import 'package:smart_wallet/constants/transactions_constants.dart';
+import 'package:smart_wallet/utils/trans_periods_utils.dart';
 import '../constants/db_constants.dart';
 import '../constants/types.dart';
 import '../helpers/custom_error.dart';

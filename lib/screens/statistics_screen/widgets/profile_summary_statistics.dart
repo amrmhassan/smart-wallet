@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_app/constants/colors.dart';
-import 'package:wallet_app/providers/statistics_provider.dart';
+import 'package:smart_wallet/constants/colors.dart';
+import 'package:smart_wallet/providers/statistics_provider.dart';
 
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
