@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
-import 'package:smart_wallet/providers/statistics_provider.dart';
+import 'package:smart_wallet/providers/profile_details_provider.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
@@ -34,13 +34,13 @@ class DatePickerButton extends StatelessWidget {
     }
     //* setting the date
     if (dateType == DateTypes.startDate) {
-      Provider.of<StatisticsProvider>(context, listen: false)
+      Provider.of<ProfileDetailsProvider>(context, listen: false)
           .setDatesPeriod(newStartingDate: pickedDate, update: true);
     } else if (dateType == DateTypes.endDate) {
-      Provider.of<StatisticsProvider>(context, listen: false)
+      Provider.of<ProfileDetailsProvider>(context, listen: false)
           .setDatesPeriod(newEndDate: pickedDate, update: true);
     }
-    Provider.of<StatisticsProvider>(context, listen: false)
+    Provider.of<ProfileDetailsProvider>(context, listen: false)
         .setPeriod(TransPeriod.custom);
 
     //? here setting the starting or ending date
@@ -49,8 +49,8 @@ class DatePickerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime rawDate = dateType == DateTypes.startDate
-        ? Provider.of<StatisticsProvider>(context).startingDate
-        : Provider.of<StatisticsProvider>(context).endDate;
+        ? Provider.of<ProfileDetailsProvider>(context).startingDate
+        : Provider.of<ProfileDetailsProvider>(context).endDate;
     String formattedDate = DateFormat('yyyy-MM-dd').format(rawDate);
 
     return GestureDetector(
@@ -64,11 +64,11 @@ class DatePickerButton extends StatelessWidget {
         height: 30,
         decoration: BoxDecoration(
           border: Border.all(
-            color:
-                Provider.of<StatisticsProvider>(context).currentActivePeriod ==
-                        TransPeriod.custom
-                    ? kMainColor
-                    : kInactiveColor,
+            color: Provider.of<ProfileDetailsProvider>(context)
+                        .currentActivePeriod ==
+                    TransPeriod.custom
+                ? kMainColor
+                : kInactiveColor,
             width: 2,
           ),
           borderRadius: BorderRadius.circular(kDefaultBorderRadius / 4),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
-import 'package:smart_wallet/providers/statistics_provider.dart';
+import 'package:smart_wallet/providers/profile_details_provider.dart';
 import 'package:smart_wallet/screens/loading_data_screen.dart';
 import './providers/quick_actions_provider.dart';
 import './providers/transactions_provider.dart';
@@ -34,14 +34,13 @@ class _MyAppState extends State<MyApp> {
           create: (ctx) => ProfilesProvider(),
         ),
         ChangeNotifierProxyProvider2<TransactionProvider, ProfilesProvider,
-            StatisticsProvider>(
+            ProfileDetailsProvider>(
           create: (
             ctx,
           ) {
-            return StatisticsProvider(
-              allProfileTransactions: [],
-              currentActivePeriod: TransPeriod.today,
-              activeProfile: null,
+            return ProfileDetailsProvider(
+              getTransactionsByProfileId: (String id) {},
+              getProfileById: (String id) {},
             );
           },
           update: (
@@ -50,12 +49,10 @@ class _MyAppState extends State<MyApp> {
             profileData,
             oldStatistics,
           ) {
-            return StatisticsProvider(
-              allProfileTransactions: transactions.getAllTransactions,
-              currentActivePeriod: oldStatistics == null
-                  ? TransPeriod.today
-                  : oldStatistics.currentActivePeriod,
-              activeProfile: profileData.getActiveProfile,
+            return ProfileDetailsProvider(
+              getTransactionsByProfileId:
+                  transactions.getTransactionsByProfileId,
+              getProfileById: profileData.getProfileById,
             );
           },
         ),

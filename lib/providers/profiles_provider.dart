@@ -10,20 +10,45 @@ import '../constants/profiles_constants.dart';
 import '../helpers/db_helper.dart';
 
 class ProfilesProvider extends ChangeNotifier {
+  //? holding the profiles
   List<ProfileModel> _profiles = [];
+  //? holding the active profile id
   String _activatedProfileId = '';
 
-  //* for getting the activated profile id
+  //? getting the active profile id
   String get activatedProfileId {
     return _activatedProfileId;
   }
 
-  //* for getting the profiles
+  //? getting profiles
   List<ProfileModel> get profiles {
     return [..._profiles.reversed.toList()];
   }
 
-  //* for getting the current active profile
+  //? getting the total money in all profiles
+  double getTotalMoney() {
+    return _profiles.fold(
+        0, (previousValue, profile) => previousValue + profile.totalMoney);
+  }
+
+  //? getting the total income for all profiles
+  double getTotalIncome() {
+    return _profiles.fold(
+        0, (previousValue, profile) => previousValue + profile.income);
+  }
+
+//? getting total outcome for all profiles
+  double getTotalOutcome() {
+    return _profiles.fold(
+        0, (previousValue, profile) => previousValue + profile.outcome);
+  }
+
+//? getting a profile by id
+  ProfileModel getProfileById(String id) {
+    return _profiles.firstWhere((element) => id == element.id);
+  }
+
+  //? getting the active profile info
   ProfileModel get getActiveProfile {
     //* fixed by setting the currentActiveId when fetching profile and there is no profiles
     //* and by adding the loading to the holder screen to prevent showing the home screen that will ask for the current active id
@@ -33,14 +58,15 @@ class ProfilesProvider extends ChangeNotifier {
     return _profiles.firstWhere((element) => element.id == activatedProfileId);
   }
 
-  int getProfileAgeInDays() {
+  //? getting profile age
+  int getProfileAgeInDays(ProfileModel profile) {
     DateTime now = DateTime.now();
-    DateTime createdAt = getActiveProfile.createdAt;
+    DateTime createdAt = profile.createdAt;
     var diff = now.difference(createdAt);
     return diff.inDays;
   }
 
-  //* for fetching and update the activated profile id from shared preferences
+  //? getting the active profile id from the shared preferences
   Future<void> fetchAndUpdateActivatedProfileId() async {
     String activatedId;
 
@@ -61,7 +87,7 @@ class ProfilesProvider extends ChangeNotifier {
     }
   }
 
-  //* for getting and updating the profiles from database
+  //? fetching and updating profiles from database
   Future<void> fetchAndUpdateProfiles() async {
     try {
       List<Map<String, dynamic>> data =
@@ -112,12 +138,13 @@ class ProfilesProvider extends ChangeNotifier {
     }
   }
 
+  //? fetching dummy profiles only for testing
   void fetchDummyProfiles() {
     _profiles = _profiles + dummyProfiles;
     notifyListeners();
   }
 
-  //* for adding a profile to database and to the _profiles
+  //? adding a new profile
   Future<String> addProfile(String name) async {
     //* checking if the profile name already exists
     bool profileNameExists = false;
@@ -158,7 +185,7 @@ class ProfilesProvider extends ChangeNotifier {
     return id;
   }
 
-  //* for editing a profile
+  //? editing an existing profile
   Future<void> editProfile({
     required String id,
     String? name,
@@ -232,6 +259,7 @@ class ProfilesProvider extends ChangeNotifier {
     }
   }
 
+  //? editing the current active profile
   Future<void> editActiveProfile({
     String? name,
     double? income,
@@ -250,7 +278,7 @@ class ProfilesProvider extends ChangeNotifier {
     );
   }
 
-  //* for setting the lastActivated property for the profile
+  //? edit the last active property when activating a profile
   Future<void> editLastActivatedForProfile() async {
     try {
       return editActiveProfile(lastActivatedDate: DateTime.now());
@@ -262,7 +290,7 @@ class ProfilesProvider extends ChangeNotifier {
     }
   }
 
-  //* for setting the active profile id in the shared preferences
+  //? setting the active profile id
   Future<void> setActivatedProfile(String id) async {
     try {
       await SharedPrefHelper.setString(kActivatedProfileIdKey, id);

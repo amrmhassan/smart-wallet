@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/providers/profiles_provider.dart';
-import 'package:smart_wallet/providers/statistics_provider.dart';
+import 'package:smart_wallet/providers/profile_details_provider.dart';
 
 import 'summary_period_icon.dart';
 
 class SammeryPeriodContainer extends StatefulWidget {
+  final int profileAge;
   const SammeryPeriodContainer({
     Key? key,
+    required this.profileAge,
   }) : super(key: key);
 
   @override
@@ -16,7 +17,7 @@ class SammeryPeriodContainer extends StatefulWidget {
 
 class _SammeryPeriodContainerState extends State<SammeryPeriodContainer> {
   void setPeriod(TransPeriod transPeriod) {
-    Provider.of<StatisticsProvider>(
+    Provider.of<ProfileDetailsProvider>(
       context,
       listen: false,
     ).setPeriod(transPeriod);
@@ -25,11 +26,7 @@ class _SammeryPeriodContainerState extends State<SammeryPeriodContainer> {
   @override
   Widget build(BuildContext context) {
     TransPeriod currenActivePeriod =
-        Provider.of<StatisticsProvider>(context).currentActivePeriod;
-    int profileAgeInDays = Provider.of<ProfilesProvider>(
-      context,
-      listen: false,
-    ).getProfileAgeInDays();
+        Provider.of<ProfileDetailsProvider>(context).currentActivePeriod;
 
     List<PeriodIcon> periodIcons = [
       const PeriodIcon(
@@ -62,7 +59,7 @@ class _SammeryPeriodContainerState extends State<SammeryPeriodContainer> {
             title: e.letter,
             onTap: () => setPeriod(e.transPeriod),
             active: currenActivePeriod == e.transPeriod,
-            enabled: profileAgeInDays >= e.showFrom,
+            enabled: widget.profileAge >= e.showFrom,
           );
         }).toList(),
       ),

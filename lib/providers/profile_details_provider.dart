@@ -16,30 +16,40 @@ enum TransPeriod {
   custom,
 }
 
-class StatisticsProvider extends ChangeNotifier {
-  //* all profile transactions get from the main (the proxy provider)
-  List<TransactionModel> allProfileTransactions;
-  TransPeriod currentActivePeriod;
-  ProfileModel? activeProfile;
+class ProfileDetailsProvider extends ChangeNotifier {
+  //* i will set the profile id from the widget tree
+  //* then this will get the transactions by a profile id from the transactions provider
+  TransPeriod currentActivePeriod = TransPeriod.today;
+  ProfileModel? profile;
+  Function(String id) getTransactionsByProfileId;
+  Function(String id) getProfileById;
 
-  StatisticsProvider({
-    required this.allProfileTransactions,
-    required this.currentActivePeriod,
-    this.activeProfile,
+  ProfileDetailsProvider({
+    required this.getTransactionsByProfileId,
+    required this.getProfileById,
   });
 
+  List<TransactionModel> allTransactions = [];
   List<TransactionModel> _viewedTransactions = [];
   late TransPeriodUtils transPeriodUtils;
+
   DateTime startingDate = DateTime.now().subtract(const Duration(days: 1));
   DateTime endDate = DateTime.now();
 
-//* the transactions that will be filtered by the periods
-  //* this is the current active period
+  Future<void> fetchTransactions(String profileId) async {
+    ProfileModel profile = await getProfileById(profileId);
+    _setProfile(profile);
 
-// //* this is the same filtered transactions by period but will be allowed to be accessed outside this class
-//   List<TransactionModel> get viewedTransactions {
-//     return [..._viewedTransactions];
-//   }
+    List<TransactionModel> fetchedProfileTransactions =
+        await getTransactionsByProfileId(profileId);
+    allTransactions = fetchedProfileTransactions;
+    fetchAndUpdateViewedTransactions(notifyListers: false);
+    notifyListeners();
+  }
+
+  void _setProfile(ProfileModel profileModel) {
+    profile = profileModel;
+  }
 
 //? 1- getting transactions, with multiple possibilities
 //* for getting the income transactions only
@@ -96,7 +106,7 @@ class StatisticsProvider extends ChangeNotifier {
   //* for initializing the _viewedTransactions when opening the statistics screen
   void fetchAndUpdateViewedTransactions({bool notifyListers = true}) {
     transPeriodUtils = TransPeriodUtils(
-      transactions: allProfileTransactions,
+      transactions: allTransactions,
       startDate: startingDate,
       endDate: endDate,
     );
@@ -143,9 +153,9 @@ class StatisticsProvider extends ChangeNotifier {
       );
     } else if (currentActivePeriod == TransPeriod.all) {
       //* for returning that all transactions
-      _viewedTransactions = allProfileTransactions;
+      _viewedTransactions = allTransactions;
       setDatesPeriod(
-        newStartingDate: activeProfile!.createdAt,
+        newStartingDate: profile!.createdAt,
         newEndDate: DateTime.now(),
       );
     } else {

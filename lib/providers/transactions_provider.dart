@@ -165,13 +165,15 @@ class TransactionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-//? getting transaction from the database and adding them
-  Future<void> fetchAndUpdateTransactions(String activatedProfileId) async {
+//? get transactinons by a profile id
+  Future<List<TransactionModel>> getTransactionsByProfileId(
+      String profileId) async {
+    List<TransactionModel> fetchedTransactions = [];
     try {
       List<Map<String, dynamic>> data = await DBHelper.getDataWhere(
-          transactionsTableName, 'profileId', activatedProfileId);
+          transactionsTableName, 'profileId', profileId);
 
-      List<TransactionModel> fetchedTransactions = data
+      fetchedTransactions = data
           .map(
             (transaction) => TransactionModel(
               id: transaction['id'],
@@ -189,15 +191,21 @@ class TransactionProvider extends ChangeNotifier {
             ),
           )
           .toList();
-      _transactions = fetchedTransactions;
-      notifyListeners();
     } catch (error) {
       if (kDebugMode) {
-        print('An error occurred fetching transactions form database');
+        print(
+            'An error occurred fetching transactions form database by a profile id');
       }
       // in the final version activate that line
       rethrow;
     }
+    return fetchedTransactions;
+  }
+
+//? getting transaction from the database and adding them
+  Future<void> fetchAndUpdateTransactions(String activatedProfileId) async {
+    _transactions = await getTransactionsByProfileId(activatedProfileId);
+    notifyListeners();
   }
 
 //? deleting a transaction by id

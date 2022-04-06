@@ -1,12 +1,6 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:smart_wallet/providers/profiles_provider.dart';
-import 'package:smart_wallet/providers/statistics_provider.dart';
-import 'package:smart_wallet/providers/transactions_provider.dart';
-import 'package:smart_wallet/widgets/app_bar/home_heading.dart';
-import '../../constants/sizes.dart';
-import 'widgets/profile_summary_statistics.dart';
-import 'widgets/summary_chart.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({Key? key}) : super(key: key);
@@ -16,56 +10,56 @@ class StatisticsScreen extends StatefulWidget {
 }
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
-  Future<void> updatingTheTransactions() async {
-    return Future.delayed(Duration.zero).then((value) {
-      //* for initializing the viewed transactions of the statistics page
-      Provider.of<StatisticsProvider>(context, listen: false)
-          .fetchAndUpdateViewedTransactions();
-    });
-  }
+  // Future<void> updatingTheTransactions() async {
+  //   return Future.delayed(Duration.zero).then((value) {
+  //     //* for initializing the viewed transactions of the statistics page
+  //     Provider.of<ProfileDetailsProvider>(context, listen: false)
+  //         .fetchAndUpdateViewedTransactions();
+  //   });
+  // }
 
 //* this is the build method of this widget
   @override
   Widget build(BuildContext context) {
     //* this is for updating the transactions that will be used for creating statistics
-    updatingTheTransactions();
+    // updatingTheTransactions();
 
-    bool showChart() {
-      return Provider.of<ProfilesProvider>(context).getProfileAgeInDays() > 0 &&
-          Provider.of<TransactionProvider>(context)
-              .getAllTransactions
-              .isNotEmpty;
-    }
+    // bool showChart() {
+    //   return Provider.of<ProfilesProvider>(context).getProfileAgeInDays() > 0 &&
+    //       Provider.of<TransactionProvider>(context)
+    //           .getAllTransactions
+    //           .isNotEmpty;
+    // }
 
     //* the main container of the home screen
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
-          child: Column(
-            children: [
-              HomeHeading(
-                title: Provider.of<ProfilesProvider>(context)
-                    .getActiveProfile
-                    .name,
-              ),
-              const SizedBox(
-                height: kDefaultPadding,
-              ),
-              const ProfileSummaryStatistics(),
-              const SizedBox(
-                height: kDefaultPadding,
-              ),
-              if (showChart())
-                const SizedBox(
-                  height: 250,
-                  width: double.infinity,
-                  child: SummaryChart(),
-                ),
-            ],
-          ),
-        ),
+        // Container(
+        //   padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+        //   child: Column(
+        //     children: [
+        //       HomeHeading(
+        //         title: Provider.of<ProfilesProvider>(context)
+        //             .getActiveProfile
+        //             .name,
+        //       ),
+        //       const SizedBox(
+        //         height: kDefaultPadding,
+        //       ),
+        //       const ProfileSummaryStatistics(),
+        //       const SizedBox(
+        //         height: kDefaultPadding,
+        //       ),
+        //       // if (showChart())
+        //       const SizedBox(
+        //         height: 250,
+        //         width: double.infinity,
+        //         child: SummaryChart(),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ],
     );
   }

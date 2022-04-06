@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/colors.dart';
-import 'package:smart_wallet/providers/statistics_provider.dart';
+import 'package:smart_wallet/providers/profile_details_provider.dart';
 
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
@@ -11,13 +11,15 @@ import 'date_picker_button.dart';
 import 'summary_element.dart';
 
 class ProfileSummaryStatistics extends StatelessWidget {
+  final int profileAge;
   const ProfileSummaryStatistics({
     Key? key,
+    required this.profileAge,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var transactionData = Provider.of<StatisticsProvider>(context);
+    var transactionData = Provider.of<ProfileDetailsProvider>(context);
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -89,7 +91,9 @@ class ProfileSummaryStatistics extends StatelessWidget {
           const SizedBox(
             width: kDefaultPadding,
           ),
-          const SammeryPeriodContainer(),
+          SammeryPeriodContainer(
+            profileAge: profileAge,
+          ),
         ],
       ),
     );
