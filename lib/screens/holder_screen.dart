@@ -90,7 +90,9 @@ class _HolderScreenState extends State<HolderScreen> {
                 Expanded(
                   //* main pages of the app
                   child: PageView(
-                    physics: const BouncingScrollPhysics(),
+                    //* prevented the user from scrolling by himself(to enable transactions dimissible)
+                    // physics: const BouncingScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     onPageChanged: (index) {
                       return _setActiveNavBarIconIndex(index);
                     },

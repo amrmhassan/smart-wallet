@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smart_wallet/constants/colors.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
 import 'package:smart_wallet/constants/sizes.dart';
@@ -41,6 +42,12 @@ class CustomAppDrawer extends StatelessWidget {
                   title: 'Debts',
                   onTap: () {},
                   iconData: Icons.money_off,
+                  color: kModerateProfileStatusColor,
+                ),
+                DrawerlistItem(
+                  title: 'Quick Actions',
+                  onTap: () {},
+                  iconData: FontAwesomeIcons.bolt,
                   color: kModerateProfileStatusColor,
                 ),
                 //* only show this option if the app is in debug mode
