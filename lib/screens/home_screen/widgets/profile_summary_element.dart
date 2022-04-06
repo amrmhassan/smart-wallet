@@ -19,6 +19,16 @@ class ProfileSummaryElement extends StatelessWidget {
     this.size = 18,
   }) : super(key: key);
 
+  String amountString(String amount) {
+    if (amount == '0') {
+      return '0';
+    } else if (transactionType == TransactionType.outcome) {
+      return '-$amount';
+    } else {
+      return amount;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -38,7 +48,7 @@ class ProfileSummaryElement extends StatelessWidget {
         ),
         Expanded(
           child: Text(
-            '${doubleToString(amount)} $currency',
+            '${amountString(doubleToString(amount))} $currency',
             textAlign: TextAlign.right,
             style: TextStyle(
               color: transactionType == null

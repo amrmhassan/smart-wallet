@@ -19,7 +19,7 @@ class DrawerLogo extends StatelessWidget {
         alignment: Alignment.bottomRight,
         children: [
           Image.asset(
-            'assets/images/whiteLogo.png',
+            'assets/images/whiteLogo-min.png',
             width: 200,
             fit: BoxFit.contain,
           ),

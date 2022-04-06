@@ -278,6 +278,22 @@ class ProfilesProvider extends ChangeNotifier {
     );
   }
 
+  //? deleting a profile
+  Future<void> deleteProfile(String profileId) async {
+    _profiles.removeWhere((element) => element.id == profileId);
+
+    //* delete from the database second
+    try {
+      await DBHelper.deleteById(profileId, profilesTableName);
+    } catch (error) {
+      if (kDebugMode) {
+        print(error);
+        print('An error occurred during deleting a profile');
+      }
+    }
+    notifyListeners();
+  }
+
   //? edit the last active property when activating a profile
   Future<void> editLastActivatedForProfile() async {
     try {

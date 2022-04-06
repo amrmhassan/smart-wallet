@@ -8,10 +8,12 @@ import '../global/person_icon.dart';
 
 class MyAppBar extends StatelessWidget {
   final String? title;
+  final Widget? rightIcon;
 
   const MyAppBar({
     Key? key,
     this.title,
+    this.rightIcon,
   }) : super(key: key);
 
   @override
@@ -49,9 +51,10 @@ class MyAppBar extends StatelessWidget {
                 : Container(),
           ),
           //* showing the person icon for allowing the user to edit his profile data
-          PersonIcon(
-            onTap: () {},
-          ),
+          rightIcon ??
+              PersonIcon(
+                onTap: () {},
+              ),
         ],
       ),
     );

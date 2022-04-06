@@ -67,86 +67,82 @@ class _BottomNavBarIconState extends State<BottomNavBarIcon>
       _animationController.reverse();
     }
     return Expanded(
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          splashColor: Colors.transparent,
-          overlayColor: MaterialStateProperty.all(Colors.transparent),
-          onTap: widget.onTap,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: _width,
-                height: _height,
-                alignment: Alignment.center,
-                child: Transform(
-                  transform: widget.active
-                      ? Matrix4.translationValues(
-                          0, _iconTranslateAnimation.value, 0)
-                      : Matrix4.translationValues(
-                          0,
-                          _iconTranslateAnimation.value,
-                          0,
-                        ),
-                  child: Icon(
-                    widget.iconData,
-                    color: widget.active
-                        ? kMainColor
-                        : kMainColor.withOpacity(0.5),
-                    size: widget.active ? kMediumIconSize : kSmallIconSize,
+      child: InkWell(
+        splashColor: Colors.transparent,
+        overlayColor: MaterialStateProperty.all(Colors.transparent),
+        onTap: widget.onTap,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: _width,
+              height: _height,
+              alignment: Alignment.center,
+              child: Transform(
+                transform: widget.active
+                    ? Matrix4.translationValues(
+                        0, _iconTranslateAnimation.value, 0)
+                    : Matrix4.translationValues(
+                        0,
+                        _iconTranslateAnimation.value,
+                        0,
+                      ),
+                child: Icon(
+                  widget.iconData,
+                  color:
+                      widget.active ? kMainColor : kMainColor.withOpacity(0.5),
+                  size: widget.active ? kMediumIconSize : kSmallIconSize,
+                ),
+              ),
+            ),
+            if (widget.active)
+              FractionallySizedBox(
+                widthFactor: 0.6,
+                child: Container(
+                  width: double.infinity,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: kMainColor,
+                    borderRadius: BorderRadius.circular(1000),
                   ),
                 ),
               ),
-              if (widget.active)
-                FractionallySizedBox(
-                  widthFactor: 0.6,
-                  child: Container(
-                    width: double.infinity,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: kMainColor,
-                      borderRadius: BorderRadius.circular(1000),
-                    ),
-                  ),
-                ),
-              // if (widget.active)
-              //   Positioned(
-              //     bottom: -25,
-              //     child: Transform(
-              //       transform: Matrix4.rotationZ((pi / 180) * 45),
-              //       origin: Offset(25, 25),
-              //       child: Container(
-              //         width: 50,
-              //         height: 50,
-              //         decoration: BoxDecoration(
-              //           color: kMainColor.withOpacity(0.5),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              //* positioned backup
-              // Positioned(
-              //   bottom: -85,
-              //   child: Container(
-              //     width: 10,
-              //     height: 140,
-              //     decoration: BoxDecoration(
-              //       // color: Color.fromARGB(255, 193, 199, 253),
-              //       borderRadius: BorderRadius.circular(50),
-              //       boxShadow: [
-              //         BoxShadow(
-              //           color: kMainColor.withOpacity(0.5),
-              //           blurRadius: 15,
-              //           offset: Offset(0, 0),
-              //           spreadRadius: 20,
-              //         )
-              //       ],
-              //     ),
-              //   ),
-              // ),
-            ],
-          ),
+            // if (widget.active)
+            //   Positioned(
+            //     bottom: -25,
+            //     child: Transform(
+            //       transform: Matrix4.rotationZ((pi / 180) * 45),
+            //       origin: Offset(25, 25),
+            //       child: Container(
+            //         width: 50,
+            //         height: 50,
+            //         decoration: BoxDecoration(
+            //           color: kMainColor.withOpacity(0.5),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            //* positioned backup
+            // Positioned(
+            //   bottom: -85,
+            //   child: Container(
+            //     width: 10,
+            //     height: 140,
+            //     decoration: BoxDecoration(
+            //       // color: Color.fromARGB(255, 193, 199, 253),
+            //       borderRadius: BorderRadius.circular(50),
+            //       boxShadow: [
+            //         BoxShadow(
+            //           color: kMainColor.withOpacity(0.5),
+            //           blurRadius: 15,
+            //           offset: Offset(0, 0),
+            //           spreadRadius: 20,
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
+          ],
         ),
       ),
     );

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/colors.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
@@ -42,17 +43,19 @@ class CustomAppDrawer extends StatelessWidget {
                   iconData: Icons.money_off,
                   color: kModerateProfileStatusColor,
                 ),
-                DrawerlistItem(
-                  title: 'Delete Database',
-                  onTap: () async {
-                    await DBHelper.deleteDatabase(dbName);
-                    await SharedPrefHelper.removeAllSavedKeys();
-                    showSnackBar(
-                        context, 'Database deleted', SnackBarType.success);
-                  },
-                  iconData: Icons.delete,
-                  color: kOutcomeColor,
-                ),
+                //* only show this option if the app is in debug mode
+                if (kDebugMode)
+                  DrawerlistItem(
+                    title: 'Delete Database',
+                    onTap: () async {
+                      await DBHelper.deleteDatabase(dbName);
+                      await SharedPrefHelper.removeAllSavedKeys();
+                      showSnackBar(
+                          context, 'Database deleted', SnackBarType.success);
+                    },
+                    iconData: Icons.delete,
+                    color: kOutcomeColor,
+                  ),
               ],
             ),
           ),

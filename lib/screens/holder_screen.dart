@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/screens/money_accounts_screen/money_accounts_screen.dart';
+import 'package:smart_wallet/screens/settings_screen/settings_screen.dart';
 import '../screens/home_screen/home_screen.dart';
 import '../screens/transactions_screen/transactions_screen.dart';
 
@@ -30,7 +31,7 @@ class _HolderScreenState extends State<HolderScreen> {
   void _setActiveNavBarIconIndex(int index) {
     if (_apply) {
       _pageController.animateToPage(index,
-          duration: _pageSliderDuration, curve: Curves.easeIn);
+          duration: _pageSliderDuration, curve: Curves.easeInOut);
       setState(() {
         _activeBottomNavBarIndex = index;
         //* for changing the page when the current active index changes
@@ -69,7 +70,12 @@ class _HolderScreenState extends State<HolderScreen> {
       //* this is the main stack that have all the content of home screen by showing every thing on each other as a stack
       body: Stack(
         children: [
-          const Background(),
+          Background(
+            //? this is for changing the background image if the current screen is the settings screen
+            backgroundPath: _activeBottomNavBarIndex == 4
+                ? 'assets/images/backgroundLight.jpg'
+                : null,
+          ),
           SafeArea(
             child: Column(
               children: [
@@ -97,7 +103,7 @@ class _HolderScreenState extends State<HolderScreen> {
                       MoneyAccountsScreen(),
                       HomeScreen(),
                       TransactionsScreen(),
-                      Text('Settings  page'),
+                      SettingsScreen(),
                     ],
                   ),
                 ),

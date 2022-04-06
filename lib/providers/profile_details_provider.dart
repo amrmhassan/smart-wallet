@@ -6,6 +6,7 @@ import 'package:smart_wallet/models/transaction_model.dart';
 import '../constants/types.dart';
 import '../utils/trans_periods_utils.dart';
 
+//? these are available periods for details
 enum TransPeriod {
   today,
   yesterday,
@@ -17,11 +18,11 @@ enum TransPeriod {
 }
 
 class ProfileDetailsProvider extends ChangeNotifier {
-  //* i will set the profile id from the widget tree
-  //* then this will get the transactions by a profile id from the transactions provider
-  TransPeriod currentActivePeriod = TransPeriod.today;
+  //? in action profile
   ProfileModel? profile;
+  //? getting transactions by profile id from the proxy provider from main
   Function(String id) getTransactionsByProfileId;
+  //? getting a profile by id form the proxy provider from main
   Function(String id) getProfileById;
 
   ProfileDetailsProvider({
@@ -29,17 +30,20 @@ class ProfileDetailsProvider extends ChangeNotifier {
     required this.getProfileById,
   });
 
+//? all transactions of a profile
   List<TransactionModel> allTransactions = [];
+  //? transactions after filtering them by periods
   List<TransactionModel> _viewedTransactions = [];
-  late TransPeriodUtils transPeriodUtils;
+  //? time period to filter transactions according to
+  TransPeriod currentActivePeriod = TransPeriod.today;
 
   DateTime startingDate = DateTime.now().subtract(const Duration(days: 1));
   DateTime endDate = DateTime.now();
 
+//? fetching transaction by a profile id
   Future<void> fetchTransactions(String profileId) async {
     ProfileModel profile = await getProfileById(profileId);
     _setProfile(profile);
-
     List<TransactionModel> fetchedProfileTransactions =
         await getTransactionsByProfileId(profileId);
     allTransactions = fetchedProfileTransactions;
@@ -47,12 +51,12 @@ class ProfileDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+//? setting the current profile model after fetching it from the profiles provider
   void _setProfile(ProfileModel profileModel) {
     profile = profileModel;
   }
 
-//? 1- getting transactions, with multiple possibilities
-//* for getting the income transactions only
+//? getting the income transactions
   List<TransactionModel> get incomeTransactions {
     return [
       ..._viewedTransactions
@@ -60,7 +64,7 @@ class ProfileDetailsProvider extends ChangeNotifier {
     ];
   }
 
-//* for getting the outcome transactions only
+//? getting the outcome transactions only
   List<TransactionModel> get outcomeTransactions {
     return [
       ..._viewedTransactions.where(
@@ -68,8 +72,7 @@ class ProfileDetailsProvider extends ChangeNotifier {
     ];
   }
 
-//? 2- for getting  calculations on the transactions
-  //* for getting the total income
+//? getting the total income
   double get totalIncome {
     double totalIncomeAmount = incomeTransactions.fold<double>(
       0,
@@ -78,7 +81,7 @@ class ProfileDetailsProvider extends ChangeNotifier {
     return totalIncomeAmount;
   }
 
-  //* for getting the total outcome
+//? getting the total outcome
   double get totalOutcome {
     double totalIncomeAmount = outcomeTransactions.fold<double>(
       0,
@@ -102,10 +105,9 @@ class ProfileDetailsProvider extends ChangeNotifier {
     return totalAmount;
   }
 
-//? methods
-  //* for initializing the _viewedTransactions when opening the statistics screen
+//? filtering transactions according to the period selected(the current active period)
   void fetchAndUpdateViewedTransactions({bool notifyListers = true}) {
-    transPeriodUtils = TransPeriodUtils(
+    TransPeriodUtils transPeriodUtils = TransPeriodUtils(
       transactions: allTransactions,
       startDate: startingDate,
       endDate: endDate,
@@ -174,13 +176,13 @@ class ProfileDetailsProvider extends ChangeNotifier {
     }
   }
 
-  //* for controlling the periods
+//? setting the current active period then fetching the transactions according to that period
   void setPeriod(TransPeriod period) {
     currentActivePeriod = period;
     fetchAndUpdateViewedTransactions();
   }
 
-  //* for setting the periods(startingDate, endDate)
+//? setting the period(custom period by the dates selectors)
   void setDatesPeriod({
     DateTime? newStartingDate,
     DateTime? newEndDate,
