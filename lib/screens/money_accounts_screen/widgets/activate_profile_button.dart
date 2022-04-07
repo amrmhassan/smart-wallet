@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
 
@@ -20,7 +20,7 @@ class NotActivateProfileButton extends StatelessWidget {
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          color: kMainColor,
+          color: ChooseColorTheme.kMainColor,
           borderRadius: BorderRadius.circular(kDefaultBorderRadius / 4),
         ),
         child: Material(
@@ -56,7 +56,7 @@ class ActivatedProfileButton extends StatelessWidget {
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          color: kInactiveColor.withOpacity(0.3),
+          color: ChooseColorTheme.kInactiveColor.withOpacity(0.3),
           borderRadius: BorderRadius.circular(kDefaultBorderRadius / 4),
         ),
         child: Material(

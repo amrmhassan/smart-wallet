@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../themes/choose_color_theme.dart';
 import 'colors.dart';
 
 //* for text styles
@@ -44,13 +45,13 @@ const TextStyle kParagraphTextStyle = TextStyle(
   fontSize: 16,
   fontWeight: FontWeight.bold,
 );
-const TextStyle kInActiveParagraphTextStyle = TextStyle(
-  color: kInactiveColor,
+TextStyle kInActiveParagraphTextStyle = TextStyle(
+  color: ChooseColorTheme.kInactiveColor,
   fontSize: 16,
   fontWeight: FontWeight.bold,
 );
-const TextStyle kSmallInActiveParagraphTextStyle = TextStyle(
-  color: kInactiveColor,
+TextStyle kSmallInActiveParagraphTextStyle = TextStyle(
+  color: ChooseColorTheme.kInactiveColor,
   fontSize: 14,
   fontWeight: FontWeight.normal,
 );

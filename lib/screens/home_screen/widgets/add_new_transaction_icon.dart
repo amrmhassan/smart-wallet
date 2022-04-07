@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 
 class AddNewTransactionIcon extends StatelessWidget {
   final VoidCallback onTap;
@@ -17,7 +17,7 @@ class AddNewTransactionIcon extends StatelessWidget {
         borderRadius: BorderRadius.circular(100),
         border: Border.all(
           width: 4,
-          color: kMainColor.withOpacity(.5),
+          color: ChooseColorTheme.kMainColor.withOpacity(.5),
         ),
       ),
       child: Material(
@@ -34,7 +34,7 @@ class AddNewTransactionIcon extends StatelessWidget {
             child: Icon(
               Icons.add,
               size: 45,
-              color: kMainColor.withOpacity(0.5),
+              color: ChooseColorTheme.kMainColor.withOpacity(0.5),
             ),
           ),
         ),

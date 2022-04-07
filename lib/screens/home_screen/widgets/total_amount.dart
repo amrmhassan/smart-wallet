@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
 import '../../../providers/transactions_provider.dart';
 
-import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../utils/general_utils.dart';
 
@@ -19,8 +19,8 @@ class TotalAmountInProfile extends StatelessWidget {
       fit: BoxFit.contain,
       child: Text(
         'Total : ${doubleToString(totalAmount)} $currency',
-        style: const TextStyle(
-          color: kMainColor,
+        style: TextStyle(
+          color: ChooseColorTheme.kMainColor,
           fontSize: kDefaultInfoTextSize,
           fontWeight: FontWeight.bold,
         ),

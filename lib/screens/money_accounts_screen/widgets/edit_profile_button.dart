@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 
 class EditProfileButton extends StatelessWidget {
@@ -15,7 +15,7 @@ class EditProfileButton extends StatelessWidget {
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        color: kInactiveColor.withOpacity(.2),
+        color: ChooseColorTheme.kInactiveColor.withOpacity(.2),
         borderRadius: BorderRadius.circular(
           kDefaultBorderRadius,
         ),
@@ -24,12 +24,12 @@ class EditProfileButton extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          child: const SizedBox(
+          child: SizedBox(
             width: 40,
             height: 40,
             child: Icon(
               Icons.edit,
-              color: kMainColor,
+              color: ChooseColorTheme.kMainColor,
               size: kSmallIconSize,
             ),
           ),

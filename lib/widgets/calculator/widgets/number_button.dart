@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
 import '../../../helpers/responsive.dart';
@@ -26,7 +26,7 @@ class NumberButton extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             offset: const Offset(0, 0),
-            color: kMainColor.withOpacity(0.2),
+            color: ChooseColorTheme.kMainColor.withOpacity(0.2),
             blurRadius: 6,
           )
         ],

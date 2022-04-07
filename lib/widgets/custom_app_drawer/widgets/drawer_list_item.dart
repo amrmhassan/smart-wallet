@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 
 class DrawerlistItem extends StatelessWidget {
   final VoidCallback onTap;
   final IconData iconData;
   final String title;
-  final Color color;
+  final Color? color;
 
   const DrawerlistItem({
     Key? key,
     required this.iconData,
     required this.onTap,
     required this.title,
-    this.color = kMainColor,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -31,7 +31,7 @@ class DrawerlistItem extends StatelessWidget {
           children: [
             Icon(
               iconData,
-              color: color,
+              color: color ?? ChooseColorTheme.kMainColor,
               size: kDefaultIconSize,
             ),
             const SizedBox(
@@ -39,8 +39,8 @@ class DrawerlistItem extends StatelessWidget {
             ),
             Text(
               title,
-              style: const TextStyle(
-                color: kMainColor,
+              style: TextStyle(
+                color: ChooseColorTheme.kMainColor,
                 fontSize: 16,
               ),
             ),

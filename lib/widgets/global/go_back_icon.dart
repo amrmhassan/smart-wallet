@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../constants/styles.dart';
+import '../../themes/choose_color_theme.dart';
 
 class GoBackIcon extends StatelessWidget {
   const GoBackIcon({
@@ -26,9 +27,9 @@ class GoBackIcon extends StatelessWidget {
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back,
-            color: kMainColor,
+            color: ChooseColorTheme.kMainColor,
             size: kDefaultIconSize,
           ),
         ),

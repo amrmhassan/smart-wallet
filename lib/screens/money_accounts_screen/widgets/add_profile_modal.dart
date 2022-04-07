@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../widgets/calculator/widgets/save_button.dart';
 import '../../../widgets/global/stylized_text_field.dart';
@@ -69,12 +70,12 @@ class AddProfileModal extends StatelessWidget {
                     maxLines: 1,
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: kMainColor.withOpacity(0.7),
+                      color: ChooseColorTheme.kMainColor.withOpacity(0.7),
                     ),
                     hintText: 'Enter The Profile Name',
                     onChanged: (value) {},
                     keyboardType: TextInputType.text,
-                    fillColor: kTextFieldInputColor,
+                    fillColor: ChooseColorTheme.kTextFieldInputColor,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(kDefaultBorderRadius),
                       borderSide: BorderSide(
@@ -122,7 +123,7 @@ class ClearProfileNameIcon extends StatelessWidget {
             right: kDefaultPadding / 4,
           ),
           decoration: BoxDecoration(
-            color: kInactiveColor.withOpacity(.4),
+            color: ChooseColorTheme.kInactiveColor.withOpacity(.4),
             borderRadius: BorderRadius.circular(kDefaultBorderRadius / 2),
           ),
           child: Material(

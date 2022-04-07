@@ -32,6 +32,12 @@ DONE -- that will be added to the statistics page that in the holder page
 DONE - the user can't add a transaction that is higher than his totalMoney
 DONE - to add a debt the user will find that option in the sideBar 
 DONE - convert the transaction card to dismissible
+DONE - you might change the total Mony indication to the Savings indeication
+DONE - the savings worked different 
+DONE - the saving of today isn't equal to the income of that day minus the outcome in the same day 
+DONE - it equals to the savings of the pervious days + income of that day - outcome of that day= totalIncome-totalOutcome
+DONE - so the savings always equal to the total (income from the first day to the current day ) - (total outcome from the first day to the current day) it will make difference in the chart of the savings-- cause the savings of each day will equal to the income of the previous days - the outcome of the previous days
+
 
 
 [Pending]
@@ -46,11 +52,16 @@ when editing a profile the new profile is pushed to the start of the profiles
 the dept will have a seperate screen that can be accessed from the sideBar (Debts)
 to fullfil a debt the can take it's amount from any current moey profile and it will be substracted from that profile
 the ability to a debt also will be implemented in the add transaction screen after showing the add a debt instead dialog the debt will be added to the debts screen which will be accissible from the sidebar debts
+make the transactions page (pageview so that the user can scroll between income, outcome, all) 
+make the quick action page (pageview so that the user can scroll between income, outcome, all)
+and change the title(all, income, outcome ) after scrolling finishes
+
 
 
 
 
 [Bad]
+NO
 
 
 
@@ -75,9 +86,4 @@ the default period will be one day and when setting a new period that period wil
 # ------------[End] critical changes in the app 
 
 
-# you might change the total Mony indication to the Savings indeication
 
-# the savings workd different 
-the saving of today isn't equal to the income of that day minus the outcome in the same day 
-it equals to the savings of the pervious days + income of that day - outcome of that day= totalIncome-totalOutcome
-# so the savings always equal to the total (income from the first day to the current day ) - (total outcome from the first day to the current day) it will make difference in the chart of the savings-- cause the savings of each day will equal to the income of the previous days - the outcome of the previous days

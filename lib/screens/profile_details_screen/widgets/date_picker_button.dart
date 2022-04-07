@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
 
-import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 
 enum DateTypes { startDate, endDate }
@@ -67,8 +67,8 @@ class DatePickerButton extends StatelessWidget {
             color: Provider.of<ProfileDetailsProvider>(context)
                         .currentActivePeriod ==
                     TransPeriod.custom
-                ? kMainColor
-                : kInactiveColor,
+                ? ChooseColorTheme.kMainColor
+                : ChooseColorTheme.kInactiveColor,
             width: 2,
           ),
           borderRadius: BorderRadius.circular(kDefaultBorderRadius / 4),
@@ -77,8 +77,8 @@ class DatePickerButton extends StatelessWidget {
           fit: BoxFit.contain,
           child: Text(
             formattedDate,
-            style: const TextStyle(
-              color: kMainColor,
+            style: TextStyle(
+              color: ChooseColorTheme.kMainColor,
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),

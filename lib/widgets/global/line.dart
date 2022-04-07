@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
+import '../../themes/choose_color_theme.dart';
 
 class Line extends StatelessWidget {
   final LineType lineType;
@@ -19,7 +20,7 @@ class Line extends StatelessWidget {
       height: lineType == LineType.vertical ? double.infinity : thickness ?? 3,
       width: lineType == LineType.vertical ? thickness ?? 3 : double.infinity,
       decoration: BoxDecoration(
-        color: color ?? kMainColor.withOpacity(0.2),
+        color: color ?? ChooseColorTheme.kMainColor.withOpacity(0.2),
         borderRadius: BorderRadius.circular(100),
       ),
     );

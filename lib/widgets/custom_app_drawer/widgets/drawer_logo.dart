@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 
 class DrawerLogo extends StatelessWidget {
@@ -23,10 +23,10 @@ class DrawerLogo extends StatelessWidget {
             width: 200,
             fit: BoxFit.contain,
           ),
-          const Text(
+          Text(
             'Smart Wallet',
             style: TextStyle(
-              color: kMainColor,
+              color: ChooseColorTheme.kMainColor,
               fontSize: 14,
               fontWeight: FontWeight.normal,
             ),

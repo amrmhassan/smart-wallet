@@ -4,6 +4,7 @@ import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../constants/types.dart';
 import '../../providers/profiles_provider.dart';
+import '../../themes/choose_color_theme.dart';
 import '../../utils/general_utils.dart';
 import '../../widgets/app_bar/home_heading.dart';
 import 'widgets/add_profile_modal.dart';
@@ -111,7 +112,7 @@ class _MoneyAccountsScreenState extends State<MoneyAccountsScreen> {
           right: kDefaultPadding / 2,
           child: FloatingActionButton(
             onPressed: () async => showAddProfileModal(),
-            backgroundColor: kMainColor,
+            backgroundColor: ChooseColorTheme.kMainColor,
             child: const Icon(
               Icons.add,
               size: kDefaultIconSize,

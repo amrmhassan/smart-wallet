@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/globals.dart';
 import '../../../constants/types.dart';
 import '../../../utils/general_utils.dart';
@@ -38,7 +39,7 @@ class ProfileSummaryElement extends StatelessWidget {
           title,
           style: TextStyle(
             color: transactionType == null
-                ? kMainColor
+                ? ChooseColorTheme.kMainColor
                 : transactionType == TransactionType.income
                     ? kIncomeColor
                     : kOutcomeColor,
@@ -52,7 +53,7 @@ class ProfileSummaryElement extends StatelessWidget {
             textAlign: TextAlign.right,
             style: TextStyle(
               color: transactionType == null
-                  ? kMainColor
+                  ? ChooseColorTheme.kMainColor
                   : transactionType == TransactionType.income
                       ? kIncomeColor
                       : kOutcomeColor,

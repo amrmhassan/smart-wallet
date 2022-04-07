@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
 import '../../../helpers/responsive.dart';
+import '../../../themes/choose_color_theme.dart';
 
 class HeadingCalcButton extends StatelessWidget {
   final IconData? iconData;
@@ -28,7 +28,7 @@ class HeadingCalcButton extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             offset: const Offset(0, 0),
-            color: kMainColor.withOpacity(0.2),
+            color: ChooseColorTheme.kMainColor.withOpacity(0.2),
             blurRadius: 6,
           )
         ],
@@ -51,7 +51,7 @@ class HeadingCalcButton extends StatelessWidget {
                   )
                 : Icon(
                     iconData,
-                    color: kMainColor,
+                    color: ChooseColorTheme.kMainColor,
                     size: kMediumIconSize,
                   ),
           ),

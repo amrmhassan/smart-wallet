@@ -1,49 +1,59 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: prefer_const_constructors
 
-import '../../../constants/sizes.dart';
-import '../../../constants/styles.dart';
+import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/sizes.dart';
+import 'package:smart_wallet/screens/home_screen/widgets/add_new_transaction_icon.dart';
+
+import '../../../widgets/global/custom_card.dart';
 import '../../../widgets/global/line.dart';
-import 'left_side_summary.dart';
-import 'right_side_sammary.dart';
+import '../../add_transaction_screen/add_transaction_screen.dart';
+import 'summary_income_outcome.dart';
 
 //* constants that matter to this widget only
-const double height = 215;
+const double height = 180;
 
 class ProfileSummary extends StatelessWidget {
   const ProfileSummary({
     Key? key,
   }) : super(key: key);
 
+  void openTransactionScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => const AddTransactionScreen(
+          addTransactionScreenOperations:
+              AddTransactionScreenOperations.addTransaction,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: height,
-      padding: const EdgeInsets.symmetric(
+    return CustomCard(
+      padding: EdgeInsets.symmetric(
         vertical: kDefaultVerticalPadding,
       ),
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        padding: const EdgeInsets.symmetric(
-          vertical: kDefaultVerticalPadding,
-        ),
-        alignment: Alignment.topCenter,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(kDefaultBorderRadius),
-          boxShadow: [
-            kDefaultBoxShadow,
-          ],
-        ),
-        child: Row(
-          children: const [
-            LeftSideSummary(),
-            Line(
-              lineType: LineType.vertical,
+      height: height,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            flex: 2,
+            child: SummaryIncomeOutcome(),
+          ),
+          Line(
+            lineType: LineType.vertical,
+          ),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: AddNewTransactionIcon(
+                  onTap: () => openTransactionScreen(context)),
             ),
-            RightSideSammary(),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

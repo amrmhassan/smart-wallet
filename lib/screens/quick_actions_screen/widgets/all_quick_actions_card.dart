@@ -5,10 +5,12 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/helpers/responsive.dart';
 import 'package:smart_wallet/utils/transactions_utils.dart';
+import 'package:smart_wallet/widgets/global/custom_card.dart';
+import '../../../constants/colors.dart';
 import '../../../models/quick_action_model.dart';
 import '../../../providers/quick_actions_provider.dart';
 
-import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
 import '../../../constants/types.dart';
@@ -57,18 +59,11 @@ class AllQuickActionsCard extends StatelessWidget {
       confirmDismiss: (direction) => showDeleteCustomDialog(context),
       background: const QuickActionCardBackground(),
       key: Key(quickAction.id),
-      child: Container(
+      child: CustomCard(
         clipBehavior: Clip.hardEdge,
-        width: double.infinity,
         margin: const EdgeInsets.only(bottom: kDefaultPadding / 2),
+        padding: EdgeInsets.zero,
 
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(kDefaultBorderRadius),
-          boxShadow: [
-            kCardBoxShadow,
-          ],
-        ),
         //* the row that hold the main components of the card, ( circular leading icon, title buttons etc...)
         child: Material(
           color: Colors.transparent,
@@ -143,7 +138,7 @@ class AllQuickActionsCard extends StatelessWidget {
                         //* for opening the screen to edit the quick action
                         CardActionButton(
                           iconData: FontAwesomeIcons.pen,
-                          color: kMainColor,
+                          color: ChooseColorTheme.kMainColor,
                           onTap: () {
                             Navigator.push(
                               context,

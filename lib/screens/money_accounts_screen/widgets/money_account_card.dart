@@ -6,6 +6,7 @@ import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
+import 'package:smart_wallet/widgets/global/custom_card.dart';
 
 import '../../../constants/profiles_constants.dart';
 import '../../../constants/sizes.dart';
@@ -112,7 +113,7 @@ class MoneyAccountCard extends StatelessWidget {
     //? if any confusion when clicking the card and go to the details page just remove that and make it only happen when clicking on the status circle
     return GestureDetector(
       onTap: () => goToProfileDetailsPage(context),
-      child: Container(
+      child: CustomCard(
         //* these constrains are for the card holder
         constraints: BoxConstraints(
           minHeight: 300,
@@ -127,13 +128,7 @@ class MoneyAccountCard extends StatelessWidget {
           bottom: 0,
         ),
         margin: const EdgeInsets.only(bottom: kDefaultPadding / 2),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(kDefaultBorderRadius),
-          color: Colors.white,
-          boxShadow: [
-            kCardBoxShadow,
-          ],
-        ),
+
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:smart_wallet/constants/profiles_constants.dart';
 
 import '../constants/colors.dart';
+import '../themes/choose_color_theme.dart';
 
 const double _goodLimit = .70; // when it is from 70% to 100% it will be good
 const double _moderateLimit =
@@ -59,7 +60,7 @@ class ProfileModel {
     } else if (moneyAccountStatus == MoneyAccountStatus.critical) {
       profileStatusColor = kCriticalProfileStatusColor;
     } else if (moneyAccountStatus == MoneyAccountStatus.empty) {
-      profileStatusColor = kMainColor.withOpacity(0.4);
+      profileStatusColor = ChooseColorTheme.kMainColor.withOpacity(0.4);
     }
   }
 }

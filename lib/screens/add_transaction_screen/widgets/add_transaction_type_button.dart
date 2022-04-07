@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/types.dart';
 
@@ -24,7 +25,9 @@ class AddTransactionTypeButton extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          border: !active ? Border.all(width: 1.5, color: kMainColor) : null,
+          border: !active
+              ? Border.all(width: 1.5, color: ChooseColorTheme.kMainColor)
+              : null,
           color: active && transactionType == TransactionType.income
               ? kIncomeColor
               : active && transactionType == TransactionType.outcome
@@ -36,7 +39,7 @@ class AddTransactionTypeButton extends StatelessWidget {
           transactionType == TransactionType.outcome
               ? Icons.arrow_upward
               : Icons.arrow_downward,
-          color: active ? Colors.white : kMainColor,
+          color: active ? Colors.white : ChooseColorTheme.kMainColor,
           size: kDefaultIconSize,
         ),
       ),

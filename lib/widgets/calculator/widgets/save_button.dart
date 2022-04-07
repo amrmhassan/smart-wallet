@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../helpers/responsive.dart';
 
@@ -19,11 +19,11 @@ class SaveButton extends StatelessWidget {
       width: Responsive.getWidth(context) / 7,
       height: Responsive.getWidth(context) / 7,
       decoration: BoxDecoration(
-        color: kMainColor,
+        color: ChooseColorTheme.kMainColor,
         boxShadow: [
           BoxShadow(
             offset: const Offset(0, 0),
-            color: kMainColor.withOpacity(0.2),
+            color: ChooseColorTheme.kMainColor.withOpacity(0.2),
             blurRadius: 6,
           )
         ],

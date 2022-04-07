@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
+import '../../themes/choose_color_theme.dart';
 
 const double _width = 45;
 const double _height = 45;
@@ -89,8 +90,9 @@ class _BottomNavBarIconState extends State<BottomNavBarIcon>
                       ),
                 child: Icon(
                   widget.iconData,
-                  color:
-                      widget.active ? kMainColor : kMainColor.withOpacity(0.5),
+                  color: widget.active
+                      ? ChooseColorTheme.kMainColor
+                      : ChooseColorTheme.kMainColor.withOpacity(0.5),
                   size: widget.active ? kMediumIconSize : kSmallIconSize,
                 ),
               ),
@@ -102,7 +104,7 @@ class _BottomNavBarIconState extends State<BottomNavBarIcon>
                   width: double.infinity,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: kMainColor,
+                    color: ChooseColorTheme.kMainColor,
                     borderRadius: BorderRadius.circular(1000),
                   ),
                 ),
@@ -117,7 +119,7 @@ class _BottomNavBarIconState extends State<BottomNavBarIcon>
             //         width: 50,
             //         height: 50,
             //         decoration: BoxDecoration(
-            //           color: kMainColor.withOpacity(0.5),
+            //           color: ChooseColorTheme.kMainColor.withOpacity(0.5),
             //         ),
             //       ),
             //     ),
@@ -133,7 +135,7 @@ class _BottomNavBarIconState extends State<BottomNavBarIcon>
             //       borderRadius: BorderRadius.circular(50),
             //       boxShadow: [
             //         BoxShadow(
-            //           color: kMainColor.withOpacity(0.5),
+            //           color: ChooseColorTheme.kMainColor.withOpacity(0.5),
             //           blurRadius: 15,
             //           offset: Offset(0, 0),
             //           spreadRadius: 20,
@@ -241,7 +243,7 @@ class _BottomNavBarIconState extends State<BottomNavBarIcon>
 //                           alignment: Alignment.center,
 //                           child: Icon(
 //                             widget.iconData,
-//                             color: kMainColor,
+//                             color: ChooseColorTheme.kMainColor,
 //                             size: widget.active
 //                                 ? kMediumIconSize
 //                                 : kSmallIconSize,

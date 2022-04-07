@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/globals.dart';
+import 'package:smart_wallet/widgets/global/custom_card.dart';
 import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/types.dart';
 import '../../../utils/general_utils.dart';
@@ -25,19 +27,9 @@ class QuickActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CustomCard(
       clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(0, 0),
-            color: kMainColor.withOpacity(0.2),
-            blurRadius: 10,
-          ),
-        ],
-      ),
+      padding: EdgeInsets.zero,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -80,7 +72,7 @@ class QuickActionCard extends StatelessWidget {
                     //   alignment: Alignment.centerRight,
                     //   child:  Icon(
                     //     Icons.more_vert,
-                    //     color: kMainColor,
+                    //     color: ChooseColorTheme.kMainColor,
                     //     size: kDefaultIconSize,
                     //   ),
                     // ),
@@ -105,8 +97,8 @@ class QuickActionCard extends StatelessWidget {
                 Text(
                   title,
                   maxLines: 1,
-                  style: const TextStyle(
-                    color: kMainColor,
+                  style: TextStyle(
+                    color: ChooseColorTheme.kMainColor,
                     fontSize: kDefaultInfoTextSize,
                     fontWeight: FontWeight.bold,
                     overflow: TextOverflow.ellipsis,
@@ -118,8 +110,8 @@ class QuickActionCard extends StatelessWidget {
                 Text(
                   description,
                   maxLines: 3,
-                  style: const TextStyle(
-                    color: kMainColor,
+                  style: TextStyle(
+                    color: ChooseColorTheme.kMainColor,
                     fontSize: kDefaultParagraphTextSize,
                     fontWeight: FontWeight.w400,
                     overflow: TextOverflow.ellipsis,

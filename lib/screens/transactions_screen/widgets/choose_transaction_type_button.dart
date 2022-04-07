@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
 
@@ -26,13 +26,13 @@ class ChooseTransactionTypeButton extends StatelessWidget {
           vertical: kDefaultVerticalPadding / 3,
         ),
         decoration: BoxDecoration(
-          color: active ? kMainColor : Colors.white,
+          color: active ? ChooseColorTheme.kMainColor : Colors.white,
           borderRadius: BorderRadius.circular(
             kDefaultBorderRadius,
           ),
           border: Border.all(
             width: 1.5,
-            color: kMainColor,
+            color: ChooseColorTheme.kMainColor,
           ),
         ),
         child: Text(

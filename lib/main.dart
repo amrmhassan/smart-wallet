@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/loading_data_screen.dart';
 import './providers/quick_actions_provider.dart';
 import './providers/transactions_provider.dart';
@@ -56,6 +57,9 @@ class _MyAppState extends State<MyApp> {
             );
           },
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => ThemeProvider(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

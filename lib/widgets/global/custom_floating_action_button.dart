@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../constants/styles.dart';
+import '../../themes/choose_color_theme.dart';
 
 class CustomFloatingActionButton extends StatelessWidget {
   final String title;
@@ -22,7 +22,7 @@ class CustomFloatingActionButton extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
             boxShadow: [kCardHeavyBoxShadow],
-            color: kMainColor,
+            color: ChooseColorTheme.kMainColor,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(
                 kDefaultBorderRadius * 5,

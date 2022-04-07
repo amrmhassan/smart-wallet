@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 
 class ProfileDetailsButton extends StatelessWidget {
@@ -21,7 +21,7 @@ class ProfileDetailsButton extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           alignment: Alignment.centerRight,
           decoration: BoxDecoration(
-            color: kInactiveColor.withOpacity(.2),
+            color: ChooseColorTheme.kInactiveColor.withOpacity(.2),
             borderRadius: BorderRadius.circular(100),
           ),
           child: Material(
@@ -34,14 +34,14 @@ class ProfileDetailsButton extends StatelessWidget {
                   vertical: kDefaultPadding / 5,
                 ),
                 child: Row(
-                  children: const [
+                  children: [
                     // Text(
                     //   'Details',
                     //   style: kSmallTextPrimaryColorStyle,
                     // ),
                     Icon(
                       Icons.keyboard_double_arrow_right_outlined,
-                      color: kMainColor,
+                      color: ChooseColorTheme.kMainColor,
                       size: kMediumIconSize,
                     ),
                   ],

@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/helpers/responsive.dart';
-import 'package:smart_wallet/screens/home_screen/widgets/quick_action_card.dart';
 import 'package:smart_wallet/screens/quick_actions_screen/widgets/all_quick_actions_card.dart';
+import 'package:smart_wallet/widgets/global/custom_card.dart';
 
 import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
 import '../../../constants/types.dart';
@@ -51,20 +52,13 @@ class TranscationCard extends StatelessWidget {
       direction: DismissDirection.endToStart,
       confirmDismiss: (direction) => showDeleteCustomDialog(context),
       background: QuickActionCardBackground(),
-      child: Container(
-        width: double.infinity,
+      child: CustomCard(
         margin: const EdgeInsets.only(bottom: kDefaultPadding / 2),
         padding: const EdgeInsets.symmetric(
           horizontal: kDefaultHorizontalPadding / 2,
           vertical: kDefaultVerticalPadding / 2,
         ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(kDefaultBorderRadius),
-          boxShadow: [
-            kCardBoxShadow,
-          ],
-        ),
+
         //* the row that hold the main components of the card, ( circular leading, title buttons etc...)
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -140,7 +134,7 @@ class TranscationCard extends StatelessWidget {
                   //* for opening the screen to edit the transactions
                   CardActionButton(
                     iconData: FontAwesomeIcons.pen,
-                    color: kMainColor,
+                    color: ChooseColorTheme.kMainColor,
                     backgroundColor: Colors.grey[100],
                     onTap: () {
                       Navigator.push(

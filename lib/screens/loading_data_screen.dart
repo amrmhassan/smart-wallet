@@ -9,6 +9,7 @@ import 'package:smart_wallet/screens/holder_screen.dart';
 import '../providers/profiles_provider.dart';
 import '../providers/quick_actions_provider.dart';
 import '../providers/transactions_provider.dart';
+import '../themes/choose_color_theme.dart';
 
 class LoadingDataScreen extends StatefulWidget {
   static const String routeName = '/loading-data-screen';
@@ -78,10 +79,10 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             'Smart Wallet',
             style: TextStyle(
-              color: kMainColor,
+              color: ChooseColorTheme.kMainColor,
               fontSize: 36,
               fontWeight: FontWeight.bold,
             ),
@@ -91,8 +92,8 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
           ),
           Container(
             alignment: Alignment.center,
-            child: const SpinKitCubeGrid(
-              color: kMainColor,
+            child: SpinKitCubeGrid(
+              color: ChooseColorTheme.kMainColor,
               size: 100,
               duration: Duration(seconds: 1),
             ),

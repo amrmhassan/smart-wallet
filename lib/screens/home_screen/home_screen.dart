@@ -1,4 +1,4 @@
-//! how to make my own icons using adobe xd then change the icon of menu to be one dash and a half
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -39,8 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     .getActiveProfile
                     .name,
               ),
+              SizedBox(height: kDefaultPadding),
               //* this has the summery of the current active profile like (outcome, income of this day or month or year..., and the current total amount that currently exist in the profile)
               const ProfileSummary(),
+              SizedBox(height: kDefaultPadding / 2),
+
               if (Provider.of<QuickActionsProvider>(context)
                   .getFavoriteQuickActions
                   .isNotEmpty)
@@ -50,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: InkWell(
                     onTap: () => Navigator.pushNamed(
                         context, QuickActionsScreen.routeName),
-                    child: const Text(
+                    child: Text(
                       'Quick Actions',
                       style: kParagraphTextStyle,
                     ),

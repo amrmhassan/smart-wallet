@@ -16,38 +16,37 @@ class SummaryIncomeOutcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final transactionData = Provider.of<TransactionProvider>(context);
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-            horizontal: kDefaultHorizontalPadding / 2),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: ProfileSummaryElement(
-                title: 'Today',
-                amount: transactionData.todayOutcome,
-                transactionType: TransactionType.outcome,
-                size: 20,
-              ),
+    return Container(
+      padding: EdgeInsets.only(
+          left: kDefaultHorizontalPadding,
+          right: kDefaultHorizontalPadding / 2),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: ProfileSummaryElement(
+              title: 'Today',
+              amount: transactionData.todayOutcome,
+              transactionType: TransactionType.outcome,
+              size: 20,
             ),
-            Expanded(
-              child: ProfileSummaryElement(
-                title: 'Yesterday',
-                amount: transactionData.yesterdayOutcome,
-                transactionType: TransactionType.outcome,
-                size: 18,
-              ),
+          ),
+          Expanded(
+            child: ProfileSummaryElement(
+              title: 'Yesterday',
+              amount: transactionData.yesterdayOutcome,
+              transactionType: TransactionType.outcome,
+              size: 18,
             ),
-            Expanded(
-              child: ProfileSummaryElement(
-                title: 'Savings',
-                amount: transactionData.totalMoney,
-                size: 16,
-              ),
+          ),
+          Expanded(
+            child: ProfileSummaryElement(
+              title: 'Savings',
+              amount: transactionData.totalMoney,
+              size: 16,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

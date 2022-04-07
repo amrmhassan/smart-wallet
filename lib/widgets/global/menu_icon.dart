@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
+import '../../themes/choose_color_theme.dart';
 
 class MenuIcon extends StatelessWidget {
   final VoidCallback onTap;
@@ -38,7 +39,7 @@ class MenuIcon extends StatelessWidget {
                   width: 30,
                   height: 3,
                   decoration: BoxDecoration(
-                    color: kMainColor,
+                    color: ChooseColorTheme.kMainColor,
                     borderRadius: BorderRadius.circular(100),
                   ),
                 ),
@@ -49,7 +50,7 @@ class MenuIcon extends StatelessWidget {
                   width: 15,
                   height: 3,
                   decoration: BoxDecoration(
-                      color: kMainColor,
+                      color: ChooseColorTheme.kMainColor,
                       borderRadius: BorderRadius.circular(20)),
                 ),
               ],
@@ -57,7 +58,7 @@ class MenuIcon extends StatelessWidget {
             // child: Icon(
             //   //! change this icon here to be a dash and a half
             //   Icons.menu,
-            //   color: kMainColor,
+            //   color: ChooseColorTheme.kMainColor,
             //   size: kDefaultIconSize,
             // ),
           ),

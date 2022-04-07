@@ -10,7 +10,9 @@ import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
 
 import '../../constants/sizes.dart';
+import '../../themes/choose_color_theme.dart';
 import '../../widgets/app_bar/home_heading.dart';
+import '../../widgets/global/custom_card.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({Key? key}) : super(key: key);
@@ -52,37 +54,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   }
 }
 
-class CustomCard extends StatelessWidget {
-  final Widget child;
-  final Clip? clipBehavior;
-  final DecorationImage? backgroundImage;
-  const CustomCard({
-    Key? key,
-    required this.child,
-    this.clipBehavior,
-    this.backgroundImage,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: clipBehavior ?? Clip.hardEdge,
-      padding: EdgeInsets.symmetric(
-        horizontal: kDefaultHorizontalPadding,
-        vertical: kDefaultVerticalPadding,
-      ),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [kCardBoxShadow],
-        borderRadius: BorderRadius.circular(kDefaultBorderRadius),
-        image: backgroundImage,
-      ),
-      child: child,
-    );
-  }
-}
-
 class StatisticsMoneySummary extends StatelessWidget {
   const StatisticsMoneySummary({
     Key? key,
@@ -93,17 +64,7 @@ class StatisticsMoneySummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: kDefaultHorizontalPadding,
-        vertical: kDefaultVerticalPadding,
-      ),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [kCardBoxShadow],
-        borderRadius: BorderRadius.circular(kDefaultBorderRadius),
-      ),
+    return CustomCard(
       child: Column(
         children: [
           StatisticsMainSummaryItem(
@@ -156,7 +117,7 @@ class StatisticsMainSummaryItem extends StatelessWidget {
                 ? kIncomeColor
                 : transactionType == TransactionType.outcome
                     ? kOutcomeColor
-                    : kMainColor,
+                    : ChooseColorTheme.kMainColor,
           ),
         ),
         Text(
@@ -169,7 +130,7 @@ class StatisticsMainSummaryItem extends StatelessWidget {
                 ? kIncomeColor
                 : transactionType == TransactionType.outcome
                     ? kOutcomeColor
-                    : kMainColor,
+                    : ChooseColorTheme.kMainColor,
           ),
         ),
       ],

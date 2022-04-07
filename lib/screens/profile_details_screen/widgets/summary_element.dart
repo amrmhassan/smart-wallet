@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/globals.dart';
 
 import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/types.dart';
 import '../../../utils/general_utils.dart';
@@ -33,7 +34,7 @@ class SummaryElement extends StatelessWidget {
                 ? kIncomeColor
                 : transactionType == TransactionType.outcome
                     ? kOutcomeColor
-                    : kMainColor,
+                    : ChooseColorTheme.kMainColor,
           ),
         ),
         const SizedBox(
@@ -47,7 +48,7 @@ class SummaryElement extends StatelessWidget {
                 ? kIncomeColor
                 : transactionType == TransactionType.outcome
                     ? kOutcomeColor
-                    : kMainColor,
+                    : ChooseColorTheme.kMainColor,
           ),
         ),
       ],

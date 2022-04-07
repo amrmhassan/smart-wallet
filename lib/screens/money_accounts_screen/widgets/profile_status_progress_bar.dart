@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
 
@@ -46,7 +46,7 @@ class ProfileStatusProgressBar extends StatelessWidget {
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(1000),
-              color: kInactiveColor.withOpacity(0.3),
+              color: ChooseColorTheme.kInactiveColor.withOpacity(0.3),
             ),
             child: FractionallySizedBox(
                 widthFactor: incomeRatio,

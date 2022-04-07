@@ -1,11 +1,13 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/constants/colors.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
+import 'package:smart_wallet/widgets/global/custom_card.dart';
 
 import '../../../constants/sizes.dart';
-import '../../../constants/styles.dart';
 import '../../../constants/types.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../home_screen/widgets/summary_period_container.dart';
 import 'date_picker_button.dart';
 import 'summary_element.dart';
@@ -21,20 +23,8 @@ class ProfileSummaryStatistics extends StatelessWidget {
   Widget build(BuildContext context) {
     var transactionData = Provider.of<ProfileDetailsProvider>(context);
 
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: kDefaultHorizontalPadding,
-        vertical: kDefaultVerticalPadding,
-      ),
-      width: double.infinity,
+    return CustomCard(
       height: 200,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(kDefaultBorderRadius / 2),
-        boxShadow: [
-          kDefaultBoxShadow,
-        ],
-      ),
       child: Row(
         children: [
           Expanded(
@@ -69,14 +59,14 @@ class ProfileSummaryStatistics extends StatelessWidget {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     DatePickerButton(
                       dateType: DateTypes.startDate,
                     ),
                     Expanded(
                       child: Icon(
                         Icons.arrow_right_alt_sharp,
-                        color: kMainColor,
+                        color: ChooseColorTheme.kMainColor,
                         size: kDefaultIconSize,
                       ),
                     ),

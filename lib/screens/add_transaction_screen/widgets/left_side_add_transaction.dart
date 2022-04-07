@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../screens/home_screen/widgets/summary_period_icon.dart';
 import '../../../widgets/global/stylized_text_field.dart';
@@ -33,13 +33,13 @@ class LeftSideAddTransaction extends StatelessWidget {
                   controller: titleController,
                   hintStyle: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: kMainColor.withOpacity(0.7),
+                    color: ChooseColorTheme.kMainColor.withOpacity(0.7),
                   ),
                   maxLines: 1,
                   hintText: 'Enter a title',
                   onChanged: (value) {},
                   keyboardType: TextInputType.text,
-                  fillColor: kTextFieldInputColor,
+                  fillColor: ChooseColorTheme.kTextFieldInputColor,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(borderRadius),
                     borderSide: BorderSide(
@@ -62,12 +62,12 @@ class LeftSideAddTransaction extends StatelessWidget {
                   hintText: 'Description',
                   hintStyle: TextStyle(
                     fontWeight: FontWeight.normal,
-                    color: kMainColor.withOpacity(0.7),
+                    color: ChooseColorTheme.kMainColor.withOpacity(0.7),
                   ),
                   maxLines: 3,
                   onChanged: (value) {},
                   keyboardType: TextInputType.multiline,
-                  fillColor: kTextFieldInputColor,
+                  fillColor: ChooseColorTheme.kTextFieldInputColor,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(borderRadius),
                     borderSide: BorderSide(

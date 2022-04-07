@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import 'profile_transactions_info.dart';
 
@@ -47,7 +48,7 @@ class ProfileMoneySummary extends StatelessWidget {
           ProfileTransactionsInfo(
             title: 'Total Money',
             amount: totalMoneyString,
-            color: kMainColor,
+            color: ChooseColorTheme.kMainColor,
           ),
           ProfileTransactionsInfo(
             title: 'Outcome',

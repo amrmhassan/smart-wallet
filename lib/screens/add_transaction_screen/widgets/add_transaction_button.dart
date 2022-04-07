@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 
 class AddTransactionButton extends StatelessWidget {
   final VoidCallback addTransaction;
@@ -17,7 +17,7 @@ class AddTransactionButton extends StatelessWidget {
       width: double.infinity,
       height: 60,
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(primary: kMainColor),
+        style: ElevatedButton.styleFrom(primary: ChooseColorTheme.kMainColor),
         onPressed: addTransaction,
         child: Text(
           saveButtonText,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
+import '../../themes/choose_color_theme.dart';
 
 class PersonIcon extends StatelessWidget {
   final VoidCallback onTap;
@@ -27,13 +28,13 @@ class PersonIcon extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(
                 width: 3,
-                color: kMainColor,
+                color: ChooseColorTheme.kMainColor,
               ),
               borderRadius: BorderRadius.circular(50),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.person,
-              color: kMainColor,
+              color: ChooseColorTheme.kMainColor,
               size: kDefaultIconSize,
             ),
           ),

@@ -4,6 +4,7 @@ import '../../constants/colors.dart';
 import '../../constants/styles.dart';
 import '../../providers/quick_actions_provider.dart';
 import '../../screens/quick_actions_screen/widgets/all_quick_actions_card.dart';
+import '../../themes/choose_color_theme.dart';
 import '../../widgets/global/empty_transactions.dart';
 
 import '../../constants/sizes.dart';
@@ -40,7 +41,7 @@ class _QuickActionsScreenState extends State<QuickActionsScreen> {
             ),
           );
         },
-        backgroundColor: kMainColor,
+        backgroundColor: ChooseColorTheme.kMainColor,
         child: const Icon(
           Icons.add,
           size: kDefaultIconSize,

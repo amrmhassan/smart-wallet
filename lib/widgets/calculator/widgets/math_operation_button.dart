@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../constants/colors.dart';
+import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
 import '../../../helpers/responsive.dart';
@@ -33,7 +33,7 @@ class MathOperationBtn extends StatelessWidget {
         borderRadius: BorderRadius.circular(
           1000,
         ),
-        border: Border.all(width: 1, color: kMainColor),
+        border: Border.all(width: 1, color: ChooseColorTheme.kMainColor),
       ),
       child: Material(
         color: Colors.transparent,
@@ -50,7 +50,7 @@ class MathOperationBtn extends StatelessWidget {
                   )
                 : Icon(
                     iconData,
-                    color: kMainColor,
+                    color: ChooseColorTheme.kMainColor,
                     size: kMediumIconSize,
                   ),
           ),
