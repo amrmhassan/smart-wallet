@@ -1,13 +1,19 @@
 //? this screen is for holding the other main screen that will be controller by the bottom nav bar
 
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_wallet/constants/sizes.dart';
 import 'package:smart_wallet/screens/money_accounts_screen/money_accounts_screen.dart';
 import 'package:smart_wallet/screens/settings_screen/settings_screen.dart';
+import '../providers/theme_provider.dart';
 import '../screens/home_screen/home_screen.dart';
 import '../screens/transactions_screen/transactions_screen.dart';
 
 import '../../widgets/app_bar/my_app_bar.dart';
 import '../../widgets/bottom_nav_bar/bottom_nav_bar.dart';
+import '../utils/profile_utils.dart';
 import '../widgets/custom_app_drawer/custom_app_drawer.dart';
 import 'home_screen/widgets/background.dart';
 import 'statistics_screen/statistics_screen.dart';
@@ -27,6 +33,7 @@ class _HolderScreenState extends State<HolderScreen> {
   int _activeBottomNavBarIndex = 2;
   bool _apply = true;
   late PageController _pageController;
+  final TextEditingController _profileNameController = TextEditingController();
 
   void _setActiveNavBarIconIndex(int index) {
     if (_apply) {
@@ -63,6 +70,8 @@ class _HolderScreenState extends State<HolderScreen> {
 //* this is the build method of this widget
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
@@ -81,7 +90,32 @@ class _HolderScreenState extends State<HolderScreen> {
               children: [
                 //* this is a custom widget of app bar
                 //* not a real one but made of containers and paddings for more control
-                const MyAppBar(),
+                _activeBottomNavBarIndex == 1
+                    ? MyAppBar(
+                        rightIcon: Container(
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(1000)),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () async => showAddProfileModal(
+                                  context, _profileNameController),
+                              child: Container(
+                                padding: EdgeInsets.all(kDefaultPadding / 2),
+                                child: Icon(
+                                  Icons.add,
+                                  color: themeProvider.getThemeColor(
+                                    ThemeColors.kMainColor,
+                                  ),
+                                  size: 28,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : MyAppBar(),
                 //* here i showed that you can know which environment you are on (development or production)
                 //* and i worked successfully
                 // if (kDebugMode) Text('In debug Mode'),

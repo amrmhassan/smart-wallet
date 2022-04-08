@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/theme_provider.dart';
-import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
-import '../../../constants/styles.dart';
 
 class NotActivateProfileButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -26,7 +24,7 @@ class NotActivateProfileButton extends StatelessWidget {
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          color: ChooseColorTheme.kMainColor,
+          color: themeProvider.getThemeColor(ThemeColors.kButtonColor),
           borderRadius: BorderRadius.circular(kDefaultBorderRadius / 4),
         ),
         child: Material(
@@ -56,13 +54,16 @@ class ActivatedProfileButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          color: ChooseColorTheme.kInactiveColor.withOpacity(0.3),
+          color: themeProvider
+              .getThemeColor(ThemeColors.kInactiveColor)
+              .withOpacity(0.3),
           borderRadius: BorderRadius.circular(kDefaultBorderRadius / 4),
         ),
         child: Material(

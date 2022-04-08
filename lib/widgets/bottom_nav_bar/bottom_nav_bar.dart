@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/widgets/global/bottom_nav_bar_icon_colored.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
-import '../../constants/styles.dart';
 import '../../providers/theme_provider.dart';
 import '../global/bottom_nav_bar_icon.dart';
 
@@ -25,22 +25,27 @@ class BottomNavBar extends StatelessWidget {
       {
         'iconData': FontAwesomeIcons.chartLine,
         'onTap': () {},
+        'iconImage': 'assets/icons/bot_nav/trend.png'
       },
       {
         'iconData': FontAwesomeIcons.users,
         'onTap': () {},
+        'iconImage': 'assets/icons/bot_nav/team.png'
       },
       {
         'iconData': FontAwesomeIcons.home,
         'onTap': () {},
+        'iconImage': 'assets/icons/bot_nav/house.png'
       },
       {
         'iconData': FontAwesomeIcons.moneyBillWave,
         'onTap': () {},
+        'iconImage': 'assets/icons/bot_nav/transaction.png'
       },
       {
         'iconData': FontAwesomeIcons.cog,
         'onTap': () {},
+        'iconImage': 'assets/icons/bot_nav/admin.png'
       },
     ];
     return Column(
@@ -82,6 +87,7 @@ class BottomNavBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: bottomNavBarIcons.map((e) {
               int index = bottomNavBarIcons.indexOf(e);
+              //? you can use the colord icons
               return BottomNavBarIcon(
                 iconData: e['iconData'],
                 onTap: () {

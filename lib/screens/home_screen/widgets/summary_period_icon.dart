@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 
-import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 
 const double width = 30;
@@ -23,15 +24,35 @@ class SummaryPeriodIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     Color kIconColor() {
       if (enabled) {
         if (active) {
           return Colors.white;
         } else {
-          return ChooseColorTheme.kMainColor;
+          return themeProvider
+              .getThemeColor(ThemeColors.kMainColor)
+              .withOpacity(0.3);
         }
       } else {
-        return ChooseColorTheme.kInactiveColor;
+        return themeProvider
+            .getThemeColor(ThemeColors.kInactiveColor)
+            .withOpacity(0.3);
+      }
+    }
+
+    Color kBackgroundColor() {
+      if (enabled) {
+        if (active) {
+          return themeProvider.getThemeColor(ThemeColors.kButtonColor);
+        } else {
+          return themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor);
+        }
+      } else {
+        return themeProvider
+            .getThemeColor(ThemeColors.kInactiveColor)
+            .withOpacity(0.0);
       }
     }
 
@@ -41,9 +62,7 @@ class SummaryPeriodIcon extends StatelessWidget {
       height: height,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: active
-            ? ChooseColorTheme.kMainColor
-            : ChooseColorTheme.kMainColor.withOpacity(0.2),
+        color: kBackgroundColor(),
         borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: Material(

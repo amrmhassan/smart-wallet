@@ -42,6 +42,7 @@ enum ThemeColors {
   kOutcomeColor,
   kSavingsColor,
   kDeleteColor,
+  kButtonColor,
 }
 
 enum ThemeTextStyles {
@@ -80,6 +81,7 @@ Map<Themes, Map<ThemeColors, Color>> colorThemes = {
     ThemeColors.kIncomeColor: Color(0xff01AD01),
     ThemeColors.kOutcomeColor: Color(0xffD60000),
     ThemeColors.kDeleteColor: Color.fromARGB(255, 204, 24, 11),
+    ThemeColors.kButtonColor: Color(0xff565D94),
   },
   Themes.dark: {
     ThemeColors.kMainColor: Color(0xffffffff).withOpacity(0.7),
@@ -91,6 +93,7 @@ Map<Themes, Map<ThemeColors, Color>> colorThemes = {
     ThemeColors.kIncomeColor: Color(0xffAEE607),
     ThemeColors.kOutcomeColor: Color(0xffEF2D2D),
     ThemeColors.kDeleteColor: Color.fromARGB(255, 204, 24, 11),
+    ThemeColors.kButtonColor: Color.fromARGB(255, 22, 46, 67),
   },
   Themes.light: {
     ThemeColors.kMainColor: Color(0xff565D94),
@@ -102,6 +105,7 @@ Map<Themes, Map<ThemeColors, Color>> colorThemes = {
     ThemeColors.kIncomeColor: Color(0xff01AD01),
     ThemeColors.kOutcomeColor: Color(0xffD60000),
     ThemeColors.kDeleteColor: Color.fromARGB(255, 204, 24, 11),
+    ThemeColors.kButtonColor: Color.fromARGB(255, 11, 79, 134),
   }
 };
 

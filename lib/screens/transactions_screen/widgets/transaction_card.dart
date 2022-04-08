@@ -78,16 +78,24 @@ class TranscationCard extends StatelessWidget {
                 border: Border.all(
                   width: 2,
                   color: transaction.transactionType == TransactionType.income
-                      ? kIncomeColor
-                      : kOutcomeColor,
+                      ? themeProvider.getThemeColor(ThemeColors.kIncomeColor)
+                      : themeProvider.getThemeColor(ThemeColors.kOutcomeColor),
                 ),
                 color: transaction.transactionType == TransactionType.income
-                    ? kIncomeColor.withOpacity(transaction.ratioToTotal > 1
-                        ? 1
-                        : transaction.ratioToTotal)
-                    : kOutcomeColor.withOpacity(transaction.ratioToTotal > 1
-                        ? 1
-                        : transaction.ratioToTotal),
+                    ? themeProvider
+                        .getThemeColor(ThemeColors.kIncomeColor)
+                        .withOpacity(
+                          transaction.ratioToTotal > 1
+                              ? 1
+                              : transaction.ratioToTotal,
+                        )
+                    : themeProvider
+                        .getThemeColor(ThemeColors.kOutcomeColor)
+                        .withOpacity(
+                          transaction.ratioToTotal > 1
+                              ? 1
+                              : transaction.ratioToTotal,
+                        ),
               ),
               //* the small circular icon that represents the original color of the transaction type
               //* to make it easy to differentiate between colors
@@ -97,8 +105,8 @@ class TranscationCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
                   color: transaction.transactionType == TransactionType.income
-                      ? kIncomeColor
-                      : kOutcomeColor,
+                      ? themeProvider.getThemeColor(ThemeColors.kIncomeColor)
+                      : themeProvider.getThemeColor(ThemeColors.kOutcomeColor),
                 ),
               ),
             ),
@@ -140,8 +148,9 @@ class TranscationCard extends StatelessWidget {
                   //* for opening the screen to edit the transactions
                   CardActionButton(
                     iconData: FontAwesomeIcons.pen,
-                    color: ChooseColorTheme.kMainColor,
-                    backgroundColor: Colors.grey[100],
+                    color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+                    backgroundColor: themeProvider
+                        .getThemeColor(ThemeColors.kMainBackgroundColor),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -161,8 +170,10 @@ class TranscationCard extends StatelessWidget {
                   //* for deleting a transactions
                   CardActionButton(
                     iconData: FontAwesomeIcons.trash,
-                    color: kDeleteColor,
-                    backgroundColor: Colors.grey[100],
+                    color:
+                        themeProvider.getThemeColor(ThemeColors.kDeleteColor),
+                    backgroundColor: themeProvider
+                        .getThemeColor(ThemeColors.kMainBackgroundColor),
                     //? here i need to show dialog before actually deleting a transaction
                     onTap: () => showDeleteCustomDialog(context),
                   ),

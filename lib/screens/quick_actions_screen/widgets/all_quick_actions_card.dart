@@ -6,14 +6,11 @@ import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/helpers/responsive.dart';
 import 'package:smart_wallet/utils/transactions_utils.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
-import '../../../constants/colors.dart';
 import '../../../models/quick_action_model.dart';
 import '../../../providers/quick_actions_provider.dart';
 
 import '../../../providers/theme_provider.dart';
-import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
-import '../../../constants/styles.dart';
 import '../../../constants/types.dart';
 import '../../../utils/general_utils.dart';
 import '../../add_transaction_screen/add_transaction_screen.dart';
@@ -91,8 +88,10 @@ class AllQuickActionsCard extends StatelessWidget {
                         width: 2,
                         color: quickAction.transactionType ==
                                 TransactionType.income
-                            ? kIncomeColor
-                            : kOutcomeColor,
+                            ? themeProvider
+                                .getThemeColor(ThemeColors.kIncomeColor)
+                            : themeProvider
+                                .getThemeColor(ThemeColors.kOutcomeColor),
                       ),
                     ),
                     child: Icon(
@@ -101,8 +100,10 @@ class AllQuickActionsCard extends StatelessWidget {
                           : Icons.arrow_upward,
                       color:
                           quickAction.transactionType == TransactionType.income
-                              ? kIncomeColor
-                              : kOutcomeColor,
+                              ? themeProvider
+                                  .getThemeColor(ThemeColors.kIncomeColor)
+                              : themeProvider
+                                  .getThemeColor(ThemeColors.kOutcomeColor),
                       size: kDefaultIconSize,
                     ),
                   ),
@@ -144,7 +145,8 @@ class AllQuickActionsCard extends StatelessWidget {
                         //* for opening the screen to edit the quick action
                         CardActionButton(
                           iconData: FontAwesomeIcons.pen,
-                          color: ChooseColorTheme.kMainColor,
+                          color: themeProvider
+                              .getThemeColor(ThemeColors.kMainColor),
                           onTap: () {
                             Navigator.push(
                               context,
@@ -170,7 +172,8 @@ class AllQuickActionsCard extends StatelessWidget {
                           iconData: quickAction.isFavorite
                               ? FontAwesomeIcons.solidHeart
                               : FontAwesomeIcons.heart,
-                          color: kDeleteColor,
+                          color: themeProvider
+                              .getThemeColor(ThemeColors.kOutcomeColor),
                           //* this will toggle the favorite for each quick action
                           onTap: () async {
                             await Provider.of<QuickActionsProvider>(context,
@@ -203,7 +206,7 @@ class QuickActionCardBackground extends StatelessWidget {
       padding: const EdgeInsets.only(right: kDefaultPadding / 2),
       margin: const EdgeInsets.only(bottom: kDefaultPadding / 2),
       decoration: BoxDecoration(
-        color: Colors.red,
+        color: themeProvider.getThemeColor(ThemeColors.kOutcomeColor),
         borderRadius: BorderRadius.circular(kDefaultBorderRadius),
       ),
       child: const Icon(

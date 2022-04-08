@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../constants/colors.dart';
-import '../../constants/styles.dart';
 import '../../providers/quick_actions_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../screens/quick_actions_screen/widgets/all_quick_actions_card.dart';

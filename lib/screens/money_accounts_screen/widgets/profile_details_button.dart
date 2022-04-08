@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/theme_provider.dart';
 import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 
@@ -14,6 +16,8 @@ class ProfileDetailsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -41,7 +45,8 @@ class ProfileDetailsButton extends StatelessWidget {
                     // ),
                     Icon(
                       Icons.keyboard_double_arrow_right_outlined,
-                      color: ChooseColorTheme.kMainColor,
+                      color:
+                          themeProvider.getThemeColor(ThemeColors.kMainColor),
                       size: kMediumIconSize,
                     ),
                   ],

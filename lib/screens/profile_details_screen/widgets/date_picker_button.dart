@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 
 import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
@@ -48,6 +49,8 @@ class DatePickerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     DateTime rawDate = dateType == DateTypes.startDate
         ? Provider.of<ProfileDetailsProvider>(context).startingDate
         : Provider.of<ProfileDetailsProvider>(context).endDate;
@@ -67,8 +70,8 @@ class DatePickerButton extends StatelessWidget {
             color: Provider.of<ProfileDetailsProvider>(context)
                         .currentActivePeriod ==
                     TransPeriod.custom
-                ? ChooseColorTheme.kMainColor
-                : ChooseColorTheme.kInactiveColor,
+                ? themeProvider.getThemeColor(ThemeColors.kMainColor)
+                : themeProvider.getThemeColor(ThemeColors.kInactiveColor),
             width: 2,
           ),
           borderRadius: BorderRadius.circular(kDefaultBorderRadius / 4),
@@ -78,7 +81,7 @@ class DatePickerButton extends StatelessWidget {
           child: Text(
             formattedDate,
             style: TextStyle(
-              color: ChooseColorTheme.kMainColor,
+              color: themeProvider.getThemeColor(ThemeColors.kMainColor),
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),

@@ -43,6 +43,7 @@ class TransactionsFilters extends StatelessWidget {
               transactionData.setCurrentActiveTransactionType(e['type']);
             },
             active: transactionData.currentActiveTransactionType == e['type'],
+            transactionType: e['type'],
           );
         }).toList(),
       ),

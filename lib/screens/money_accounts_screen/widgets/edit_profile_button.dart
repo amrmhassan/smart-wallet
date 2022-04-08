@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 
 import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
@@ -12,6 +14,8 @@ class EditProfileButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
@@ -29,7 +33,7 @@ class EditProfileButton extends StatelessWidget {
             height: 40,
             child: Icon(
               Icons.edit,
-              color: ChooseColorTheme.kMainColor,
+              color: themeProvider.getThemeColor(ThemeColors.kMainColor),
               size: kSmallIconSize,
             ),
           ),

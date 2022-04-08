@@ -34,11 +34,11 @@ class ProfileTransactionsInfo extends StatelessWidget {
                 fontWeight: FontWeight.normal,
               ),
             ),
-            const Text(
+            Text(
               currency,
               style: TextStyle(
                 fontSize: 11,
-                color: Colors.black45,
+                color: themeProvider.getThemeColor(ThemeColors.kMainColor),
               ),
             )
           ],

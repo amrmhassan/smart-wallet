@@ -1,6 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 
 import '../../../constants/colors.dart';
+import '../../../helpers/responsive.dart';
 import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../widgets/calculator/widgets/save_button.dart';
@@ -31,6 +36,8 @@ class AddProfileModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: Container(
@@ -40,8 +47,8 @@ class AddProfileModal extends StatelessWidget {
           vertical: kDefaultVerticalPadding,
         ),
         height: 150,
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(kDefaultBorderRadius),
             topRight: Radius.circular(kDefaultBorderRadius),
@@ -70,16 +77,23 @@ class AddProfileModal extends StatelessWidget {
                     maxLines: 1,
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: ChooseColorTheme.kMainColor.withOpacity(0.7),
+                      color:
+                          themeProvider.getThemeColor(ThemeColors.kMainColor),
                     ),
                     hintText: 'Enter The Profile Name',
+                    textStyle: TextStyle(
+                      color:
+                          themeProvider.getThemeColor(ThemeColors.kMainColor),
+                    ),
                     onChanged: (value) {},
                     keyboardType: TextInputType.text,
-                    fillColor: ChooseColorTheme.kTextFieldInputColor,
+                    fillColor: themeProvider
+                        .getThemeColor(ThemeColors.kCardBackgroundColor),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(kDefaultBorderRadius),
                       borderSide: BorderSide(
-                        color: Colors.white.withOpacity(0.3),
+                        color: themeProvider
+                            .getThemeColor(ThemeColors.kMainBackgroundColor),
                         width: 1,
                       ),
                     ),
@@ -97,8 +111,53 @@ class AddProfileModal extends StatelessWidget {
             const SizedBox(
               width: kDefaultPadding / 2,
             ),
-            SaveButton(onTap: onTap),
+            AddProfileButton(onTap: onTap)
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class AddProfileButton extends StatelessWidget {
+  const AddProfileButton({
+    Key? key,
+    required this.onTap,
+  }) : super(key: key);
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      clipBehavior: Clip.hardEdge,
+      alignment: Alignment.center,
+      width: Responsive.getWidth(context) / 7,
+      height: Responsive.getWidth(context) / 7,
+      decoration: BoxDecoration(
+        color: themeProvider.getThemeColor(ThemeColors.kButtonColor),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 0),
+            color: ChooseColorTheme.kMainColor.withOpacity(0.2),
+            blurRadius: 6,
+          )
+        ],
+        borderRadius: BorderRadius.circular(
+          kDefaultBorderRadius / 2,
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.save,
+              color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+            ),
+          ),
         ),
       ),
     );
@@ -114,6 +173,7 @@ class ClearProfileNameIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -123,7 +183,8 @@ class ClearProfileNameIcon extends StatelessWidget {
             right: kDefaultPadding / 4,
           ),
           decoration: BoxDecoration(
-            color: ChooseColorTheme.kInactiveColor.withOpacity(.4),
+            color:
+                themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
             borderRadius: BorderRadius.circular(kDefaultBorderRadius / 2),
           ),
           child: Material(
@@ -134,9 +195,9 @@ class ClearProfileNameIcon extends StatelessWidget {
                 alignment: Alignment.center,
                 width: 40,
                 height: 40,
-                child: const Icon(
+                child: Icon(
                   Icons.close,
-                  color: kOutcomeColor,
+                  color: themeProvider.getThemeColor(ThemeColors.kDeleteColor),
                 ),
               ),
             ),

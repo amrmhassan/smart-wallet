@@ -5,12 +5,12 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
+import 'package:smart_wallet/screens/home_screen/widgets/summary_period_icon.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
 
 import '../../../constants/profiles_constants.dart';
 import '../../../constants/sizes.dart';
-import '../../../constants/styles.dart';
 import '../../../models/profile_model.dart';
 import '../../../providers/profiles_provider.dart';
 import '../../../providers/theme_provider.dart';
@@ -102,11 +102,13 @@ class MoneyAccountCard extends StatelessWidget {
 
 //* for navigating to the clicked profile card details
   void goToProfileDetailsPage(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (ctx) => ProfileDetailsScreen(profileId: profileModel.id),
-        ));
+    if (profileModel.moneyAccountStatus != MoneyAccountStatus.empty) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (ctx) => ProfileDetailsScreen(profileId: profileModel.id),
+          ));
+    }
   }
 
   @override

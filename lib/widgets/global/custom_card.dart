@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 
 import '../../constants/sizes.dart';
-import '../../constants/styles.dart';
 
 class CustomCard extends StatelessWidget {
   final Widget child;
