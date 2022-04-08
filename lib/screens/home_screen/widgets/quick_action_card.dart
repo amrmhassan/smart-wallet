@@ -113,7 +113,7 @@ class QuickActionCard extends StatelessWidget {
                   maxLines: 3,
                   style: TextStyle(
                     color: themeProvider
-                        .getThemeColor(ThemeColors.kMainColor)
+                        .getThemeColor(ThemeColors.kInactiveColor)
                         .withOpacity(0.8),
                     fontSize: kDefaultParagraphTextSize,
                     fontWeight: FontWeight.w400,

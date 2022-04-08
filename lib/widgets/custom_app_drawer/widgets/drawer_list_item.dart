@@ -23,33 +23,36 @@ class DrawerlistItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
 
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: kDefaultHorizontalPadding,
-          vertical: kDefaultVerticalPadding / 2,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              iconData,
-              color:
-                  color ?? themeProvider.getThemeColor(ThemeColors.kMainColor),
-              size: kDefaultIconSize,
-            ),
-            const SizedBox(
-              width: kDefaultPadding / 2,
-            ),
-            Text(
-              title,
-              style: TextStyle(
-                color: themeProvider.getThemeColor(ThemeColors.kMainColor),
-                fontSize: 16,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: kDefaultHorizontalPadding,
+            vertical: kDefaultVerticalPadding / 2,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                iconData,
+                color: color ??
+                    themeProvider.getThemeColor(ThemeColors.kMainColor),
+                size: kDefaultIconSize,
               ),
-            ),
-          ],
+              const SizedBox(
+                width: kDefaultPadding / 2,
+              ),
+              Text(
+                title,
+                style: TextStyle(
+                  color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

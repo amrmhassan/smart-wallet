@@ -24,6 +24,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   @override
   Widget build(BuildContext context) {
     var profilesData = Provider.of<ProfilesProvider>(context);
+    var themeProvider = Provider.of<ThemeProvider>(context);
 
     return Stack(
       alignment: Alignment.bottomRight,
@@ -41,10 +42,17 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               StatisticsMoneySummary(profilesData: profilesData),
               SizedBox(height: kDefaultPadding / 2),
               CustomCard(
-                child: Text('The hight profile with total money will be here '),
+                child: Text(
+                  'The hight profile with total money will be here ',
+                  style: themeProvider.getTextStyle(
+                      ThemeTextStyles.kSmallInActiveParagraphTextStyle),
+                ),
               ),
               SizedBox(height: kDefaultPadding / 2),
-              CustomCard(child: Text('total debts will be here')),
+              CustomCard(
+                  child: Text('total debts will be here',
+                      style: themeProvider.getTextStyle(
+                          ThemeTextStyles.kSmallInActiveParagraphTextStyle))),
             ],
           ),
         ),
@@ -111,13 +119,18 @@ class StatisticsMainSummaryItem extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            fontSize: 18,
-            fontWeight:
-                transactionType == TransactionType.all ? FontWeight.bold : null,
+            fontSize: 16,
+            fontWeight: transactionType == TransactionType.all
+                ? FontWeight.bold
+                : FontWeight.w400,
             color: transactionType == TransactionType.income
-                ? themeProvider.getThemeColor(ThemeColors.kIncomeColor)
+                ? themeProvider
+                    .getThemeColor(ThemeColors.kIncomeColor)
+                    .withOpacity(0.6)
                 : transactionType == TransactionType.outcome
-                    ? themeProvider.getThemeColor(ThemeColors.kOutcomeColor)
+                    ? themeProvider
+                        .getThemeColor(ThemeColors.kOutcomeColor)
+                        .withOpacity(0.6)
                     : themeProvider.getThemeColor(ThemeColors.kSavingsColor),
           ),
         ),
@@ -125,12 +138,17 @@ class StatisticsMainSummaryItem extends StatelessWidget {
           '${doubleToString(amount)} $currency',
           style: TextStyle(
             fontSize: 16,
-            fontWeight:
-                transactionType == TransactionType.all ? FontWeight.bold : null,
+            fontWeight: transactionType == TransactionType.all
+                ? FontWeight.bold
+                : FontWeight.w400,
             color: transactionType == TransactionType.income
-                ? themeProvider.getThemeColor(ThemeColors.kIncomeColor)
+                ? themeProvider
+                    .getThemeColor(ThemeColors.kIncomeColor)
+                    .withOpacity(0.6)
                 : transactionType == TransactionType.outcome
-                    ? themeProvider.getThemeColor(ThemeColors.kOutcomeColor)
+                    ? themeProvider
+                        .getThemeColor(ThemeColors.kOutcomeColor)
+                        .withOpacity(0.6)
                     : themeProvider.getThemeColor(ThemeColors.kSavingsColor),
           ),
         ),

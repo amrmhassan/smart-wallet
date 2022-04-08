@@ -16,7 +16,7 @@ String doubleToString(double amount) {
 void showSnackBar(
     BuildContext context, String message, SnackBarType snackBarType,
     [bool aboveBottomNavBar = false]) {
-  var themeProvider = Provider.of<ThemeProvider>(context);
+  var themeProvider = Provider.of<ThemeProvider>(context, listen: false);
   ScaffoldMessenger.of(context).removeCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(

@@ -6,7 +6,7 @@ import 'package:smart_wallet/helpers/shared_pref_helper.dart';
 import '../themes/theme_controller.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  Themes currentTheme = Themes.basic;
+  Themes currentTheme = Themes.dark;
   Future<void> setTheme(Themes theme) async {
     currentTheme = theme;
     await SharedPrefHelper.setString(kCurrentActiveTheme, currentTheme.name);

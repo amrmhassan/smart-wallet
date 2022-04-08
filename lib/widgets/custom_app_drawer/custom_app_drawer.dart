@@ -8,9 +8,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/colors.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
+import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/helpers/db_helper.dart';
 import 'package:smart_wallet/helpers/shared_pref_helper.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/screens/holder_screen.dart';
+import 'package:smart_wallet/screens/quick_actions_screen/quick_actions_screen.dart';
+import 'package:smart_wallet/utils/general_utils.dart';
 
 import 'widgets/drawer_list_item.dart';
 import 'widgets/drawer_logo.dart';
@@ -20,6 +24,14 @@ class CustomAppDrawer extends StatelessWidget {
   const CustomAppDrawer({
     Key? key,
   }) : super(key: key);
+
+  Future<void> deleteDatabaseAndRestart(BuildContext context) async {
+    {
+      await DBHelper.deleteDatabase(dbName);
+      await SharedPrefHelper.removeAllSavedKeys();
+      Phoenix.rebirth(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,30 +49,35 @@ class CustomAppDrawer extends StatelessWidget {
                 children: [
                   DrawerlistItem(
                     title: 'Home',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, HolderScreen.routeName);
+                    },
                     iconData: Icons.home,
                   ),
                   DrawerlistItem(
-                    title: 'Debts',
-                    onTap: () {},
-                    iconData: Icons.money_off,
-                    color: kModerateProfileStatusColor,
-                  ),
-                  DrawerlistItem(
                     title: 'Quick Actions',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, QuickActionsScreen.routeName);
+                    },
                     iconData: FontAwesomeIcons.bolt,
                     color: kModerateProfileStatusColor,
                   ),
+                  DrawerlistItem(
+                    title: 'Debts',
+                    onTap: () {
+                      showSnackBar(context, 'Coming soon', SnackBarType.info);
+                      Navigator.of(context).pop();
+                    },
+                    iconData: Icons.money_off,
+                    color: kModerateProfileStatusColor,
+                  ),
+
                   //* only show this option if the app is in debug mode
                   if (kDebugMode)
                     DrawerlistItem(
                       title: 'Delete Database',
-                      onTap: () async {
-                        await DBHelper.deleteDatabase(dbName);
-                        await SharedPrefHelper.removeAllSavedKeys();
-                        Phoenix.rebirth(context);
-                      },
+                      onTap: () async => deleteDatabaseAndRestart(context),
                       iconData: Icons.delete,
                       color: themeProvider
                           .getThemeColor(ThemeColors.kOutcomeColor),
@@ -72,8 +89,7 @@ class CustomAppDrawer extends StatelessWidget {
                         Phoenix.rebirth(context);
                       },
                       iconData: FontAwesomeIcons.bolt,
-                      color: themeProvider
-                          .getThemeColor(ThemeColors.kOutcomeColor),
+                      color: kModerateProfileStatusColor,
                     ),
                 ],
               ),

@@ -46,13 +46,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       crossAxisCount: 2,
                       crossAxisSpacing: kDefaultPadding / 2,
                       mainAxisSpacing: kDefaultPadding / 2,
-                      childAspectRatio: 2 / 3,
+                      childAspectRatio: 1.4,
                     ),
                     children: [
                       //! type the theme name and preview it
-                      ThemeChanger(themeProvider: themeProvider),
+                      ThemeChanger(),
                       CustomCard(
-                        child: Text('Appearance'),
+                        child: Text(
+                          'Appearance',
+                          style: themeProvider.getTextStyle(
+                            ThemeTextStyles.kParagraphTextStyle,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -69,13 +74,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
 class ThemeChanger extends StatelessWidget {
   const ThemeChanger({
     Key? key,
-    required this.themeProvider,
   }) : super(key: key);
-
-  final ThemeProvider themeProvider;
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
     return GestureDetector(
       onTap: () {
         //? this will toggle the theme from dark to basic and vice versa
@@ -90,12 +93,12 @@ class ThemeChanger extends StatelessWidget {
         }
       },
       child: CustomCard(
-        backgroundImage: DecorationImage(
-          image: AssetImage(
-            'assets/images/background.jpg',
-          ),
-          fit: BoxFit.cover,
-        ),
+        // backgroundImage: DecorationImage(
+        //   image: AssetImage(
+        //     'assets/images/background.jpg',
+        //   ),
+        //   fit: BoxFit.cover,
+        // ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -109,10 +112,18 @@ class ThemeChanger extends StatelessWidget {
                 SizedBox(
                   width: kDefaultPadding / 2,
                 ),
-                Text(
-                  'Themes',
-                  style: themeProvider.getTextStyle(
-                      ThemeTextStyles.kSmallTextPrimaryColorStyle),
+                Expanded(
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Text(
+                      'Themes',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            themeProvider.getThemeColor(ThemeColors.kMainColor),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -122,7 +133,7 @@ class ThemeChanger extends StatelessWidget {
             Expanded(
               child: Center(
                 child: Text(
-                  'Light',
+                  themeProvider.currentTheme == Themes.basic ? 'Basic' : 'Dark',
                   style: TextStyle(
                     color: themeProvider
                         .getThemeColor(ThemeColors.kMainColor)
