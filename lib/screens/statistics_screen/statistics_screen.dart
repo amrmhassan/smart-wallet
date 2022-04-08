@@ -72,13 +72,13 @@ class StatisticsMoneySummary extends StatelessWidget {
           ),
           SizedBox(height: kDefaultPadding / 2),
           StatisticsMainSummaryItem(
-            title: 'Income',
+            title: 'Total Income',
             amount: profilesData.getTotalIncome(),
             transactionType: TransactionType.income,
           ),
           SizedBox(height: kDefaultPadding / 2),
           StatisticsMainSummaryItem(
-            title: 'Outcome',
+            title: 'Total Outcome',
             amount: profilesData.getTotalOutcome(),
             transactionType: TransactionType.outcome,
           ),

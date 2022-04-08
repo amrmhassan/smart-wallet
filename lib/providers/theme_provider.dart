@@ -17,12 +17,12 @@ class ThemeProvider extends ChangeNotifier {
 
   TextStyle getTextStyle(ThemeTextStyles themeTextStyles) {
     //? this is because i will have only one version of textStyle
-    return textStylesThemes[Themes.basic]![themeTextStyles] as TextStyle;
+    return textStylesThemes[currentTheme]![themeTextStyles] as TextStyle;
   }
 
   BoxShadow getBoxShadow(ThemeBoxShadow themeBoxShadow) {
     //? this is because i will have only one version of boxshadow
-    return boxShadowThemes[Themes.basic]![themeBoxShadow] as BoxShadow;
+    return boxShadowThemes[currentTheme]![themeBoxShadow] as BoxShadow;
   }
 }
 
@@ -87,7 +87,7 @@ Map<Themes, Map<ThemeColors, Color>> colorThemes = {
     ThemeColors.kMainColor: Color(0xffffffff).withOpacity(0.7),
     ThemeColors.kSavingsColor: Color(0xffF39F2A),
     ThemeColors.kInactiveColor: Color(0xff9A9CA3),
-    ThemeColors.kTextFieldInputColor: Color(0xff2A2D3E),
+    ThemeColors.kTextFieldInputColor: Color(0xff3C4854),
     ThemeColors.kMainBackgroundColor: Color(0xff3C4854),
     ThemeColors.kCardBackgroundColor: Color(0xff283949),
     ThemeColors.kIncomeColor: Color(0xffAEE607),
@@ -137,9 +137,32 @@ Map<Themes, Map<ThemeBoxShadow, BoxShadow>> boxShadowThemes = {
           themeProvider.getThemeColor(ThemeColors.kMainColor).withOpacity(0.5),
     ),
   },
+  Themes.dark: {
+    ThemeBoxShadow.kDefaultBoxShadow: BoxShadow(),
+    ThemeBoxShadow.kBottomNavBarShadow: BoxShadow(),
+    ThemeBoxShadow.kIconBoxShadow: BoxShadow(
+      offset: const Offset(0, 0),
+      color:
+          themeProvider.getThemeColor(ThemeColors.kMainColor).withOpacity(0.2),
+      blurRadius: 6,
+    ),
+    ThemeBoxShadow.kCardBoxShadow: BoxShadow(
+      offset: const Offset(3, 3),
+      blurRadius: 6,
+      color:
+          themeProvider.getThemeColor(ThemeColors.kMainColor).withOpacity(0.2),
+    ),
+    ThemeBoxShadow.kCardHeavyBoxShadow: BoxShadow(
+      offset: const Offset(3, 3),
+      blurRadius: 6,
+      color:
+          themeProvider.getThemeColor(ThemeColors.kMainColor).withOpacity(0.5),
+    ),
+  },
 };
 
 Map<Themes, Map<ThemeTextStyles, TextStyle>> textStylesThemes = {
+  //? basic theme text styles
   Themes.basic: {
     ThemeTextStyles.kHeadingTextStyle: TextStyle(
       color: themeProvider.getThemeColor(ThemeColors.kMainColor),
@@ -148,6 +171,81 @@ Map<Themes, Map<ThemeTextStyles, TextStyle>> textStylesThemes = {
     ),
     ThemeTextStyles.kCalcTextStyle: TextStyle(
       color: Colors.black87,
+      fontSize: 26,
+      fontWeight: FontWeight.bold,
+    ),
+    ThemeTextStyles.kActivatedProfileTextStyle: TextStyle(
+      color:
+          themeProvider.getThemeColor(ThemeColors.kMainColor).withOpacity(0.5),
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+    ),
+    ThemeTextStyles.kLinkTextStyle: TextStyle(
+      color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+      decoration: TextDecoration.underline,
+      fontSize: 16,
+    ),
+    ThemeTextStyles.kParagraphTextStyle: TextStyle(
+      color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+    ),
+    ThemeTextStyles.kSmallTextPrimaryColorStyle: TextStyle(
+      color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+      fontSize: 14,
+      fontWeight: FontWeight.normal,
+    ),
+    ThemeTextStyles.kMediumTextPrimaryColorStyle: TextStyle(
+      color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+      fontSize: 16,
+      fontWeight: FontWeight.normal,
+    ),
+    ThemeTextStyles.kSmallTextOpaqueColorStyle: TextStyle(
+      color:
+          themeProvider.getThemeColor(ThemeColors.kMainColor).withOpacity(0.6),
+      fontSize: 18,
+      fontWeight: FontWeight.normal,
+    ),
+    ThemeTextStyles.kWhiteTextStyle: TextStyle(
+      color: Colors.white,
+      fontSize: 22,
+      fontWeight: FontWeight.bold,
+    ),
+    ThemeTextStyles.kWhiteProfileStatusTextStyle: TextStyle(
+      color: Colors.white,
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+    ),
+    ThemeTextStyles.kActivateProfileTextStyle: TextStyle(
+      color: Colors.white,
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+    ),
+    ThemeTextStyles.kInActiveParagraphTextStyle: TextStyle(
+      color: themeProvider.getThemeColor(ThemeColors.kInactiveColor),
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+    ),
+    ThemeTextStyles.kSmallInActiveParagraphTextStyle: TextStyle(
+      color: themeProvider.getThemeColor(ThemeColors.kInactiveColor),
+      fontSize: 14,
+      fontWeight: FontWeight.normal,
+    ),
+    ThemeTextStyles.kSmallTextWhiteColorStyle: TextStyle(
+      color: Colors.white,
+      fontSize: 14,
+      fontWeight: FontWeight.normal,
+    ),
+  },
+  //? dark theme text styles
+  Themes.dark: {
+    ThemeTextStyles.kHeadingTextStyle: TextStyle(
+      color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+    ),
+    ThemeTextStyles.kCalcTextStyle: TextStyle(
+      color: themeProvider.getThemeColor(ThemeColors.kMainColor),
       fontSize: 26,
       fontWeight: FontWeight.bold,
     ),

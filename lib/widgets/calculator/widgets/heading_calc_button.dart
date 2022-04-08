@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../../../constants/sizes.dart';
 import '../../../helpers/responsive.dart';
 import '../../../providers/theme_provider.dart';
-import '../../../themes/choose_color_theme.dart';
 
 class HeadingCalcButton extends StatelessWidget {
   final IconData? iconData;
@@ -27,13 +26,9 @@ class HeadingCalcButton extends StatelessWidget {
       width: Responsive.getWidth(context) / 7,
       height: Responsive.getWidth(context) / 7,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
         boxShadow: [
-          BoxShadow(
-            offset: const Offset(0, 0),
-            color: ChooseColorTheme.kMainColor.withOpacity(0.2),
-            blurRadius: 6,
-          )
+          themeProvider.getBoxShadow(ThemeBoxShadow.kDefaultBoxShadow)
         ],
         borderRadius: BorderRadius.circular(
           1000,
@@ -55,7 +50,7 @@ class HeadingCalcButton extends StatelessWidget {
                   )
                 : Icon(
                     iconData,
-                    color: ChooseColorTheme.kMainColor,
+                    color: themeProvider.getThemeColor(ThemeColors.kMainColor),
                     size: kMediumIconSize,
                   ),
           ),

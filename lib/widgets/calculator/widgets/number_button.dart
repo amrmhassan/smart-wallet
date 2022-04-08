@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/theme_provider.dart';
-import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../helpers/responsive.dart';
 
@@ -25,13 +24,9 @@ class NumberButton extends StatelessWidget {
       width: Responsive.getWidth(context) / 7,
       height: Responsive.getWidth(context) / 7,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
         boxShadow: [
-          BoxShadow(
-            offset: const Offset(0, 0),
-            color: ChooseColorTheme.kMainColor.withOpacity(0.2),
-            blurRadius: 6,
-          )
+          themeProvider.getBoxShadow(ThemeBoxShadow.kDefaultBoxShadow)
         ],
         borderRadius: BorderRadius.circular(
           kDefaultBorderRadius / 2,

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
+import 'package:smart_wallet/widgets/global/custom_card.dart';
 import '../../constants/sizes.dart';
 import '../../constants/types.dart';
 import '../../models/quick_action_model.dart';
 import '../../models/transaction_model.dart';
 import '../../providers/quick_actions_provider.dart';
-import '../../providers/theme_provider.dart';
 import '../../providers/transactions_provider.dart';
 import '../../utils/general_utils.dart';
 import '../../utils/transactions_utils.dart';
@@ -190,8 +190,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var themeProvider = Provider.of<ThemeProvider>(context);
-
     //* this argument to inform this widget that i need to add a quick action not a transaction
     //* when needing to add a quick action i will add the argument to this with the argument:true like in the add_quick_action_button.dart file
 
@@ -231,20 +229,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       height: 40,
                     ),
                     //* the main container of the adding new transaction cart which will have the main padding around the edges of the screen
-                    Container(
+                    CustomCard(
                       padding: const EdgeInsets.all(kDefaultPadding / 2),
-                      width: double.infinity,
                       height: 200,
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(kDefaultBorderRadius),
-                        color: Colors.white,
-                        // boxShadow: [kDefaultBoxShadow],
-                        boxShadow: [
-                          themeProvider
-                              .getBoxShadow(ThemeBoxShadow.kDefaultBoxShadow)
-                        ],
-                      ),
                       //* the row which will have the main sides of the cart
                       child: Row(
                         children: [

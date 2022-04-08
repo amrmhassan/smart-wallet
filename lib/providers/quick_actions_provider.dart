@@ -75,7 +75,7 @@ class QuickActionsProvider extends ChangeNotifier {
         'createdAt': createdAt.toIso8601String(),
         'transactionType':
             transactionType == TransactionType.income ? 'income' : 'outcome',
-        'isFavorite': 'false',
+        'isFavorite':_quickActions.isEmpty?'true': 'false',
         'profileId': profileId,
       });
     } catch (error) {
@@ -92,7 +92,7 @@ class QuickActionsProvider extends ChangeNotifier {
       amount: amount,
       createdAt: createdAt,
       transactionType: transactionType,
-      isFavorite: false,
+      isFavorite:_quickActions.isEmpty?true: false,
       profileId: profileId,
     );
     _quickActions.add(quickActionModel);

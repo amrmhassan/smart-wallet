@@ -293,7 +293,11 @@ class _CalculatorState extends State<Calculator> {
             ),
             child: Text(
               output,
-              style: themeProvider.getTextStyle(ThemeTextStyles.kCalcTextStyle),
+              style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: themeProvider
+                      .getThemeColor(ThemeColors.kMainBackgroundColor)),
             ),
           ),
           const SizedBox(

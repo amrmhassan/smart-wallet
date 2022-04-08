@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../themes/choose_color_theme.dart';
+import 'package:provider/provider.dart';
+import '../../../providers/theme_provider.dart';
 import '../../../constants/sizes.dart';
-import '../../../screens/home_screen/widgets/summary_period_icon.dart';
 import '../../../widgets/global/stylized_text_field.dart';
 
 class LeftSideAddTransaction extends StatelessWidget {
@@ -17,6 +17,8 @@ class LeftSideAddTransaction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     //* this is the left side container , it is expanded cause it will take the 3/5 of the width
     return Expanded(
       flex: 3,
@@ -33,22 +35,29 @@ class LeftSideAddTransaction extends StatelessWidget {
                   controller: titleController,
                   hintStyle: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: ChooseColorTheme.kMainColor.withOpacity(0.7),
+                    color: themeProvider.getThemeColor(ThemeColors.kMainColor),
                   ),
                   maxLines: 1,
                   hintText: 'Enter a title',
                   onChanged: (value) {},
                   keyboardType: TextInputType.text,
-                  fillColor: ChooseColorTheme.kTextFieldInputColor,
+                  textStyle: TextStyle(
+                    color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+                  ),
+                  fillColor: themeProvider
+                      .getThemeColor(ThemeColors.kTextFieldInputColor),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderRadius:
+                        BorderRadius.circular(kDefaultBorderRadius / 2),
                     borderSide: BorderSide(
-                      color: Colors.white.withOpacity(0.3),
+                      color: themeProvider
+                          .getThemeColor(ThemeColors.kMainBackgroundColor),
                       width: 1,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderRadius:
+                        BorderRadius.circular(kDefaultBorderRadius / 2),
                     borderSide: BorderSide(
                       color: Colors.white.withOpacity(0.3),
                       width: 1,
@@ -62,25 +71,33 @@ class LeftSideAddTransaction extends StatelessWidget {
                   hintText: 'Description',
                   hintStyle: TextStyle(
                     fontWeight: FontWeight.normal,
-                    color: ChooseColorTheme.kMainColor.withOpacity(0.7),
+                    color: themeProvider.getThemeColor(ThemeColors.kMainColor),
                   ),
                   maxLines: 3,
                   onChanged: (value) {},
                   keyboardType: TextInputType.multiline,
-                  fillColor: ChooseColorTheme.kTextFieldInputColor,
+                  textStyle: TextStyle(
+                    color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+                  ),
+                  fillColor: themeProvider
+                      .getThemeColor(ThemeColors.kTextFieldInputColor),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderRadius:
+                        BorderRadius.circular(kDefaultBorderRadius / 2),
+                    borderSide: BorderSide(
+                      color: themeProvider
+                          .getThemeColor(ThemeColors.kMainBackgroundColor),
+                      width: 1,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius:
+                        BorderRadius.circular(kDefaultBorderRadius / 2),
                     borderSide: BorderSide(
                       color: Colors.white.withOpacity(0.3),
                       width: 1,
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(borderRadius),
-                      borderSide: BorderSide(
-                        color: Colors.white.withOpacity(0.3),
-                        width: 1,
-                      )),
                 ),
               ],
             ),

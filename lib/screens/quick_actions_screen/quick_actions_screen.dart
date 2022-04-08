@@ -21,6 +21,18 @@ class QuickActionsScreen extends StatefulWidget {
 }
 
 class _QuickActionsScreenState extends State<QuickActionsScreen> {
+  void openAddQuickActionScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => const AddTransactionScreen(
+          addTransactionScreenOperations:
+              AddTransactionScreenOperations.addQuickAction,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final quickActionsData = Provider.of<QuickActionsProvider>(context);
@@ -51,17 +63,9 @@ class _QuickActionsScreenState extends State<QuickActionsScreen> {
                   //* my custom app bar and the mainAppBar is equal to false for adding the back button and remove the menu icon(side bar opener)
                   MyAppBar(
                     title: 'Quick Actions',
-                    rightIcon: AddElementButton(onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (ctx) => const AddTransactionScreen(
-                            addTransactionScreenOperations:
-                                AddTransactionScreenOperations.addQuickAction,
-                          ),
-                        ),
-                      );
-                    }),
+                    rightIcon: AddElementButton(
+                      onTap: () => openAddQuickActionScreen(context),
+                    ),
                   ),
                   //* space between the app bar and the next widget
                   const SizedBox(

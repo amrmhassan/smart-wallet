@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/theme_provider.dart';
-import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../helpers/responsive.dart';
 
@@ -32,11 +31,16 @@ class MathOperationBtn extends StatelessWidget {
       width: Responsive.getWidth(context) / 7,
       height: Responsive.getWidth(context) / 7,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
         borderRadius: BorderRadius.circular(
           1000,
         ),
-        border: Border.all(width: 1, color: ChooseColorTheme.kMainColor),
+        border: Border.all(
+          width: 1,
+          color: themeProvider
+              .getThemeColor(ThemeColors.kMainColor)
+              .withOpacity(0.2),
+        ),
       ),
       child: Material(
         color: Colors.transparent,
@@ -54,7 +58,7 @@ class MathOperationBtn extends StatelessWidget {
                   )
                 : Icon(
                     iconData,
-                    color: ChooseColorTheme.kMainColor,
+                    color: themeProvider.getThemeColor(ThemeColors.kMainColor),
                     size: kMediumIconSize,
                   ),
           ),

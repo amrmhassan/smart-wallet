@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 
-import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/types.dart';
 import 'add_transaction_type_button.dart';
@@ -56,7 +55,8 @@ class RightSideAddTransaction extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: kDefaultPadding / 4),
                 decoration: BoxDecoration(
-                  color: ChooseColorTheme.kTextFieldInputColor,
+                  color: themeProvider
+                      .getThemeColor(ThemeColors.kTextFieldInputColor),
                   borderRadius: BorderRadius.circular(kDefaultBorderRadius / 2),
                 ),
                 //* price text field

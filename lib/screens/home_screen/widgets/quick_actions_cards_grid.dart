@@ -5,11 +5,11 @@ import 'package:provider/provider.dart';
 import '../../../models/quick_action_model.dart';
 import '../../../providers/quick_actions_provider.dart';
 import '../../../providers/theme_provider.dart';
-import '../../../screens/quick_actions_screen/quick_actions_screen.dart';
 import '../../../utils/transactions_utils.dart';
 import '../../../widgets/global/empty_transactions.dart';
 
 import '../../../constants/sizes.dart';
+import '../../add_transaction_screen/add_transaction_screen.dart';
 import 'quick_action_card.dart';
 
 class QuickActionsCardsGrid extends StatelessWidget {
@@ -17,7 +17,17 @@ class QuickActionsCardsGrid extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-//* in this method i will apply the quick action and add the transaction by clicking on the quick action card
+  void openAddQuickActionScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => const AddTransactionScreen(
+          addTransactionScreenOperations:
+              AddTransactionScreenOperations.addQuickAction,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,26 +51,15 @@ class QuickActionsCardsGrid extends StatelessWidget {
                   InkWell(
                     splashColor: Colors.transparent,
                     overlayColor: MaterialStateProperty.all(Colors.transparent),
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, QuickActionsScreen.routeName);
-                    },
+                    onTap: () => openAddQuickActionScreen(context),
                     child: EmptyTransactions(
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'No Favorite ',
+                            'No Favorite Quick Actions, Add one?',
                             style: themeProvider.getTextStyle(
                                 ThemeTextStyles.kParagraphTextStyle),
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            'Quick Actions ',
-                            style: themeProvider
-                                .getTextStyle(ThemeTextStyles.kLinkTextStyle),
                           ),
                         ],
                       ),

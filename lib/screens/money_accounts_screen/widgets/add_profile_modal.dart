@@ -46,7 +46,7 @@ class AddProfileModal extends StatelessWidget {
         ),
         height: 150,
         decoration: BoxDecoration(
-          color: themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
+          color: themeProvider.getThemeColor(ThemeColors.kCardBackgroundColor),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(kDefaultBorderRadius),
             topRight: Radius.circular(kDefaultBorderRadius),
@@ -86,7 +86,7 @@ class AddProfileModal extends StatelessWidget {
                     onChanged: (value) {},
                     keyboardType: TextInputType.text,
                     fillColor: themeProvider
-                        .getThemeColor(ThemeColors.kCardBackgroundColor),
+                        .getThemeColor(ThemeColors.kTextFieldInputColor),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(kDefaultBorderRadius),
                       borderSide: BorderSide(
