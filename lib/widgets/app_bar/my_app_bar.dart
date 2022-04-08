@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../constants/styles.dart';
 
 import '../../constants/sizes.dart';
+import '../../providers/theme_provider.dart';
 import '../global/go_back_icon.dart';
 import '../global/menu_icon.dart';
 import '../global/person_icon.dart';
@@ -18,6 +20,8 @@ class MyAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     //* the main container of my app bar
     return Container(
       padding: EdgeInsets.only(
@@ -45,7 +49,8 @@ class MyAppBar extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       title as String,
-                      style: kParagraphTextStyle,
+                      style: themeProvider
+                          .getTextStyle(ThemeTextStyles.kParagraphTextStyle),
                     ),
                   )
                 : Container(),

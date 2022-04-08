@@ -10,6 +10,7 @@ import '../../../constants/colors.dart';
 import '../../../models/quick_action_model.dart';
 import '../../../providers/quick_actions_provider.dart';
 
+import '../../../providers/theme_provider.dart';
 import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
@@ -52,6 +53,8 @@ class AllQuickActionsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     //* the main container of the card
     return Dismissible(
       direction: DismissDirection.endToStart,
@@ -116,7 +119,9 @@ class AllQuickActionsCard extends StatelessWidget {
                         width: Responsive.getWidth(context) / 3,
                         child: Text(
                           quickAction.title,
-                          style: kParagraphTextStyle,
+                          style: themeProvider.getTextStyle(
+                              ThemeTextStyles.kParagraphTextStyle),
+                          // style: kParagraphTextStyle,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -126,7 +131,8 @@ class AllQuickActionsCard extends StatelessWidget {
                       //* price text widget
                       Text(
                         '${doubleToString(quickAction.amount)} $currency',
-                        style: kSmallTextPrimaryColorStyle,
+                        style: themeProvider.getTextStyle(
+                            ThemeTextStyles.kSmallTextPrimaryColorStyle),
                       ),
                     ],
                   ),

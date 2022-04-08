@@ -43,8 +43,9 @@ class CustomCard extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         color: themeProvider.getThemeColor(ThemeColors.kCardBackgroundColor),
-        boxShadow:
-            themeProvider.currentTheme == Themes.dark ? null : [kCardBoxShadow],
+        boxShadow: themeProvider.currentTheme == Themes.dark
+            ? null
+            : [themeProvider.getBoxShadow(ThemeBoxShadow.kCardBoxShadow)],
         borderRadius: BorderRadius.circular(kDefaultBorderRadius),
         image: backgroundImage,
       ),

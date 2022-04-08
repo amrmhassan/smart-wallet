@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 
-import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../themes/choose_color_theme.dart';
 
@@ -13,11 +14,12 @@ class PersonIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
-        color: Colors.white,
+        color: themeProvider.getThemeColor(ThemeColors.kCardBackgroundColor),
       ),
       child: Material(
         color: Colors.transparent,
@@ -28,13 +30,13 @@ class PersonIcon extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(
                 width: 3,
-                color: ChooseColorTheme.kMainColor,
+                color: themeProvider.getThemeColor(ThemeColors.kMainColor),
               ),
               borderRadius: BorderRadius.circular(50),
             ),
             child: Icon(
               Icons.person,
-              color: ChooseColorTheme.kMainColor,
+              color: themeProvider.getThemeColor(ThemeColors.kMainColor),
               size: kDefaultIconSize,
             ),
           ),

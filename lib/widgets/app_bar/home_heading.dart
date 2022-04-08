@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../constants/styles.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 
 class HomeHeading extends StatelessWidget {
   final String title;
@@ -11,11 +11,13 @@ class HomeHeading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       alignment: Alignment.center,
       child: Text(
         title,
-        style: kHeadingTextStyle,
+        style: themeProvider.getTextStyle(ThemeTextStyles.kHeadingTextStyle),
       ),
     );
   }

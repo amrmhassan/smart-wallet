@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smart_wallet/constants/colors.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
@@ -61,6 +62,15 @@ class CustomAppDrawer extends StatelessWidget {
                           context, 'Database deleted', SnackBarType.success);
                     },
                     iconData: Icons.delete,
+                    color: kOutcomeColor,
+                  ),
+                if (kDebugMode)
+                  DrawerlistItem(
+                    title: 'Restart App',
+                    onTap: () async {
+                      Phoenix.rebirth(context);
+                    },
+                    iconData: FontAwesomeIcons.bolt,
                     color: kOutcomeColor,
                   ),
               ],

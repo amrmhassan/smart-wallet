@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
 import '../../../helpers/responsive.dart';
+import '../../../providers/theme_provider.dart';
 import '../../../themes/choose_color_theme.dart';
 
 class HeadingCalcButton extends StatelessWidget {
@@ -18,6 +20,8 @@ class HeadingCalcButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       clipBehavior: Clip.hardEdge,
       alignment: Alignment.center,
@@ -47,7 +51,8 @@ class HeadingCalcButton extends StatelessWidget {
             child: iconData == null
                 ? Text(
                     title as String,
-                    style: kCalcTextStyle,
+                    style: themeProvider
+                        .getTextStyle(ThemeTextStyles.kCalcTextStyle),
                   )
                 : Icon(
                     iconData,

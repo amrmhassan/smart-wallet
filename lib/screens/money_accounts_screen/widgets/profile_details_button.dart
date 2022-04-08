@@ -37,7 +37,7 @@ class ProfileDetailsButton extends StatelessWidget {
                   children: [
                     // Text(
                     //   'Details',
-                    //   style: kSmallTextPrimaryColorStyle,
+                    //   style: themeProvider.getTextStyle(ThemeTextStyles.kSmallTextPrimaryColorStyle),
                     // ),
                     Icon(
                       Icons.keyboard_double_arrow_right_outlined,

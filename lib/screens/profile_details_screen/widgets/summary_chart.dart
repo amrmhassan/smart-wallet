@@ -7,6 +7,7 @@ import 'package:smart_wallet/constants/sizes.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 
 import '../../../constants/styles.dart';
+import '../../../providers/theme_provider.dart';
 
 class SummaryChart extends StatefulWidget {
   const SummaryChart({Key? key}) : super(key: key);
@@ -27,6 +28,8 @@ class _SummaryChartState extends State<SummaryChart> {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: kDefaultHorizontalPadding,
@@ -36,7 +39,7 @@ class _SummaryChartState extends State<SummaryChart> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(kDefaultBorderRadius / 2),
         boxShadow: [
-          kDefaultBoxShadow,
+          themeProvider.getBoxShadow(ThemeBoxShadow.kDefaultBoxShadow),
         ],
       ),
       child: Column(

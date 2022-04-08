@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
 
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
+import '../../../providers/theme_provider.dart';
 
 class ProfileTransactionsInfo extends StatelessWidget {
   final String title;
@@ -17,6 +19,8 @@ class ProfileTransactionsInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Column(
       children: [
         Row(
@@ -44,7 +48,8 @@ class ProfileTransactionsInfo extends StatelessWidget {
         ),
         Text(
           title,
-          style: kSmallInActiveParagraphTextStyle,
+          style: themeProvider
+              .getTextStyle(ThemeTextStyles.kSmallInActiveParagraphTextStyle),
         ),
       ],
     );

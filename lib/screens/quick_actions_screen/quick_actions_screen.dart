@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../constants/colors.dart';
 import '../../constants/styles.dart';
 import '../../providers/quick_actions_provider.dart';
+import '../../providers/theme_provider.dart';
 import '../../screens/quick_actions_screen/widgets/all_quick_actions_card.dart';
 import '../../themes/choose_color_theme.dart';
 import '../../widgets/global/empty_transactions.dart';
@@ -27,6 +28,8 @@ class _QuickActionsScreenState extends State<QuickActionsScreen> {
     final quickActionsData = Provider.of<QuickActionsProvider>(context);
     final quickActions =
         quickActionsData.displayedQuickActions.reversed.toList();
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       floatingActionButton: FloatingActionButton(
@@ -83,7 +86,8 @@ class _QuickActionsScreenState extends State<QuickActionsScreen> {
                             imagePath: 'assets/icons/box.png',
                             trainling: Text(
                               'No Quick Actions Here',
-                              style: kSmallTextOpaqueColorStyle,
+                              style: themeProvider.getTextStyle(
+                                  ThemeTextStyles.kSmallTextOpaqueColorStyle),
                             ),
                           )
                         : ListView.builder(

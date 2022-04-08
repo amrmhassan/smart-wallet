@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../providers/theme_provider.dart';
 import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
@@ -23,6 +25,8 @@ class MathOperationBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       clipBehavior: Clip.hardEdge,
       alignment: Alignment.center,
@@ -46,7 +50,8 @@ class MathOperationBtn extends StatelessWidget {
             child: iconData == null
                 ? Text(
                     title as String,
-                    style: kCalcTextStyle,
+                    style: themeProvider
+                        .getTextStyle(ThemeTextStyles.kCalcTextStyle),
                   )
                 : Icon(
                     iconData,

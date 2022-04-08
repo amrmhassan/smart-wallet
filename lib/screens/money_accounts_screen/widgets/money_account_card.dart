@@ -13,6 +13,7 @@ import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
 import '../../../models/profile_model.dart';
 import '../../../providers/profiles_provider.dart';
+import '../../../providers/theme_provider.dart';
 import '../../profile_details_screen/profile_details_screen.dart';
 import 'activate_profile_button.dart';
 import 'add_profile_modal.dart';
@@ -110,6 +111,8 @@ class MoneyAccountCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     //? if any confusion when clicking the card and go to the details page just remove that and make it only happen when clicking on the status circle
     return GestureDetector(
       onTap: () => goToProfileDetailsPage(context),
@@ -170,7 +173,8 @@ class MoneyAccountCard extends StatelessWidget {
               widthFactor: 0.7,
               child: Text(
                 profileModel.name,
-                style: kHeadingTextStyle,
+                style: themeProvider
+                    .getTextStyle(ThemeTextStyles.kHeadingTextStyle),
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
               ),

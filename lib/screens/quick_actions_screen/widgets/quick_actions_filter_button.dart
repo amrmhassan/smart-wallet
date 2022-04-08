@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../constants/sizes.dart';
 
 import '../../../constants/styles.dart';
+import '../../../providers/theme_provider.dart';
 
 class QuickActionsFilterButton extends StatelessWidget {
   final bool active;
@@ -16,6 +18,8 @@ class QuickActionsFilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Expanded(
       child: InkWell(
         onTap: onTap,
@@ -25,7 +29,11 @@ class QuickActionsFilterButton extends StatelessWidget {
           alignment: Alignment.center,
           child: Text(
             title,
-            style: active ? kParagraphTextStyle : kInActiveParagraphTextStyle,
+            style: active
+                ? themeProvider
+                    .getTextStyle(ThemeTextStyles.kParagraphTextStyle)
+                : themeProvider
+                    .getTextStyle(ThemeTextStyles.kInActiveParagraphTextStyle),
           ),
         ),
       ),

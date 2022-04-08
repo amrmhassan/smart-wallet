@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../providers/theme_provider.dart';
 import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
@@ -16,6 +18,8 @@ class NumberButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       clipBehavior: Clip.hardEdge,
       alignment: Alignment.center,
@@ -44,7 +48,8 @@ class NumberButton extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 number,
-                style: kCalcTextStyle,
+                style:
+                    themeProvider.getTextStyle(ThemeTextStyles.kCalcTextStyle),
               )),
         ),
       ),

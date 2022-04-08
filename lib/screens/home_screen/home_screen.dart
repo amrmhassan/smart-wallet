@@ -6,6 +6,7 @@ import 'package:smart_wallet/providers/profiles_provider.dart';
 import '../../constants/sizes.dart';
 import '../../constants/styles.dart';
 import '../../providers/quick_actions_provider.dart';
+import '../../providers/theme_provider.dart';
 import '../../screens/quick_actions_screen/quick_actions_screen.dart';
 import '../../widgets/app_bar/home_heading.dart';
 
@@ -26,6 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     //* the main container of the home screen
     return Stack(
       alignment: Alignment.bottomRight,
@@ -55,7 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         context, QuickActionsScreen.routeName),
                     child: Text(
                       'Quick Actions',
-                      style: kParagraphTextStyle,
+                      style: themeProvider
+                          .getTextStyle(ThemeTextStyles.kParagraphTextStyle),
                     ),
                   ),
                 ),
@@ -85,23 +89,23 @@ class _HomeScreenState extends State<HomeScreen> {
         //? this floating action button will be hidden when scrolling down
         //* floating action button for adding new quick action
 
-        if (Provider.of<QuickActionsProvider>(context)
-            .getFavoriteQuickActions
-            .isNotEmpty)
-          CustomFloatingActionButton(
-            title: 'Add Quick Action',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (ctx) => const AddTransactionScreen(
-                    addTransactionScreenOperations:
-                        AddTransactionScreenOperations.addQuickAction,
-                  ),
-                ),
-              );
-            },
-          ),
+        // if (Provider.of<QuickActionsProvider>(context)
+        //     .getFavoriteQuickActions
+        //     .isNotEmpty)
+        //   CustomFloatingActionButton(
+        //     title: 'Add Quick Action',
+        //     onTap: () {
+        //       Navigator.push(
+        //         context,
+        //         MaterialPageRoute(
+        //           builder: (ctx) => const AddTransactionScreen(
+        //             addTransactionScreenOperations:
+        //                 AddTransactionScreenOperations.addQuickAction,
+        //           ),
+        //         ),
+        //       );
+        //     },
+        //   ),
       ],
     );
   }

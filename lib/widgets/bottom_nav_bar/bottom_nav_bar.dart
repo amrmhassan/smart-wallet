@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../constants/styles.dart';
+import '../../providers/theme_provider.dart';
 import '../global/bottom_nav_bar_icon.dart';
 
 class BottomNavBar extends StatelessWidget {
@@ -17,6 +19,8 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     List<Map<String, dynamic>> bottomNavBarIcons = [
       {
         'iconData': FontAwesomeIcons.chartLine,
@@ -48,13 +52,25 @@ class BottomNavBar extends StatelessWidget {
           ),
           height: kCustomBottomNavBarHeight,
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: kBottomNavBarColors,
-            ),
+            gradient: themeProvider.currentTheme == Themes.dark
+                ? LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                        themeProvider.getThemeColor(
+                          ThemeColors.kMainBackgroundColor,
+                        ),
+                        themeProvider.getThemeColor(
+                          ThemeColors.kCardBackgroundColor,
+                        ),
+                      ])
+                : const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: kBottomNavBarColors,
+                  ),
             boxShadow: [
-              kBottomNavBarShadow,
+              themeProvider.getBoxShadow(ThemeBoxShadow.kBottomNavBarShadow)
             ],
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(kDefaultBorderRadius),

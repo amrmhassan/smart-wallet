@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/theme_provider.dart';
 import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
@@ -20,6 +22,8 @@ class ProfileStatusProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return FractionallySizedBox(
       widthFactor: 0.8,
       child: Column(
@@ -27,13 +31,16 @@ class ProfileStatusProgressBar extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Income',
-                style: kSmallTextPrimaryColorStyle,
+                style: themeProvider
+                    .getTextStyle(ThemeTextStyles.kSmallTextPrimaryColorStyle),
+                // style: kSmallTextPrimaryColorStyle,
               ),
               Text(
                 incomeRatioString,
-                style: kSmallTextPrimaryColorStyle,
+                style: themeProvider
+                    .getTextStyle(ThemeTextStyles.kSmallTextPrimaryColorStyle),
               ),
             ],
           ),

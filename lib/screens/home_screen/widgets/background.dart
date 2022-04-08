@@ -16,8 +16,18 @@ class Background extends StatelessWidget {
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(
-        color: themeProvider.currentTheme == Themes.dark
-            ? themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor)
+        gradient: themeProvider.currentTheme == Themes.dark
+            ? LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                    themeProvider.getThemeColor(
+                      ThemeColors.kMainBackgroundColor,
+                    ),
+                    themeProvider.getThemeColor(
+                      ThemeColors.kCardBackgroundColor,
+                    ),
+                  ])
             : null,
         image: themeProvider.currentTheme == Themes.basic
             ? DecorationImage(

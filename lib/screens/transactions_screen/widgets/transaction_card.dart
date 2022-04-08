@@ -3,12 +3,14 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/helpers/responsive.dart';
 import 'package:smart_wallet/screens/quick_actions_screen/widgets/all_quick_actions_card.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
 
 import '../../../constants/colors.dart';
+import '../../../providers/theme_provider.dart';
 import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
@@ -46,6 +48,8 @@ class TranscationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     //* the main container of the card
     return Dismissible(
       key: Key(transaction.id),
@@ -112,7 +116,8 @@ class TranscationCard extends StatelessWidget {
                   width: Responsive.getWidth(context) / 3,
                   child: Text(
                     transaction.title,
-                    style: kParagraphTextStyle,
+                    style: themeProvider
+                        .getTextStyle(ThemeTextStyles.kParagraphTextStyle),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -122,7 +127,8 @@ class TranscationCard extends StatelessWidget {
                 //* price text widget
                 Text(
                   '${doubleToString(transaction.amount)} $currency',
-                  style: kSmallTextPrimaryColorStyle,
+                  style: themeProvider.getTextStyle(
+                      ThemeTextStyles.kSmallTextPrimaryColorStyle),
                 ),
               ],
             ),

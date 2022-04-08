@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
 import '../../../constants/colors.dart';
 import '../../../themes/choose_color_theme.dart';
@@ -27,6 +29,8 @@ class QuickActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return CustomCard(
       clipBehavior: Clip.hardEdge,
       padding: EdgeInsets.zero,
@@ -55,8 +59,10 @@ class QuickActionCard extends StatelessWidget {
                         border: Border.all(
                           width: 2,
                           color: transactionType == TransactionType.income
-                              ? kIncomeColor
-                              : kOutcomeColor,
+                              ? themeProvider
+                                  .getThemeColor(ThemeColors.kIncomeColor)
+                              : themeProvider
+                                  .getThemeColor(ThemeColors.kOutcomeColor),
                         ),
                       ),
                       child: Icon(
@@ -64,24 +70,20 @@ class QuickActionCard extends StatelessWidget {
                             ? Icons.arrow_downward
                             : Icons.arrow_upward,
                         color: transactionType == TransactionType.income
-                            ? kIncomeColor
-                            : kOutcomeColor,
+                            ? themeProvider
+                                .getThemeColor(ThemeColors.kIncomeColor)
+                            : themeProvider
+                                .getThemeColor(ThemeColors.kOutcomeColor),
                       ),
                     ),
-                    // Container(
-                    //   alignment: Alignment.centerRight,
-                    //   child:  Icon(
-                    //     Icons.more_vert,
-                    //     color: ChooseColorTheme.kMainColor,
-                    //     size: kDefaultIconSize,
-                    //   ),
-                    // ),
                     Text(
                       '${doubleToString(amount)} $currency',
                       style: TextStyle(
                         color: transactionType == TransactionType.income
-                            ? kIncomeColor
-                            : kOutcomeColor,
+                            ? themeProvider
+                                .getThemeColor(ThemeColors.kIncomeColor)
+                            : themeProvider
+                                .getThemeColor(ThemeColors.kOutcomeColor),
                         fontSize: kDefaultInfoTextSize,
                         fontWeight: FontWeight.bold,
                       ),
@@ -98,7 +100,7 @@ class QuickActionCard extends StatelessWidget {
                   title,
                   maxLines: 1,
                   style: TextStyle(
-                    color: ChooseColorTheme.kMainColor,
+                    color: themeProvider.getThemeColor(ThemeColors.kMainColor),
                     fontSize: kDefaultInfoTextSize,
                     fontWeight: FontWeight.bold,
                     overflow: TextOverflow.ellipsis,
@@ -111,7 +113,9 @@ class QuickActionCard extends StatelessWidget {
                   description,
                   maxLines: 3,
                   style: TextStyle(
-                    color: ChooseColorTheme.kMainColor,
+                    color: themeProvider
+                        .getThemeColor(ThemeColors.kMainColor)
+                        .withOpacity(0.8),
                     fontSize: kDefaultParagraphTextSize,
                     fontWeight: FontWeight.w400,
                     overflow: TextOverflow.ellipsis,

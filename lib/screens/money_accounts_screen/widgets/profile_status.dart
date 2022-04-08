@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants/profiles_constants.dart';
 import '../../../constants/styles.dart';
+import '../../../providers/theme_provider.dart';
 
 class ProfileStatus extends StatelessWidget {
   final MoneyAccountStatus moneyAccountStatus;
@@ -26,6 +28,8 @@ class ProfileStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       alignment: Alignment.center,
       width: 150,
@@ -36,7 +40,8 @@ class ProfileStatus extends StatelessWidget {
       ),
       child: Text(
         statusText,
-        style: kWhiteProfileStatusTextStyle,
+        style: themeProvider
+            .getTextStyle(ThemeTextStyles.kWhiteProfileStatusTextStyle),
       ),
     );
   }

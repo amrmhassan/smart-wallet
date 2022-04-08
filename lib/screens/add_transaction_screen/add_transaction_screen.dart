@@ -8,6 +8,7 @@ import '../../constants/types.dart';
 import '../../models/quick_action_model.dart';
 import '../../models/transaction_model.dart';
 import '../../providers/quick_actions_provider.dart';
+import '../../providers/theme_provider.dart';
 import '../../providers/transactions_provider.dart';
 import '../../utils/general_utils.dart';
 import '../../utils/transactions_utils.dart';
@@ -190,6 +191,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     //* this argument to inform this widget that i need to add a quick action not a transaction
     //* when needing to add a quick action i will add the argument to this with the argument:true like in the add_quick_action_button.dart file
 
@@ -237,7 +240,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         borderRadius:
                             BorderRadius.circular(kDefaultBorderRadius),
                         color: Colors.white,
-                        boxShadow: [kDefaultBoxShadow],
+                        // boxShadow: [kDefaultBoxShadow],
+                        boxShadow: [
+                          themeProvider
+                              .getBoxShadow(ThemeBoxShadow.kDefaultBoxShadow)
+                        ],
                       ),
                       //* the row which will have the main sides of the cart
                       child: Row(

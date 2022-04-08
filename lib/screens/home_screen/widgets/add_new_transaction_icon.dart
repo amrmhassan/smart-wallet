@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../themes/choose_color_theme.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 
 class AddNewTransactionIcon extends StatelessWidget {
   final VoidCallback onTap;
@@ -11,13 +11,15 @@ class AddNewTransactionIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
         border: Border.all(
           width: 4,
-          color: ChooseColorTheme.kMainColor.withOpacity(.5),
+          color: themeProvider.getThemeColor(ThemeColors.kMainColor),
         ),
       ),
       child: Material(
@@ -34,7 +36,7 @@ class AddNewTransactionIcon extends StatelessWidget {
             child: Icon(
               Icons.add,
               size: 45,
-              color: ChooseColorTheme.kMainColor.withOpacity(0.5),
+              color: themeProvider.getThemeColor(ThemeColors.kMainColor),
             ),
           ),
         ),

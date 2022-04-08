@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../constants/styles.dart';
+import '../../providers/theme_provider.dart';
 import '../../themes/choose_color_theme.dart';
 
 class GoBackIcon extends StatelessWidget {
@@ -12,6 +14,8 @@ class GoBackIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       clipBehavior: Clip.hardEdge,
       width: 45,
@@ -19,7 +23,9 @@ class GoBackIcon extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(50),
-        boxShadow: [kDefaultBoxShadow],
+        boxShadow: [
+          themeProvider.getBoxShadow(ThemeBoxShadow.kDefaultBoxShadow)
+        ],
       ),
       child: Material(
         color: Colors.transparent,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 
-import '../../constants/colors.dart';
 import '../../themes/choose_color_theme.dart';
 
 class MenuIcon extends StatelessWidget {
@@ -15,6 +16,7 @@ class MenuIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
     return Container(
       clipBehavior: Clip.hardEdge,
       width: width,
@@ -39,7 +41,7 @@ class MenuIcon extends StatelessWidget {
                   width: 30,
                   height: 3,
                   decoration: BoxDecoration(
-                    color: ChooseColorTheme.kMainColor,
+                    color: themeProvider.getThemeColor(ThemeColors.kMainColor),
                     borderRadius: BorderRadius.circular(100),
                   ),
                 ),
@@ -50,7 +52,8 @@ class MenuIcon extends StatelessWidget {
                   width: 15,
                   height: 3,
                   decoration: BoxDecoration(
-                      color: ChooseColorTheme.kMainColor,
+                      color:
+                          themeProvider.getThemeColor(ThemeColors.kMainColor),
                       borderRadius: BorderRadius.circular(20)),
                 ),
               ],

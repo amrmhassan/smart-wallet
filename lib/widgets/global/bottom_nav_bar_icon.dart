@@ -1,8 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 
-import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../themes/choose_color_theme.dart';
 
@@ -60,6 +61,7 @@ class _BottomNavBarIconState extends State<BottomNavBarIcon>
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
     //* this if statement is for making the nonActive icon reverse its animation and come to the bottom without clicking it
     //* cause the user won't click it to make it nonActive
     if (widget.active) {
@@ -91,8 +93,10 @@ class _BottomNavBarIconState extends State<BottomNavBarIcon>
                 child: Icon(
                   widget.iconData,
                   color: widget.active
-                      ? ChooseColorTheme.kMainColor
-                      : ChooseColorTheme.kMainColor.withOpacity(0.5),
+                      ? themeProvider.getThemeColor(ThemeColors.kSavingsColor)
+                      : themeProvider
+                          .getThemeColor(ThemeColors.kSavingsColor)
+                          .withOpacity(0.5),
                   size: widget.active ? kMediumIconSize : kSmallIconSize,
                 ),
               ),
@@ -104,9 +108,18 @@ class _BottomNavBarIconState extends State<BottomNavBarIcon>
                   width: double.infinity,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: ChooseColorTheme.kMainColor,
-                    borderRadius: BorderRadius.circular(1000),
-                  ),
+                      color: themeProvider
+                          .getThemeColor(ThemeColors.kSavingsColor),
+                      borderRadius: BorderRadius.circular(1000),
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(0, 0),
+                          color: themeProvider.getThemeColor(
+                            ThemeColors.kSavingsColor,
+                          ),
+                          blurRadius: 10,
+                        )
+                      ]),
                 ),
               ),
             // if (widget.active)

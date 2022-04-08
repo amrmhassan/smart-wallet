@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/theme_provider.dart';
 import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
@@ -18,6 +20,8 @@ class ChooseTransactionTypeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -37,8 +41,11 @@ class ChooseTransactionTypeButton extends StatelessWidget {
         ),
         child: Text(
           title,
-          style:
-              active ? kSmallTextWhiteColorStyle : kSmallTextPrimaryColorStyle,
+          style: active
+              ? themeProvider
+                  .getTextStyle(ThemeTextStyles.kSmallTextWhiteColorStyle)
+              : themeProvider
+                  .getTextStyle(ThemeTextStyles.kSmallTextPrimaryColorStyle),
         ),
       ),
     );

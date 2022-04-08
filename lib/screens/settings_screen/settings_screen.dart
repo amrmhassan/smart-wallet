@@ -1,9 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/constants/colors.dart';
-import 'package:smart_wallet/constants/styles.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import '../../constants/sizes.dart';
 import '../../themes/choose_color_theme.dart';
@@ -20,6 +19,8 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
@@ -63,6 +64,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             Provider.of<ThemeProvider>(context, listen: false)
                                 .setTheme(Themes.basic);
                           }
+                          //! add this line after saving the current active theme to the shared preferences
+
+                          // Phoenix.rebirth(context);
                         },
                         child: CustomCard(
                           backgroundImage: DecorationImage(
@@ -86,7 +90,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ),
                                   Text(
                                     'Themes',
-                                    style: kSmallTextPrimaryColorStyle,
+                                    style: themeProvider.getTextStyle(
+                                        ThemeTextStyles
+                                            .kSmallTextPrimaryColorStyle),
                                   ),
                                 ],
                               ),

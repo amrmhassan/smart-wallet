@@ -1,8 +1,12 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/constants/colors.dart';
 import '../../../constants/styles.dart';
 import '../../../models/quick_action_model.dart';
 import '../../../providers/quick_actions_provider.dart';
+import '../../../providers/theme_provider.dart';
 import '../../../screens/quick_actions_screen/quick_actions_screen.dart';
 import '../../../utils/transactions_utils.dart';
 import '../../../widgets/global/empty_transactions.dart';
@@ -21,6 +25,7 @@ class QuickActionsCardsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     List<QuickActionModel> quickActions =
         Provider.of<QuickActionsProvider>(context).getFavoriteQuickActions;
+    var themeProvider = Provider.of<ThemeProvider>(context);
 
     return Expanded(
       child: Container(
@@ -45,17 +50,19 @@ class QuickActionsCardsGrid extends StatelessWidget {
                     child: EmptyTransactions(
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Text(
                             'No Favorite ',
-                            style: kParagraphTextStyle,
+                            style: themeProvider.getTextStyle(
+                                ThemeTextStyles.kParagraphTextStyle),
                           ),
                           SizedBox(
                             height: 8,
                           ),
                           Text(
                             'Quick Actions ',
-                            style: kLinkTextStyle,
+                            style: themeProvider
+                                .getTextStyle(ThemeTextStyles.kLinkTextStyle),
                           ),
                         ],
                       ),

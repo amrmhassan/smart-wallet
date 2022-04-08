@@ -1,5 +1,9 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: prefer_const_constructors
 
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../providers/theme_provider.dart';
 import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/styles.dart';
@@ -14,6 +18,8 @@ class NotActivateProfileButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
@@ -28,12 +34,12 @@ class NotActivateProfileButton extends StatelessWidget {
           child: InkWell(
             onTap: onTap,
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: kDefaultPadding / 3),
+              padding: EdgeInsets.symmetric(vertical: kDefaultPadding / 3),
               alignment: Alignment.center,
-              child: const Text(
+              child: Text(
                 'Activate',
-                style: kActivateProfileTextStyle,
+                style: themeProvider
+                    .getTextStyle(ThemeTextStyles.kActivateProfileTextStyle),
               ),
             ),
           ),
@@ -68,7 +74,8 @@ class ActivatedProfileButton extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 'Activated',
-                style: kActivatedProfileTextStyle,
+                style: themeProvider
+                    .getTextStyle(ThemeTextStyles.kActivatedProfileTextStyle),
               ),
             ),
           ),

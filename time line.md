@@ -43,6 +43,7 @@ DONE - so the savings always equal to the total (income from the first day to th
 [Pending]
 add a lastActivatedDate to each profile 
 --then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)
+# after chaning the theme restart the app programatically
 
 
 [Soon]

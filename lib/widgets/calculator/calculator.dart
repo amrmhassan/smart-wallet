@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_wallet/widgets/global/custom_card.dart';
 import '../../constants/sizes.dart';
 import '../../constants/styles.dart';
+import '../../providers/theme_provider.dart';
 import 'widgets/heading_calc_button.dart';
 import 'widgets/math_operation_button.dart';
 import 'widgets/number_button.dart';
@@ -264,23 +267,20 @@ class _CalculatorState extends State<Calculator> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
+    return CustomCard(
       // constraints: BoxConstraints(
       //   //? if you added this container into Expanded then remove this constrains
       //   maxHeight: 500,
       //   minHeight: 200,
       // ),
       clipBehavior: Clip.hardEdge,
-      width: double.infinity,
       margin: const EdgeInsets.only(
         bottom: kDefaultPadding,
       ),
       padding: const EdgeInsets.only(bottom: kDefaultPadding),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(kDefaultBorderRadius / 2),
-        boxShadow: [kDefaultBoxShadow],
-      ),
+
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -294,7 +294,7 @@ class _CalculatorState extends State<Calculator> {
             ),
             child: Text(
               output,
-              style: kCalcTextStyle,
+              style: themeProvider.getTextStyle(ThemeTextStyles.kCalcTextStyle),
             ),
           ),
           const SizedBox(

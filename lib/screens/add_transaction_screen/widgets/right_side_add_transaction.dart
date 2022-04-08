@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 
 import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
@@ -32,6 +34,7 @@ class RightSideAddTransaction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
     return Expanded(
       flex: 2,
       child: Row(
@@ -61,7 +64,8 @@ class RightSideAddTransaction extends StatelessWidget {
                 child: FittedBox(
                   child: Text(
                     amountToString,
-                    style: kCalcTextStyle,
+                    style: themeProvider
+                        .getTextStyle(ThemeTextStyles.kCalcTextStyle),
                   ),
                 ),
               ),

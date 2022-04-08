@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
@@ -10,7 +11,7 @@ import './screens/holder_screen.dart';
 import './screens/quick_actions_screen/quick_actions_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(Phoenix(child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {

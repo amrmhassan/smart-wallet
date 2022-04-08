@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 
 import '../../../constants/colors.dart';
 import '../../../themes/choose_color_theme.dart';
@@ -32,6 +34,7 @@ class ProfileSummaryElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -39,10 +42,10 @@ class ProfileSummaryElement extends StatelessWidget {
           title,
           style: TextStyle(
             color: transactionType == null
-                ? ChooseColorTheme.kMainColor
+                ? themeProvider.getThemeColor(ThemeColors.kSavingsColor)
                 : transactionType == TransactionType.income
-                    ? kIncomeColor
-                    : kOutcomeColor,
+                    ? themeProvider.getThemeColor(ThemeColors.kIncomeColor)
+                    : themeProvider.getThemeColor(ThemeColors.kOutcomeColor),
             fontWeight: FontWeight.bold,
             fontSize: size,
           ),
@@ -53,10 +56,10 @@ class ProfileSummaryElement extends StatelessWidget {
             textAlign: TextAlign.right,
             style: TextStyle(
               color: transactionType == null
-                  ? ChooseColorTheme.kMainColor
+                  ? themeProvider.getThemeColor(ThemeColors.kSavingsColor)
                   : transactionType == TransactionType.income
-                      ? kIncomeColor
-                      : kOutcomeColor,
+                      ? themeProvider.getThemeColor(ThemeColors.kIncomeColor)
+                      : themeProvider.getThemeColor(ThemeColors.kOutcomeColor),
               fontWeight: FontWeight.bold,
               fontSize: size,
             ),
