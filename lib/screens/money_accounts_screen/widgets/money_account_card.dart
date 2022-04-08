@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
-import 'package:smart_wallet/screens/home_screen/widgets/summary_period_icon.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
 

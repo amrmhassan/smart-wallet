@@ -4,7 +4,6 @@ import 'package:smart_wallet/providers/theme_provider.dart';
 
 import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
-import '../../../constants/styles.dart';
 import '../../../constants/types.dart';
 import 'add_transaction_type_button.dart';
 

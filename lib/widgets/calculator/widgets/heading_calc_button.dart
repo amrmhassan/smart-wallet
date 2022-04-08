@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../constants/sizes.dart';
-import '../../../constants/styles.dart';
 import '../../../helpers/responsive.dart';
 import '../../../providers/theme_provider.dart';
 import '../../../themes/choose_color_theme.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/screens/holder_screen.dart';
 import '../../providers/quick_actions_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../screens/quick_actions_screen/widgets/all_quick_actions_card.dart';
-import '../../themes/choose_color_theme.dart';
 import '../../widgets/global/empty_transactions.dart';
 
 import '../../constants/sizes.dart';
@@ -30,24 +30,7 @@ class _QuickActionsScreenState extends State<QuickActionsScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (ctx) => const AddTransactionScreen(
-                addTransactionScreenOperations:
-                    AddTransactionScreenOperations.addQuickAction,
-              ),
-            ),
-          );
-        },
-        backgroundColor: ChooseColorTheme.kMainColor,
-        child: const Icon(
-          Icons.add,
-          size: kDefaultIconSize,
-        ),
-      ),
+
       //* this is the drawer
       drawer: Drawer(
         child: Container(
@@ -66,8 +49,19 @@ class _QuickActionsScreenState extends State<QuickActionsScreen> {
               child: Column(
                 children: [
                   //* my custom app bar and the mainAppBar is equal to false for adding the back button and remove the menu icon(side bar opener)
-                  const MyAppBar(
+                  MyAppBar(
                     title: 'Quick Actions',
+                    rightIcon: AddElementButton(onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => const AddTransactionScreen(
+                            addTransactionScreenOperations:
+                                AddTransactionScreenOperations.addQuickAction,
+                          ),
+                        ),
+                      );
+                    }),
                   ),
                   //* space between the app bar and the next widget
                   const SizedBox(

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
 
 import '../../../constants/sizes.dart';
-import '../../../constants/styles.dart';
 import '../../../providers/theme_provider.dart';
 
 class ProfileTransactionsInfo extends StatelessWidget {

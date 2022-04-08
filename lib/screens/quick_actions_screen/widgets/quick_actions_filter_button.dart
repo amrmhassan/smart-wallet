@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../constants/sizes.dart';
 
-import '../../../constants/styles.dart';
 import '../../../providers/theme_provider.dart';
 
 class QuickActionsFilterButton extends StatelessWidget {

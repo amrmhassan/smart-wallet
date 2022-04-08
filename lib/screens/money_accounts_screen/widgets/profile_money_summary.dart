@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 
-import '../../../constants/colors.dart';
-import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import 'profile_transactions_info.dart';
 

@@ -1,7 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/constants/colors.dart';
 import 'package:smart_wallet/constants/sizes.dart';
 import 'package:smart_wallet/helpers/shared_pref_helper.dart';
 import 'package:smart_wallet/screens/holder_screen.dart';

@@ -70,8 +70,6 @@ class _HolderScreenState extends State<HolderScreen> {
 //* this is the build method of this widget
   @override
   Widget build(BuildContext context) {
-    var themeProvider = Provider.of<ThemeProvider>(context);
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
@@ -92,27 +90,9 @@ class _HolderScreenState extends State<HolderScreen> {
                 //* not a real one but made of containers and paddings for more control
                 _activeBottomNavBarIndex == 1
                     ? MyAppBar(
-                        rightIcon: Container(
-                          clipBehavior: Clip.hardEdge,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(1000)),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () async => showAddProfileModal(
-                                  context, _profileNameController),
-                              child: Container(
-                                padding: EdgeInsets.all(kDefaultPadding / 2),
-                                child: Icon(
-                                  Icons.add,
-                                  color: themeProvider.getThemeColor(
-                                    ThemeColors.kMainColor,
-                                  ),
-                                  size: 28,
-                                ),
-                              ),
-                            ),
-                          ),
+                        rightIcon: AddElementButton(
+                          onTap: () async => showAddProfileModal(
+                              context, _profileNameController),
                         ),
                       )
                     : MyAppBar(),
@@ -152,6 +132,39 @@ class _HolderScreenState extends State<HolderScreen> {
             setActiveBottomNavBarIcon: _setActiveNavBarIconIndex,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class AddElementButton extends StatelessWidget {
+  final VoidCallback onTap;
+  const AddElementButton({
+    Key? key,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+    return Container(
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(1000)),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            padding: EdgeInsets.all(kDefaultPadding / 2),
+            child: Icon(
+              Icons.add,
+              color: themeProvider.getThemeColor(
+                ThemeColors.kMainColor,
+              ),
+              size: 28,
+            ),
+          ),
+        ),
       ),
     );
   }

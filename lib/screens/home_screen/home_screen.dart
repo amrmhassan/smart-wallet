@@ -4,14 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import '../../constants/sizes.dart';
-import '../../constants/styles.dart';
 import '../../providers/quick_actions_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../screens/quick_actions_screen/quick_actions_screen.dart';
 import '../../widgets/app_bar/home_heading.dart';
 
-import '../../widgets/global/custom_floating_action_button.dart';
-import '../add_transaction_screen/add_transaction_screen.dart';
 import 'widgets/profile_summary.dart';
 import 'widgets/quick_actions_cards_grid.dart';
 

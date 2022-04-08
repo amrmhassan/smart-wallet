@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../constants/sizes.dart';
-import '../../constants/types.dart';
-import '../../providers/profiles_provider.dart';
-import '../../themes/choose_color_theme.dart';
-import '../../utils/general_utils.dart';
 import '../../widgets/app_bar/home_heading.dart';
-import 'widgets/add_profile_modal.dart';
 import 'widgets/profiles_grid.dart';
 
 class MoneyAccountsScreen extends StatefulWidget {

@@ -3,8 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
-import '../../../constants/colors.dart';
-import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/types.dart';
 import '../../../utils/general_utils.dart';

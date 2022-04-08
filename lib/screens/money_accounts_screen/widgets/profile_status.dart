@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/profiles_constants.dart';
-import '../../../constants/styles.dart';
 import '../../../providers/theme_provider.dart';
 
 class ProfileStatus extends StatelessWidget {

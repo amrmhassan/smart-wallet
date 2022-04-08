@@ -2,15 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/constants/colors.dart';
 import 'package:smart_wallet/constants/globals.dart';
-import 'package:smart_wallet/constants/styles.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
 
 import '../../constants/sizes.dart';
-import '../../themes/choose_color_theme.dart';
 import '../../widgets/app_bar/home_heading.dart';
 import '../../widgets/global/custom_card.dart';
 
@@ -104,6 +102,8 @@ class StatisticsMainSummaryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -114,10 +114,10 @@ class StatisticsMainSummaryItem extends StatelessWidget {
             fontWeight:
                 transactionType == TransactionType.all ? FontWeight.bold : null,
             color: transactionType == TransactionType.income
-                ? kIncomeColor
+                ? themeProvider.getThemeColor(ThemeColors.kIncomeColor)
                 : transactionType == TransactionType.outcome
-                    ? kOutcomeColor
-                    : ChooseColorTheme.kMainColor,
+                    ? themeProvider.getThemeColor(ThemeColors.kOutcomeColor)
+                    : themeProvider.getThemeColor(ThemeColors.kSavingsColor),
           ),
         ),
         Text(
@@ -127,10 +127,10 @@ class StatisticsMainSummaryItem extends StatelessWidget {
             fontWeight:
                 transactionType == TransactionType.all ? FontWeight.bold : null,
             color: transactionType == TransactionType.income
-                ? kIncomeColor
+                ? themeProvider.getThemeColor(ThemeColors.kIncomeColor)
                 : transactionType == TransactionType.outcome
-                    ? kOutcomeColor
-                    : ChooseColorTheme.kMainColor,
+                    ? themeProvider.getThemeColor(ThemeColors.kOutcomeColor)
+                    : themeProvider.getThemeColor(ThemeColors.kSavingsColor),
           ),
         ),
       ],

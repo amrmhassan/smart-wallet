@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 
-import '../../themes/choose_color_theme.dart';
-
 class MenuIcon extends StatelessWidget {
   final VoidCallback onTap;
   const MenuIcon({

@@ -6,7 +6,6 @@ import 'package:smart_wallet/utils/charts_utils.dart';
 import 'package:smart_wallet/constants/sizes.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 
-import '../../../constants/styles.dart';
 import '../../../providers/theme_provider.dart';
 
 class SummaryChart extends StatefulWidget {

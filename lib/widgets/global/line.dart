@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../constants/colors.dart';
 import '../../themes/choose_color_theme.dart';
 
 class Line extends StatelessWidget {

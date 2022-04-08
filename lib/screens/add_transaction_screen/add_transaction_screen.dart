@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import '../../constants/sizes.dart';
-import '../../constants/styles.dart';
 import '../../constants/types.dart';
 import '../../models/quick_action_model.dart';
 import '../../models/transaction_model.dart';

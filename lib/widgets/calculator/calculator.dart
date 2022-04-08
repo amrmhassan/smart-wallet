@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
 import '../../constants/sizes.dart';
-import '../../constants/styles.dart';
 import '../../providers/theme_provider.dart';
 import 'widgets/heading_calc_button.dart';
 import 'widgets/math_operation_button.dart';

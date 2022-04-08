@@ -5,7 +5,6 @@ import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 
-import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 
 enum DateTypes { startDate, endDate }
