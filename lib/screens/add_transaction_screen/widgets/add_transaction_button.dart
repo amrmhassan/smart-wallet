@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
-import '../../../themes/choose_color_theme.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 
 class AddTransactionButton extends StatelessWidget {
   final VoidCallback addTransaction;
@@ -13,11 +14,13 @@ class AddTransactionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
     return SizedBox(
       width: double.infinity,
       height: 60,
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(primary: ChooseColorTheme.kMainColor),
+        style: ElevatedButton.styleFrom(
+            primary: themeProvider.getThemeColor(ThemeColors.kMainColor)),
         onPressed: addTransaction,
         child: Text(
           saveButtonText,

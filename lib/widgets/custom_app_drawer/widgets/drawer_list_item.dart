@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
+import 'package:provider/provider.dart';
 
-import '../../../themes/choose_color_theme.dart';
+import '../../../providers/theme_provider.dart';
 import '../../../constants/sizes.dart';
 
 class DrawerlistItem extends StatelessWidget {
@@ -19,6 +21,8 @@ class DrawerlistItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -31,7 +35,8 @@ class DrawerlistItem extends StatelessWidget {
           children: [
             Icon(
               iconData,
-              color: color ?? ChooseColorTheme.kMainColor,
+              color:
+                  color ?? themeProvider.getThemeColor(ThemeColors.kMainColor),
               size: kDefaultIconSize,
             ),
             const SizedBox(
@@ -40,7 +45,7 @@ class DrawerlistItem extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                color: ChooseColorTheme.kMainColor,
+                color: themeProvider.getThemeColor(ThemeColors.kMainColor),
                 fontSize: 16,
               ),
             ),

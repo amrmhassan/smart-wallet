@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 
-import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 
 class EditProfileButton extends StatelessWidget {
@@ -19,7 +19,9 @@ class EditProfileButton extends StatelessWidget {
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        color: ChooseColorTheme.kInactiveColor.withOpacity(.2),
+        color: themeProvider
+            .getThemeColor(ThemeColors.kInactiveColor)
+            .withOpacity(.2),
         borderRadius: BorderRadius.circular(
           kDefaultBorderRadius,
         ),

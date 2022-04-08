@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
+import 'package:provider/provider.dart';
 
-import '../../themes/choose_color_theme.dart';
+import '../../providers/theme_provider.dart';
 
 class Line extends StatelessWidget {
   final LineType lineType;
@@ -15,11 +17,16 @@ class Line extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       height: lineType == LineType.vertical ? double.infinity : thickness ?? 3,
       width: lineType == LineType.vertical ? thickness ?? 3 : double.infinity,
       decoration: BoxDecoration(
-        color: color ?? ChooseColorTheme.kMainColor.withOpacity(0.2),
+        color: color ??
+            themeProvider
+                .getThemeColor(ThemeColors.kMainColor)
+                .withOpacity(0.2),
         borderRadius: BorderRadius.circular(100),
       ),
     );

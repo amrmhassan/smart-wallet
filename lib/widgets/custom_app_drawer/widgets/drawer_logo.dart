@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
+import 'package:provider/provider.dart';
 
-import '../../../themes/choose_color_theme.dart';
+import '../../../providers/theme_provider.dart';
 import '../../../constants/sizes.dart';
 
 class DrawerLogo extends StatelessWidget {
@@ -10,6 +12,8 @@ class DrawerLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: kDefaultHorizontalPadding,
@@ -26,7 +30,7 @@ class DrawerLogo extends StatelessWidget {
           Text(
             'Smart Wallet',
             style: TextStyle(
-              color: ChooseColorTheme.kMainColor,
+              color: themeProvider.getThemeColor(ThemeColors.kMainColor),
               fontSize: 14,
               fontWeight: FontWeight.normal,
             ),

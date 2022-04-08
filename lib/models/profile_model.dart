@@ -3,6 +3,7 @@ import 'package:smart_wallet/constants/profiles_constants.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 
 import '../constants/colors.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
 
 const double _goodLimit = .70; // when it is from 70% to 100% it will be good
 const double _moderateLimit =

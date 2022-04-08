@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants/colors.dart';
-import '../../../themes/choose_color_theme.dart';
+import '../../../providers/theme_provider.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/types.dart';
 
@@ -19,6 +21,7 @@ class AddTransactionTypeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
     return GestureDetector(
       onTap: () => onTap(transactionType),
       child: Container(
@@ -26,7 +29,9 @@ class AddTransactionTypeButton extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           border: !active
-              ? Border.all(width: 1.5, color: ChooseColorTheme.kMainColor)
+              ? Border.all(
+                  width: 1.5,
+                  color: themeProvider.getThemeColor(ThemeColors.kMainColor))
               : null,
           color: active && transactionType == TransactionType.income
               ? kIncomeColor
@@ -39,7 +44,9 @@ class AddTransactionTypeButton extends StatelessWidget {
           transactionType == TransactionType.outcome
               ? Icons.arrow_upward
               : Icons.arrow_downward,
-          color: active ? Colors.white : ChooseColorTheme.kMainColor,
+          color: active
+              ? Colors.white
+              : themeProvider.getThemeColor(ThemeColors.kMainColor),
           size: kDefaultIconSize,
         ),
       ),

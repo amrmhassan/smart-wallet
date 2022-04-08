@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/sizes.dart';
 import '../../providers/theme_provider.dart';
-import '../../themes/choose_color_theme.dart';
 
 class GoBackIcon extends StatelessWidget {
   const GoBackIcon({
@@ -19,7 +19,7 @@ class GoBackIcon extends StatelessWidget {
       width: 45,
       height: 45,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: themeProvider.getThemeColor(ThemeColors.kMainColor),
         borderRadius: BorderRadius.circular(50),
         boxShadow: [
           themeProvider.getBoxShadow(ThemeBoxShadow.kDefaultBoxShadow)
@@ -33,7 +33,8 @@ class GoBackIcon extends StatelessWidget {
           },
           child: Icon(
             Icons.arrow_back,
-            color: ChooseColorTheme.kMainColor,
+            color:
+                themeProvider.getThemeColor(ThemeColors.kCardBackgroundColor),
             size: kDefaultIconSize,
           ),
         ),

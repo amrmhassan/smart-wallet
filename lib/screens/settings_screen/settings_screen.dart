@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import '../../constants/sizes.dart';
-import '../../themes/choose_color_theme.dart';
 import '../../widgets/app_bar/home_heading.dart';
 import '../../widgets/global/custom_card.dart';
 
@@ -50,71 +50,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     children: [
                       //! type the theme name and preview it
-                      GestureDetector(
-                        onTap: () {
-                          //? this will toggle the theme from dark to basic and vice versa
-                          Themes theme =
-                              Provider.of<ThemeProvider>(context, listen: false)
-                                  .currentTheme;
-                          if (theme == Themes.basic) {
-                            Provider.of<ThemeProvider>(context, listen: false)
-                                .setTheme(Themes.dark);
-                          } else {
-                            Provider.of<ThemeProvider>(context, listen: false)
-                                .setTheme(Themes.basic);
-                          }
-                          //! add this line after saving the current active theme to the shared preferences
-
-                          // Phoenix.rebirth(context);
-                        },
-                        child: CustomCard(
-                          backgroundImage: DecorationImage(
-                            image: AssetImage(
-                              'assets/images/background.jpg',
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Image.asset(
-                                    'assets/icons/themes.png',
-                                    width: 30,
-                                    fit: BoxFit.contain,
-                                  ),
-                                  SizedBox(
-                                    width: kDefaultPadding / 2,
-                                  ),
-                                  Text(
-                                    'Themes',
-                                    style: themeProvider.getTextStyle(
-                                        ThemeTextStyles
-                                            .kSmallTextPrimaryColorStyle),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: kDefaultPadding / 2,
-                              ),
-                              Expanded(
-                                child: Center(
-                                  child: Text(
-                                    'Light',
-                                    style: TextStyle(
-                                      color: ChooseColorTheme.kMainColor
-                                          .withOpacity(0.5),
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      ThemeChanger(themeProvider: themeProvider),
                       CustomCard(
                         child: Text('Appearance'),
                       ),
@@ -126,6 +62,80 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class ThemeChanger extends StatelessWidget {
+  const ThemeChanger({
+    Key? key,
+    required this.themeProvider,
+  }) : super(key: key);
+
+  final ThemeProvider themeProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        //? this will toggle the theme from dark to basic and vice versa
+        Themes theme =
+            Provider.of<ThemeProvider>(context, listen: false).currentTheme;
+        if (theme == Themes.basic) {
+          Provider.of<ThemeProvider>(context, listen: false)
+              .setTheme(Themes.dark);
+        } else {
+          Provider.of<ThemeProvider>(context, listen: false)
+              .setTheme(Themes.basic);
+        }
+      },
+      child: CustomCard(
+        backgroundImage: DecorationImage(
+          image: AssetImage(
+            'assets/images/background.jpg',
+          ),
+          fit: BoxFit.cover,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Image.asset(
+                  'assets/icons/themes.png',
+                  width: 30,
+                  fit: BoxFit.contain,
+                ),
+                SizedBox(
+                  width: kDefaultPadding / 2,
+                ),
+                Text(
+                  'Themes',
+                  style: themeProvider.getTextStyle(
+                      ThemeTextStyles.kSmallTextPrimaryColorStyle),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: kDefaultPadding / 2,
+            ),
+            Expanded(
+              child: Center(
+                child: Text(
+                  'Light',
+                  style: TextStyle(
+                    color: themeProvider
+                        .getThemeColor(ThemeColors.kMainColor)
+                        .withOpacity(0.5),
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

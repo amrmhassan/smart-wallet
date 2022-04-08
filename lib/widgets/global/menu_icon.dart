@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 
@@ -59,7 +60,7 @@ class MenuIcon extends StatelessWidget {
             // child: Icon(
             //   //! change this icon here to be a dash and a half
             //   Icons.menu,
-            //   color: ChooseColorTheme.kMainColor,
+            //   color: themeProvider.getThemeColor(ThemeColors.kMainColor),
             //   size: kDefaultIconSize,
             // ),
           ),

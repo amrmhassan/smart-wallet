@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/theme_provider.dart';
-import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 
 class ProfileDetailsButton extends StatelessWidget {
@@ -25,7 +25,9 @@ class ProfileDetailsButton extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           alignment: Alignment.centerRight,
           decoration: BoxDecoration(
-            color: ChooseColorTheme.kInactiveColor.withOpacity(.2),
+            color: themeProvider
+                .getThemeColor(ThemeColors.kInactiveColor)
+                .withOpacity(.2),
             borderRadius: BorderRadius.circular(100),
           ),
           child: Material(

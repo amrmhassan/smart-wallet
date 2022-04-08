@@ -1,16 +1,17 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/sizes.dart';
 import 'package:smart_wallet/helpers/shared_pref_helper.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/holder_screen.dart';
 
 import '../providers/profiles_provider.dart';
 import '../providers/quick_actions_provider.dart';
 import '../providers/transactions_provider.dart';
-import '../themes/choose_color_theme.dart';
 
 class LoadingDataScreen extends StatefulWidget {
   static const String routeName = '/loading-data-screen';
@@ -26,6 +27,11 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
   void initState() {
     //* i needed the trick of duration zero here
     //* here i will fetch and update the transactions
+
+    Future.delayed(Duration.zero).then((value) async {
+      await Provider.of<ThemeProvider>(context, listen: false)
+          .fetchAndSetActiveTheme();
+    });
     Future.delayed(Duration.zero).then((value) async {
       //* for getting the profiles and initialize one if empty
       await Provider.of<ProfilesProvider>(context, listen: false)
@@ -76,25 +82,29 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
+      backgroundColor:
+          themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             'Smart Wallet',
             style: TextStyle(
-              color: ChooseColorTheme.kMainColor,
+              color: themeProvider.getThemeColor(ThemeColors.kMainColor),
               fontSize: 36,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(
+          SizedBox(
             height: kDefaultPadding * 2,
           ),
           Container(
             alignment: Alignment.center,
             child: SpinKitCubeGrid(
-              color: ChooseColorTheme.kMainColor,
+              color: themeProvider.getThemeColor(ThemeColors.kMainColor),
               size: 100,
               duration: Duration(seconds: 1),
             ),

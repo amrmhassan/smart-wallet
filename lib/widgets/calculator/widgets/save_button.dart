@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/theme_provider.dart';
-import '../../../themes/choose_color_theme.dart';
 import '../../../constants/sizes.dart';
 import '../../../helpers/responsive.dart';
 
@@ -27,7 +27,9 @@ class SaveButton extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             offset: const Offset(0, 0),
-            color: ChooseColorTheme.kMainColor.withOpacity(0.2),
+            color: themeProvider
+                .getThemeColor(ThemeColors.kMainColor)
+                .withOpacity(0.2),
             blurRadius: 6,
           )
         ],

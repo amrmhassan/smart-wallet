@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 
@@ -133,7 +134,7 @@ class _BottomNavBarIconState extends State<BottomNavBarIcon>
             //         width: 50,
             //         height: 50,
             //         decoration: BoxDecoration(
-            //           color: ChooseColorTheme.kMainColor.withOpacity(0.5),
+            //           color: themeProvider.getThemeColor(ThemeColors.kMainColor).withOpacity(0.5),
             //         ),
             //       ),
             //     ),
@@ -149,7 +150,7 @@ class _BottomNavBarIconState extends State<BottomNavBarIcon>
             //       borderRadius: BorderRadius.circular(50),
             //       boxShadow: [
             //         BoxShadow(
-            //           color: ChooseColorTheme.kMainColor.withOpacity(0.5),
+            //           color: themeProvider.getThemeColor(ThemeColors.kMainColor).withOpacity(0.5),
             //           blurRadius: 15,
             //           offset: Offset(0, 0),
             //           spreadRadius: 20,
@@ -168,7 +169,7 @@ class _BottomNavBarIconState extends State<BottomNavBarIcon>
 ////////////////////////////////////////////////////////////////////////////
 
 //? this is the backup of this widget
-// import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';import 'package:smart_wallet/constants/theme_constants.dart';
 
 // import '../../constants/colors.dart';
 // import '../../constants/sizes.dart';
@@ -257,7 +258,7 @@ class _BottomNavBarIconState extends State<BottomNavBarIcon>
 //                           alignment: Alignment.center,
 //                           child: Icon(
 //                             widget.iconData,
-//                             color: ChooseColorTheme.kMainColor,
+//                             color: themeProvider.getThemeColor(ThemeColors.kMainColor),
 //                             size: widget.active
 //                                 ? kMediumIconSize
 //                                 : kSmallIconSize,
