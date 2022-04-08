@@ -20,7 +20,7 @@ class ChooseTransactionTypeButton extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
-  Color get backgroundColor {
+  Color backgroundColor(ThemeProvider themeProvider) {
     // if (transactionType == TransactionType.income) {
     //   return active
     //       ? themeProvider.getThemeColor(ThemeColors.kMainColor)
@@ -52,7 +52,7 @@ class ChooseTransactionTypeButton extends StatelessWidget {
           vertical: kDefaultVerticalPadding / 3,
         ),
         decoration: BoxDecoration(
-          color: backgroundColor,
+          color: backgroundColor(themeProvider),
           borderRadius: BorderRadius.circular(
             kDefaultBorderRadius,
           ),
@@ -60,7 +60,9 @@ class ChooseTransactionTypeButton extends StatelessWidget {
             width: 1.5,
             color: active
                 ? Colors.transparent
-                : themeProvider.getThemeColor(ThemeColors.kCardBackgroundColor),
+                : themeProvider
+                    .getThemeColor(ThemeColors.kMainColor)
+                    .withOpacity(0.5),
           ),
         ),
         child: Text(

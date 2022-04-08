@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/constants/shared_pref_constants.dart';
@@ -7,10 +5,8 @@ import 'package:smart_wallet/helpers/shared_pref_helper.dart';
 
 import '../themes/theme_controller.dart';
 
-ThemeProvider themeProvider = ThemeProvider();
-
 class ThemeProvider extends ChangeNotifier {
-  Themes currentTheme = Themes.dark;
+  Themes currentTheme = Themes.basic;
   Future<void> setTheme(Themes theme) async {
     currentTheme = theme;
     await SharedPrefHelper.setString(kCurrentActiveTheme, currentTheme.name);

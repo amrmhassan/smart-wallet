@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../constants/colors.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
+import '../constants/theme_constants.dart';
 import '../constants/types.dart';
 
 String doubleToString(double amount) {
@@ -14,6 +16,7 @@ String doubleToString(double amount) {
 void showSnackBar(
     BuildContext context, String message, SnackBarType snackBarType,
     [bool aboveBottomNavBar = false]) {
+  var themeProvider = Provider.of<ThemeProvider>(context);
   ScaffoldMessenger.of(context).removeCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
@@ -27,7 +30,7 @@ void showSnackBar(
       backgroundColor: snackBarType == SnackBarType.success
           ? Colors.green
           : snackBarType == SnackBarType.error
-              ? kOutcomeColor
+              ? themeProvider.getThemeColor(ThemeColors.kOutcomeColor)
               : null,
       action: SnackBarAction(
         label: 'Ok',

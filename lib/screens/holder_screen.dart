@@ -16,6 +16,7 @@ import '../../widgets/app_bar/my_app_bar.dart';
 import '../../widgets/bottom_nav_bar/bottom_nav_bar.dart';
 import '../utils/profile_utils.dart';
 import '../widgets/custom_app_drawer/custom_app_drawer.dart';
+import 'add_transaction_screen/add_transaction_screen.dart';
 import 'home_screen/widgets/background.dart';
 import 'statistics_screen/statistics_screen.dart';
 
@@ -62,6 +63,18 @@ class _HolderScreenState extends State<HolderScreen> {
     super.initState();
   }
 
+  void openTransactionScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => const AddTransactionScreen(
+          addTransactionScreenOperations:
+              AddTransactionScreenOperations.addTransaction,
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -96,7 +109,13 @@ class _HolderScreenState extends State<HolderScreen> {
                               context, _profileNameController),
                         ),
                       )
-                    : MyAppBar(),
+                    : _activeBottomNavBarIndex == 3
+                        ? MyAppBar(
+                            rightIcon: AddElementButton(
+                              onTap: () => openTransactionScreen(context),
+                            ),
+                          )
+                        : MyAppBar(),
                 //* here i showed that you can know which environment you are on (development or production)
                 //* and i worked successfully
                 // if (kDebugMode) Text('In debug Mode'),

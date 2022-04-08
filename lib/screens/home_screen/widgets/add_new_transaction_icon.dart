@@ -20,7 +20,9 @@ class AddNewTransactionIcon extends StatelessWidget {
         borderRadius: BorderRadius.circular(100),
         border: Border.all(
           width: 4,
-          color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+          color: themeProvider
+              .getThemeColor(ThemeColors.kMainColor)
+              .withOpacity(0.5),
         ),
       ),
       child: Material(
@@ -37,7 +39,9 @@ class AddNewTransactionIcon extends StatelessWidget {
             child: Icon(
               Icons.add,
               size: 45,
-              color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+              color: themeProvider
+                  .getThemeColor(ThemeColors.kMainColor)
+                  .withOpacity(0.9),
             ),
           ),
         ),

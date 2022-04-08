@@ -202,6 +202,8 @@ class QuickActionCardBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       alignment: Alignment.centerRight,
       padding: const EdgeInsets.only(right: kDefaultPadding / 2),

@@ -83,27 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-
-        //? this floating action button will be hidden when scrolling down
-        //* floating action button for adding new quick action
-
-        // if (Provider.of<QuickActionsProvider>(context)
-        //     .getFavoriteQuickActions
-        //     .isNotEmpty)
-        //   CustomFloatingActionButton(
-        //     title: 'Add Quick Action',
-        //     onTap: () {
-        //       Navigator.push(
-        //         context,
-        //         MaterialPageRoute(
-        //           builder: (ctx) => const AddTransactionScreen(
-        //             addTransactionScreenOperations:
-        //                 AddTransactionScreenOperations.addQuickAction,
-        //           ),
-        //         ),
-        //       );
-        //     },
-        //   ),
       ],
     );
   }

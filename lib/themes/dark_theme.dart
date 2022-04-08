@@ -17,11 +17,7 @@ Map<ThemeColors, Color> darkColors = {
 Map<ThemeBoxShadow, BoxShadow> darkBoxShadows = {
   ThemeBoxShadow.kDefaultBoxShadow: const BoxShadow(),
   ThemeBoxShadow.kBottomNavBarShadow: const BoxShadow(),
-  ThemeBoxShadow.kIconBoxShadow: BoxShadow(
-    offset: const Offset(0, 0),
-    color: darkColors[ThemeColors.kMainColor]!.withOpacity(0.2),
-    blurRadius: 6,
-  ),
+  ThemeBoxShadow.kIconBoxShadow: const BoxShadow(),
   ThemeBoxShadow.kCardBoxShadow: BoxShadow(
     offset: const Offset(3, 3),
     blurRadius: 6,

@@ -3,16 +3,17 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/constants/colors.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/home_screen/widgets/background.dart';
 import 'package:smart_wallet/screens/profile_details_screen/widgets/summary_chart.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/widgets/app_bar/my_app_bar.dart';
 
 import '../../constants/sizes.dart';
+import '../../constants/theme_constants.dart';
 import '../../providers/profiles_provider.dart';
 import '../../providers/transactions_provider.dart';
 import 'widgets/profile_summary_statistics.dart';
@@ -142,6 +143,7 @@ class DeleteProfileIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
     var activeProfileId = Provider.of<ProfilesProvider>(context, listen: false)
         .activatedProfileId;
     return GestureDetector(
@@ -170,8 +172,10 @@ class DeleteProfileIcon extends StatelessWidget {
               child: Icon(
                 Icons.delete,
                 color: activeProfileId == profileId
-                    ? kOutcomeColor.withOpacity(0.5)
-                    : kOutcomeColor,
+                    ? themeProvider
+                        .getThemeColor(ThemeColors.kOutcomeColor)
+                        .withOpacity(0.5)
+                    : themeProvider.getThemeColor(ThemeColors.kOutcomeColor),
               ),
             ),
           ),

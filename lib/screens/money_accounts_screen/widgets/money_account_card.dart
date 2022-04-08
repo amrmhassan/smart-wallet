@@ -9,6 +9,7 @@ import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
 
+import '../../../constants/colors.dart';
 import '../../../constants/profiles_constants.dart';
 import '../../../constants/sizes.dart';
 import '../../../models/profile_model.dart';
@@ -111,6 +112,26 @@ class MoneyAccountCard extends StatelessWidget {
     }
   }
 
+  Color getStatusColor(ThemeProvider _themeProvider) {
+    MoneyAccountStatus moneyAccountStatus = profileModel.moneyAccountStatus;
+
+    //? for setting the profileStatusColor
+    if (moneyAccountStatus == MoneyAccountStatus.good) {
+      return kGoodProfileStatusColor;
+    } else if (moneyAccountStatus == MoneyAccountStatus.moderate) {
+      return kModerateProfileStatusColor;
+    } else if (moneyAccountStatus == MoneyAccountStatus.critical) {
+      return kCriticalProfileStatusColor;
+    } else {
+      //! this is an exception , try to find a solution for this
+      if (_themeProvider.currentTheme == Themes.basic) {
+        return _themeProvider.getThemeColor(ThemeColors.kMainColor);
+      } else {
+        return _themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
@@ -166,7 +187,7 @@ class MoneyAccountCard extends StatelessWidget {
             ),
             ProfileStatus(
               moneyAccountStatus: profileModel.moneyAccountStatus,
-              profileStatusColor: profileModel.profileStatusColor,
+              profileStatusColor: getStatusColor(themeProvider),
             ),
             const SizedBox(
               height: kDefaultPadding / 2,
@@ -199,7 +220,7 @@ class MoneyAccountCard extends StatelessWidget {
             ),
             if (profileModel.moneyAccountStatus != MoneyAccountStatus.empty)
               ProfileStatusProgressBar(
-                profileStatusColor: profileModel.profileStatusColor,
+                profileStatusColor: getStatusColor(themeProvider),
                 incomeRatio: profileModel.incomeRatio,
               ),
             if (profileModel.moneyAccountStatus != MoneyAccountStatus.empty)

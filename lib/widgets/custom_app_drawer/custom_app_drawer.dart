@@ -66,7 +66,8 @@ class CustomAppDrawer extends StatelessWidget {
                         Phoenix.rebirth(context);
                       },
                       iconData: Icons.delete,
-                      color: kOutcomeColor,
+                      color: themeProvider
+                          .getThemeColor(ThemeColors.kOutcomeColor),
                     ),
                   if (kDebugMode)
                     DrawerlistItem(
@@ -75,7 +76,8 @@ class CustomAppDrawer extends StatelessWidget {
                         Phoenix.rebirth(context);
                       },
                       iconData: FontAwesomeIcons.bolt,
-                      color: kOutcomeColor,
+                      color: themeProvider
+                          .getThemeColor(ThemeColors.kOutcomeColor),
                     ),
                 ],
               ),

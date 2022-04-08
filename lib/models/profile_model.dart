@@ -1,9 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:smart_wallet/constants/profiles_constants.dart';
-import 'package:smart_wallet/providers/theme_provider.dart';
-
-import '../constants/colors.dart';
-import 'package:smart_wallet/constants/theme_constants.dart';
 
 const double _goodLimit = .70; // when it is from 70% to 100% it will be good
 const double _moderateLimit =
@@ -20,7 +15,6 @@ class ProfileModel {
   late MoneyAccountStatus moneyAccountStatus;
   late double totalMoney;
   late double incomeRatio;
-  late Color profileStatusColor;
   DateTime? lastActivatedDate;
 
   ProfileModel({
@@ -51,18 +45,6 @@ class ProfileModel {
       moneyAccountStatus = MoneyAccountStatus.moderate;
     } else {
       moneyAccountStatus = MoneyAccountStatus.critical;
-    }
-
-    //? for setting the profileStatusColor
-    if (moneyAccountStatus == MoneyAccountStatus.good) {
-      profileStatusColor = kGoodProfileStatusColor;
-    } else if (moneyAccountStatus == MoneyAccountStatus.moderate) {
-      profileStatusColor = kModerateProfileStatusColor;
-    } else if (moneyAccountStatus == MoneyAccountStatus.critical) {
-      profileStatusColor = kCriticalProfileStatusColor;
-    } else if (moneyAccountStatus == MoneyAccountStatus.empty) {
-      profileStatusColor =
-          themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor);
     }
   }
 }

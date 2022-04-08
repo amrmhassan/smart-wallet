@@ -28,9 +28,7 @@ class HeadingCalcButton extends StatelessWidget {
       height: Responsive.getWidth(context) / 7,
       decoration: BoxDecoration(
         color: themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
-        boxShadow: [
-          themeProvider.getBoxShadow(ThemeBoxShadow.kDefaultBoxShadow)
-        ],
+        boxShadow: [themeProvider.getBoxShadow(ThemeBoxShadow.kIconBoxShadow)],
         borderRadius: BorderRadius.circular(
           1000,
         ),

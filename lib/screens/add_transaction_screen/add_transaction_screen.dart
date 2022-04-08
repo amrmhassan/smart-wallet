@@ -177,7 +177,19 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       });
       setcurrentActiveTransactionType(editedQuickAction!.transactionType);
     } else {
-      //* making the current active transaction type to be income if the current active profile total money is lower 0
+      //* 1] setting the current active transaction type according to the user adding a transaction from the transactions screen
+      //* if the current active transaction type is income then activate the income first else activate the outcome first
+      var transactionProvider =
+          Provider.of<TransactionProvider>(context, listen: false);
+      if (transactionProvider.currentActiveTransactionType ==
+          TransactionType.income) {
+        setcurrentActiveTransactionType(TransactionType.income);
+      } else if (transactionProvider.currentActiveTransactionType ==
+          TransactionType.outcome) {
+        setcurrentActiveTransactionType(TransactionType.outcome);
+      }
+
+      //* 2] making the current active transaction type to be income if the current active profile total money is lower 0
       double currentActiveProfileTotalMoney =
           Provider.of<ProfilesProvider>(context, listen: false)
               .getActiveProfile

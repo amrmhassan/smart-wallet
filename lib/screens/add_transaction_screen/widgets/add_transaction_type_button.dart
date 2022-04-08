@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 
-import '../../../constants/colors.dart';
 import '../../../providers/theme_provider.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/types.dart';
@@ -34,10 +33,10 @@ class AddTransactionTypeButton extends StatelessWidget {
                   color: themeProvider.getThemeColor(ThemeColors.kMainColor))
               : null,
           color: active && transactionType == TransactionType.income
-              ? kIncomeColor
+              ? themeProvider.getThemeColor(ThemeColors.kIncomeColor)
               : active && transactionType == TransactionType.outcome
-                  ? kOutcomeColor
-                  : Colors.white,
+                  ? themeProvider.getThemeColor(ThemeColors.kOutcomeColor)
+                  : null,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Icon(

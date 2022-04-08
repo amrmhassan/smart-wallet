@@ -44,8 +44,8 @@ Map<ThemeTextStyles, TextStyle> basicTextStyles = {
     fontSize: 20,
     fontWeight: FontWeight.bold,
   ),
-  ThemeTextStyles.kCalcTextStyle: const TextStyle(
-    color: Colors.black87,
+  ThemeTextStyles.kCalcTextStyle: TextStyle(
+    color: basicColors[ThemeColors.kMainColor],
     fontSize: 26,
     fontWeight: FontWeight.bold,
   ),
