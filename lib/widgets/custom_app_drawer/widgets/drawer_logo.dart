@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
@@ -19,13 +21,20 @@ class DrawerLogo extends StatelessWidget {
         horizontal: kDefaultHorizontalPadding,
         vertical: kDefaultVerticalPadding,
       ),
+      width: double.infinity,
       child: Stack(
         alignment: Alignment.bottomRight,
         children: [
-          Image.asset(
-            'assets/images/whiteLogo-min.png',
-            width: 200,
-            fit: BoxFit.contain,
+          Center(
+            child: Text(
+              's',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 200,
+                color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+                fontFamily: 'Rubik',
+              ),
+            ),
           ),
           Text(
             'Smart Wallet',

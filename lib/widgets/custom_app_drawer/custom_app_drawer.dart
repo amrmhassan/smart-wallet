@@ -8,7 +8,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/colors.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
-import 'package:smart_wallet/constants/sizes.dart';
 import 'package:smart_wallet/helpers/db_helper.dart';
 import 'package:smart_wallet/helpers/shared_pref_helper.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
@@ -30,9 +29,6 @@ class CustomAppDrawer extends StatelessWidget {
         color: themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
         child: Column(
           children: [
-            SizedBox(
-              height: kDefaultPadding,
-            ),
             DrawerLogo(),
             DrawerSeparatorLine(),
             Expanded(
