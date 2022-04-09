@@ -280,6 +280,10 @@ class ProfilesProvider extends ChangeNotifier {
 
   //? deleting a profile
   Future<void> deleteProfile(String profileId) async {
+    //* checking if the deleted profile is the active profile
+    if (profileId == activatedProfileId) {
+      throw CustomError('You can\'t delete the active profile');
+    }
     _profiles.removeWhere((element) => element.id == profileId);
 
     //* delete from the database second

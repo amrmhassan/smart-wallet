@@ -7,6 +7,7 @@ import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
+import 'package:smart_wallet/utils/profile_utils.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
 
 import '../../../constants/colors.dart';
@@ -109,6 +110,9 @@ class MoneyAccountCard extends StatelessWidget {
           MaterialPageRoute(
             builder: (ctx) => ProfileDetailsScreen(profileId: profileModel.id),
           ));
+    } else {
+      showDeleteProfileModal(
+          context, profileModel.id, 'This profile is empty, Delete it?');
     }
   }
 

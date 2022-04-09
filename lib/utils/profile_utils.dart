@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -64,6 +65,33 @@ Future<void> showAddProfileModal(
       clearProfileNewName: () => clearProfileName(_profileNameController),
     ),
   );
+}
+
+Future<void> showDeleteProfileModal(BuildContext context, String profileId,
+    [String? msg, bool exitAfterDeleting = false]) async {
+  await AwesomeDialog(
+    context: context,
+    dialogType: DialogType.WARNING,
+    animType: AnimType.BOTTOMSLIDE,
+    title: msg ?? 'Delete a profile?',
+    btnCancelOnPress: () {},
+    btnOkOnPress: () async {
+      try {
+        //* this will check if i am deleting the profile from the details screen or from
+        //* after clicking the empty profile
+        if (exitAfterDeleting) {
+          Navigator.pop(context);
+        }
+        await Provider.of<ProfilesProvider>(
+          context,
+          listen: false,
+        ).deleteProfile(profileId);
+        showSnackBar(context, 'Profile deleted', SnackBarType.info);
+      } catch (error) {
+        showSnackBar(context, error.toString(), SnackBarType.error);
+      }
+    },
+  ).show();
 }
 
 void clearProfileName(TextEditingController _profileNameController) {

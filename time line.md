@@ -36,6 +36,7 @@ DONE - you might change the total Mony indication to the Savings indeication
 DONE - the savings worked different 
 DONE - the saving of today isn't equal to the income of that day minus the outcome in the same day 
 DONE - it equals to the savings of the pervious days + income of that day - outcome of that day= totalIncome-totalOutcome
+DONE - after chaning the theme restart the app programatically(Fixied with other solution)
 DONE - so the savings always equal to the total (income from the first day to the current day ) - (total outcome from the first day to the current day) it will make difference in the chart of the savings-- cause the savings of each day will equal to the income of the previous days - the outcome of the previous days
 
 
@@ -43,7 +44,7 @@ DONE - so the savings always equal to the total (income from the first day to th
 [Pending]
 add a lastActivatedDate to each profile 
 --then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)
-# after chaning the theme restart the app programatically
+
 
 
 [Soon]
@@ -56,7 +57,16 @@ the ability to a debt also will be implemented in the add transaction screen aft
 make the transactions page (pageview so that the user can scroll between income, outcome, all) 
 make the quick action page (pageview so that the user can scroll between income, outcome, all)
 and change the title(all, income, outcome ) after scrolling finishes
-
+add a property to profiles, transactions, quick actions called index
+-- this property will be used to arrange them later 
+-- for the quick actions it will  be used to arrange them in the favourite status( home screen )
+-- for the profiles it will be used to arrange them after activating them 
+-- when activating a profile it's index property will be greater than the whole profiles in the list
+-- when fetching them arrange them according to the index 
+-- control this ability from the settings to let the user decide how to arrange them 
+-- for the quick actions allow the user to drag and rearrange them in the favorites(home screen) with the recordable list
+allow the user to open a profile even if it is still empty 
+-- or show a dialog to delete empty profile when clicking  it's card if it is empty instead of opening it 
 
 
 

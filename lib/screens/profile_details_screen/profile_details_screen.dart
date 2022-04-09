@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/types.dart';
@@ -16,6 +15,7 @@ import '../../constants/sizes.dart';
 import '../../constants/theme_constants.dart';
 import '../../providers/profiles_provider.dart';
 import '../../providers/transactions_provider.dart';
+import '../../utils/profile_utils.dart';
 import 'widgets/profile_summary_statistics.dart';
 
 class ProfileDetailsScreen extends StatefulWidget {
@@ -118,29 +118,6 @@ class DeleteProfileIcon extends StatelessWidget {
     required this.profileId,
   }) : super(key: key);
 
-  Future<void> deleteProfile(
-      BuildContext context, String activeProfileId) async {
-    await AwesomeDialog(
-      context: context,
-      dialogType: DialogType.WARNING,
-      animType: AnimType.BOTTOMSLIDE,
-      title: 'Delete a profile?',
-      btnCancelOnPress: () {},
-      btnOkOnPress: () async {
-        try {
-          Navigator.pop(context);
-          await Provider.of<ProfilesProvider>(
-            context,
-            listen: false,
-          ).deleteProfile(profileId);
-          showSnackBar(context, 'Profile deleted', SnackBarType.info);
-        } catch (error) {
-          showSnackBar(context, error.toString(), SnackBarType.error);
-        }
-      },
-    ).show();
-  }
-
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
@@ -166,7 +143,8 @@ class DeleteProfileIcon extends StatelessWidget {
           child: InkWell(
             onTap: activeProfileId == profileId
                 ? null
-                : () async => deleteProfile(context, activeProfileId),
+                : () async => await showDeleteProfileModal(
+                    context, profileId, null, true),
             child: Container(
               padding: EdgeInsets.all(kDefaultPadding / 2),
               child: Icon(
