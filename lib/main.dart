@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +7,7 @@ import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/loading_data_screen.dart';
+import 'package:smart_wallet/tests/testing_widget.dart';
 import './providers/quick_actions_provider.dart';
 import './providers/transactions_provider.dart';
 import './screens/holder_screen.dart';
@@ -66,9 +69,10 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         initialRoute: LoadingDataScreen.routeName,
         routes: {
+          LoadingDataScreen.routeName: (ctx) => const LoadingDataScreen(),
           HolderScreen.routeName: (ctx) => const HolderScreen(),
           QuickActionsScreen.routeName: (ctx) => const QuickActionsScreen(),
-          LoadingDataScreen.routeName: (ctx) => const LoadingDataScreen(),
+          TestingWidget.routeName: (ctx) => TestingWidget(),
         },
       ),
     );

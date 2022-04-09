@@ -8,6 +8,7 @@ class QuickActionModel {
   DateTime createdAt;
   TransactionType transactionType;
   bool isFavorite;
+  int? quickActionIndex;
 
   String profileId;
   QuickActionModel({
@@ -19,5 +20,6 @@ class QuickActionModel {
     required this.transactionType,
     this.isFavorite = false,
     required this.profileId,
+    this.quickActionIndex,
   });
 }

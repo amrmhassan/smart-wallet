@@ -19,8 +19,8 @@ class QuickActionCard extends StatelessWidget {
   const QuickActionCard({
     Key? key,
     this.transactionType = TransactionType.income,
-    this.title = 'Empty Title',
-    this.description = 'Empty Description',
+    required this.title,
+    required this.description,
     required this.amount,
     this.onTap,
     this.onLongPress,
@@ -37,7 +37,6 @@ class QuickActionCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap ?? () {},
-          onLongPress: onLongPress ?? () {},
           child: Container(
             padding: const EdgeInsets.symmetric(
               horizontal: kDefaultHorizontalPadding / 2,

@@ -14,8 +14,8 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   Future<void> fetchAndSetActiveTheme() async {
-    String themeName =
-        await SharedPrefHelper.getString(kCurrentActiveTheme) as String;
+    String themeName = await SharedPrefHelper.getString(kCurrentActiveTheme) ??
+        currentTheme.name;
     if (themeName == Themes.basic.name) {
       currentTheme = Themes.basic;
     } else if (themeName == Themes.dark.name) {

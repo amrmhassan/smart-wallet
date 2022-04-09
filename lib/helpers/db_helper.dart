@@ -20,7 +20,7 @@ class DBHelper {
             'CREATE TABLE $profilesTableName (id TEXT PRIMARY KEY,name TEXT, income TEXT, outcome TEXT, activated TEXT, createdAt TEXT, lastActivatedDate TEXT)');
         //* creating quick actions table
         return db.execute(
-            'CREATE TABLE $quickActionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT,  isFavorite TEXT, profileId TEXT  )');
+            'CREATE TABLE $quickActionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT,  isFavorite TEXT, profileId TEXT , quickActionIndex TEXT )');
       },
       version: 1,
     );

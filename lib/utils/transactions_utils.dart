@@ -186,19 +186,21 @@ Future<void> editTransaction({
 }
 
 //? 4] editing a quick action
-Future<void> editQuickAction(
-    {required String title,
-    required String description,
-    required TransactionType transactionType,
-    required ProfileModel activeProfile,
-    required BuildContext context,
-    required double amount,
-    required QuickActionModel oldQuickaction}) async {
+Future<void> editQuickAction({
+  required String title,
+  required String description,
+  required TransactionType transactionType,
+  required ProfileModel activeProfile,
+  required BuildContext context,
+  required double amount,
+  required QuickActionModel oldQuickaction,
+}) async {
   //* here i will add edit a quick action
   String id = oldQuickaction.id;
   DateTime createdAt = oldQuickaction.createdAt;
   bool isFavorite = oldQuickaction.isFavorite;
   String profileId = oldQuickaction.profileId;
+  int? quickActionIndex = oldQuickaction.quickActionIndex;
   QuickActionModel newQuickAction = QuickActionModel(
     id: id,
     title: title,
@@ -208,7 +210,7 @@ Future<void> editQuickAction(
     transactionType: transactionType,
     isFavorite: isFavorite,
     profileId: profileId,
-    // isFavorite:
+    quickActionIndex: quickActionIndex,
   );
 
   try {

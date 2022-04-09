@@ -64,6 +64,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
+  drag_and_drop_gridview:
+    dependency: "direct main"
+    description:
+      name: drag_and_drop_gridview
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.8"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.3"
   fake_async:
     dependency: transitive
     description:
@@ -111,6 +125,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  flutter_reorderable_grid_view:
+    dependency: "direct main"
+    description:
+      name: flutter_reorderable_grid_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.3"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -275,6 +296,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.2"
+  reorderable_grid_view:
+    dependency: "direct main"
+    description:
+      name: reorderable_grid_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.2"
   shared_preferences:
     dependency: "direct main"
     description:
