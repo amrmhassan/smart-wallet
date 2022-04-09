@@ -101,6 +101,7 @@ class QuickActionsCardsGrid extends StatelessWidget {
                 children: generatedQuickActions,
                 onReorder: (List<OrderUpdateEntity> orderUpdateEntities) async {
                   for (final orderUpdateEntity in orderUpdateEntities) {
+                    //* this will run only one time on the updated quick action
                     final quickAction =
                         quickActions.removeAt(orderUpdateEntity.oldIndex);
                     quickActions.insert(

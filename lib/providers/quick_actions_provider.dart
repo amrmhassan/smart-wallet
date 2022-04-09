@@ -19,9 +19,12 @@ class QuickActionsProvider extends ChangeNotifier {
 
 //* for getting the favorite quick actions only
   List<QuickActionModel> get getFavoriteQuickActions {
-    return [
+    var favQuickActions = [
       ..._quickActions.where((element) => element.isFavorite == true),
     ];
+    favQuickActions.sort(
+        (a, b) => ((a.quickActionIndex ?? 0) - (b.quickActionIndex ?? 0)));
+    return favQuickActions;
   }
 
 //* for getting the income quick actions only
@@ -144,6 +147,9 @@ class QuickActionsProvider extends ChangeNotifier {
           );
         },
       ).toList();
+      fetchedQuickActions.sort((a, b) {
+        return a.createdAt.difference(b.createdAt).inSeconds;
+      });
       _quickActions = fetchedQuickActions;
       notifyListeners();
     } catch (error) {
@@ -249,6 +255,9 @@ class QuickActionsProvider extends ChangeNotifier {
       List<QuickActionModel> newFavoriteQuickActions) async {
     //? here i will edit a mass favorite quick actions
     for (var quickAction in newFavoriteQuickActions) {
+      int index = newFavoriteQuickActions.indexOf(quickAction);
+      quickAction.quickActionIndex = index;
+
       await editQuickActionOnDataBaseOnly(quickAction);
     }
   }

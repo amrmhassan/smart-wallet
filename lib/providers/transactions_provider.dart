@@ -191,6 +191,10 @@ class TransactionProvider extends ChangeNotifier {
             ),
           )
           .toList();
+
+      fetchedTransactions.sort((a, b) {
+        return a.createdAt.difference(b.createdAt).inSeconds;
+      });
     } catch (error) {
       if (kDebugMode) {
         print(
