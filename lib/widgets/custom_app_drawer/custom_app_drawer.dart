@@ -50,15 +50,17 @@ class CustomAppDrawer extends StatelessWidget {
                   DrawerlistItem(
                     title: 'Home',
                     onTap: () {
-                      Navigator.pushNamed(context, HolderScreen.routeName);
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushNamed(HolderScreen.routeName);
                     },
                     iconData: Icons.home,
                   ),
                   DrawerlistItem(
                     title: 'Quick Actions',
                     onTap: () {
-                      Navigator.pushNamed(
-                          context, QuickActionsScreen.routeName);
+                      Navigator.of(context).pop();
+                      Navigator.of(context)
+                          .pushNamed(QuickActionsScreen.routeName);
                     },
                     iconData: FontAwesomeIcons.bolt,
                     color: kModerateProfileStatusColor,

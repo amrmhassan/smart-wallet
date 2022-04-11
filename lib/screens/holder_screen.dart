@@ -36,6 +36,7 @@ class _HolderScreenState extends State<HolderScreen> {
   bool _apply = true;
   late PageController _pageController;
   final TextEditingController _profileNameController = TextEditingController();
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   void _setActiveNavBarIconIndex(int index) {
     if (_apply) {
@@ -85,6 +86,7 @@ class _HolderScreenState extends State<HolderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
       drawer: const CustomAppDrawer(),
@@ -123,24 +125,35 @@ class _HolderScreenState extends State<HolderScreen> {
 
                 Expanded(
                   //* main pages of the app
-                  child: PageView(
-                    //* prevented the user from scrolling by himself(to enable transactions dimissible)
-                    // physics: const BouncingScrollPhysics(),
-                    physics: const NeverScrollableScrollPhysics(),
-                    onPageChanged: (index) {
-                      return _setActiveNavBarIconIndex(index);
-                    },
-                    //! try this attribute now
-                    allowImplicitScrolling: false,
-                    controller: _pageController,
+                  child: GestureDetector(
+                    onPanUpdate: (details) {
+                      if (details.delta.dx > 0) {
+                        //? this will be executed when ever the user swipes right
+                        _key.currentState!.openDrawer();
+                      } else {
+                        //? this will be executed when ever the user swipes left
 
-                    children: const [
-                      StatisticsScreen(),
-                      MoneyAccountsScreen(),
-                      HomeScreen(),
-                      TransactionsScreen(),
-                      SettingsScreen(),
-                    ],
+                      }
+                    },
+                    child: PageView(
+                      //* prevented the user from scrolling by himself(to enable transactions dimissible)
+                      // physics: const BouncingScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
+                      onPageChanged: (index) {
+                        return _setActiveNavBarIconIndex(index);
+                      },
+                      //! try this attribute now
+                      allowImplicitScrolling: false,
+                      controller: _pageController,
+
+                      children: const [
+                        StatisticsScreen(),
+                        MoneyAccountsScreen(),
+                        HomeScreen(),
+                        TransactionsScreen(),
+                        SettingsScreen(),
+                      ],
+                    ),
                   ),
                 ),
               ],
