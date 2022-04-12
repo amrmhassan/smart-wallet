@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/screens/authentication_screen/authentication_screen.dart';
 import 'package:smart_wallet/screens/loading_data_screen.dart';
 import 'package:smart_wallet/tests/testing_widget.dart';
 import './providers/quick_actions_provider.dart';
@@ -73,6 +74,7 @@ class _MyAppState extends State<MyApp> {
           HolderScreen.routeName: (ctx) => const HolderScreen(),
           QuickActionsScreen.routeName: (ctx) => const QuickActionsScreen(),
           TestingWidget.routeName: (ctx) => TestingWidget(),
+          AuthenticationScreen.routeName: (ctx) => AuthenticationScreen(),
         },
       ),
     );

@@ -19,6 +19,7 @@ enum ThemeColors {
 
 enum ThemeTextStyles {
   kHeadingTextStyle,
+  kExtraLargeHeadingTextStyle,
   kCalcTextStyle,
   kActivatedProfileTextStyle,
   kLinkTextStyle,

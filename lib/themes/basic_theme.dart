@@ -44,6 +44,11 @@ Map<ThemeTextStyles, TextStyle> basicTextStyles = {
     fontSize: 20,
     fontWeight: FontWeight.bold,
   ),
+  ThemeTextStyles.kExtraLargeHeadingTextStyle: TextStyle(
+    color: basicColors[ThemeColors.kMainColor]!,
+    fontSize: 30,
+    fontWeight: FontWeight.bold,
+  ),
   ThemeTextStyles.kCalcTextStyle: TextStyle(
     color: basicColors[ThemeColors.kMainColor],
     fontSize: 26,

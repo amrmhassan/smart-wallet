@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/screens/authentication_screen/authentication_screen.dart';
 
 import '../../constants/sizes.dart';
 import '../../providers/theme_provider.dart';
@@ -58,7 +59,10 @@ class MyAppBar extends StatelessWidget {
           //* showing the person icon for allowing the user to edit his profile data
           rightIcon ??
               PersonIcon(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(AuthenticationScreen.routeName);
+                },
               ),
         ],
       ),

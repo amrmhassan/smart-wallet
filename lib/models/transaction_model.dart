@@ -10,6 +10,7 @@ class TransactionModel {
   //* this property i will need to provide the ratio of this transaction to the total amount of money i have right now in this profile
   double ratioToTotal;
   String profileId;
+  String? userID;
 
   TransactionModel({
     required this.id,
@@ -20,5 +21,6 @@ class TransactionModel {
     required this.transactionType,
     required this.ratioToTotal,
     required this.profileId,
+    this.userID,
   });
 }
