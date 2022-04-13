@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
@@ -18,22 +20,22 @@ class UserPhoto extends StatelessWidget {
     var themeProvider = Provider.of<ThemeProvider>(context);
 
     return Container(
-      clipBehavior: Clip.hardEdge,
-      width: raduis ?? 80,
-      height: raduis ?? 80,
+      padding: EdgeInsets.all(2),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: themeProvider.getThemeColor(ThemeColors.kMainColor),
         borderRadius: BorderRadius.circular(1000),
-        border: Border.all(
-          width: 2,
-          color: themeProvider.getThemeColor(
-            ThemeColors.kMainColor,
-          ),
-        ),
       ),
-      child: Image.network(
-        photoUrl,
-        fit: BoxFit.contain,
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(1000),
+        ),
+        width: raduis ?? 80,
+        height: raduis ?? 80,
+        child: Image.network(
+          photoUrl,
+          fit: BoxFit.contain,
+        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/sizes.dart';
@@ -39,10 +40,15 @@ class LogInUserOptions extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(
                   horizontal: kDefaultHorizontalPadding / 3),
-              child: Text(
-                'Sign In Using',
-                style: themeProvider.getTextStyle(
-                  ThemeTextStyles.kInActiveParagraphTextStyle,
+              child: StreamBuilder(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (ctx, snapshot) => Text(
+                  snapshot.hasData
+                      ? 'Sign In with another email?'
+                      : 'Sign In Using',
+                  style: themeProvider.getTextStyle(
+                    ThemeTextStyles.kInActiveParagraphTextStyle,
+                  ),
                 ),
               ),
             ),
@@ -60,8 +66,13 @@ class LogInUserOptions extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GoogleSignInButton(
-              onTap: () async => await googleLogin(context),
+            StreamBuilder(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (ctx, snapshot) => GoogleSignInButton(
+                onTap: snapshot.hasData
+                    ? () {}
+                    : () async => await googleLogin(context),
+              ),
             )
           ],
         ),

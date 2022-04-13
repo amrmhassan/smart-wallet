@@ -3,10 +3,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
-import 'package:smart_wallet/screens/sync_data_screen/widgets/data_card.dart';
-import 'package:smart_wallet/screens/sync_data_screen/widgets/login_user_options.dart';
-import 'package:smart_wallet/screens/sync_data_screen/widgets/user_info_viewer.dart';
+import 'package:smart_wallet/providers/quick_actions_provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/providers/transactions_provider.dart';
+import 'package:smart_wallet/screens/sync_data_screen/widgets/logged_in_user_data.dart';
+import 'package:smart_wallet/screens/sync_data_screen/widgets/logout_button.dart';
+import 'package:smart_wallet/screens/sync_data_screen/widgets/not_logged_in_user_data.dart';
 import '../../constants/sizes.dart';
 
 import '../../widgets/app_bar/my_app_bar.dart';
@@ -26,6 +30,12 @@ class SyncDataScreen extends StatefulWidget {
 class _SyncDataScreenState extends State<SyncDataScreen> {
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+    var profiles = Provider.of<ProfilesProvider>(context).profiles;
+    var transactions = Provider.of<TransactionProvider>(context).transactions;
+    var quickActions =
+        Provider.of<QuickActionsProvider>(context).allQuickActions;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
@@ -50,88 +60,52 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
-                child: Column(
-                  children: [
-                    MyAppBar(
-                      title: 'Sync Data',
-                      enableTapping: false,
-                    ),
-                    SizedBox(
-                      height: kDefaultPadding,
-                    ),
-                    StreamBuilder(
-                      stream: FirebaseAuth.instance.authStateChanges(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Text('Loading');
-                        } else if (snapshot.hasError) {
-                          return Text('Error');
-                        } else if (snapshot.hasData) {
-                          User user = snapshot.data as User;
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      StreamBuilder(
+                        stream: FirebaseAuth.instance.authStateChanges(),
+                        builder: (ctx, snapshot) => MyAppBar(
+                          title: 'Sync Data',
+                          enableTapping: false,
+                          rightIcon: snapshot.hasData ? LogOutButton() : null,
+                        ),
+                      ),
+                      SizedBox(
+                        height: kDefaultPadding,
+                      ),
+                      StreamBuilder(
+                        stream: FirebaseAuth.instance.authStateChanges(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Text('Loading');
+                          } else if (snapshot.hasError) {
+                            return Text('Error');
+                          } else if (snapshot.hasData) {
+                            User user = snapshot.data as User;
 
-                          return Column(
-                            children: [
-                              //* for showing the user info (picture and a name)
-                              UserInfoViewer(
-                                photoUrl: user.photoURL,
-                                userName: user.displayName,
-                                userEmail: user.email,
-                              ),
-
-                              SizedBox(
-                                height: kDefaultPadding,
-                              ),
-
-                              //* for showing the not synced data info
-                              DataCard(
-                                title: 'Not Synced Data',
-                                data: {
-                                  'Profiles': 10,
-                                  'Transactions': 53,
-                                  'Quick Actions': 6,
-                                },
-                              ),
-                              SizedBox(
-                                height: kDefaultPadding,
-                              ),
-                              //* for showing the synced data info
-                              DataCard(
-                                title: 'Synced Data',
-                                data: {
-                                  'Profiles': 10,
-                                  'Transactions': 53,
-                                  'Quick Actions': 6,
-                                },
-                              ),
-                            ],
-                          );
-                        } else {
-                          var profiles =
-                              Provider.of<ProfilesProvider>(context).profiles;
-
-                          return Column(
-                            children: [
-                              LogInUserOptions(),
-                              SizedBox(
-                                height: kDefaultPadding,
-                              ),
-
-                              //* for showing the not synced data info
-                              DataCard(
-                                title: 'Not Synced Data',
-                                data: {
-                                  'Profiles': profiles.length,
-                                  'Transactions': 9,
-                                  'Quick Actions': 6,
-                                },
-                              ),
-                            ],
-                          );
-                        }
-                      },
-                    ),
-                  ],
+                            return LoggedInUserData(
+                              user: user,
+                              profiles: profiles,
+                              transactions: transactions,
+                              quickActions: quickActions,
+                            );
+                          } else {
+                            return NotLoggedInUserData(
+                              profiles: profiles,
+                              transactions: transactions,
+                              quickActions: quickActions,
+                            );
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        height: kDefaultPadding,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
