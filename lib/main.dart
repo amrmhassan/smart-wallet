@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/providers/authentication_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
 import 'package:smart_wallet/providers/synced_data_provider.dart';
@@ -75,6 +76,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (ctx) => SyncedDataProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => AuthenticationProvider(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

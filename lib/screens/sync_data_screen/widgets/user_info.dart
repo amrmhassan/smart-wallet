@@ -3,13 +3,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/sizes.dart';
+import 'package:smart_wallet/screens/sync_data_screen/widgets/user_photo.dart';
 
 import '../../../constants/theme_constants.dart';
 import '../../../providers/theme_provider.dart';
 
 class UserInfo extends StatelessWidget {
+  final String? photoUrl;
+  final String? userName;
+  final String? userEmail;
   const UserInfo({
     Key? key,
+    this.photoUrl,
+    this.userName,
+    this.userEmail,
   }) : super(key: key);
 
   @override
@@ -18,29 +25,29 @@ class UserInfo extends StatelessWidget {
 
     return Column(
       children: [
-        Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(1000),
-            border: Border.all(
-              width: 2,
-              color: themeProvider.getThemeColor(
-                ThemeColors.kMainColor,
-              ),
-            ),
-          ),
-        ),
+        if (photoUrl != null) UserPhoto(photoUrl: photoUrl!),
         SizedBox(
           height: kDefaultPadding / 2,
         ),
-        Text(
-          'User Name',
-          style: themeProvider.getTextStyle(
-            ThemeTextStyles.kHeadingTextStyle,
+        if (userName != null)
+          Text(
+            userName!,
+            style: themeProvider.getTextStyle(
+              ThemeTextStyles.kHeadingTextStyle,
+            ),
           ),
+        SizedBox(
+          height: kDefaultPadding / 3,
         ),
+        if (userEmail != null)
+          Text(
+            userEmail!,
+            style: themeProvider.getTextStyle(
+              ThemeTextStyles.kSmallInActiveParagraphTextStyle,
+            ),
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+          ),
       ],
     );
   }

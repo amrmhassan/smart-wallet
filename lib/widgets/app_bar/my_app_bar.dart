@@ -12,11 +12,13 @@ import '../global/person_icon.dart';
 class MyAppBar extends StatelessWidget {
   final String? title;
   final Widget? rightIcon;
+  final bool enableTapping;
 
   const MyAppBar({
     Key? key,
     this.title,
     this.rightIcon,
+    this.enableTapping = true,
   }) : super(key: key);
 
   @override
@@ -59,9 +61,12 @@ class MyAppBar extends StatelessWidget {
           //* showing the person icon for allowing the user to edit his profile data
           rightIcon ??
               PersonIcon(
-                onTap: () {
-                  Navigator.of(context).pushNamed(SyncDataScreen.routeName);
-                },
+                onTap: enableTapping
+                    ? () {
+                        Navigator.of(context)
+                            .pushNamed(SyncDataScreen.routeName);
+                      }
+                    : () {},
               ),
         ],
       ),

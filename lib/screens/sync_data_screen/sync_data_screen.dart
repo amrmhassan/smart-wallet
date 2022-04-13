@@ -1,12 +1,13 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/constants/theme_constants.dart';
+import 'package:smart_wallet/providers/authentication_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/data_card.dart';
+import 'package:smart_wallet/screens/sync_data_screen/widgets/login_user_options.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/user_info.dart';
-import 'package:smart_wallet/widgets/global/line.dart';
 import '../../constants/sizes.dart';
 
 import '../../widgets/app_bar/my_app_bar.dart';
@@ -28,7 +29,21 @@ class SyncDataScreen extends StatefulWidget {
 class _SyncDataScreenState extends State<SyncDataScreen> {
   @override
   Widget build(BuildContext context) {
-    var themeProvider = Provider.of<ThemeProvider>(context);
+    var authenticationProvider = Provider.of<AuthenticationProvider>(context);
+    String? photoUrl;
+    String? userName;
+    String? userId;
+    String? userEmail;
+    try {
+      userId = authenticationProvider.userGoogle.id;
+      photoUrl = authenticationProvider.userGoogle.photoUrl;
+      userName = authenticationProvider.userGoogle.displayName;
+      userEmail = authenticationProvider.userGoogle.email;
+    } catch (error) {
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    }
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
@@ -57,6 +72,7 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
                   children: [
                     MyAppBar(
                       title: 'Sync Data',
+                      enableTapping: false,
                     ),
                     SizedBox(
                       height: kDefaultPadding,
@@ -64,60 +80,17 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
                     Column(
                       children: [
                         //* for showing the user info (picture and a name)
-                        if (loggedIn) UserInfo(),
-                        Column(
-                          children: [
-                            // Text(
-                            //   'Please sign in first!',
-                            //   style: themeProvider.getTextStyle(
-                            //     ThemeTextStyles.kParagraphTextStyle,
-                            //   ),
-                            // ),
-                            SizedBox(
-                              height: kDefaultPadding / 2,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Line(
-                                    lineType: LineType.horizontal,
-                                    thickness: 1,
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          kDefaultHorizontalPadding / 3),
-                                  child: Text(
-                                    'Sign In Using',
-                                    style: themeProvider.getTextStyle(
-                                      ThemeTextStyles
-                                          .kInActiveParagraphTextStyle,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Line(
-                                    lineType: LineType.horizontal,
-                                    thickness: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: kDefaultPadding / 2,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GoogleSignInButton(
-                                  onTap: () {},
-                                )
-                              ],
-                            ),
-                          ],
+                        if (userId != null)
+                          UserInfo(
+                            photoUrl: photoUrl,
+                            userName: userName,
+                            userEmail: userEmail,
+                          ),
+                        SizedBox(
+                          height: kDefaultPadding / 2,
                         ),
+                        //* for showing login options
+                        if (userId == null) LogInUserOptions(),
                         SizedBox(
                           height: kDefaultPadding,
                         ),
@@ -151,38 +124,6 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class GoogleSignInButton extends StatelessWidget {
-  final VoidCallback onTap;
-  const GoogleSignInButton({
-    Key? key,
-    required this.onTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          child: Container(
-            padding: EdgeInsets.all(5),
-            child: Image.asset(
-              'assets/icons/google.png',
-              width: 35,
-            ),
-          ),
         ),
       ),
     );
