@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/types.dart';
-import 'package:smart_wallet/providers/quick_actions_provider.dart';
-import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/utils/profile_utils.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
@@ -45,15 +43,6 @@ class MoneyAccountCard extends StatelessWidget {
     //? here set the loading to true and
     await Provider.of<ProfilesProvider>(context, listen: false)
         .setActivatedProfile(profileModel.id);
-
-    String activatedProfileId =
-        Provider.of<ProfilesProvider>(context, listen: false)
-            .activatedProfileId;
-    await Provider.of<TransactionProvider>(context, listen: false)
-        .fetchAndUpdateTransactions(activatedProfileId);
-    await Provider.of<QuickActionsProvider>(context, listen: false)
-        .fetchAndUpdateQuickActions(activatedProfileId);
-    //? here set the loading to false
   }
 
 //* showing the profile modal that will be responsible for changing the profile name

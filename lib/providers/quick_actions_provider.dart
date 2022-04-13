@@ -1,7 +1,6 @@
 // ignore_for_file: unused_element, prefer_const_constructors
 
 import 'package:flutter/foundation.dart';
-import 'package:smart_wallet/models/profile_model.dart';
 import 'package:uuid/uuid.dart';
 import '../constants/db_constants.dart';
 import '../constants/types.dart';
@@ -13,12 +12,22 @@ import '../helpers/db_helper.dart';
 //! it will only exist in the favorite quick actions
 
 class QuickActionsProvider extends ChangeNotifier {
+  final String activeProfileId;
+  QuickActionsProvider({
+    required this.activeProfileId,
+    required this.allQuickActions,
+  });
   //? a) quick actions stuff
-  List<QuickActionModel> _quickActions = [];
-  List<QuickActionModel> _allQuickActions = [];
+  List<QuickActionModel> allQuickActions;
+
+  List<QuickActionModel> get activeProfileQuickActions {
+    return allQuickActions
+        .where((element) => element.profileId == activeProfileId)
+        .toList();
+  }
 
   int get allQuickActionsLength {
-    return _allQuickActions.length;
+    return allQuickActions.length;
   }
 
 //? 1- getting quick actions, with multiple possibilities
@@ -26,7 +35,8 @@ class QuickActionsProvider extends ChangeNotifier {
 //* for getting the favorite quick actions only
   List<QuickActionModel> get getFavoriteQuickActions {
     var favQuickActions = [
-      ..._quickActions.where((element) => element.isFavorite == true),
+      ...activeProfileQuickActions
+          .where((element) => element.isFavorite == true),
     ];
     favQuickActions.sort(
         (a, b) => ((a.quickActionIndex ?? 0) - (b.quickActionIndex ?? 0)));
@@ -36,7 +46,7 @@ class QuickActionsProvider extends ChangeNotifier {
 //* for getting the income quick actions only
   List<QuickActionModel> get _incomeQuickActions {
     return [
-      ..._quickActions
+      ...activeProfileQuickActions
           .where((element) => element.transactionType == TransactionType.income)
     ];
   }
@@ -44,7 +54,7 @@ class QuickActionsProvider extends ChangeNotifier {
 //* for getting the outcome quick actions only
   List<QuickActionModel> get _outcomeQuickActions {
     return [
-      ..._quickActions.where(
+      ...activeProfileQuickActions.where(
           (element) => element.transactionType == TransactionType.outcome)
     ];
   }
@@ -56,18 +66,13 @@ class QuickActionsProvider extends ChangeNotifier {
     } else if (currentActiveQuickActionType == TransactionType.outcome) {
       return _outcomeQuickActions;
     } else {
-      return [..._quickActions];
+      return [...activeProfileQuickActions];
     }
   }
 
   //* for getting a quick actions by its id
   QuickActionModel getQuickById(String id) {
-    return _quickActions.firstWhere((element) => element.id == id);
-  }
-
-//* for getting all quick actions no matter it's type
-  List<QuickActionModel> get getAllQuickActions {
-    return [..._quickActions];
+    return allQuickActions.firstWhere((element) => element.id == id);
   }
 
   //? 3- methods to control the quickActions
@@ -80,7 +85,7 @@ class QuickActionsProvider extends ChangeNotifier {
 //* here checking if the added quick action is the first
 //* to make it favorite and make it's quickActionIndex prop to be zero
     int? quickActionIndex;
-    if (_quickActions.isEmpty) {
+    if (allQuickActions.isEmpty) {
       quickActionIndex = 0;
     } else {
       quickActionIndex = null;
@@ -96,7 +101,7 @@ class QuickActionsProvider extends ChangeNotifier {
         'createdAt': createdAt.toIso8601String(),
         'transactionType':
             transactionType == TransactionType.income ? 'income' : 'outcome',
-        'isFavorite': _quickActions.isEmpty ? 'true' : 'false',
+        'isFavorite': activeProfileQuickActions.isEmpty ? 'true' : 'false',
         'profileId': profileId,
         'quickActionIndex': quickActionIndex.toString(),
       });
@@ -114,19 +119,19 @@ class QuickActionsProvider extends ChangeNotifier {
       amount: amount,
       createdAt: createdAt,
       transactionType: transactionType,
-      isFavorite: _quickActions.isEmpty ? true : false,
+      isFavorite: activeProfileQuickActions.isEmpty ? true : false,
       profileId: profileId,
       quickActionIndex: quickActionIndex,
     );
-    _quickActions.add(quickActionModel);
+    allQuickActions.add(quickActionModel);
     notifyListeners();
   }
 
 //* for getting the quickActions from the database
-  Future<void> fetchAndUpdateQuickActions(String activatedProfileId) async {
+  Future<void> fetchAllQuickActionsFromDataBase() async {
     try {
-      List<Map<String, dynamic>> data = await DBHelper.getDataWhere(
-          quickActionsTableName, 'profileId', activatedProfileId);
+      List<Map<String, dynamic>> data =
+          await DBHelper.getData(quickActionsTableName);
 
       List<QuickActionModel> fetchedQuickActions = data.map(
         (quickAction) {
@@ -156,8 +161,7 @@ class QuickActionsProvider extends ChangeNotifier {
       fetchedQuickActions.sort((a, b) {
         return a.createdAt.difference(b.createdAt).inSeconds;
       });
-      _quickActions = fetchedQuickActions;
-      notifyListeners();
+      allQuickActions = fetchedQuickActions;
     } catch (error) {
       if (kDebugMode) {
         print(error);
@@ -165,12 +169,6 @@ class QuickActionsProvider extends ChangeNotifier {
       }
       // rethrow;
     }
-  }
-
-//* for getting the quickActions from the database
-  Future<int> getAllQuickActionsFromDataBase(
-      List<ProfileModel> profiles) async {
-    return 2;
   }
 
 //* for deleting a quickActions
@@ -185,7 +183,7 @@ class QuickActionsProvider extends ChangeNotifier {
       }
     }
 
-    _quickActions.removeWhere((element) => element.id == id);
+    allQuickActions.removeWhere((element) => element.id == id);
     notifyListeners();
   }
 
@@ -215,9 +213,9 @@ class QuickActionsProvider extends ChangeNotifier {
       rethrow;
     }
     int transactionIndex =
-        _quickActions.indexWhere((element) => element.id == quickActionId);
-    _quickActions.removeWhere((element) => element.id == quickActionId);
-    _quickActions.insert(transactionIndex, newQuickAction);
+        allQuickActions.indexWhere((element) => element.id == quickActionId);
+    allQuickActions.removeWhere((element) => element.id == quickActionId);
+    allQuickActions.insert(transactionIndex, newQuickAction);
     notifyListeners();
   }
 

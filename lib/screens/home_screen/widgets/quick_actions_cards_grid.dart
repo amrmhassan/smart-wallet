@@ -5,6 +5,7 @@ import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart'
 import 'package:flutter_reorderable_grid_view/widgets/reorderable_builder.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/screens/quick_actions_screen/quick_actions_screen.dart';
 import '../../../models/quick_action_model.dart';
 import '../../../providers/quick_actions_provider.dart';
 import '../../../providers/theme_provider.dart';
@@ -21,15 +22,23 @@ class QuickActionsCardsGrid extends StatelessWidget {
   }) : super(key: key);
 
   void openAddQuickActionScreen(BuildContext context) {
-    Navigator.push(
+    var quickActions = Provider.of<QuickActionsProvider>(
       context,
-      MaterialPageRoute(
-        builder: (ctx) => const AddTransactionScreen(
-          addTransactionScreenOperations:
-              AddTransactionScreenOperations.addQuickAction,
+      listen: false,
+    ).activeProfileQuickActions;
+    if (quickActions.isEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (ctx) => const AddTransactionScreen(
+            addTransactionScreenOperations:
+                AddTransactionScreenOperations.addQuickAction,
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      Navigator.pushNamed(context, QuickActionsScreen.routeName);
+    }
   }
 
   @override

@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:smart_wallet/models/profile_model.dart';
 import 'package:uuid/uuid.dart';
-import 'package:smart_wallet/constants/transactions_constants.dart';
 import 'package:smart_wallet/utils/trans_periods_utils.dart';
 import '../constants/db_constants.dart';
 import '../constants/types.dart';
@@ -10,13 +8,25 @@ import '../helpers/db_helper.dart';
 import '../models/transaction_model.dart';
 
 class TransactionProvider extends ChangeNotifier {
+  final String activeProfileId;
   //? all profile transactions
-  List<TransactionModel> _transactions = [];
+  List<TransactionModel> transactions;
+
+  TransactionProvider({
+    required this.activeProfileId,
+    required this.transactions,
+  });
+
+  List<TransactionModel> get activeProfileTransactions {
+    return transactions
+        .where((element) => element.profileId == activeProfileId)
+        .toList();
+  }
 
 //? getting income transactions
   List<TransactionModel> get _incomeTransactions {
     return [
-      ..._transactions
+      ...activeProfileTransactions
           .where((element) => element.transactionType == TransactionType.income)
     ];
   }
@@ -24,7 +34,7 @@ class TransactionProvider extends ChangeNotifier {
 //? getting outcome transactions
   List<TransactionModel> get _outcomeTransactions {
     return [
-      ..._transactions.where(
+      ...activeProfileTransactions.where(
           (element) => element.transactionType == TransactionType.outcome)
     ];
   }
@@ -36,13 +46,8 @@ class TransactionProvider extends ChangeNotifier {
     } else if (currentActiveTransactionType == TransactionType.outcome) {
       return _outcomeTransactions;
     } else {
-      return [..._transactions];
+      return [...activeProfileTransactions];
     }
-  }
-
-//? getting all transactions
-  List<TransactionModel> get getAllTransactions {
-    return [..._transactions];
   }
 
 //? getting total income for a profile
@@ -92,21 +97,15 @@ class TransactionProvider extends ChangeNotifier {
         0, (previousValue, element) => previousValue + element.amount);
   }
 
-//? loading dummy transactions for testing
-  void loadDummyTransactions() {
-    _transactions = _transactions + dummyTransactionsFixedDate;
-    notifyListeners();
-  }
-
 //? getting a transaction by id
   TransactionModel getTransactionById(String id) {
-    return _transactions.firstWhere((element) => element.id == id);
+    return activeProfileTransactions.firstWhere((element) => element.id == id);
   }
 
 //? getting the last transaction in the list
 //* this will be used to check if the current added transaction has the same amount and transaction type as the last transaction in the list
   TransactionModel getLastTransaction() {
-    return _transactions[_transactions.length - 1];
+    return activeProfileTransactions[transactions.length - 1];
   }
 
 //? adding new transaction
@@ -162,24 +161,17 @@ class TransactionProvider extends ChangeNotifier {
       ratioToTotal: ratioToTotal,
       profileId: profileId,
     );
-    _transactions.add(newTransaction);
+    transactions.add(newTransaction);
     notifyListeners();
   }
 
-//? get all transactions
-  Future<int> getAllTransactionsFromDatabase(
-      List<ProfileModel> profiles) async {
-    List<TransactionModel> fetchedTransactions = [];
-    return 10;
-  }
-
 //? get transactinons by a profile id
-  Future<List<TransactionModel>> getTransactionsByProfileId(
-      String profileId) async {
+  Future<void> fetchAllTransactionsFromDataBase() async {
     List<TransactionModel> fetchedTransactions = [];
     try {
-      List<Map<String, dynamic>> data = await DBHelper.getDataWhere(
-          transactionsTableName, 'profileId', profileId);
+      List<Map<String, dynamic>> data = await DBHelper.getData(
+        transactionsTableName,
+      );
 
       fetchedTransactions = data
           .map(
@@ -203,6 +195,8 @@ class TransactionProvider extends ChangeNotifier {
       fetchedTransactions.sort((a, b) {
         return a.createdAt.difference(b.createdAt).inSeconds;
       });
+      transactions = fetchedTransactions;
+      // notifyListeners();
     } catch (error) {
       if (kDebugMode) {
         print(
@@ -211,19 +205,12 @@ class TransactionProvider extends ChangeNotifier {
       // in the final version activate that line
       rethrow;
     }
-    return fetchedTransactions;
-  }
-
-//? getting transaction from the database and adding them
-  Future<void> fetchAndUpdateTransactions(String activatedProfileId) async {
-    _transactions = await getTransactionsByProfileId(activatedProfileId);
-    notifyListeners();
   }
 
 //? deleting a transaction by id
   Future<void> deleteTransaction(String id) async {
     //* if that transaction is income and deleting it will make the total by negative then throw an error that you can't delete that transaction , you can only edit it to a lower amount but not lower than the current total amount in that profile
-    _transactions.removeWhere((element) {
+    transactions.removeWhere((element) {
       if (element.transactionType == TransactionType.income &&
           element.amount > totalMoney &&
           element.id == id) {
@@ -249,12 +236,12 @@ class TransactionProvider extends ChangeNotifier {
   Future<void> editTransaction(
       String transactionId, TransactionModel newTransaction) async {
     //* i commented this cause it has no value
-    // //* first checking if the transaction exist in the _transactions
+    // //* first checking if the transaction exist in the transactions
 
     // TransactionModel? oldTransaction;
     // try {
     //   oldTransaction =
-    //       _transactions.firstWhere((element) => element.id == transactionId);
+    //       transactions.firstWhere((element) => element.id == transactionId);
     // } catch (error) {
     //   //* this transaction doesn't exist in the transactions
     //   rethrow;
@@ -294,9 +281,9 @@ class TransactionProvider extends ChangeNotifier {
       rethrow;
     }
     int transactionIndex =
-        _transactions.indexWhere((element) => element.id == transactionId);
-    _transactions.removeWhere((element) => element.id == transactionId);
-    _transactions.insert(transactionIndex, newTransaction);
+        transactions.indexWhere((element) => element.id == transactionId);
+    transactions.removeWhere((element) => element.id == transactionId);
+    transactions.insert(transactionIndex, newTransaction);
     notifyListeners();
   }
 

@@ -20,18 +20,18 @@ enum TransPeriod {
 class ProfileDetailsProvider extends ChangeNotifier {
   //? in action profile
   ProfileModel? profile;
-  //? getting transactions by profile id from the proxy provider from main
-  Function(String id) getTransactionsByProfileId;
+//? all transactions of a profile
+  List<TransactionModel> allTransactions;
   //? getting a profile by id form the proxy provider from main
   Function(String id) getProfileById;
 
   ProfileDetailsProvider({
-    required this.getTransactionsByProfileId,
+    required this.allTransactions,
     required this.getProfileById,
   });
+  //? one profile transactions
+  List<TransactionModel> profileTransactions = [];
 
-//? all transactions of a profile
-  List<TransactionModel> allTransactions = [];
   //? transactions after filtering them by periods
   List<TransactionModel> _viewedTransactions = [];
   //? time period to filter transactions according to
@@ -44,9 +44,12 @@ class ProfileDetailsProvider extends ChangeNotifier {
   Future<void> fetchTransactions(String profileId) async {
     ProfileModel profile = await getProfileById(profileId);
     _setProfile(profile);
-    List<TransactionModel> fetchedProfileTransactions =
-        await getTransactionsByProfileId(profileId);
-    allTransactions = fetchedProfileTransactions;
+    profileTransactions = allTransactions
+        .where(
+          (element) => element.profileId == profile.id,
+        )
+        .toList();
+
     fetchAndUpdateViewedTransactions(notifyListers: false);
     notifyListeners();
   }
@@ -106,9 +109,11 @@ class ProfileDetailsProvider extends ChangeNotifier {
   }
 
 //? filtering transactions according to the period selected(the current active period)
-  void fetchAndUpdateViewedTransactions({bool notifyListers = true}) {
+  void fetchAndUpdateViewedTransactions({
+    bool notifyListers = true,
+  }) {
     TransPeriodUtils transPeriodUtils = TransPeriodUtils(
-      transactions: allTransactions,
+      transactions: profileTransactions,
       startDate: startingDate,
       endDate: endDate,
     );
@@ -155,7 +160,7 @@ class ProfileDetailsProvider extends ChangeNotifier {
       );
     } else if (currentActivePeriod == TransPeriod.all) {
       //* for returning that all transactions
-      _viewedTransactions = allTransactions;
+      _viewedTransactions = profileTransactions;
       setDatesPeriod(
         newStartingDate: profile!.createdAt,
         newEndDate: DateTime.now(),

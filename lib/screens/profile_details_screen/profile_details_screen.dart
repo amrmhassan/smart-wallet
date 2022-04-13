@@ -36,7 +36,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
 
   bool showChart(int profileAge) {
     return profileAge > 0 &&
-        Provider.of<TransactionProvider>(context).getAllTransactions.isNotEmpty;
+        Provider.of<TransactionProvider>(context).transactions.isNotEmpty;
   }
 
   void setLoading(bool l) {

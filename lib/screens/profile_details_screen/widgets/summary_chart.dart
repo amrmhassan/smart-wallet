@@ -65,7 +65,7 @@ class _SummaryChartState extends State<SummaryChart> {
                     transactions: Provider.of<TransactionProvider>(
                       context,
                       listen: false,
-                    ).getAllTransactions,
+                    ).transactions,
                     firstDate: Provider.of<ProfilesProvider>(
                       context,
                       listen: false,

@@ -39,21 +39,39 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (ctx) => TransactionProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => QuickActionsProvider(),
-        ),
-        ChangeNotifierProvider(
           create: (ctx) => ProfilesProvider(),
         ),
+        ChangeNotifierProxyProvider<ProfilesProvider, TransactionProvider>(
+            create: (ctx) {
+          return TransactionProvider(
+            activeProfileId: '',
+            transactions: [],
+          );
+        }, update: (ctx, profiles, oldTransactions) {
+          return TransactionProvider(
+            activeProfileId: profiles.activatedProfileId,
+            transactions: oldTransactions?.transactions ?? [],
+          );
+        }),
+        ChangeNotifierProxyProvider<ProfilesProvider, QuickActionsProvider>(
+            create: (ctx) {
+          return QuickActionsProvider(
+            activeProfileId: '',
+            allQuickActions: [],
+          );
+        }, update: (ctx, profiles, oldQuickActions) {
+          return QuickActionsProvider(
+            activeProfileId: profiles.activatedProfileId,
+            allQuickActions: oldQuickActions?.allQuickActions ?? [],
+          );
+        }),
         ChangeNotifierProxyProvider2<TransactionProvider, ProfilesProvider,
             ProfileDetailsProvider>(
           create: (
             ctx,
           ) {
             return ProfileDetailsProvider(
-              getTransactionsByProfileId: (String id) {},
+              allTransactions: [],
               getProfileById: (String id) {},
             );
           },
@@ -64,8 +82,7 @@ class _MyAppState extends State<MyApp> {
             oldStatistics,
           ) {
             return ProfileDetailsProvider(
-              getTransactionsByProfileId:
-                  transactions.getTransactionsByProfileId,
+              allTransactions: transactions.transactions,
               getProfileById: profileData.getProfileById,
             );
           },

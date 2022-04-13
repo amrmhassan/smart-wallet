@@ -116,6 +116,7 @@ class ProfilesProvider extends ChangeNotifier {
           .toList();
       //? i was trying to make the activated profiles come first
       //? it will need some more thinking and planning
+      //! replace this with the reordable list
 
       // List<ProfileModel> activatedBefore = fetchedProfiles
       //     .where((element) => element.lastActivatedDate != null)
@@ -128,6 +129,9 @@ class ProfilesProvider extends ChangeNotifier {
       //   return a.lastActivatedDate!.compareTo(b.lastActivatedDate!);
       // });
 
+      fetchedProfiles.sort((a, b) {
+        return a.createdAt.difference(b.createdAt).inSeconds;
+      });
       _profiles = fetchedProfiles;
       notifyListeners();
     } catch (error) {

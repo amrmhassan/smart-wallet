@@ -1,12 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/providers/authentication_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
-import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/data_card.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/login_user_options.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/user_info_viewer.dart';
@@ -131,7 +128,6 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
                               ),
                             ],
                           );
-                          ;
                         }
                       },
                     ),
