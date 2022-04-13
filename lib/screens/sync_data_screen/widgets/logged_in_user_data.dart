@@ -4,11 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/sizes.dart';
-import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/models/quick_action_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
-import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/providers/synced_data_provider.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/data_card.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/login_user_options.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/sync_data_button.dart';
@@ -44,7 +43,12 @@ class LoggedInUserData extends StatelessWidget {
           height: kDefaultPadding,
         ),
         SyncDataButton(
-          onTap: () {},
+          onTap: () async {
+            await Provider.of<SyncedDataProvider>(
+              context,
+              listen: false,
+            ).syncAllData();
+          },
         ),
         SizedBox(
           height: kDefaultPadding / 2,

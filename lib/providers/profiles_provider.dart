@@ -111,6 +111,7 @@ class ProfilesProvider extends ChangeNotifier {
               lastActivatedDate: profile['lastActivatedDate'] == null
                   ? null
                   : DateTime.parse(profile['lastActivatedDate']),
+              needSync: profile['needSync'] == 'true' ? true : false,
             ),
           )
           .toList();
@@ -133,7 +134,7 @@ class ProfilesProvider extends ChangeNotifier {
         return a.createdAt.difference(b.createdAt).inSeconds;
       });
       _profiles = fetchedProfiles;
-      notifyListeners();
+      // notifyListeners();
     } catch (error) {
       if (kDebugMode) {
         print('Error fetching profiles from the database');
@@ -174,6 +175,7 @@ class ProfilesProvider extends ChangeNotifier {
         'outcome': 0,
         'createdAt': createdAt.toIso8601String(),
         'activated': 'false',
+        'needSync': 'true',
       });
     } catch (error) {
       if (kDebugMode) {
@@ -183,10 +185,21 @@ class ProfilesProvider extends ChangeNotifier {
     }
 
     ProfileModel newProfile = ProfileModel(
-        id: id, name: name, income: 0, outcome: 0, createdAt: createdAt);
+      id: id,
+      name: name,
+      income: 0,
+      outcome: 0,
+      createdAt: createdAt,
+      needSync: true,
+    );
     _profiles.add(newProfile);
     notifyListeners();
     return id;
+  }
+
+  Future<void> toggleProfileNeedSync(String id) async {
+    ProfileModel profile = getProfileById(id);
+    await editProfile(id: id, needSync: !profile.needSync);
   }
 
   //? editing an existing profile
@@ -196,12 +209,14 @@ class ProfilesProvider extends ChangeNotifier {
     double? income,
     double? outcome,
     DateTime? lastActivatedDate,
+    bool? needSync,
   }) async {
     //* rejecting edit if no argument is provided
     if (name == null &&
         income == null &&
         outcome == null &&
-        lastActivatedDate == null) {
+        lastActivatedDate == null &&
+        needSync == null) {
       throw CustomError(
           'You must enter one argument at least to edit the profile');
     }
@@ -227,6 +242,7 @@ class ProfilesProvider extends ChangeNotifier {
     bool activated = editedProfile.activated;
     DateTime? newLastActiveDate =
         lastActivatedDate ?? editedProfile.lastActivatedDate;
+    bool newNeedSync = needSync ?? editedProfile.needSync;
     //* edit the profile in database first
     try {
       await DBHelper.insert(profilesTableName, {
@@ -239,6 +255,7 @@ class ProfilesProvider extends ChangeNotifier {
         'lastActivatedDate': newLastActiveDate == null
             ? 'null'
             : newLastActiveDate.toIso8601String(),
+        'needSync': newNeedSync,
       });
 
       //* edit it on the _profiles
@@ -252,6 +269,7 @@ class ProfilesProvider extends ChangeNotifier {
         createdAt: createdAt,
         activated: activated,
         lastActivatedDate: newLastActiveDate,
+        needSync: newNeedSync,
       );
       _profiles.insert(index, newProfile);
       notifyListeners();

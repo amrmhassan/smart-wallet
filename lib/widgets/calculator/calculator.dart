@@ -94,10 +94,11 @@ class _CalculatorState extends State<Calculator> {
         currentNumberList.clear();
       }
     }
-
-    setState(() {
-      currentNumberList.add(value);
-    });
+    if (currentNumberList.length <= 8) {
+      setState(() {
+        currentNumberList.add(value);
+      });
+    }
   }
 
   void deleteCurrenOperation() {
@@ -292,13 +293,15 @@ class _CalculatorState extends State<Calculator> {
             decoration: BoxDecoration(
               color: Colors.blueGrey[200],
             ),
-            child: Text(
-              output,
-              style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: themeProvider
-                      .getThemeColor(ThemeColors.kMainBackgroundColor)),
+            child: FittedBox(
+              child: Text(
+                output,
+                style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    color: themeProvider
+                        .getThemeColor(ThemeColors.kMainBackgroundColor)),
+              ),
             ),
           ),
           const SizedBox(

@@ -1,5 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
+//! [ERRORS]
+//! transactions can't be loaded from the database and updated when loading the first time
+//! profiles don't update after syncing them to the database
+
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
@@ -19,10 +23,9 @@ import './screens/quick_actions_screen/quick_actions_screen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
   runApp(Phoenix(child: const MyApp()));
 }
 
@@ -42,29 +45,34 @@ class _MyAppState extends State<MyApp> {
           create: (ctx) => ProfilesProvider(),
         ),
         ChangeNotifierProxyProvider<ProfilesProvider, TransactionProvider>(
-            create: (ctx) {
-          return TransactionProvider(
-            activeProfileId: '',
-            transactions: [],
-          );
-        }, update: (ctx, profiles, oldTransactions) {
-          return TransactionProvider(
-            activeProfileId: profiles.activatedProfileId,
-            transactions: oldTransactions?.transactions ?? [],
-          );
-        }),
+          create: (ctx) {
+            return TransactionProvider(
+              activeProfileId: '',
+              transactions: [],
+            );
+          },
+          update: (ctx, profiles, oldTransactions) {
+            // print('transactions ${oldTransactions?.transactions.length}');
+            return TransactionProvider(
+              activeProfileId: profiles.activatedProfileId,
+              transactions: oldTransactions!.transactions,
+            );
+          },
+        ),
         ChangeNotifierProxyProvider<ProfilesProvider, QuickActionsProvider>(
-            create: (ctx) {
-          return QuickActionsProvider(
-            activeProfileId: '',
-            allQuickActions: [],
-          );
-        }, update: (ctx, profiles, oldQuickActions) {
-          return QuickActionsProvider(
-            activeProfileId: profiles.activatedProfileId,
-            allQuickActions: oldQuickActions?.allQuickActions ?? [],
-          );
-        }),
+          create: (ctx) {
+            return QuickActionsProvider(
+              activeProfileId: '',
+              allQuickActions: [],
+            );
+          },
+          update: (ctx, profiles, oldQuickActions) {
+            return QuickActionsProvider(
+              activeProfileId: profiles.activatedProfileId,
+              allQuickActions: oldQuickActions!.allQuickActions,
+            );
+          },
+        ),
         ChangeNotifierProxyProvider2<TransactionProvider, ProfilesProvider,
             ProfileDetailsProvider>(
           create: (
@@ -90,8 +98,25 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (ctx) => ThemeProvider(),
         ),
-        ChangeNotifierProvider(
-          create: (ctx) => SyncedDataProvider(),
+        ChangeNotifierProxyProvider3<ProfilesProvider, TransactionProvider,
+            QuickActionsProvider, SyncedDataProvider>(
+          create: (ctx) => SyncedDataProvider(
+            profilesProvider: null,
+            transactionProvider: null,
+            quickActionsProvider: null,
+          ),
+          update: (
+            ctx,
+            profiles,
+            transactions,
+            quickActions,
+            oldSyncedData,
+          ) =>
+              SyncedDataProvider(
+            profilesProvider: profiles,
+            transactionProvider: transactions,
+            quickActionsProvider: quickActions,
+          ),
         ),
         ChangeNotifierProvider(
           create: (ctx) => AuthenticationProvider(),

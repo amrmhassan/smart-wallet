@@ -104,6 +104,7 @@ class QuickActionsProvider extends ChangeNotifier {
         'isFavorite': activeProfileQuickActions.isEmpty ? 'true' : 'false',
         'profileId': profileId,
         'quickActionIndex': quickActionIndex.toString(),
+        'needSync': 'true',
       });
     } catch (error) {
       if (kDebugMode) {
@@ -122,6 +123,7 @@ class QuickActionsProvider extends ChangeNotifier {
       isFavorite: activeProfileQuickActions.isEmpty ? true : false,
       profileId: profileId,
       quickActionIndex: quickActionIndex,
+      needSync: true,
     );
     allQuickActions.add(quickActionModel);
     notifyListeners();
@@ -155,13 +157,16 @@ class QuickActionsProvider extends ChangeNotifier {
             quickActionIndex: quickAction['quickActionIndex'] == 'null'
                 ? null
                 : int.parse(quickAction['quickActionIndex']),
+            needSync: quickAction['needSync'] == 'true' ? true : false,
           );
         },
       ).toList();
+
       fetchedQuickActions.sort((a, b) {
         return a.createdAt.difference(b.createdAt).inSeconds;
       });
       allQuickActions = fetchedQuickActions;
+      notifyListeners();
     } catch (error) {
       if (kDebugMode) {
         print(error);
@@ -185,6 +190,12 @@ class QuickActionsProvider extends ChangeNotifier {
 
     allQuickActions.removeWhere((element) => element.id == id);
     notifyListeners();
+  }
+
+  Future<void> toggleQuickActionNeedSync(String id) async {
+    QuickActionModel quickAction = getQuickById(id);
+    quickAction.needSync = !quickAction.needSync;
+    await editQuickAction(id, quickAction);
   }
 
 //* for editing a quick action

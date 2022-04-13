@@ -3,10 +3,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
-import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/logged_in_user_data.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/logout_button.dart';
@@ -30,7 +28,6 @@ class SyncDataScreen extends StatefulWidget {
 class _SyncDataScreenState extends State<SyncDataScreen> {
   @override
   Widget build(BuildContext context) {
-    var themeProvider = Provider.of<ThemeProvider>(context);
     var profiles = Provider.of<ProfilesProvider>(context).profiles;
     var transactions = Provider.of<TransactionProvider>(context).transactions;
     var quickActions =

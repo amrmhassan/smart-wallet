@@ -18,9 +18,11 @@ class TransactionProvider extends ChangeNotifier {
   });
 
   List<TransactionModel> get activeProfileTransactions {
-    return transactions
+    List<TransactionModel> t = transactions
         .where((element) => element.profileId == activeProfileId)
         .toList();
+
+    return t;
   }
 
 //? getting income transactions
@@ -142,6 +144,7 @@ class TransactionProvider extends ChangeNotifier {
             transactionType == TransactionType.income ? 'income' : 'outcome',
         'ratioToTotal': ratioToTotal.toString(),
         'profileId': profileId,
+        'needSync': 'true',
       });
     } catch (error) {
       if (kDebugMode) {
@@ -160,6 +163,7 @@ class TransactionProvider extends ChangeNotifier {
       transactionType: transactionType,
       ratioToTotal: ratioToTotal,
       profileId: profileId,
+      needSync: true,
     );
     transactions.add(newTransaction);
     notifyListeners();
@@ -167,13 +171,12 @@ class TransactionProvider extends ChangeNotifier {
 
 //? get transactinons by a profile id
   Future<void> fetchAllTransactionsFromDataBase() async {
-    List<TransactionModel> fetchedTransactions = [];
     try {
       List<Map<String, dynamic>> data = await DBHelper.getData(
         transactionsTableName,
       );
 
-      fetchedTransactions = data
+      List<TransactionModel> fetchedTransactions = data
           .map(
             (transaction) => TransactionModel(
               id: transaction['id'],
@@ -188,6 +191,7 @@ class TransactionProvider extends ChangeNotifier {
                 transaction['ratioToTotal'],
               ),
               profileId: transaction['profileId'],
+              needSync: transaction['needSync'] == 'true' ? true : false,
             ),
           )
           .toList();
@@ -232,6 +236,12 @@ class TransactionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> toggleTransactionNeedSync(String id) async {
+    TransactionModel transaction = getTransactionById(id);
+    transaction.needSync = !transaction.needSync;
+    await editTransaction(id, transaction);
+  }
+
 //? editing a transaction
   Future<void> editTransaction(
       String transactionId, TransactionModel newTransaction) async {
@@ -273,6 +283,7 @@ class TransactionProvider extends ChangeNotifier {
                 : 'outcome',
         'ratioToTotal': newTransaction.ratioToTotal.toString(),
         'profileId': newTransaction.profileId,
+        'needSync': newTransaction.needSync,
       });
     } catch (error) {
       if (kDebugMode) {

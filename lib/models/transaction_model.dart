@@ -11,6 +11,7 @@ class TransactionModel {
   double ratioToTotal;
   String profileId;
   String? userID;
+  bool needSync;
 
   TransactionModel({
     required this.id,
@@ -22,5 +23,6 @@ class TransactionModel {
     required this.ratioToTotal,
     required this.profileId,
     this.userID,
+    this.needSync = true,
   });
 }

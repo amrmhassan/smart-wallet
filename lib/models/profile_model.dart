@@ -11,12 +11,13 @@ class ProfileModel {
   double outcome;
   bool activated;
   DateTime createdAt;
+  DateTime? lastActivatedDate;
+  String? userId;
+  bool needSync;
 
   late MoneyAccountStatus moneyAccountStatus;
   late double totalMoney;
   late double incomeRatio;
-  DateTime? lastActivatedDate;
-  String? userId;
 
   ProfileModel({
     required this.id,
@@ -27,6 +28,7 @@ class ProfileModel {
     this.activated = false,
     this.lastActivatedDate,
     this.userId,
+    this.needSync = true,
   }) {
     //? for setting the total money
     //* the total money equals to income - outcome

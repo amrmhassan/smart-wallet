@@ -10,8 +10,9 @@ class QuickActionModel {
   bool isFavorite;
   int? quickActionIndex;
   String? userId;
-
   String profileId;
+  bool needSync;
+
   QuickActionModel({
     required this.id,
     required this.title,
@@ -23,5 +24,6 @@ class QuickActionModel {
     required this.profileId,
     this.quickActionIndex,
     this.userId,
+    this.needSync = true,
   });
 }
