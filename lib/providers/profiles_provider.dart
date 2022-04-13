@@ -98,23 +98,40 @@ class ProfilesProvider extends ChangeNotifier {
         return setActivatedProfile(id);
       }
       //? i will need to rearrange the profiles according to the lastActivated date then the createdAt date
+      List<ProfileModel> fetchedProfiles = data.map(
+        (profile) {
+          // print(profile['id']);
+          // print(profile['name']);
+          // print(profile['income']);
+          // print(profile['outcome']);
+          // print(profile['createdAt']);
+          // print(profile['activated']);
+          // print(profile['lastActivatedDate']);
+          // print(profile['needSync']);
+          ProfileModel profileModel = ProfileModel(
+            id: profile['id'],
+            name: profile['name'],
+            income: double.parse(profile['income']),
+            outcome: double.parse(profile['outcome']),
+            createdAt: DateTime.parse(profile['createdAt']),
+            activated: profile['activated'] == 'false' ? false : true,
+            lastActivatedDate: profile['lastActivatedDate'] == null
+                ? null
+                : DateTime.parse(profile['lastActivatedDate']),
+            needSync:
+                //! i added this check to equal 1 cause it causes an error and i don't know why
+                //! the error is the first profile always have needSync of '1' with no reason
+                profile['needSync'] == 'true' || profile['needSync'] == '1'
+                    ? true
+                    : false,
+          );
+          // print('---------------------');
+          // print(profileModel.needSync);
+          // print('---------------------');
 
-      List<ProfileModel> fetchedProfiles = data
-          .map(
-            (profile) => ProfileModel(
-              id: profile['id'],
-              name: profile['name'],
-              income: double.parse(profile['income']),
-              outcome: double.parse(profile['outcome']),
-              createdAt: DateTime.parse(profile['createdAt']),
-              activated: profile['activated'] == 'false' ? false : true,
-              lastActivatedDate: profile['lastActivatedDate'] == null
-                  ? null
-                  : DateTime.parse(profile['lastActivatedDate']),
-              needSync: profile['id'] == 'true' ? true : false,
-            ),
-          )
-          .toList();
+          return profileModel;
+        },
+      ).toList();
       //? i was trying to make the activated profiles come first
       //? it will need some more thinking and planning
       //! replace this with the reordable list
@@ -129,14 +146,14 @@ class ProfilesProvider extends ChangeNotifier {
       // activatedBefore.sort((a, b) {
       //   return a.lastActivatedDate!.compareTo(b.lastActivatedDate!);
       // });
-
       fetchedProfiles.sort((a, b) {
         return a.createdAt.difference(b.createdAt).inSeconds;
       });
       _profiles = fetchedProfiles;
-      // notifyListeners();
+      notifyListeners();
     } catch (error) {
       if (kDebugMode) {
+        print(error.toString());
         print('Error fetching profiles from the database');
       }
       // rethrow;

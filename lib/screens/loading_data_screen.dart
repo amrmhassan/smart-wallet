@@ -5,7 +5,6 @@ import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/sizes.dart';
-import 'package:smart_wallet/helpers/shared_pref_helper.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/holder_screen.dart';
 
@@ -52,14 +51,14 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
           .fetchAllQuickActionsFromDataBase();
 
       //* check if it the first time to run the app to make the animation last longer(5 sec)
-      if (await SharedPrefHelper.firstTimeRunApp()) {
-        //* loading the data after 3 seconds if it the first time to run the app
-        await Future.delayed(Duration.zero).then((value) async =>
-            Navigator.pushReplacementNamed(context, HolderScreen.routeName));
-      } else {
-        //* loading the app UI after finishing fetching data from the database immediately if it isn't the first time to run the app
-        Navigator.pushReplacementNamed(context, HolderScreen.routeName);
-      }
+      await Future.delayed(Duration(seconds: 2)).then((value) async =>
+          Navigator.pushReplacementNamed(context, HolderScreen.routeName));
+      // if (await SharedPrefHelper.firstTimeRunApp()) {
+      //   //* loading the data after 3 seconds if it the first time to run the app
+      // } else {
+      //   //* loading the app UI after finishing fetching data from the database immediately if it isn't the first time to run the app
+      //   Navigator.pushReplacementNamed(context, HolderScreen.routeName);
+      // }
     });
 
     super.initState();

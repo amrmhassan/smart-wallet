@@ -67,18 +67,6 @@ class SyncedDataProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
-      fetchSyncedData() async {
-    //* it is gonna be
-    //* 'users/userId/profiles'
-    //* 'users/userId/transactions'
-    //* 'users/userId/quickActions'
-
-    var profiles =
-        await FirebaseFirestore.instance.collection(usersCollectionName).get();
-    return profiles.docs;
-  }
-
   Future<void> addProfile(
     ProfileModel profile,
   ) async {
@@ -91,10 +79,12 @@ class SyncedDataProvider extends ChangeNotifier {
         .collection(profilesCollectionName)
         .add({
       'activated': profile.activated,
-      'createdAt': profile.createdAt,
+      'createdAt': profile.createdAt.toIso8601String(),
       'id': profile.id,
       'income': profile.income,
-      'lastActivatedDate': profile.lastActivatedDate,
+      'lastActivatedDate': profile.lastActivatedDate == null
+          ? 'null'
+          : profile.lastActivatedDate!.toIso8601String(),
       'name': profile.name,
       'outcome': profile.outcome,
       'userId': userId,
@@ -148,5 +138,34 @@ class SyncedDataProvider extends ChangeNotifier {
       'quickActionIndex': quickActionModel.quickActionIndex,
       'userId': userId,
     });
+  }
+
+  Future<List<ProfileModel>> fetchSyncedProfiles() async {
+    var dbRef = FirebaseFirestore.instance;
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    var data = await dbRef
+        .collection(usersCollectionName)
+        .doc(userId)
+        .collection(profilesCollectionName)
+        .get();
+    List<ProfileModel> fetchedProfiles = data.docs
+        .map(
+          (profile) => ProfileModel(
+            id: profile['id'],
+            name: profile['name'],
+            income: profile['income'],
+            outcome: profile['outcome'],
+            createdAt: DateTime.parse(profile['createdAt']),
+            activated: profile['activated'],
+            lastActivatedDate: profile['lastActivatedDate'] == 'null'
+                ? null
+                : DateTime.parse(profile['lastActivatedDate']),
+            needSync: false,
+            userId: profile['userId'],
+          ),
+        )
+        .toList();
+    print(fetchedProfiles.length);
+    return fetchedProfiles;
   }
 }

@@ -34,6 +34,26 @@ class LoggedInUserData extends StatefulWidget {
 
 class _LoggedInUserDataState extends State<LoggedInUserData> {
   bool _syncing = false;
+
+  Future syncData() async {
+    try {
+      setState(() {
+        _syncing = true;
+      });
+      await Provider.of<SyncedDataProvider>(
+        context,
+        listen: false,
+      ).syncAllData();
+      setState(() {
+        _syncing = false;
+      });
+    } catch (error) {
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // var themeProvider = Provider.of<ThemeProvider>(context);
@@ -52,25 +72,15 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
         _syncing
             ? Text('Syncing')
             : SyncDataButton(
-                onTap: () async {
-                  try {
-                    setState(() {
-                      _syncing = true;
-                    });
-                    await Provider.of<SyncedDataProvider>(
-                      context,
-                      listen: false,
-                    ).syncAllData();
-                    setState(() {
-                      _syncing = false;
-                    });
-                  } catch (error) {
-                    if (kDebugMode) {
-                      print(error.toString());
-                    }
-                  }
-                },
+                onTap: syncData,
               ),
+        ElevatedButton(
+          onPressed: () async {
+            await Provider.of<SyncedDataProvider>(context, listen: false)
+                .fetchSyncedProfiles();
+          },
+          child: Text('Fetch Synced Data'),
+        ),
         SizedBox(
           height: kDefaultPadding / 2,
         ),
