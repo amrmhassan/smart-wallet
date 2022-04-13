@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:smart_wallet/models/profile_model.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/constants/transactions_constants.dart';
 import 'package:smart_wallet/utils/trans_periods_utils.dart';
@@ -163,6 +164,13 @@ class TransactionProvider extends ChangeNotifier {
     );
     _transactions.add(newTransaction);
     notifyListeners();
+  }
+
+//? get all transactions
+  Future<int> getAllTransactionsFromDatabase(
+      List<ProfileModel> profiles) async {
+    List<TransactionModel> fetchedTransactions = [];
+    return 10;
   }
 
 //? get transactinons by a profile id

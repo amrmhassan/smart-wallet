@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/sizes.dart';
 import 'package:smart_wallet/helpers/shared_pref_helper.dart';
+import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/holder_screen.dart';
 
@@ -45,6 +46,8 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
       String activatedProfileId =
           Provider.of<ProfilesProvider>(context, listen: false)
               .activatedProfileId;
+      List<ProfileModel> profiles =
+          Provider.of<ProfilesProvider>(context).profiles;
 
       //* for getting the transactions of the active profile
       await Provider.of<TransactionProvider>(context, listen: false)

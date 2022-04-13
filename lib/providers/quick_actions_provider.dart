@@ -1,6 +1,7 @@
 // ignore_for_file: unused_element, prefer_const_constructors
 
 import 'package:flutter/foundation.dart';
+import 'package:smart_wallet/models/profile_model.dart';
 import 'package:uuid/uuid.dart';
 import '../constants/db_constants.dart';
 import '../constants/types.dart';
@@ -14,6 +15,11 @@ import '../helpers/db_helper.dart';
 class QuickActionsProvider extends ChangeNotifier {
   //? a) quick actions stuff
   List<QuickActionModel> _quickActions = [];
+  List<QuickActionModel> _allQuickActions = [];
+
+  int get allQuickActionsLength {
+    return _allQuickActions.length;
+  }
 
 //? 1- getting quick actions, with multiple possibilities
 
@@ -159,6 +165,12 @@ class QuickActionsProvider extends ChangeNotifier {
       }
       // rethrow;
     }
+  }
+
+//* for getting the quickActions from the database
+  Future<int> getAllQuickActionsFromDataBase(
+      List<ProfileModel> profiles) async {
+    return 2;
   }
 
 //* for deleting a quickActions

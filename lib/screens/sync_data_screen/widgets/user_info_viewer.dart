@@ -8,11 +8,11 @@ import 'package:smart_wallet/screens/sync_data_screen/widgets/user_photo.dart';
 import '../../../constants/theme_constants.dart';
 import '../../../providers/theme_provider.dart';
 
-class UserInfo extends StatelessWidget {
+class UserInfoViewer extends StatelessWidget {
   final String? photoUrl;
   final String? userName;
   final String? userEmail;
-  const UserInfo({
+  const UserInfoViewer({
     Key? key,
     this.photoUrl,
     this.userName,
