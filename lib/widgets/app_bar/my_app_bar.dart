@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/screens/authentication_screen/authentication_screen.dart';
+import 'package:smart_wallet/screens/sync_data_screen/sync_data_screen.dart';
 
 import '../../constants/sizes.dart';
 import '../../providers/theme_provider.dart';
@@ -60,8 +60,7 @@ class MyAppBar extends StatelessWidget {
           rightIcon ??
               PersonIcon(
                 onTap: () {
-                  Navigator.of(context)
-                      .pushNamed(AuthenticationScreen.routeName);
+                  Navigator.of(context).pushNamed(SyncDataScreen.routeName);
                 },
               ),
         ],

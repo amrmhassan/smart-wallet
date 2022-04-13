@@ -5,16 +5,23 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
+import 'package:smart_wallet/providers/synced_data_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/authentication_screen/authentication_screen.dart';
 import 'package:smart_wallet/screens/loading_data_screen.dart';
+import 'package:smart_wallet/screens/sync_data_screen/sync_data_screen.dart';
 import 'package:smart_wallet/tests/testing_widget.dart';
 import './providers/quick_actions_provider.dart';
 import './providers/transactions_provider.dart';
 import './screens/holder_screen.dart';
 import './screens/quick_actions_screen/quick_actions_screen.dart';
 
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(Phoenix(child: const MyApp()));
 }
 
@@ -64,7 +71,10 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (ctx) => ThemeProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => SyncedDataProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -75,6 +85,7 @@ class _MyAppState extends State<MyApp> {
           QuickActionsScreen.routeName: (ctx) => const QuickActionsScreen(),
           TestingWidget.routeName: (ctx) => TestingWidget(),
           AuthenticationScreen.routeName: (ctx) => AuthenticationScreen(),
+          SyncDataScreen.routeName: (ctx) => SyncDataScreen(),
         },
       ),
     );
