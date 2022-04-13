@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/sizes.dart';
@@ -13,7 +14,7 @@ import 'package:smart_wallet/screens/sync_data_screen/widgets/login_user_options
 import 'package:smart_wallet/screens/sync_data_screen/widgets/sync_data_button.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/user_info_viewer.dart';
 
-class LoggedInUserData extends StatelessWidget {
+class LoggedInUserData extends StatefulWidget {
   const LoggedInUserData({
     Key? key,
     required this.user,
@@ -28,28 +29,48 @@ class LoggedInUserData extends StatelessWidget {
   final List<QuickActionModel> quickActions;
 
   @override
+  State<LoggedInUserData> createState() => _LoggedInUserDataState();
+}
+
+class _LoggedInUserDataState extends State<LoggedInUserData> {
+  bool _syncing = false;
+  @override
   Widget build(BuildContext context) {
     // var themeProvider = Provider.of<ThemeProvider>(context);
     return Column(
       children: [
         //* for showing the user info (picture and a name)
         UserInfoViewer(
-          photoUrl: user.photoURL,
-          userName: user.displayName,
-          userEmail: user.email,
+          photoUrl: widget.user.photoURL,
+          userName: widget.user.displayName,
+          userEmail: widget.user.email,
         ),
 
         SizedBox(
           height: kDefaultPadding,
         ),
-        SyncDataButton(
-          onTap: () async {
-            await Provider.of<SyncedDataProvider>(
-              context,
-              listen: false,
-            ).syncAllData();
-          },
-        ),
+        _syncing
+            ? Text('Syncing')
+            : SyncDataButton(
+                onTap: () async {
+                  try {
+                    setState(() {
+                      _syncing = true;
+                    });
+                    await Provider.of<SyncedDataProvider>(
+                      context,
+                      listen: false,
+                    ).syncAllData();
+                    setState(() {
+                      _syncing = false;
+                    });
+                  } catch (error) {
+                    if (kDebugMode) {
+                      print(error.toString());
+                    }
+                  }
+                },
+              ),
         SizedBox(
           height: kDefaultPadding / 2,
         ),
@@ -58,9 +79,9 @@ class LoggedInUserData extends StatelessWidget {
         DataCard(
           title: 'Not Synced Data',
           data: {
-            'Profiles': profiles.length,
-            'Transactions': transactions.length,
-            'Quick Actions': quickActions.length,
+            'Profiles': widget.profiles.length,
+            'Transactions': widget.transactions.length,
+            'Quick Actions': widget.quickActions.length,
           },
         ),
         SizedBox(

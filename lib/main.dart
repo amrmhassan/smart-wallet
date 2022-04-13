@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 //! [ERRORS]
-//! transactions can't be loaded from the database and updated when loading the first time
+//[Solved] i don't know how but it is self solved i guess transactions can't be loaded from the database and updated when loading the first time
 //! profiles don't update after syncing them to the database
 
 import 'package:flutter/material.dart';

@@ -111,7 +111,7 @@ class ProfilesProvider extends ChangeNotifier {
               lastActivatedDate: profile['lastActivatedDate'] == null
                   ? null
                   : DateTime.parse(profile['lastActivatedDate']),
-              needSync: profile['needSync'] == 'true' ? true : false,
+              needSync: profile['id'] == 'true' ? true : false,
             ),
           )
           .toList();
