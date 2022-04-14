@@ -15,6 +15,10 @@ class ProfilesProvider extends ChangeNotifier {
   //? holding the active profile id
   String _activatedProfileId = '';
 
+  List<ProfileModel> get notSyncedProfiles {
+    return _profiles.where((element) => element.needSync).toList();
+  }
+
   //? getting the active profile id
   String get activatedProfileId {
     return _activatedProfileId;

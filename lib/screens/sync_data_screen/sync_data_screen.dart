@@ -51,7 +51,7 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var profiles = Provider.of<ProfilesProvider>(context).profiles;
+    var profileProvider = Provider.of<ProfilesProvider>(context);
     var transactionProvider = Provider.of<TransactionProvider>(context);
     var quickActionsProvider = Provider.of<QuickActionsProvider>(context);
 
@@ -111,7 +111,7 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
 
                                   return LoggedInUserData(
                                     user: user,
-                                    profiles: profiles,
+                                    profiles: profileProvider.notSyncedProfiles,
                                     transactions: transactionProvider
                                         .notSyncedTransactions,
                                     quickActions: quickActionsProvider
@@ -119,7 +119,7 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
                                   );
                                 } else {
                                   return NotLoggedInUserData(
-                                    profiles: profiles,
+                                    profiles: profileProvider.notSyncedProfiles,
                                     transactions: transactionProvider
                                         .notSyncedTransactions,
                                     quickActions: quickActionsProvider

@@ -49,10 +49,16 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
           Provider.of<TransactionProvider>(context, listen: false);
       var quickActionsProvider =
           Provider.of<QuickActionsProvider>(context, listen: false);
+
       await Provider.of<SyncedDataProvider>(
         context,
         listen: false,
-      ).syncAllData(profileProvider, transactionProvider, quickActionsProvider);
+      ).syncAllData(
+        profileProvider,
+        transactionProvider,
+        quickActionsProvider,
+      );
+
       await Provider.of<TransactionProvider>(context, listen: false)
           .fetchAndUpdateAllTransactions();
       await Provider.of<QuickActionsProvider>(context, listen: false)
@@ -87,13 +93,13 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
             : SyncDataButton(
                 onTap: () async => await syncData(context),
               ),
-        ElevatedButton(
-          onPressed: () async {
-            await Provider.of<SyncedDataProvider>(context, listen: false)
-                .fetchSyncedProfiles();
-          },
-          child: Text('Fetch Synced Data'),
-        ),
+        // ElevatedButton(
+        //   onPressed: () async {
+        //     await Provider.of<SyncedDataProvider>(context, listen: false)
+        //         .fetchSyncedProfiles();
+        //   },
+        //   child: Text('Fetch Synced Data'),
+        // ),
         SizedBox(
           height: kDefaultPadding / 2,
         ),
