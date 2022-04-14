@@ -42,7 +42,7 @@ class DBHelper {
 
   static Future<List<Map<String, dynamic>>> getData(String table) async {
     final db = await DBHelper.database(table);
-    return db.query(table);
+    return await db.query(table);
   }
 
   static Future<List<Map<String, dynamic>>> getDataWhere(

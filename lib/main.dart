@@ -5,7 +5,6 @@
 //! profiles don't update after syncing them to the database
 
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/authentication_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
@@ -26,7 +25,7 @@ import 'package:firebase_core/firebase_core.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(Phoenix(child: const MyApp()));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -37,6 +36,18 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  @override
+  void dispose() {
+    Provider.of<ProfilesProvider>(context).dispose();
+    Provider.of<TransactionProvider>(context).dispose();
+    Provider.of<QuickActionsProvider>(context).dispose();
+    Provider.of<SyncedDataProvider>(context).dispose();
+    Provider.of<ThemeProvider>(context).dispose();
+    Provider.of<ProfileDetailsProvider>(context).dispose();
+    Provider.of<AuthenticationProvider>(context).dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

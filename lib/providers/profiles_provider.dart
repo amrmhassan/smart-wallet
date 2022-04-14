@@ -100,6 +100,7 @@ class ProfilesProvider extends ChangeNotifier {
       //? i will need to rearrange the profiles according to the lastActivated date then the createdAt date
       List<ProfileModel> fetchedProfiles = data.map(
         (profile) {
+          // var needSyncTest = profile['needSync'];
           // print(profile['id']);
           // print(profile['name']);
           // print(profile['income']);
@@ -114,7 +115,10 @@ class ProfilesProvider extends ChangeNotifier {
             income: double.parse(profile['income']),
             outcome: double.parse(profile['outcome']),
             createdAt: DateTime.parse(profile['createdAt']),
-            activated: profile['activated'] == 'false' ? false : true,
+            activated:
+                profile['activated'] == 'true' || profile['activated'] == '1'
+                    ? true
+                    : false,
             lastActivatedDate: profile['lastActivatedDate'] == null
                 ? null
                 : DateTime.parse(profile['lastActivatedDate']),
@@ -150,7 +154,6 @@ class ProfilesProvider extends ChangeNotifier {
         return a.createdAt.difference(b.createdAt).inSeconds;
       });
       _profiles = fetchedProfiles;
-      notifyListeners();
     } catch (error) {
       if (kDebugMode) {
         print(error.toString());
@@ -158,6 +161,7 @@ class ProfilesProvider extends ChangeNotifier {
       }
       // rethrow;
     }
+    notifyListeners();
   }
 
   //? fetching dummy profiles only for testing
@@ -207,7 +211,6 @@ class ProfilesProvider extends ChangeNotifier {
       income: 0,
       outcome: 0,
       createdAt: createdAt,
-      needSync: true,
     );
     _profiles.add(newProfile);
     notifyListeners();

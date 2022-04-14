@@ -3,7 +3,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/colors.dart';
@@ -30,7 +29,7 @@ class CustomAppDrawer extends StatelessWidget {
     {
       await DBHelper.deleteDatabase(dbName);
       await SharedPrefHelper.removeAllSavedKeys();
-      Phoenix.rebirth(context);
+      // Navigator.pushReplacementNamed(context, LoadingDataScreen.routeName);
     }
   }
 

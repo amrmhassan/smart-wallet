@@ -165,7 +165,6 @@ class SyncedDataProvider extends ChangeNotifier {
           ),
         )
         .toList();
-    print(fetchedProfiles.length);
     return fetchedProfiles;
   }
 }

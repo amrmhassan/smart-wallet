@@ -20,6 +20,10 @@ class QuickActionsProvider extends ChangeNotifier {
   //? a) quick actions stuff
   List<QuickActionModel> allQuickActions;
 
+  void refreshProvider() {
+    notifyListeners();
+  }
+
   List<QuickActionModel> get activeProfileQuickActions {
     return allQuickActions
         .where((element) => element.profileId == activeProfileId)
@@ -123,7 +127,6 @@ class QuickActionsProvider extends ChangeNotifier {
       isFavorite: activeProfileQuickActions.isEmpty ? true : false,
       profileId: profileId,
       quickActionIndex: quickActionIndex,
-      needSync: true,
     );
     allQuickActions.add(quickActionModel);
     notifyListeners();
@@ -157,15 +160,26 @@ class QuickActionsProvider extends ChangeNotifier {
             quickActionIndex: quickAction['quickActionIndex'] == 'null'
                 ? null
                 : int.parse(quickAction['quickActionIndex']),
-            needSync: quickAction['needSync'] == 'true' ? true : false,
+            needSync: quickAction['needSync'] == 'true' ||
+                    quickAction['needSync'] == '1'
+                ? true
+                : false,
           );
         },
       ).toList();
 
-      fetchedQuickActions.sort((a, b) {
-        return a.createdAt.difference(b.createdAt).inSeconds;
-      });
+      // fetchedQuickActions.sort((a, b) {
+      //   return a.createdAt.difference(b.createdAt).inSeconds;
+      // });
       allQuickActions = fetchedQuickActions;
+      // var dataLength = data.length;
+      // var fetchedLength = fetchedQuickActions.length;
+      // var transLength = allQuickActions.length;
+      // print('-------------------------------------------');
+      // print(dataLength);
+      // print(fetchedLength);
+      // print(transLength);
+      // print('-------------------------------------------');
       notifyListeners();
     } catch (error) {
       if (kDebugMode) {

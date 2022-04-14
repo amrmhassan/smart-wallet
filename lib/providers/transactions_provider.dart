@@ -17,6 +17,10 @@ class TransactionProvider extends ChangeNotifier {
     required this.transactions,
   });
 
+  void refreshProvider() {
+    notifyListeners();
+  }
+
   List<TransactionModel> get activeProfileTransactions {
     List<TransactionModel> t = transactions
         .where((element) => element.profileId == activeProfileId)
@@ -163,7 +167,6 @@ class TransactionProvider extends ChangeNotifier {
       transactionType: transactionType,
       ratioToTotal: ratioToTotal,
       profileId: profileId,
-      needSync: true,
     );
     transactions.add(newTransaction);
     notifyListeners();
@@ -191,16 +194,30 @@ class TransactionProvider extends ChangeNotifier {
                 transaction['ratioToTotal'],
               ),
               profileId: transaction['profileId'],
-              needSync: transaction['needSync'] == 'true' ? true : false,
+              needSync: transaction['needSync'] == 'true' ||
+                      transaction['needSync'] == '1'
+                  ? true
+                  : false,
             ),
           )
           .toList();
 
-      fetchedTransactions.sort((a, b) {
-        return a.createdAt.difference(b.createdAt).inSeconds;
-      });
+      // fetchedTransactions.sort((a, b) {
+      //   return a.createdAt.difference(b.createdAt).inSeconds;
+      // });
       transactions = fetchedTransactions;
-      // notifyListeners();
+      //? the data are fetched from the database successfully and there is no error fetching them
+      //? this error doesn't happen with the quick actions
+      //? when adding the notifyListeners to the end of this function i think i worked
+      // var dataLength = data.length;
+      // var fetchedLength = fetchedTransactions.length;
+      // var transLength = transactions.length;
+      // print('-------------------------------------------');
+      // print(dataLength);
+      // print(fetchedLength);
+      // print(transLength);
+      // print('-------------------------------------------');
+      notifyListeners();
     } catch (error) {
       if (kDebugMode) {
         print(

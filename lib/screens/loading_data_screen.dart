@@ -5,12 +5,13 @@ import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/sizes.dart';
+import 'package:smart_wallet/helpers/shared_pref_helper.dart';
+import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/holder_screen.dart';
 
 import '../providers/profiles_provider.dart';
-import '../providers/quick_actions_provider.dart';
-import '../providers/transactions_provider.dart';
 
 class LoadingDataScreen extends StatefulWidget {
   static const String routeName = '/loading-data-screen';
@@ -22,43 +23,44 @@ class LoadingDataScreen extends StatefulWidget {
 
 class _LoadingDataScreenState extends State<LoadingDataScreen> {
   bool firstTimeRunApp = true;
+
   @override
   void initState() {
     //* i needed the trick of duration zero here
     //* here i will fetch and update the transactions
 
+    //? 1]  fetching the active theme
     Future.delayed(Duration.zero).then((value) async {
       await Provider.of<ThemeProvider>(context, listen: false)
           .fetchAndSetActiveTheme();
-    });
-    Future.delayed(Duration.zero).then((value) async {
-      //* for getting the profiles and initialize one if empty
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .fetchAndUpdateProfiles();
+      // });
+      // Future.delayed(Duration.zero).then((value) async {
+      // //? 2] fetching the profiles
+      // await Provider.of<ProfilesProvider>(context, listen: false)
+      //     .fetchAndUpdateProfiles();
+      // //? 3] fetching the active profile id
+      // //* foe getting the active profile id and default one if empty
+      // await Provider.of<ProfilesProvider>(context, listen: false)
+      //     .fetchAndUpdateActivatedProfileId();
 
-      //* foe getting the active profile id and default one if empty
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .fetchAndUpdateActivatedProfileId();
+      // //? 4] fetching the transactions from the database
+      // await Provider.of<TransactionProvider>(context, listen: false)
+      //     .fetchAllTransactionsFromDataBase();
 
-      //* for setting the active profile id
+      //? 5] fetching the quick actions
+      // await Provider.of<QuickActionsProvider>(context, listen: false)
+      //     .fetchAllQuickActionsFromDataBase();
+//! this error happened because i was using pushReplacementNamed and this disposes the providers used here
+//! so i think i might need to refresh the providers in the holder screen to user them again after disposing this widget
 
-      //* for getting the transactions of the active profile
-      await Provider.of<TransactionProvider>(context, listen: false)
-          .fetchAllTransactionsFromDataBase();
-
-      //* for getting the quick actions of the active profile
-      await Provider.of<QuickActionsProvider>(context, listen: false)
-          .fetchAllQuickActionsFromDataBase();
-
-      //* check if it the first time to run the app to make the animation last longer(5 sec)
-      await Future.delayed(Duration(seconds: 2)).then((value) async =>
-          Navigator.pushReplacementNamed(context, HolderScreen.routeName));
-      // if (await SharedPrefHelper.firstTimeRunApp()) {
-      //   //* loading the data after 3 seconds if it the first time to run the app
-      // } else {
-      //   //* loading the app UI after finishing fetching data from the database immediately if it isn't the first time to run the app
-      //   Navigator.pushReplacementNamed(context, HolderScreen.routeName);
-      // }
+      //? 6] forwarding the holder screen
+      await Future.delayed(Duration.zero).then((value) async =>
+          await Navigator.pushReplacementNamed(
+              context, HolderScreen.routeName));
+      if (await SharedPrefHelper.firstTimeRunApp()) {
+      } else {
+        await Navigator.pushReplacementNamed(context, HolderScreen.routeName);
+      }
     });
 
     super.initState();
@@ -71,30 +73,43 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
     return Scaffold(
       backgroundColor:
           themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Smart Wallet',
-            style: TextStyle(
-              color: themeProvider.getThemeColor(ThemeColors.kMainColor),
-              fontSize: 36,
-              fontWeight: FontWeight.bold,
-            ),
+      body: MainLoading(),
+    );
+  }
+}
+
+class MainLoading extends StatelessWidget {
+  const MainLoading({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'Smart Wallet',
+          style: TextStyle(
+            color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+            fontSize: 36,
+            fontWeight: FontWeight.bold,
           ),
-          SizedBox(
-            height: kDefaultPadding * 2,
+        ),
+        SizedBox(
+          height: kDefaultPadding * 2,
+        ),
+        Container(
+          alignment: Alignment.center,
+          child: SpinKitCubeGrid(
+            color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+            size: 100,
+            duration: Duration(seconds: 1),
           ),
-          Container(
-            alignment: Alignment.center,
-            child: SpinKitCubeGrid(
-              color: themeProvider.getThemeColor(ThemeColors.kMainColor),
-              size: 100,
-              duration: Duration(seconds: 1),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
