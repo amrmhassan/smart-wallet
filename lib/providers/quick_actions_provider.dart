@@ -220,7 +220,7 @@ class QuickActionsProvider extends ChangeNotifier {
             newQuickAction.transactionType == TransactionType.income
                 ? 'income'
                 : 'outcome',
-        'isFavorite': newQuickAction.isFavorite.toString(),
+        'isFavorite': newQuickAction.isFavorite,
         'profileId': newQuickAction.profileId,
         'quickActionIndex': newQuickAction.quickActionIndex.toString(),
       });
@@ -266,7 +266,7 @@ class QuickActionsProvider extends ChangeNotifier {
             newQuickAction.transactionType == TransactionType.income
                 ? 'income'
                 : 'outcome',
-        'isFavorite': newQuickAction.isFavorite.toString(),
+        'isFavorite': newQuickAction.isFavorite,
         'profileId': newQuickAction.profileId,
         'quickActionIndex': newQuickAction.quickActionIndex.toString(),
       });

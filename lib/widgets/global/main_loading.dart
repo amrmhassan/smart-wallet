@@ -16,29 +16,34 @@ class MainLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Smart Wallet',
-          style: TextStyle(
-            color: themeProvider.getThemeColor(ThemeColors.kMainColor),
-            fontSize: 36,
-            fontWeight: FontWeight.bold,
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Smart Wallet',
+            style: TextStyle(
+              color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+              fontSize: 36,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        SizedBox(
-          height: kDefaultPadding * 2,
-        ),
-        Container(
-          alignment: Alignment.center,
-          child: SpinKitCubeGrid(
-            color: themeProvider.getThemeColor(ThemeColors.kMainColor),
-            size: 100,
-            duration: Duration(seconds: 1),
+          SizedBox(
+            height: kDefaultPadding * 2,
           ),
-        ),
-      ],
+          Container(
+            alignment: Alignment.center,
+            child: SpinKitCubeGrid(
+              color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+              size: 100,
+              duration: Duration(seconds: 1),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

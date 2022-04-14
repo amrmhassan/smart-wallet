@@ -38,8 +38,18 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    //? profile provider
+    //? transaction provider
+    //? quick Action provider
+    //?
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => ThemeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => AuthenticationProvider(),
+        ),
         ChangeNotifierProvider(
           create: (ctx) => ProfilesProvider(),
         ),
@@ -72,7 +82,7 @@ class _MyAppState extends State<MyApp> {
             );
           },
         ),
-        ChangeNotifierProxyProvider2<TransactionProvider, ProfilesProvider,
+        ChangeNotifierProxyProvider2<ProfilesProvider, TransactionProvider,
             ProfileDetailsProvider>(
           create: (
             ctx,
@@ -84,8 +94,8 @@ class _MyAppState extends State<MyApp> {
           },
           update: (
             ctx,
-            transactions,
             profileData,
+            transactions,
             oldStatistics,
           ) {
             return ProfileDetailsProvider(
@@ -93,9 +103,6 @@ class _MyAppState extends State<MyApp> {
               getProfileById: profileData.getProfileById,
             );
           },
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => ThemeProvider(),
         ),
         ChangeNotifierProxyProvider3<ProfilesProvider, TransactionProvider,
             QuickActionsProvider, SyncedDataProvider>(
@@ -117,9 +124,6 @@ class _MyAppState extends State<MyApp> {
             quickActionsProvider: quickActions,
           ),
         ),
-        ChangeNotifierProvider(
-          create: (ctx) => AuthenticationProvider(),
-        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
