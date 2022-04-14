@@ -78,7 +78,6 @@ class SyncedDataProvider extends ChangeNotifier {
         .doc(userId)
         .collection(profilesCollectionName)
         .add({
-      'activated': profile.activated,
       'createdAt': profile.createdAt.toIso8601String(),
       'id': profile.id,
       'income': profile.income,
@@ -156,7 +155,6 @@ class SyncedDataProvider extends ChangeNotifier {
             income: profile['income'],
             outcome: profile['outcome'],
             createdAt: DateTime.parse(profile['createdAt']),
-            activated: profile['activated'],
             lastActivatedDate: profile['lastActivatedDate'] == 'null'
                 ? null
                 : DateTime.parse(profile['lastActivatedDate']),

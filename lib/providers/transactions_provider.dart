@@ -148,7 +148,7 @@ class TransactionProvider extends ChangeNotifier {
             transactionType == TransactionType.income ? 'income' : 'outcome',
         'ratioToTotal': ratioToTotal.toString(),
         'profileId': profileId,
-        'needSync': 'true',
+        'needSync': true,
       });
     } catch (error) {
       if (kDebugMode) {
@@ -194,10 +194,7 @@ class TransactionProvider extends ChangeNotifier {
                 transaction['ratioToTotal'],
               ),
               profileId: transaction['profileId'],
-              needSync: transaction['needSync'] == 'true' ||
-                      transaction['needSync'] == '1'
-                  ? true
-                  : false,
+              needSync: transaction['needSync'] == 1 ? true : false,
             ),
           )
           .toList();
@@ -220,8 +217,7 @@ class TransactionProvider extends ChangeNotifier {
       notifyListeners();
     } catch (error) {
       if (kDebugMode) {
-        print(
-            'An error occurred fetching transactions form database by a profile id');
+        print('An error occurred fetching all transactions form database ');
       }
       // in the final version activate that line
       rethrow;

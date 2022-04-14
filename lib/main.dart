@@ -37,18 +37,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void dispose() {
-    Provider.of<ProfilesProvider>(context).dispose();
-    Provider.of<TransactionProvider>(context).dispose();
-    Provider.of<QuickActionsProvider>(context).dispose();
-    Provider.of<SyncedDataProvider>(context).dispose();
-    Provider.of<ThemeProvider>(context).dispose();
-    Provider.of<ProfileDetailsProvider>(context).dispose();
-    Provider.of<AuthenticationProvider>(context).dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [

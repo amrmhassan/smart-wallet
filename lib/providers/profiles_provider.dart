@@ -115,23 +115,11 @@ class ProfilesProvider extends ChangeNotifier {
             income: double.parse(profile['income']),
             outcome: double.parse(profile['outcome']),
             createdAt: DateTime.parse(profile['createdAt']),
-            activated:
-                profile['activated'] == 'true' || profile['activated'] == '1'
-                    ? true
-                    : false,
             lastActivatedDate: profile['lastActivatedDate'] == null
                 ? null
                 : DateTime.parse(profile['lastActivatedDate']),
-            needSync:
-                //! i added this check to equal 1 cause it causes an error and i don't know why
-                //! the error is the first profile always have needSync of '1' with no reason
-                profile['needSync'] == 'true' || profile['needSync'] == '1'
-                    ? true
-                    : false,
+            needSync: profile['needSync'] == 1 ? true : false,
           );
-          // print('---------------------');
-          // print(profileModel.needSync);
-          // print('---------------------');
 
           return profileModel;
         },
@@ -195,8 +183,7 @@ class ProfilesProvider extends ChangeNotifier {
         'income': 0,
         'outcome': 0,
         'createdAt': createdAt.toIso8601String(),
-        'activated': 'false',
-        'needSync': 'true',
+        'needSync': true,
       });
     } catch (error) {
       if (kDebugMode) {
@@ -259,7 +246,6 @@ class ProfilesProvider extends ChangeNotifier {
     double newIncome = income ?? editedProfile.income;
     double newOutcome = outcome ?? editedProfile.outcome;
     DateTime createdAt = editedProfile.createdAt;
-    bool activated = editedProfile.activated;
     DateTime? newLastActiveDate =
         lastActivatedDate ?? editedProfile.lastActivatedDate;
     bool newNeedSync = needSync ?? editedProfile.needSync;
@@ -271,7 +257,6 @@ class ProfilesProvider extends ChangeNotifier {
         'income': newIncome,
         'outcome': newOutcome,
         'createdAt': createdAt.toIso8601String(),
-        'activated': activated ? 'true' : 'false',
         'lastActivatedDate': newLastActiveDate == null
             ? 'null'
             : newLastActiveDate.toIso8601String(),
@@ -287,7 +272,6 @@ class ProfilesProvider extends ChangeNotifier {
         income: newIncome,
         outcome: newOutcome,
         createdAt: createdAt,
-        activated: activated,
         lastActivatedDate: newLastActiveDate,
         needSync: newNeedSync,
       );

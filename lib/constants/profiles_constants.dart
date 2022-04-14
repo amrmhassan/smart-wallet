@@ -29,7 +29,6 @@ List<ProfileModel> dummyProfiles = [
     name: 'Private Account',
     income: 200,
     outcome: 200,
-    activated: true,
     createdAt: DateTime.now().subtract(const Duration(days: 100)),
   ),
   ProfileModel(

@@ -105,10 +105,10 @@ class QuickActionsProvider extends ChangeNotifier {
         'createdAt': createdAt.toIso8601String(),
         'transactionType':
             transactionType == TransactionType.income ? 'income' : 'outcome',
-        'isFavorite': activeProfileQuickActions.isEmpty ? 'true' : 'false',
+        'isFavorite': activeProfileQuickActions.isEmpty ? true : false,
         'profileId': profileId,
         'quickActionIndex': quickActionIndex.toString(),
-        'needSync': 'true',
+        'needSync': true,
       });
     } catch (error) {
       if (kDebugMode) {
@@ -151,19 +151,12 @@ class QuickActionsProvider extends ChangeNotifier {
                 : TransactionType.outcome,
 
             //? sqlite doesn't support bool datatype so i will store it as string then fetch it and decide
-            isFavorite: quickAction['isFavorite'] == null
-                ? false
-                : quickAction['isFavorite'] == 'true'
-                    ? true
-                    : false,
+            isFavorite: quickAction['isFavorite'] == 1 ? true : false,
             profileId: quickAction['profileId'],
             quickActionIndex: quickAction['quickActionIndex'] == 'null'
                 ? null
                 : int.parse(quickAction['quickActionIndex']),
-            needSync: quickAction['needSync'] == 'true' ||
-                    quickAction['needSync'] == '1'
-                ? true
-                : false,
+            needSync: quickAction['needSync'] == 1 ? true : false,
           );
         },
       ).toList();

@@ -9,7 +9,6 @@ class ProfileModel {
   String name;
   double income;
   double outcome;
-  bool activated;
   DateTime createdAt;
   DateTime? lastActivatedDate;
   String? userId;
@@ -25,7 +24,6 @@ class ProfileModel {
     required this.income,
     required this.outcome,
     required this.createdAt,
-    this.activated = false,
     this.lastActivatedDate,
     this.userId,
     this.needSync = true,

@@ -14,13 +14,13 @@ class DBHelper {
       onCreate: (db, version) async {
         //* creating transactions table
         await db.execute(
-            'CREATE TABLE $transactionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT, ratioToTotal TEXT, profileId TEXT, needSync TEXT )');
+            'CREATE TABLE $transactionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT, ratioToTotal TEXT, profileId TEXT, needSync BLOB )');
         //* creating profiles table
         await db.execute(
-            'CREATE TABLE $profilesTableName (id TEXT PRIMARY KEY,name TEXT, income TEXT, outcome TEXT, activated TEXT, createdAt TEXT, lastActivatedDate TEXT, needSync TEXT )');
+            'CREATE TABLE $profilesTableName (id TEXT PRIMARY KEY,name TEXT, income TEXT, outcome TEXT, createdAt TEXT, lastActivatedDate TEXT, needSync BLOB )');
         //* creating quick actions table
         return db.execute(
-            'CREATE TABLE $quickActionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT,  isFavorite TEXT, profileId TEXT , quickActionIndex TEXT, needSync TEXT )');
+            'CREATE TABLE $quickActionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT,  isFavorite BLOB, profileId TEXT , quickActionIndex TEXT, needSync BLOB )');
       },
       version: 1,
     );
