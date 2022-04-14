@@ -11,53 +11,43 @@ import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 
 class SyncedDataProvider extends ChangeNotifier {
-  final ProfilesProvider? profilesProvider;
-  final TransactionProvider? transactionProvider;
-  final QuickActionsProvider? quickActionsProvider;
-
-  SyncedDataProvider({
-    required this.profilesProvider,
-    required this.transactionProvider,
-    required this.quickActionsProvider,
-  });
-
   List<String> profilesIDsToSync = [];
   List<String> transactionsIDsToSync = [];
   List<String> quickActionsIDsToSync = [];
 
-  Future<void> syncAllData() async {
-    if (profilesProvider == null ||
-        transactionProvider == null ||
-        quickActionsProvider == null) return;
+  Future<void> syncAllData(
+      ProfilesProvider profilesProvider,
+      TransactionProvider transactionProvider,
+      QuickActionsProvider quickActionsProvider) async {
     try {
-      for (var profile in profilesProvider!.profiles) {
+      for (var profile in profilesProvider.profiles) {
         if (kDebugMode) {
           print(' profile ${profile.needSync}');
         }
         if (profile.needSync) {
           await addProfile(profile);
-          await profilesProvider!.toggleProfileNeedSync(profile.id);
+          await profilesProvider.toggleProfileNeedSync(profile.id);
         }
       }
-      for (var transaction in transactionProvider!.transactions) {
+      for (var transaction in transactionProvider.allTransactions) {
         if (kDebugMode) {
           print(' transaction ${transaction.needSync}');
         }
 
         if (transaction.needSync) {
           await addTransaction(transaction);
-          await transactionProvider!.toggleTransactionNeedSync(transaction.id);
+          await transactionProvider.toggleTransactionNeedSync(transaction.id);
         }
       }
 
-      for (var quickAction in quickActionsProvider!.allQuickActions) {
+      for (var quickAction in quickActionsProvider.allQuickActions) {
         if (kDebugMode) {
           print(' quickAction ${quickAction.needSync}');
         }
 
         if (quickAction.needSync) {
           await addQuickAction(quickAction);
-          await quickActionsProvider!.toggleQuickActionNeedSync(quickAction.id);
+          await quickActionsProvider.toggleQuickActionNeedSync(quickAction.id);
         }
       }
     } catch (error) {

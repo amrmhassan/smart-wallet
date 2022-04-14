@@ -1,9 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-//! [ERRORS]
-//[Solved] i don't know how but it is self solved i guess transactions can't be loaded from the database and updated when loading the first time
-//! profiles don't update after syncing them to the database
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/authentication_provider.dart';
@@ -38,50 +34,14 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    //? profile provider
-    //? transaction provider
-    //? quick Action provider
-    //?
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (ctx) => ThemeProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => AuthenticationProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => ProfilesProvider(),
-        ),
-        ChangeNotifierProxyProvider<ProfilesProvider, TransactionProvider>(
-          create: (ctx) {
-            return TransactionProvider(
-              activeProfileId: '',
-              transactions: [],
-            );
-          },
-          update: (ctx, profiles, oldTransactions) {
-            // print('transactions ${oldTransactions?.transactions.length}');
-            return TransactionProvider(
-              activeProfileId: profiles.activatedProfileId,
-              transactions: oldTransactions!.transactions,
-            );
-          },
-        ),
-        ChangeNotifierProxyProvider<ProfilesProvider, QuickActionsProvider>(
-          create: (ctx) {
-            return QuickActionsProvider(
-              activeProfileId: '',
-              allQuickActions: [],
-            );
-          },
-          update: (ctx, profiles, oldQuickActions) {
-            return QuickActionsProvider(
-              activeProfileId: profiles.activatedProfileId,
-              allQuickActions: oldQuickActions!.allQuickActions,
-            );
-          },
-        ),
+        ChangeNotifierProvider(create: (ctx) => ThemeProvider()),
+        ChangeNotifierProvider(create: (ctx) => AuthenticationProvider()),
+        ChangeNotifierProvider(create: (ctx) => ProfilesProvider()),
+        ChangeNotifierProvider(create: (ctx) => TransactionProvider()),
+        ChangeNotifierProvider(create: (ctx) => QuickActionsProvider()),
+        ChangeNotifierProvider(create: (ctx) => SyncedDataProvider()),
         ChangeNotifierProxyProvider2<ProfilesProvider, TransactionProvider,
             ProfileDetailsProvider>(
           create: (
@@ -103,26 +63,6 @@ class _MyAppState extends State<MyApp> {
               getProfileById: profileData.getProfileById,
             );
           },
-        ),
-        ChangeNotifierProxyProvider3<ProfilesProvider, TransactionProvider,
-            QuickActionsProvider, SyncedDataProvider>(
-          create: (ctx) => SyncedDataProvider(
-            profilesProvider: null,
-            transactionProvider: null,
-            quickActionsProvider: null,
-          ),
-          update: (
-            ctx,
-            profiles,
-            transactions,
-            quickActions,
-            oldSyncedData,
-          ) =>
-              SyncedDataProvider(
-            profilesProvider: profiles,
-            transactionProvider: transactions,
-            quickActionsProvider: quickActions,
-          ),
         ),
       ],
       child: MaterialApp(

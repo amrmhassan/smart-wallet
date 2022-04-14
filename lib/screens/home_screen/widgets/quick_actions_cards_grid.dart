@@ -25,7 +25,7 @@ class QuickActionsCardsGrid extends StatelessWidget {
     var quickActions = Provider.of<QuickActionsProvider>(
       context,
       listen: false,
-    ).activeProfileQuickActions;
+    ).quickActions;
     if (quickActions.isEmpty) {
       Navigator.push(
         context,
@@ -55,10 +55,22 @@ class QuickActionsCardsGrid extends StatelessWidget {
         title: quickActions[index].title,
         description: quickActions[index].description,
         transactionType: quickActions[index].transactionType,
-        onTap: () => showApplyQuickActionDialog(
-          context,
-          quickActions[index],
-        ),
+        onTap: () async {
+          QuickActionModel q = quickActions[index];
+          //! an error here after changing the order and applying the quick action it apply the older quick action that was in it's place instead of the new quick Action
+          return showApplyQuickActionDialog(
+            context,
+            QuickActionModel(
+              id: q.id,
+              title: q.title,
+              description: q.description,
+              amount: q.amount,
+              createdAt: q.createdAt,
+              transactionType: q.transactionType,
+              profileId: q.profileId,
+            ),
+          );
+        },
       ),
     );
 

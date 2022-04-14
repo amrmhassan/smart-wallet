@@ -8,31 +8,26 @@ import '../helpers/db_helper.dart';
 import '../models/transaction_model.dart';
 
 class TransactionProvider extends ChangeNotifier {
-  final String activeProfileId;
   //? all profile transactions
-  List<TransactionModel> transactions;
+  List<TransactionModel> transactions = [];
+  List<TransactionModel> allTransactions = [];
 
-  TransactionProvider({
-    required this.activeProfileId,
-    required this.transactions,
-  });
-
-  void refreshProvider() {
-    notifyListeners();
+  List<TransactionModel> get notSyncedTransactions {
+    return allTransactions
+        .where((element) => element.needSync == true)
+        .toList();
   }
 
-  List<TransactionModel> get activeProfileTransactions {
-    List<TransactionModel> t = transactions
-        .where((element) => element.profileId == activeProfileId)
+  List<TransactionModel> getProfileTransactions(String profileId) {
+    return transactions
+        .where((element) => element.profileId == profileId)
         .toList();
-
-    return t;
   }
 
 //? getting income transactions
   List<TransactionModel> get _incomeTransactions {
     return [
-      ...activeProfileTransactions
+      ...transactions
           .where((element) => element.transactionType == TransactionType.income)
     ];
   }
@@ -40,7 +35,7 @@ class TransactionProvider extends ChangeNotifier {
 //? getting outcome transactions
   List<TransactionModel> get _outcomeTransactions {
     return [
-      ...activeProfileTransactions.where(
+      ...transactions.where(
           (element) => element.transactionType == TransactionType.outcome)
     ];
   }
@@ -52,7 +47,7 @@ class TransactionProvider extends ChangeNotifier {
     } else if (currentActiveTransactionType == TransactionType.outcome) {
       return _outcomeTransactions;
     } else {
-      return [...activeProfileTransactions];
+      return [...transactions];
     }
   }
 
@@ -105,13 +100,13 @@ class TransactionProvider extends ChangeNotifier {
 
 //? getting a transaction by id
   TransactionModel getTransactionById(String id) {
-    return activeProfileTransactions.firstWhere((element) => element.id == id);
+    return transactions.firstWhere((element) => element.id == id);
   }
 
 //? getting the last transaction in the list
 //* this will be used to check if the current added transaction has the same amount and transaction type as the last transaction in the list
   TransactionModel getLastTransaction() {
-    return activeProfileTransactions[transactions.length - 1];
+    return transactions[transactions.length - 1];
   }
 
 //? adding new transaction
@@ -148,7 +143,7 @@ class TransactionProvider extends ChangeNotifier {
             transactionType == TransactionType.income ? 'income' : 'outcome',
         'ratioToTotal': ratioToTotal.toString(),
         'profileId': profileId,
-        'needSync': true,
+        'needSync': 'TRUE',
       });
     } catch (error) {
       if (kDebugMode) {
@@ -173,11 +168,10 @@ class TransactionProvider extends ChangeNotifier {
   }
 
 //? get transactinons by a profile id
-  Future<void> fetchAllTransactionsFromDataBase() async {
+  Future<void> fetchAndUpdateProfileTransactions(String profileId) async {
     try {
-      List<Map<String, dynamic>> data = await DBHelper.getData(
-        transactionsTableName,
-      );
+      List<Map<String, dynamic>> data = await DBHelper.getDataWhere(
+          transactionsTableName, 'profileId', profileId);
 
       List<TransactionModel> fetchedTransactions = data
           .map(
@@ -194,32 +188,57 @@ class TransactionProvider extends ChangeNotifier {
                 transaction['ratioToTotal'],
               ),
               profileId: transaction['profileId'],
-              needSync: transaction['needSync'] == 1 ? true : false,
+              needSync: transaction['needSync'] == 'TRUE' ? true : false,
             ),
           )
           .toList();
 
-      // fetchedTransactions.sort((a, b) {
-      //   return a.createdAt.difference(b.createdAt).inSeconds;
-      // });
+      fetchedTransactions.sort((a, b) {
+        return a.createdAt.difference(b.createdAt).inSeconds;
+      });
       transactions = fetchedTransactions;
-      //? the data are fetched from the database successfully and there is no error fetching them
-      //? this error doesn't happen with the quick actions
-      //? when adding the notifyListeners to the end of this function i think i worked
-      // var dataLength = data.length;
-      // var fetchedLength = fetchedTransactions.length;
-      // var transLength = transactions.length;
-      // print('-------------------------------------------');
-      // print(dataLength);
-      // print(fetchedLength);
-      // print(transLength);
-      // print('-------------------------------------------');
+
       notifyListeners();
     } catch (error) {
       if (kDebugMode) {
         print('An error occurred fetching all transactions form database ');
       }
-      // in the final version activate that line
+      rethrow;
+    }
+  }
+
+//? fetching and updating all transactions
+  Future<void> fetchAndUpdateAllTransactions() async {
+    List<TransactionModel> fetchedTransactions = [];
+    try {
+      List<Map<String, dynamic>> data =
+          await DBHelper.getData(transactionsTableName);
+
+      fetchedTransactions = data
+          .map(
+            (transaction) => TransactionModel(
+              id: transaction['id'],
+              title: transaction['title'],
+              description: transaction['description'],
+              amount: double.parse(transaction['amount']),
+              createdAt: DateTime.parse(transaction['createdAt']),
+              transactionType: transaction['transactionType'] == 'income'
+                  ? TransactionType.income
+                  : TransactionType.outcome,
+              ratioToTotal: double.parse(
+                transaction['ratioToTotal'],
+              ),
+              profileId: transaction['profileId'],
+              needSync: transaction['needSync'] == 'TRUE' ? true : false,
+            ),
+          )
+          .toList();
+      allTransactions = fetchedTransactions;
+      notifyListeners();
+    } catch (error) {
+      if (kDebugMode) {
+        print('An error occurred fetching all transactions form database ');
+      }
       rethrow;
     }
   }
@@ -296,7 +315,7 @@ class TransactionProvider extends ChangeNotifier {
                 : 'outcome',
         'ratioToTotal': newTransaction.ratioToTotal.toString(),
         'profileId': newTransaction.profileId,
-        'needSync': newTransaction.needSync,
+        'needSync': newTransaction.needSync ? 'TRUE' : 'FALSE',
       });
     } catch (error) {
       if (kDebugMode) {

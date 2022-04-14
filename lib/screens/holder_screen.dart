@@ -73,23 +73,27 @@ class _HolderScreenState extends State<HolderScreen> {
     });
 
     //! this will run after 1 second of starting
-    Future.delayed(Duration(seconds: 1)).then((value) async {
+    Future.delayed(Duration.zero).then((value) async {
       //? 2] fetching the profiles
       await Provider.of<ProfilesProvider>(context, listen: false)
           .fetchAndUpdateProfiles();
+
       //? 3] fetching the active profile id
       await Provider.of<ProfilesProvider>(context, listen: false)
           .fetchAndUpdateActivatedProfileId();
-    });
 
-    //! this will run after 2 second of starting
-    Future.delayed(Duration(seconds: 2)).then((value) async {
+      String activeProfileId =
+          Provider.of<ProfilesProvider>(context, listen: false)
+              .activatedProfileId;
+
       // //? 4] fetching the transactions from the database
       await Provider.of<TransactionProvider>(context, listen: false)
-          .fetchAllTransactionsFromDataBase();
+          .fetchAndUpdateProfileTransactions(activeProfileId);
+
       // //? 5] fetching the quick actions
       await Provider.of<QuickActionsProvider>(context, listen: false)
-          .fetchAllQuickActionsFromDataBase();
+          .fetchAndUpdateProfileQuickActions(activeProfileId);
+
       setState(() {
         _loading = false;
       });
@@ -120,15 +124,7 @@ class _HolderScreenState extends State<HolderScreen> {
 
   @override
   void dispose() {
-    print('-----------------Disposing the holder screen--------------------');
     _pageController.dispose();
-    // Provider.of<ProfilesProvider>(context).dispose();
-    // Provider.of<TransactionProvider>(context).dispose();
-    // Provider.of<QuickActionsProvider>(context).dispose();
-    // Provider.of<SyncedDataProvider>(context).dispose();
-    // Provider.of<ThemeProvider>(context).dispose();
-    // Provider.of<ProfileDetailsProvider>(context).dispose();
-    // Provider.of<AuthenticationProvider>(context).dispose();
     super.dispose();
   }
 
@@ -267,9 +263,8 @@ class TestingLengthsWidget extends StatelessWidget {
           ),
           TestingElement(
             title: 'All Quick Actions',
-            value: Provider.of<QuickActionsProvider>(context)
-                .allQuickActions
-                .length,
+            value:
+                Provider.of<QuickActionsProvider>(context).quickActions.length,
           ),
         ],
       ),

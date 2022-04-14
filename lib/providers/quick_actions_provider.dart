@@ -12,26 +12,18 @@ import '../helpers/db_helper.dart';
 //! it will only exist in the favorite quick actions
 
 class QuickActionsProvider extends ChangeNotifier {
-  final String activeProfileId;
-  QuickActionsProvider({
-    required this.activeProfileId,
-    required this.allQuickActions,
-  });
   //? a) quick actions stuff
-  List<QuickActionModel> allQuickActions;
+  List<QuickActionModel> quickActions = [];
+  List<QuickActionModel> allQuickActions = [];
 
-  void refreshProvider() {
-    notifyListeners();
-  }
-
-  List<QuickActionModel> get activeProfileQuickActions {
+  List<QuickActionModel> get notSyncedQuickActions {
     return allQuickActions
-        .where((element) => element.profileId == activeProfileId)
+        .where((element) => element.needSync == true)
         .toList();
   }
 
-  int get allQuickActionsLength {
-    return allQuickActions.length;
+  int get quickActionsLength {
+    return quickActions.length;
   }
 
 //? 1- getting quick actions, with multiple possibilities
@@ -39,8 +31,7 @@ class QuickActionsProvider extends ChangeNotifier {
 //* for getting the favorite quick actions only
   List<QuickActionModel> get getFavoriteQuickActions {
     var favQuickActions = [
-      ...activeProfileQuickActions
-          .where((element) => element.isFavorite == true),
+      ...quickActions.where((element) => element.isFavorite == true),
     ];
     favQuickActions.sort(
         (a, b) => ((a.quickActionIndex ?? 0) - (b.quickActionIndex ?? 0)));
@@ -50,7 +41,7 @@ class QuickActionsProvider extends ChangeNotifier {
 //* for getting the income quick actions only
   List<QuickActionModel> get _incomeQuickActions {
     return [
-      ...activeProfileQuickActions
+      ...quickActions
           .where((element) => element.transactionType == TransactionType.income)
     ];
   }
@@ -58,7 +49,7 @@ class QuickActionsProvider extends ChangeNotifier {
 //* for getting the outcome quick actions only
   List<QuickActionModel> get _outcomeQuickActions {
     return [
-      ...activeProfileQuickActions.where(
+      ...quickActions.where(
           (element) => element.transactionType == TransactionType.outcome)
     ];
   }
@@ -70,13 +61,13 @@ class QuickActionsProvider extends ChangeNotifier {
     } else if (currentActiveQuickActionType == TransactionType.outcome) {
       return _outcomeQuickActions;
     } else {
-      return [...activeProfileQuickActions];
+      return [...quickActions];
     }
   }
 
   //* for getting a quick actions by its id
   QuickActionModel getQuickById(String id) {
-    return allQuickActions.firstWhere((element) => element.id == id);
+    return quickActions.firstWhere((element) => element.id == id);
   }
 
   //? 3- methods to control the quickActions
@@ -89,7 +80,7 @@ class QuickActionsProvider extends ChangeNotifier {
 //* here checking if the added quick action is the first
 //* to make it favorite and make it's quickActionIndex prop to be zero
     int? quickActionIndex;
-    if (allQuickActions.isEmpty) {
+    if (quickActions.isEmpty) {
       quickActionIndex = 0;
     } else {
       quickActionIndex = null;
@@ -105,10 +96,10 @@ class QuickActionsProvider extends ChangeNotifier {
         'createdAt': createdAt.toIso8601String(),
         'transactionType':
             transactionType == TransactionType.income ? 'income' : 'outcome',
-        'isFavorite': activeProfileQuickActions.isEmpty ? true : false,
+        'isFavorite': quickActions.isEmpty ? 'TRUE' : 'FALSE',
         'profileId': profileId,
         'quickActionIndex': quickActionIndex.toString(),
-        'needSync': true,
+        'needSync': 'TRUE',
       });
     } catch (error) {
       if (kDebugMode) {
@@ -124,19 +115,19 @@ class QuickActionsProvider extends ChangeNotifier {
       amount: amount,
       createdAt: createdAt,
       transactionType: transactionType,
-      isFavorite: activeProfileQuickActions.isEmpty ? true : false,
+      isFavorite: quickActions.isEmpty ? true : false,
       profileId: profileId,
       quickActionIndex: quickActionIndex,
     );
-    allQuickActions.add(quickActionModel);
+    quickActions.add(quickActionModel);
     notifyListeners();
   }
 
 //* for getting the quickActions from the database
-  Future<void> fetchAllQuickActionsFromDataBase() async {
+  Future<void> fetchAndUpdateProfileQuickActions(String profileId) async {
     try {
-      List<Map<String, dynamic>> data =
-          await DBHelper.getData(quickActionsTableName);
+      List<Map<String, dynamic>> data = await DBHelper.getDataWhere(
+          quickActionsTableName, 'profileId', profileId);
 
       List<QuickActionModel> fetchedQuickActions = data.map(
         (quickAction) {
@@ -151,28 +142,21 @@ class QuickActionsProvider extends ChangeNotifier {
                 : TransactionType.outcome,
 
             //? sqlite doesn't support bool datatype so i will store it as string then fetch it and decide
-            isFavorite: quickAction['isFavorite'] == 1 ? true : false,
+            isFavorite: quickAction['isFavorite'] == 'TRUE' ? true : false,
             profileId: quickAction['profileId'],
             quickActionIndex: quickAction['quickActionIndex'] == 'null'
                 ? null
                 : int.parse(quickAction['quickActionIndex']),
-            needSync: quickAction['needSync'] == 1 ? true : false,
+            needSync: quickAction['needSync'] == 'TRUE' ? true : false,
           );
         },
       ).toList();
 
-      // fetchedQuickActions.sort((a, b) {
-      //   return a.createdAt.difference(b.createdAt).inSeconds;
-      // });
-      allQuickActions = fetchedQuickActions;
-      // var dataLength = data.length;
-      // var fetchedLength = fetchedQuickActions.length;
-      // var transLength = allQuickActions.length;
-      // print('-------------------------------------------');
-      // print(dataLength);
-      // print(fetchedLength);
-      // print(transLength);
-      // print('-------------------------------------------');
+      fetchedQuickActions.sort((a, b) {
+        return a.createdAt.difference(b.createdAt).inSeconds;
+      });
+      quickActions = fetchedQuickActions;
+
       notifyListeners();
     } catch (error) {
       if (kDebugMode) {
@@ -181,6 +165,47 @@ class QuickActionsProvider extends ChangeNotifier {
       }
       // rethrow;
     }
+  }
+
+//* for getting the all quick Actions from the database
+  Future<List<QuickActionModel>> fetchAndUpdateAllQuickActions() async {
+    List<QuickActionModel> fetchedQuickActions = [];
+    try {
+      List<Map<String, dynamic>> data =
+          await DBHelper.getData(quickActionsTableName);
+
+      fetchedQuickActions = data.map(
+        (quickAction) {
+          return QuickActionModel(
+            id: quickAction['id'],
+            title: quickAction['title'],
+            description: quickAction['description'],
+            amount: double.parse(quickAction['amount']),
+            createdAt: DateTime.parse(quickAction['createdAt']),
+            transactionType: quickAction['transactionType'] == 'income'
+                ? TransactionType.income
+                : TransactionType.outcome,
+
+            //? sqlite doesn't support bool datatype so i will store it as string then fetch it and decide
+            isFavorite: quickAction['isFavorite'] == 'TRUE' ? true : false,
+            profileId: quickAction['profileId'],
+            quickActionIndex: quickAction['quickActionIndex'] == 'null'
+                ? null
+                : int.parse(quickAction['quickActionIndex']),
+            needSync: quickAction['needSync'] == 'TRUE' ? true : false,
+          );
+        },
+      ).toList();
+      allQuickActions = fetchedQuickActions;
+      notifyListeners();
+    } catch (error) {
+      if (kDebugMode) {
+        print(error);
+        print('Error fetching quick actions from the database');
+      }
+      // rethrow;
+    }
+    return fetchedQuickActions;
   }
 
 //* for deleting a quickActions
@@ -195,7 +220,7 @@ class QuickActionsProvider extends ChangeNotifier {
       }
     }
 
-    allQuickActions.removeWhere((element) => element.id == id);
+    quickActions.removeWhere((element) => element.id == id);
     notifyListeners();
   }
 
@@ -220,9 +245,10 @@ class QuickActionsProvider extends ChangeNotifier {
             newQuickAction.transactionType == TransactionType.income
                 ? 'income'
                 : 'outcome',
-        'isFavorite': newQuickAction.isFavorite,
+        'isFavorite': newQuickAction.isFavorite ? 'TRUE' : 'FALSE',
         'profileId': newQuickAction.profileId,
         'quickActionIndex': newQuickAction.quickActionIndex.toString(),
+        'needSync': newQuickAction.needSync ? 'TRUE' : 'FALSE',
       });
     } catch (error) {
       if (kDebugMode) {
@@ -231,9 +257,9 @@ class QuickActionsProvider extends ChangeNotifier {
       rethrow;
     }
     int transactionIndex =
-        allQuickActions.indexWhere((element) => element.id == quickActionId);
-    allQuickActions.removeWhere((element) => element.id == quickActionId);
-    allQuickActions.insert(transactionIndex, newQuickAction);
+        quickActions.indexWhere((element) => element.id == quickActionId);
+    quickActions.removeWhere((element) => element.id == quickActionId);
+    quickActions.insert(transactionIndex, newQuickAction);
     notifyListeners();
   }
 
