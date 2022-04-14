@@ -1,4 +1,5 @@
 import 'package:smart_wallet/constants/profiles_constants.dart';
+import 'package:smart_wallet/constants/types.dart';
 
 const double _goodLimit = .70; // when it is from 70% to 100% it will be good
 const double _moderateLimit =
@@ -12,7 +13,8 @@ class ProfileModel {
   DateTime createdAt;
   DateTime? lastActivatedDate;
   String? userId;
-  bool needSync;
+  late bool needSync;
+  SyncFlags syncFlag;
 
   late MoneyAccountStatus moneyAccountStatus;
   late double totalMoney;
@@ -26,7 +28,7 @@ class ProfileModel {
     required this.createdAt,
     this.lastActivatedDate,
     this.userId,
-    this.needSync = true,
+    this.syncFlag = SyncFlags.none,
   }) {
     //? for setting the total money
     //* the total money equals to income - outcome
@@ -47,6 +49,12 @@ class ProfileModel {
       moneyAccountStatus = MoneyAccountStatus.moderate;
     } else {
       moneyAccountStatus = MoneyAccountStatus.critical;
+    }
+    //? for setting the need sync
+    if (syncFlag != SyncFlags.none) {
+      needSync == true;
+    } else {
+      needSync = false;
     }
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'package:smart_wallet/constants/types.dart';
+import 'package:smart_wallet/models/synced_elements_model.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
 import 'package:smart_wallet/constants/shared_pref_constants.dart';
@@ -16,7 +18,9 @@ class ProfilesProvider extends ChangeNotifier {
   String _activatedProfileId = '';
 
   List<ProfileModel> get notSyncedProfiles {
-    return _profiles.where((element) => element.needSync).toList();
+    return _profiles
+        .where((element) => element.syncFlag != SyncFlags.none)
+        .toList();
   }
 
   //? getting the active profile id
@@ -113,7 +117,7 @@ class ProfilesProvider extends ChangeNotifier {
             lastActivatedDate: profile['lastActivatedDate'] == null
                 ? null
                 : DateTime.parse(profile['lastActivatedDate']),
-            needSync: profile['needSync'] == 'TRUE' ? true : false,
+            syncFlag: stringToSyncFlag(profile['syncFlag']),
           );
 
           return profileModel;
@@ -178,7 +182,7 @@ class ProfilesProvider extends ChangeNotifier {
         'income': 0,
         'outcome': 0,
         'createdAt': createdAt.toIso8601String(),
-        'needSync': 'TRUE',
+        'syncFlag': SyncFlags.add.name,
       });
     } catch (error) {
       if (kDebugMode) {
@@ -193,15 +197,16 @@ class ProfilesProvider extends ChangeNotifier {
       income: 0,
       outcome: 0,
       createdAt: createdAt,
+      syncFlag: SyncFlags.add,
     );
     _profiles.add(newProfile);
     notifyListeners();
     return id;
   }
 
-  Future<void> toggleProfileNeedSync(String id) async {
+  Future<void> changeSyncFlag(String id, SyncFlags newSyncFlag) async {
     ProfileModel profile = getProfileById(id);
-    await editProfile(id: id, needSync: !profile.needSync);
+    await editProfile(id: id, syncFlags: newSyncFlag);
   }
 
   //? editing an existing profile
@@ -211,14 +216,14 @@ class ProfilesProvider extends ChangeNotifier {
     double? income,
     double? outcome,
     DateTime? lastActivatedDate,
-    bool? needSync,
+    SyncFlags? syncFlags,
   }) async {
     //* rejecting edit if no argument is provided
     if (name == null &&
         income == null &&
         outcome == null &&
         lastActivatedDate == null &&
-        needSync == null) {
+        syncFlags == null) {
       throw CustomError(
           'You must enter one argument at least to edit the profile');
     }
@@ -243,7 +248,7 @@ class ProfilesProvider extends ChangeNotifier {
     DateTime createdAt = editedProfile.createdAt;
     DateTime? newLastActiveDate =
         lastActivatedDate ?? editedProfile.lastActivatedDate;
-    bool newNeedSync = needSync ?? editedProfile.needSync;
+    SyncFlags newSyncFlag = syncFlags ?? editedProfile.syncFlag;
     //* edit the profile in database first
     try {
       await DBHelper.insert(profilesTableName, {
@@ -255,7 +260,7 @@ class ProfilesProvider extends ChangeNotifier {
         'lastActivatedDate': newLastActiveDate == null
             ? 'null'
             : newLastActiveDate.toIso8601String(),
-        'needSync': newNeedSync ? 'TRUE' : 'FALSE',
+        'syncFlag': newSyncFlag.name,
       });
 
       //* edit it on the _profiles
@@ -268,7 +273,7 @@ class ProfilesProvider extends ChangeNotifier {
         outcome: newOutcome,
         createdAt: createdAt,
         lastActivatedDate: newLastActiveDate,
-        needSync: newNeedSync,
+        syncFlag: newSyncFlag,
       );
       _profiles.insert(index, newProfile);
       notifyListeners();

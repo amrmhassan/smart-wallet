@@ -11,7 +11,7 @@ import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/helpers/db_helper.dart';
 import 'package:smart_wallet/helpers/shared_pref_helper.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
-import 'package:smart_wallet/screens/holder_screen.dart';
+import 'package:smart_wallet/screens/holder_screen/holder_screen.dart';
 import 'package:smart_wallet/screens/loading_data_screen.dart';
 import 'package:smart_wallet/screens/quick_actions_screen/quick_actions_screen.dart';
 import 'package:smart_wallet/utils/general_utils.dart';

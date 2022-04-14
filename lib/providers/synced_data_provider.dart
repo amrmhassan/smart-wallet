@@ -26,7 +26,7 @@ class SyncedDataProvider extends ChangeNotifier {
         }
         if (profile.needSync) {
           await addProfile(profile);
-          await profilesProvider.toggleProfileNeedSync(profile.id);
+          await profilesProvider.changeSyncFlag(profile.id, SyncFlags.none);
         }
       }
       for (var transaction in transactionProvider.allTransactions) {
@@ -148,8 +148,8 @@ class SyncedDataProvider extends ChangeNotifier {
             lastActivatedDate: profile['lastActivatedDate'] == 'null'
                 ? null
                 : DateTime.parse(profile['lastActivatedDate']),
-            needSync: false,
             userId: profile['userId'],
+            syncFlag: SyncFlags.none,
           ),
         )
         .toList();

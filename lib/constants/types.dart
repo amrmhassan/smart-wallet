@@ -9,3 +9,10 @@ enum SnackBarType {
   error,
   success,
 }
+
+enum SyncFlags {
+  none,
+  add,
+  edit,
+  delete,
+}

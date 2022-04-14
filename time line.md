@@ -67,6 +67,12 @@ add a property to profiles, transactions, quick actions called index
 -- for the quick actions allow the user to drag and rearrange them in the favorites(home screen) with the recordable list
 allow the user to open a profile even if it is still empty 
 -- or show a dialog to delete empty profile when clicking  it's card if it is empty instead of opening it 
+----------------------------------
+for syncing data
+in each data provider(profile, transactions, quick actions)
+make a variable that will return an array of data needing to be synced wit ha flag of what you need to do
+for example this will return an array of ProfileSync(flag:SyncFlags.add, profile:ProfileModel)
+and the same for transactions and quick actions
 
 
 

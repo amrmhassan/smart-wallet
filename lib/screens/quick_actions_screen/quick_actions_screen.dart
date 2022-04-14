@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/screens/holder_screen.dart';
+import 'package:smart_wallet/screens/holder_screen/widgets/holder_screen.dart';
 import '../../providers/quick_actions_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../screens/quick_actions_screen/widgets/all_quick_actions_card.dart';

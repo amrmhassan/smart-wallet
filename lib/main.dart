@@ -13,7 +13,7 @@ import 'package:smart_wallet/screens/sync_data_screen/sync_data_screen.dart';
 import 'package:smart_wallet/tests/testing_widget.dart';
 import './providers/quick_actions_provider.dart';
 import './providers/transactions_provider.dart';
-import './screens/holder_screen.dart';
+import 'screens/holder_screen/holder_screen.dart';
 import './screens/quick_actions_screen/quick_actions_screen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
