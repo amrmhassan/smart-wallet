@@ -13,6 +13,7 @@ import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/loading_data_screen.dart';
 import 'package:smart_wallet/screens/money_accounts_screen/money_accounts_screen.dart';
 import 'package:smart_wallet/screens/settings_screen/settings_screen.dart';
+import 'package:smart_wallet/widgets/global/main_loading.dart';
 import '../providers/theme_provider.dart';
 import '../screens/home_screen/home_screen.dart';
 import '../screens/transactions_screen/transactions_screen.dart';
@@ -71,13 +72,18 @@ class _HolderScreenState extends State<HolderScreen> {
       setState(() {
         _loading = true;
       });
+      //? 1]  fetching the active theme
+      await Provider.of<ThemeProvider>(context, listen: false)
+          .fetchAndSetActiveTheme();
+
       //? 2] fetching the profiles
       await Provider.of<ProfilesProvider>(context, listen: false)
           .fetchAndUpdateProfiles();
+
       //? 3] fetching the active profile id
-      //* foe getting the active profile id and default one if empty
       await Provider.of<ProfilesProvider>(context, listen: false)
           .fetchAndUpdateActivatedProfileId();
+
       // //? 4] fetching the transactions from the database
       await Provider.of<TransactionProvider>(context, listen: false)
           .fetchAllTransactionsFromDataBase();
@@ -170,7 +176,7 @@ class _HolderScreenState extends State<HolderScreen> {
                           //! at the end remove this column , container, expanded and leave only the page viewer
                           child: Column(
                             children: [
-                              if (kDebugMode) TestingLengthsWidget(),
+                              if (false) TestingLengthsWidget(),
                               Expanded(
                                 child: PageView(
                                   //* prevented the user from scrolling by himself(to enable transactions dimissible)

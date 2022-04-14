@@ -10,6 +10,7 @@ import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/holder_screen.dart';
+import 'package:smart_wallet/widgets/global/main_loading.dart';
 
 import '../providers/profiles_provider.dart';
 
@@ -31,8 +32,8 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
 
     //? 1]  fetching the active theme
     Future.delayed(Duration.zero).then((value) async {
-      await Provider.of<ThemeProvider>(context, listen: false)
-          .fetchAndSetActiveTheme();
+      // await Provider.of<ThemeProvider>(context, listen: false)
+      //     .fetchAndSetActiveTheme();
       // });
       // Future.delayed(Duration.zero).then((value) async {
       // //? 2] fetching the profiles
@@ -74,42 +75,6 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
       backgroundColor:
           themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
       body: MainLoading(),
-    );
-  }
-}
-
-class MainLoading extends StatelessWidget {
-  const MainLoading({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var themeProvider = Provider.of<ThemeProvider>(context);
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Smart Wallet',
-          style: TextStyle(
-            color: themeProvider.getThemeColor(ThemeColors.kMainColor),
-            fontSize: 36,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(
-          height: kDefaultPadding * 2,
-        ),
-        Container(
-          alignment: Alignment.center,
-          child: SpinKitCubeGrid(
-            color: themeProvider.getThemeColor(ThemeColors.kMainColor),
-            size: 100,
-            duration: Duration(seconds: 1),
-          ),
-        ),
-      ],
     );
   }
 }
