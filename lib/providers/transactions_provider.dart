@@ -143,7 +143,7 @@ class TransactionProvider extends ChangeNotifier {
             transactionType == TransactionType.income ? 'income' : 'outcome',
         'ratioToTotal': ratioToTotal.toString(),
         'profileId': profileId,
-        'needSync': 'TRUE',
+        'needSync': 'YES',
       });
     } catch (error) {
       if (kDebugMode) {
@@ -188,7 +188,7 @@ class TransactionProvider extends ChangeNotifier {
                 transaction['ratioToTotal'],
               ),
               profileId: transaction['profileId'],
-              needSync: transaction['needSync'] == 'TRUE' ? true : false,
+              needSync: transaction['needSync'] == 'YES' ? true : false,
             ),
           )
           .toList();
@@ -229,7 +229,7 @@ class TransactionProvider extends ChangeNotifier {
                 transaction['ratioToTotal'],
               ),
               profileId: transaction['profileId'],
-              needSync: transaction['needSync'] == 'TRUE' ? true : false,
+              needSync: transaction['needSync'] == 'YES' ? true : false,
             ),
           )
           .toList();
@@ -315,7 +315,7 @@ class TransactionProvider extends ChangeNotifier {
                 : 'outcome',
         'ratioToTotal': newTransaction.ratioToTotal.toString(),
         'profileId': newTransaction.profileId,
-        'needSync': newTransaction.needSync ? 'TRUE' : 'FALSE',
+        'needSync': newTransaction.needSync ? 'YES' : 'NO',
       });
     } catch (error) {
       if (kDebugMode) {

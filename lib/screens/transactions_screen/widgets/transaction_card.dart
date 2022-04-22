@@ -36,8 +36,13 @@ class TranscationCard extends StatelessWidget {
       title: 'Delete Transaction?',
       btnCancelOnPress: () {},
       btnOkOnPress: () async {
-        deleteTransaction(context, transaction);
-        confirmDelete = true;
+        try {
+          await deleteTransaction(context, transaction);
+          confirmDelete = true;
+        } catch (error) {
+          showSnackBar(context, error.toString(), SnackBarType.error);
+          confirmDelete = false;
+        }
       },
     ).show();
 
@@ -166,15 +171,15 @@ class TranscationCard extends StatelessWidget {
                     width: kDefaultPadding / 4,
                   ),
                   //* for deleting a transactions
-                  CardActionButton(
-                    iconData: FontAwesomeIcons.trash,
-                    color:
-                        themeProvider.getThemeColor(ThemeColors.kDeleteColor),
-                    backgroundColor: themeProvider
-                        .getThemeColor(ThemeColors.kMainBackgroundColor),
-                    //? here i need to show dialog before actually deleting a transaction
-                    onTap: () => showDeleteCustomDialog(context),
-                  ),
+                  // CardActionButton(
+                  //   iconData: FontAwesomeIcons.trash,
+                  //   color:
+                  //       themeProvider.getThemeColor(ThemeColors.kDeleteColor),
+                  //   backgroundColor: themeProvider
+                  //       .getThemeColor(ThemeColors.kMainBackgroundColor),
+                  //   //? here i need to show dialog before actually deleting a transaction
+                  //   onTap: () => showDeleteCustomDialog(context),
+                  // ),
                 ],
               ),
             )

@@ -216,7 +216,7 @@ Future<void> editQuickAction({
   try {
     //* sending the updating info to the provider
     await Provider.of<QuickActionsProvider>(context, listen: false)
-        .editQuickAction(id, newQuickAction);
+        .editQuickAction(newQuickAction);
     showSnackBar(context, 'Quick Action Updated', SnackBarType.success);
     Navigator.pop(context);
   } catch (error) {
@@ -230,25 +230,20 @@ Future<void> deleteTransaction(
   //* update the profile before deleting the transaction
   //* getting the current deleted transaction amount and transaction type
 
-  try {
-    await Provider.of<TransactionProvider>(context, listen: false)
-        .deleteTransaction(transaction.id);
-    showSnackBar(context, 'Transaction Deleted', SnackBarType.info);
+  await Provider.of<TransactionProvider>(context, listen: false)
+      .deleteTransaction(transaction.id);
+  showSnackBar(context, 'Transaction Deleted', SnackBarType.info);
 
-    //* getting the curret active profile to update it
-    ProfileModel activeProfile =
-        Provider.of<ProfilesProvider>(context, listen: false).getActiveProfile;
-    //* checking the transaction type to update the profile according to that
-    if (transaction.transactionType == TransactionType.income) {
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .editActiveProfile(income: activeProfile.income - transaction.amount);
-    } else if (transaction.transactionType == TransactionType.outcome) {
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .editActiveProfile(
-              outcome: activeProfile.outcome - transaction.amount);
-    }
-  } catch (error) {
-    showSnackBar(context, error.toString(), SnackBarType.error);
+  //* getting the curret active profile to update it
+  ProfileModel activeProfile =
+      Provider.of<ProfilesProvider>(context, listen: false).getActiveProfile;
+  //* checking the transaction type to update the profile according to that
+  if (transaction.transactionType == TransactionType.income) {
+    await Provider.of<ProfilesProvider>(context, listen: false)
+        .editActiveProfile(income: activeProfile.income - transaction.amount);
+  } else if (transaction.transactionType == TransactionType.outcome) {
+    await Provider.of<ProfilesProvider>(context, listen: false)
+        .editActiveProfile(outcome: activeProfile.outcome - transaction.amount);
   }
 }
 

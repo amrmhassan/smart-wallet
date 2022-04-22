@@ -16,11 +16,16 @@ import '../../../constants/sizes.dart';
 import '../../add_transaction_screen/add_transaction_screen.dart';
 import 'quick_action_card.dart';
 
-class QuickActionsCardsGrid extends StatelessWidget {
+class QuickActionsCardsGrid extends StatefulWidget {
   const QuickActionsCardsGrid({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<QuickActionsCardsGrid> createState() => _QuickActionsCardsGridState();
+}
+
+class _QuickActionsCardsGridState extends State<QuickActionsCardsGrid> {
   void openAddQuickActionScreen(BuildContext context) {
     var quickActions = Provider.of<QuickActionsProvider>(
       context,
@@ -50,7 +55,7 @@ class QuickActionsCardsGrid extends StatelessWidget {
       quickActions.length,
       (index) => QuickActionCard(
         //! this key will be the quickaction[index].index (a property from the quick action model)
-        key: Key(index.toString()),
+        key: Key(quickActions[index].id),
         amount: quickActions[index].amount * 1.00,
         title: quickActions[index].title,
         description: quickActions[index].description,
@@ -131,6 +136,8 @@ class QuickActionsCardsGrid extends StatelessWidget {
                   await Provider.of<QuickActionsProvider>(context,
                           listen: false)
                       .updateFavoriteQuickActionsIndex(quickActions);
+                  //? this line is very important(without it the quick actions won't change order if reordered)
+                  setState(() {});
                 },
                 longPressDelay: Duration(
                   milliseconds: 200,
