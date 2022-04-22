@@ -63,7 +63,9 @@ class ProfilesProvider extends ChangeNotifier {
     //* before loading them from the database
     // fix that error , this will create an error first time the app loads cause
     // i think this is called before the profiles loads
-    return _profiles.firstWhere((element) => element.id == activatedProfileId);
+    return _profiles.firstWhere(
+      (element) => element.id == activatedProfileId,
+    );
   }
 
   //? getting profile age
@@ -123,28 +125,15 @@ class ProfilesProvider extends ChangeNotifier {
           return profileModel;
         },
       ).toList();
-      //? i was trying to make the activated profiles come first
-      //? it will need some more thinking and planning
-      //! replace this with the reordable list
 
-      // List<ProfileModel> activatedBefore = fetchedProfiles
-      //     .where((element) => element.lastActivatedDate != null)
-      //     .toList();
-      // List<ProfileModel> neverActivated = fetchedProfiles
-      //     .where((element) => element.lastActivatedDate == null)
-      //     .toList();
-
-      // activatedBefore.sort((a, b) {
-      //   return a.lastActivatedDate!.compareTo(b.lastActivatedDate!);
-      // });
       fetchedProfiles.sort((a, b) {
         return a.createdAt.difference(b.createdAt).inSeconds;
       });
       _profiles = fetchedProfiles;
     } catch (error) {
       if (kDebugMode) {
-        print(error.toString());
         print('Error fetching profiles from the database');
+        rethrow;
       }
       // rethrow;
     }
@@ -205,7 +194,6 @@ class ProfilesProvider extends ChangeNotifier {
   }
 
   Future<void> changeSyncFlag(String id, SyncFlags newSyncFlag) async {
-    ProfileModel profile = getProfileById(id);
     await editProfile(id: id, syncFlags: newSyncFlag);
   }
 

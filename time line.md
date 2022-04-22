@@ -73,6 +73,8 @@ in each data provider(profile, transactions, quick actions)
 make a variable that will return an array of data needing to be synced wit ha flag of what you need to do
 for example this will return an array of ProfileSync(flag:SyncFlags.add, profile:ProfileModel)
 and the same for transactions and quick actions
+add a method for each model to convert it to json or from json
+-- i will use this methods to save the model to the database or fetch it from the data base
 
 
 

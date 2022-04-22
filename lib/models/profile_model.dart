@@ -13,7 +13,6 @@ class ProfileModel {
   DateTime createdAt;
   DateTime? lastActivatedDate;
   String? userId;
-  late bool needSync;
   SyncFlags syncFlag;
 
   late MoneyAccountStatus moneyAccountStatus;
@@ -49,12 +48,6 @@ class ProfileModel {
       moneyAccountStatus = MoneyAccountStatus.moderate;
     } else {
       moneyAccountStatus = MoneyAccountStatus.critical;
-    }
-    //? for setting the need sync
-    if (syncFlag != SyncFlags.none) {
-      needSync == true;
-    } else {
-      needSync = false;
     }
   }
 }

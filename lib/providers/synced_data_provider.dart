@@ -22,9 +22,9 @@ class SyncedDataProvider extends ChangeNotifier {
     try {
       for (var profile in profilesProvider.profiles) {
         if (kDebugMode) {
-          print(' profile ${profile.needSync}');
+          print(' profile ${profile.syncFlag != SyncFlags.none}');
         }
-        if (profile.needSync) {
+        if (profile.syncFlag == SyncFlags.add) {
           await addProfile(profile);
           await profilesProvider.changeSyncFlag(profile.id, SyncFlags.none);
         }
