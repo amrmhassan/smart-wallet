@@ -30,7 +30,13 @@ class ProfilesProvider extends ChangeNotifier {
 
   //? getting profiles
   List<ProfileModel> get profiles {
-    return [..._profiles.reversed.toList()];
+    return [
+      ..._profiles
+          .where((element) => element.deleted == false)
+          .toList()
+          .reversed
+          .toList()
+    ];
   }
 
   //? getting the total money in all profiles
@@ -120,6 +126,7 @@ class ProfilesProvider extends ChangeNotifier {
                 ? null
                 : DateTime.parse(profile['lastActivatedDate']),
             syncFlag: stringToSyncFlag(profile['syncFlag']),
+            deleted: profile['deleted'] == 'YES' ? true : false,
           );
 
           return profileModel;
@@ -172,6 +179,7 @@ class ProfilesProvider extends ChangeNotifier {
         'outcome': 0,
         'createdAt': createdAt.toIso8601String(),
         'syncFlag': SyncFlags.add.name,
+        'deleted': "NO",
       });
     } catch (error) {
       if (kDebugMode) {
@@ -187,6 +195,7 @@ class ProfilesProvider extends ChangeNotifier {
       outcome: 0,
       createdAt: createdAt,
       syncFlag: SyncFlags.add,
+      deleted: false,
     );
     _profiles.add(newProfile);
     notifyListeners();
@@ -198,20 +207,21 @@ class ProfilesProvider extends ChangeNotifier {
   }
 
   //? editing an existing profile
-  Future<void> editProfile({
-    required String id,
-    String? name,
-    double? income,
-    double? outcome,
-    DateTime? lastActivatedDate,
-    SyncFlags? syncFlags,
-  }) async {
+  Future<void> editProfile(
+      {required String id,
+      String? name,
+      double? income,
+      double? outcome,
+      DateTime? lastActivatedDate,
+      SyncFlags? syncFlags,
+      bool? deleted}) async {
     //* rejecting edit if no argument is provided
     if (name == null &&
         income == null &&
         outcome == null &&
         lastActivatedDate == null &&
-        syncFlags == null) {
+        syncFlags == null &&
+        deleted == null) {
       throw CustomError(
           'You must enter one argument at least to edit the profile');
     }
@@ -243,6 +253,7 @@ class ProfilesProvider extends ChangeNotifier {
         (editedProfile.syncFlag == SyncFlags.add
             ? SyncFlags.add
             : SyncFlags.edit);
+    bool newDeleted = deleted ?? false;
     //* edit the profile in database first
     try {
       await DBHelper.insert(profilesTableName, {
@@ -255,6 +266,7 @@ class ProfilesProvider extends ChangeNotifier {
             ? 'null'
             : newLastActiveDate.toIso8601String(),
         'syncFlag': newSyncFlag.name,
+        'deleted': newDeleted ? 'YES' : 'NO',
       });
 
       //* edit it on the _profiles
@@ -268,6 +280,7 @@ class ProfilesProvider extends ChangeNotifier {
         createdAt: createdAt,
         lastActivatedDate: newLastActiveDate,
         syncFlag: newSyncFlag,
+        deleted: newDeleted,
       );
       _profiles.insert(index, newProfile);
       notifyListeners();
@@ -304,18 +317,7 @@ class ProfilesProvider extends ChangeNotifier {
     if (profileId == activatedProfileId) {
       throw CustomError('You can\'t delete the active profile');
     }
-    _profiles.removeWhere((element) => element.id == profileId);
-
-    //* delete from the database second
-    try {
-      await DBHelper.deleteById(profileId, profilesTableName);
-    } catch (error) {
-      if (kDebugMode) {
-        print(error);
-        print('An error occurred during deleting a profile');
-      }
-    }
-    notifyListeners();
+    return editProfile(id: profileId, deleted: true);
   }
 
   //? edit the last active property when activating a profile

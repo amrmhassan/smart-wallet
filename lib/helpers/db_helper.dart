@@ -17,7 +17,7 @@ class DBHelper {
             'CREATE TABLE $transactionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT, ratioToTotal TEXT, profileId TEXT, needSync TEXT )');
         //* creating profiles table
         await db.execute(
-            'CREATE TABLE $profilesTableName (id TEXT PRIMARY KEY,name TEXT, income TEXT, outcome TEXT, createdAt TEXT, lastActivatedDate TEXT , syncFlag TEXT)');
+            'CREATE TABLE $profilesTableName (id TEXT PRIMARY KEY,name TEXT, income TEXT, outcome TEXT, createdAt TEXT, lastActivatedDate TEXT , syncFlag TEXT, deleted TEXT)');
         //* creating quick actions table
         return db.execute(
             'CREATE TABLE $quickActionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT,  isFavorite TEXT, profileId TEXT , quickActionIndex TEXT, needSync TEXT )');

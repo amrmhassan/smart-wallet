@@ -14,6 +14,7 @@ class ProfileModel {
   DateTime? lastActivatedDate;
   String? userId;
   SyncFlags syncFlag;
+  bool deleted;
 
   late MoneyAccountStatus moneyAccountStatus;
   late double totalMoney;
@@ -28,6 +29,7 @@ class ProfileModel {
     this.lastActivatedDate,
     this.userId,
     this.syncFlag = SyncFlags.none,
+    this.deleted = false,
   }) {
     //? for setting the total money
     //* the total money equals to income - outcome
