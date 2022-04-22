@@ -54,7 +54,6 @@ class _QuickActionsCardsGridState extends State<QuickActionsCardsGrid> {
     final generatedQuickActions = List.generate(
       quickActions.length,
       (index) => QuickActionCard(
-        //! this key will be the quickaction[index].index (a property from the quick action model)
         key: Key(quickActions[index].id),
         amount: quickActions[index].amount * 1.00,
         title: quickActions[index].title,
@@ -62,7 +61,7 @@ class _QuickActionsCardsGridState extends State<QuickActionsCardsGrid> {
         transactionType: quickActions[index].transactionType,
         onTap: () async {
           QuickActionModel q = quickActions[index];
-          //! an error here after changing the order and applying the quick action it apply the older quick action that was in it's place instead of the new quick Action
+          // an error here after changing the order and applying the quick action it apply the older quick action that was in it's place instead of the new quick Action
           return showApplyQuickActionDialog(
             context,
             QuickActionModel(

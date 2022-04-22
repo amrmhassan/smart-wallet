@@ -26,8 +26,12 @@ class SyncedDataProvider extends ChangeNotifier {
         }
         if (profile.syncFlag == SyncFlags.add) {
           await addProfile(profile);
-          await profilesProvider.changeSyncFlag(profile.id, SyncFlags.none);
+        } else if (profile.syncFlag == SyncFlags.edit) {
+          await updateProfile(profile);
+        } else {
+          // await deleteProfile(profile);
         }
+        await profilesProvider.changeSyncFlag(profile.id, SyncFlags.none);
       }
       for (var transaction in transactionProvider.allTransactions) {
         if (kDebugMode) {
@@ -57,6 +61,25 @@ class SyncedDataProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> updateProfile(ProfileModel profile) async {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    var dbRef = FirebaseFirestore.instance;
+    await dbRef
+        .collection(usersCollectionName)
+        .doc(userId)
+        .collection(profilesCollectionName)
+        .doc(profile.id)
+        .update(profile.toJSON());
+
+//   Future<void> updateUser() {
+//   return users
+//     .doc('ABC123')
+//     .update({'company': 'Stokes and Sons'})
+//     .then((value) => print("User Updated"))
+//     .catchError((error) => print("Failed to update user: $error"));
+// }
+  }
+
   Future<void> addProfile(
     ProfileModel profile,
   ) async {
@@ -67,17 +90,8 @@ class SyncedDataProvider extends ChangeNotifier {
         .collection(usersCollectionName)
         .doc(userId)
         .collection(profilesCollectionName)
-        .add({
-      'createdAt': profile.createdAt.toIso8601String(),
-      'id': profile.id,
-      'income': profile.income,
-      'lastActivatedDate': profile.lastActivatedDate == null
-          ? 'null'
-          : profile.lastActivatedDate!.toIso8601String(),
-      'name': profile.name,
-      'outcome': profile.outcome,
-      'userId': userId,
-    });
+        .doc(profile.id)
+        .set(profile.toJSON());
   }
 
   Future<void> addTransaction(TransactionModel transactionModel) async {

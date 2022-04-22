@@ -50,4 +50,18 @@ class ProfileModel {
       moneyAccountStatus = MoneyAccountStatus.critical;
     }
   }
+
+  Map<String, dynamic> toJSON() {
+    return {
+      'id': id,
+      'createdAt': createdAt.toIso8601String(),
+      'income': income,
+      'lastActivatedDate': lastActivatedDate == null
+          ? 'null'
+          : lastActivatedDate!.toIso8601String(),
+      'name': name,
+      'outcome': outcome,
+      'userId': userId,
+    };
+  }
 }

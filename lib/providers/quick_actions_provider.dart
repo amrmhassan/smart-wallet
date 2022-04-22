@@ -131,8 +131,6 @@ class QuickActionsProvider extends ChangeNotifier {
 
       List<QuickActionModel> fetchedQuickActions = data.map(
         (quickAction) {
-          var test = quickAction['isFavorite'];
-          print(quickAction['isFavorite']);
           return QuickActionModel(
             id: quickAction['id'],
             title: quickAction['title'],

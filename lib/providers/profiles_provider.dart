@@ -236,7 +236,13 @@ class ProfilesProvider extends ChangeNotifier {
     DateTime createdAt = editedProfile.createdAt;
     DateTime? newLastActiveDate =
         lastActivatedDate ?? editedProfile.lastActivatedDate;
-    SyncFlags newSyncFlag = syncFlags ?? editedProfile.syncFlag;
+    //? if syncFlags is null, check if the profile flag is add to add it cause it won't be there is firestore for editing
+    //? and if it not add then mark it as edit
+    //? and if the syncFlags is set it will be only SyncFlags.none
+    SyncFlags newSyncFlag = syncFlags ??
+        (editedProfile.syncFlag == SyncFlags.add
+            ? SyncFlags.add
+            : SyncFlags.edit);
     //* edit the profile in database first
     try {
       await DBHelper.insert(profilesTableName, {
