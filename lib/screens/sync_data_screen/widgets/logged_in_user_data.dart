@@ -60,10 +60,10 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
         quickActionsProvider,
       );
 
-      // await Provider.of<TransactionProvider>(context, listen: false)
-      //     .fetchAndUpdateAllTransactions();
-      // await Provider.of<QuickActionsProvider>(context, listen: false)
-      //     .fetchAndUpdateAllQuickActions();
+      await Provider.of<TransactionProvider>(context, listen: false)
+          .fetchAndUpdateAllTransactions();
+      await Provider.of<QuickActionsProvider>(context, listen: false)
+          .fetchAndUpdateAllQuickActions();
       setState(() {
         _syncing = false;
       });
@@ -90,11 +90,11 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
         SizedBox(
           height: kDefaultPadding,
         ),
-        _syncing
-            ? Text('Syncing')
-            : SyncDataButton(
-                onTap: () async => await syncData(context),
-              ),
+
+        SyncDataButton(
+          onTap: () async => await syncData(context),
+          syncing: _syncing,
+        ),
 
         SizedBox(
           height: kDefaultPadding / 2,

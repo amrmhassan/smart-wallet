@@ -8,10 +8,12 @@ import 'package:smart_wallet/providers/theme_provider.dart';
 
 class SyncDataButton extends StatelessWidget {
   final VoidCallback onTap;
+  final bool syncing;
 
   const SyncDataButton({
     Key? key,
     required this.onTap,
+    required this.syncing,
   }) : super(key: key);
 
   @override
@@ -30,12 +32,12 @@ class SyncDataButton extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: onTap,
+            onTap: syncing ? null : onTap,
             child: Container(
               padding: EdgeInsets.symmetric(vertical: kDefaultPadding / 3),
               alignment: Alignment.center,
               child: Text(
-                'Sync Data',
+                syncing ? 'Syncing...' : 'Sync Data',
                 style: themeProvider
                     .getTextStyle(ThemeTextStyles.kActivateProfileTextStyle),
               ),
