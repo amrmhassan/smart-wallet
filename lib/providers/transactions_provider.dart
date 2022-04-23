@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:smart_wallet/constants/db_shortage_constants.dart';
+import 'package:smart_wallet/models/synced_elements_model.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/utils/trans_periods_utils.dart';
 import '../constants/db_constants.dart';
@@ -10,20 +11,24 @@ import '../models/transaction_model.dart';
 
 class TransactionProvider extends ChangeNotifier {
   //? all profile transactions
-  List<TransactionModel> transactions = [];
+  List<TransactionModel> _transactions = [];
   List<TransactionModel> allTransactions = [];
 
   List<TransactionModel> get notSyncedTransactions {
     return allTransactions
-        .where((element) => element.needSync == true)
+        .where((element) => element.syncFlag != SyncFlags.none)
         .toList();
   }
 
-  List<TransactionModel> getProfileTransactions(String profileId) {
-    return transactions
-        .where((element) => element.profileId == profileId)
-        .toList();
+  List<TransactionModel> get transactions {
+    return _transactions.where((element) => element.deleted == false).toList();
   }
+  // List<TransactionModel> getProfileTransactions(String profileId) {
+  //   return transactions
+  //       .where((element) =>
+  //           (element.profileId == profileId && element.deleted == false))
+  //       .toList();
+  // }
 
 //? getting income transactions
   List<TransactionModel> get _incomeTransactions {
@@ -101,7 +106,7 @@ class TransactionProvider extends ChangeNotifier {
 
 //? getting a transaction by id
   TransactionModel getTransactionById(String id) {
-    return transactions.firstWhere((element) => element.id == id);
+    return allTransactions.firstWhere((element) => element.id == id);
   }
 
 //? getting the last transaction in the list
@@ -144,7 +149,8 @@ class TransactionProvider extends ChangeNotifier {
             transactionType == TransactionType.income ? 'income' : 'outcome',
         'ratioToTotal': ratioToTotal.toString(),
         'profileId': profileId,
-        'needSync': dbTrue,
+        'syncFlag': SyncFlags.add.name,
+        'deleted': dbFalse,
       });
     } catch (error) {
       if (kDebugMode) {
@@ -163,8 +169,10 @@ class TransactionProvider extends ChangeNotifier {
       transactionType: transactionType,
       ratioToTotal: ratioToTotal,
       profileId: profileId,
+      syncFlag: SyncFlags.add,
+      deleted: false,
     );
-    transactions.add(newTransaction);
+    _transactions.add(newTransaction);
     notifyListeners();
   }
 
@@ -189,7 +197,8 @@ class TransactionProvider extends ChangeNotifier {
                 transaction['ratioToTotal'],
               ),
               profileId: transaction['profileId'],
-              needSync: transaction['needSync'] == dbTrue ? true : false,
+              deleted: transaction['deleted'] == dbTrue ? true : false,
+              syncFlag: stringToSyncFlag(transaction['syncFlag']),
             ),
           )
           .toList();
@@ -197,7 +206,7 @@ class TransactionProvider extends ChangeNotifier {
       fetchedTransactions.sort((a, b) {
         return a.createdAt.difference(b.createdAt).inSeconds;
       });
-      transactions = fetchedTransactions;
+      _transactions = fetchedTransactions;
 
       notifyListeners();
     } catch (error) {
@@ -230,7 +239,8 @@ class TransactionProvider extends ChangeNotifier {
                 transaction['ratioToTotal'],
               ),
               profileId: transaction['profileId'],
-              needSync: transaction['needSync'] == dbTrue ? true : false,
+              deleted: transaction['deleted'] == dbTrue ? true : false,
+              syncFlag: stringToSyncFlag(transaction['syncFlag']),
             ),
           )
           .toList();
@@ -247,53 +257,27 @@ class TransactionProvider extends ChangeNotifier {
 //? deleting a transaction by id
   Future<void> deleteTransaction(String id) async {
     //* if that transaction is income and deleting it will make the total by negative then throw an error that you can't delete that transaction , you can only edit it to a lower amount but not lower than the current total amount in that profile
-    transactions.removeWhere((element) {
-      if (element.transactionType == TransactionType.income &&
-          element.amount > totalMoney &&
-          element.id == id) {
-        throw CustomError(
-            'Your total balance will be negative, you can\'t delete it.');
-      }
-      return element.id == id;
-    });
+    TransactionModel deletedTransaction = getTransactionById(id);
+    deletedTransaction.deleted = true;
 
-    //* delete from the database second
-    try {
-      await DBHelper.deleteById(id, transactionsTableName);
-    } catch (error) {
-      if (kDebugMode) {
-        print(error);
-        print('An error occurred during deleting a transaction');
-      }
+    if (deletedTransaction.syncFlag == SyncFlags.add) {
+      return editTransaction(id, deletedTransaction);
+    } else {
+      deletedTransaction.syncFlag = SyncFlags.delete;
+      return editTransaction(id, deletedTransaction);
     }
-    notifyListeners();
   }
 
-  Future<void> toggleTransactionNeedSync(String id) async {
+  Future<void> changeSyncFlag(String id, SyncFlags newSyncFlag) async {
     TransactionModel transaction = getTransactionById(id);
-    transaction.needSync = !transaction.needSync;
-    await editTransaction(id, transaction);
+    transaction.syncFlag = newSyncFlag;
+
+    return editTransaction(id, transaction);
   }
 
 //? editing a transaction
   Future<void> editTransaction(
       String transactionId, TransactionModel newTransaction) async {
-    //* i commented this cause it has no value
-    // //* first checking if the transaction exist in the transactions
-
-    // TransactionModel? oldTransaction;
-    // try {
-    //   oldTransaction =
-    //       transactions.firstWhere((element) => element.id == transactionId);
-    // } catch (error) {
-    //   //* this transaction doesn't exist in the transactions
-    //   rethrow;
-    // }
-    // //* return if the transaction doesn't exist
-    // if (oldTransaction == null) {
-    //   throw CustomError('This transaction doesn\'t exit to be deleted');
-    // }
-
     //* checking if the transactin is outcome and the it is greater than the current total money
     //* this is the amount that should be compared to the amount of the newTransaction
     double newAmount = totalMoney - newTransaction.amount;
@@ -316,7 +300,8 @@ class TransactionProvider extends ChangeNotifier {
                 : 'outcome',
         'ratioToTotal': newTransaction.ratioToTotal.toString(),
         'profileId': newTransaction.profileId,
-        'needSync': newTransaction.needSync ? dbTrue : dbFalse,
+        'syncFlag': newTransaction.syncFlag.name,
+        'deleted': newTransaction.deleted ? dbTrue : dbFalse,
       });
     } catch (error) {
       if (kDebugMode) {
@@ -325,9 +310,10 @@ class TransactionProvider extends ChangeNotifier {
       rethrow;
     }
     int transactionIndex =
-        transactions.indexWhere((element) => element.id == transactionId);
-    transactions.removeWhere((element) => element.id == transactionId);
-    transactions.insert(transactionIndex, newTransaction);
+        _transactions.indexWhere((element) => element.id == transactionId);
+    _transactions.removeWhere((element) => element.id == transactionId);
+    _transactions.insert(transactionIndex, newTransaction);
+
     notifyListeners();
   }
 

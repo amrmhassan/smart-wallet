@@ -14,7 +14,7 @@ class DBHelper {
       onCreate: (db, version) async {
         //* creating transactions table
         await db.execute(
-            'CREATE TABLE $transactionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT, ratioToTotal TEXT, profileId TEXT, needSync TEXT )');
+            'CREATE TABLE $transactionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT, ratioToTotal TEXT, profileId TEXT, syncFlag TEXT, deleted TEXT  )');
         //* creating profiles table
         await db.execute(
             'CREATE TABLE $profilesTableName (id TEXT PRIMARY KEY,name TEXT, income TEXT, outcome TEXT, createdAt TEXT, lastActivatedDate TEXT , syncFlag TEXT, deleted TEXT)');

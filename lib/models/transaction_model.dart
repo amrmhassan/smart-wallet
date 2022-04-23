@@ -1,5 +1,6 @@
 import '../constants/types.dart';
 
+//! remove the needSync property from the transaction model and it's followers
 class TransactionModel {
   String id;
   String title;
@@ -11,7 +12,8 @@ class TransactionModel {
   double ratioToTotal;
   String profileId;
   String? userID;
-  bool needSync;
+  bool deleted;
+  SyncFlags syncFlag;
 
   TransactionModel({
     required this.id,
@@ -23,6 +25,22 @@ class TransactionModel {
     required this.ratioToTotal,
     required this.profileId,
     this.userID,
-    this.needSync = true,
+    this.deleted = false,
+    this.syncFlag = SyncFlags.none,
   });
+
+  Map<String, dynamic> toJSON() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'amount': amount,
+      'createdAt': createdAt,
+      'transactionType': transactionType.name,
+      'ratioToTotal': ratioToTotal,
+      'profileId': profileId,
+      'userID': userID,
+      'deleted': deleted,
+    };
+  }
 }

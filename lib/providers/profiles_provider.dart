@@ -31,8 +31,6 @@ class ProfilesProvider extends ChangeNotifier {
 
   //? getting not deleted profiles
   List<ProfileModel> get profiles {
-    var p = _profiles;
-
     return [
       ..._profiles
           .where((element) => element.deleted == false)
@@ -188,7 +186,7 @@ class ProfilesProvider extends ChangeNotifier {
         'outcome': 0,
         'createdAt': createdAt.toIso8601String(),
         'syncFlag': SyncFlags.add.name,
-        'deleted': "NO",
+        'deleted': dbFalse,
       });
     } catch (error) {
       if (kDebugMode) {

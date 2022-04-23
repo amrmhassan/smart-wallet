@@ -20,26 +20,27 @@ class SyncedDataProvider extends ChangeNotifier {
       TransactionProvider transactionProvider,
       QuickActionsProvider quickActionsProvider) async {
     try {
-      for (var profile in profilesProvider.allProfiles) {
+      for (var profile in profilesProvider.notSyncedProfiles) {
         if (profile.syncFlag == SyncFlags.add) {
           await addProfile(profile);
         } else if (profile.syncFlag == SyncFlags.edit) {
           await updateProfile(profile);
         } else if (profile.syncFlag == SyncFlags.delete) {
-          //* for deleting a profile i will just update the deleted property in the profile to be true
           await updateProfile(profile);
         }
         await profilesProvider.changeSyncFlag(profile.id, SyncFlags.none);
       }
       for (var transaction in transactionProvider.allTransactions) {
-        if (kDebugMode) {
-          print(' transaction ${transaction.needSync}');
+        if (transaction.syncFlag == SyncFlags.add) {
+          await addTransaction(transaction);
+        } else if (transaction.syncFlag == SyncFlags.edit) {
+          await editTransaction(transaction);
+        } else if (transaction.syncFlag == SyncFlags.delete) {
+          await editTransaction(transaction);
         }
 
-        if (transaction.needSync) {
-          await addTransaction(transaction);
-          await transactionProvider.toggleTransactionNeedSync(transaction.id);
-        }
+        await transactionProvider.changeSyncFlag(
+            transaction.id, SyncFlags.none);
       }
 
       for (var quickAction in quickActionsProvider.allQuickActions) {
@@ -57,17 +58,6 @@ class SyncedDataProvider extends ChangeNotifier {
         print(error.toString());
       }
     }
-  }
-
-  Future<void> updateProfile(ProfileModel profile) async {
-    String userId = FirebaseAuth.instance.currentUser!.uid;
-    var dbRef = FirebaseFirestore.instance;
-    await dbRef
-        .collection(usersCollectionName)
-        .doc(userId)
-        .collection(profilesCollectionName)
-        .doc(profile.id)
-        .update(profile.toJSON());
   }
 
   Future<void> addProfile(
@@ -92,20 +82,31 @@ class SyncedDataProvider extends ChangeNotifier {
         .collection(usersCollectionName)
         .doc(userId)
         .collection(transactionsCollectionName)
-        .add({
-      'id': transactionModel.id,
-      'title': transactionModel.title,
-      'description': transactionModel.description,
-      'amount': transactionModel.amount,
-      'createdAt': transactionModel.createdAt,
-      'transactionType':
-          transactionModel.transactionType == TransactionType.income
-              ? 'income'
-              : 'outcome',
-      'ratioToTotal': transactionModel.ratioToTotal,
-      'profileId': transactionModel.profileId,
-      'userId': userId,
-    });
+        .doc(transactionModel.id)
+        .set(transactionModel.toJSON());
+  }
+
+  Future<void> updateProfile(ProfileModel profile) async {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    var dbRef = FirebaseFirestore.instance;
+    await dbRef
+        .collection(usersCollectionName)
+        .doc(userId)
+        .collection(profilesCollectionName)
+        .doc(profile.id)
+        .update(profile.toJSON());
+  }
+
+  Future<void> editTransaction(TransactionModel transactionModel) async {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    var dbRef = FirebaseFirestore.instance;
+
+    await dbRef
+        .collection(usersCollectionName)
+        .doc(userId)
+        .collection(transactionsCollectionName)
+        .doc(transactionModel.id)
+        .update(transactionModel.toJSON());
   }
 
   Future<void> addQuickAction(QuickActionModel quickActionModel) async {

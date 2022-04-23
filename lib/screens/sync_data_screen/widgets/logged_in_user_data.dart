@@ -43,6 +43,7 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
       setState(() {
         _syncing = true;
       });
+
       var profileProvider =
           Provider.of<ProfilesProvider>(context, listen: false);
       var transactionProvider =
@@ -93,13 +94,7 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
             : SyncDataButton(
                 onTap: () async => await syncData(context),
               ),
-        // ElevatedButton(
-        //   onPressed: () async {
-        //     await Provider.of<SyncedDataProvider>(context, listen: false)
-        //         .fetchSyncedProfiles();
-        //   },
-        //   child: Text('Fetch Synced Data'),
-        // ),
+
         SizedBox(
           height: kDefaultPadding / 2,
         ),
