@@ -288,6 +288,7 @@ class QuickActionsProvider extends ChangeNotifier {
     } else {
       newQuickAction.quickActionIndex == null;
     }
+    newQuickAction.syncFlag = SyncFlags.edit;
 
     return editQuickAction(newQuickAction);
   }
