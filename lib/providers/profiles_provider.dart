@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:smart_wallet/constants/db_shortage_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/models/synced_elements_model.dart';
 import 'package:uuid/uuid.dart';
@@ -28,8 +29,10 @@ class ProfilesProvider extends ChangeNotifier {
     return _activatedProfileId;
   }
 
-  //? getting profiles
+  //? getting not deleted profiles
   List<ProfileModel> get profiles {
+    var p = _profiles;
+
     return [
       ..._profiles
           .where((element) => element.deleted == false)
@@ -37,6 +40,11 @@ class ProfilesProvider extends ChangeNotifier {
           .reversed
           .toList()
     ];
+  }
+
+  //? getting all profiles with the deleted ones (will be used for syncing)
+  List<ProfileModel> get allProfiles {
+    return [..._profiles];
   }
 
   //? getting the total money in all profiles
@@ -122,11 +130,12 @@ class ProfilesProvider extends ChangeNotifier {
             income: double.parse(profile['income']),
             outcome: double.parse(profile['outcome']),
             createdAt: DateTime.parse(profile['createdAt']),
-            lastActivatedDate: profile['lastActivatedDate'] == null
+            lastActivatedDate: profile['lastActivatedDate'] == null ||
+                    profile['lastActivatedDate'] == 'null'
                 ? null
                 : DateTime.parse(profile['lastActivatedDate']),
             syncFlag: stringToSyncFlag(profile['syncFlag']),
-            deleted: profile['deleted'] == 'YES' ? true : false,
+            deleted: profile['deleted'] == dbTrue ? true : false,
           );
 
           return profileModel;
@@ -253,7 +262,7 @@ class ProfilesProvider extends ChangeNotifier {
         (editedProfile.syncFlag == SyncFlags.add
             ? SyncFlags.add
             : SyncFlags.edit);
-    bool newDeleted = deleted ?? false;
+    bool newDeleted = deleted ?? editedProfile.deleted;
     //* edit the profile in database first
     try {
       await DBHelper.insert(profilesTableName, {
@@ -266,7 +275,7 @@ class ProfilesProvider extends ChangeNotifier {
             ? 'null'
             : newLastActiveDate.toIso8601String(),
         'syncFlag': newSyncFlag.name,
-        'deleted': newDeleted ? 'YES' : 'NO',
+        'deleted': newDeleted ? dbTrue : dbFalse,
       });
 
       //* edit it on the _profiles
@@ -317,7 +326,15 @@ class ProfilesProvider extends ChangeNotifier {
     if (profileId == activatedProfileId) {
       throw CustomError('You can\'t delete the active profile');
     }
-    return editProfile(id: profileId, deleted: true);
+    //? here i need to check if the profile is flagged as add
+    //? if it is still new (add flag) then you can't update it in the firestore so you need to keep the add flag
+    ProfileModel profileToDelete = getProfileById(profileId);
+    if (profileToDelete.syncFlag == SyncFlags.add) {
+      return editProfile(id: profileId, deleted: true);
+    }
+    //* when deleting a profile that is still not added to the firestore yet it will be flagged as deleted
+    return editProfile(
+        id: profileId, deleted: true, syncFlags: SyncFlags.delete);
   }
 
   //? edit the last active property when activating a profile

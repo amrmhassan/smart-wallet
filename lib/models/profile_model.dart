@@ -56,14 +56,25 @@ class ProfileModel {
   Map<String, dynamic> toJSON() {
     return {
       'id': id,
-      'createdAt': createdAt.toIso8601String(),
+      'name': name,
       'income': income,
+      'outcome': outcome,
+      'createdAt': createdAt.toIso8601String(),
       'lastActivatedDate': lastActivatedDate == null
           ? 'null'
           : lastActivatedDate!.toIso8601String(),
-      'name': name,
-      'outcome': outcome,
       'userId': userId,
+      'deleted': deleted,
     };
+
+    //     String id;
+    // String name;
+    // double income;
+    // double outcome;
+    // DateTime createdAt;
+    // DateTime? lastActivatedDate;
+    // String? userId;
+    // SyncFlags syncFlag;
+    // bool deleted;
   }
 }

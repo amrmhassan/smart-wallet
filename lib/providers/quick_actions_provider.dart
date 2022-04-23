@@ -1,6 +1,7 @@
 // ignore_for_file: unused_element, prefer_const_constructors
 
 import 'package:flutter/foundation.dart';
+import 'package:smart_wallet/constants/db_shortage_constants.dart';
 import 'package:uuid/uuid.dart';
 import '../constants/db_constants.dart';
 import '../constants/types.dart';
@@ -96,10 +97,10 @@ class QuickActionsProvider extends ChangeNotifier {
         'createdAt': createdAt.toIso8601String(),
         'transactionType':
             transactionType == TransactionType.income ? 'income' : 'outcome',
-        'isFavorite': quickActions.isEmpty ? 'YES' : 'NO',
+        'isFavorite': quickActions.isEmpty ? dbTrue : dbFalse,
         'profileId': profileId,
         'quickActionIndex': quickActionIndex.toString(),
-        'needSync': 'YES',
+        'needSync': dbTrue,
       });
     } catch (error) {
       if (kDebugMode) {
@@ -142,12 +143,12 @@ class QuickActionsProvider extends ChangeNotifier {
                 : TransactionType.outcome,
 
             //? sqlite doesn't support bool datatype so i will store it as string then fetch it and decide
-            isFavorite: quickAction['isFavorite'] == 'YES' ? true : false,
+            isFavorite: quickAction['isFavorite'] == dbTrue ? true : false,
             profileId: quickAction['profileId'],
             quickActionIndex: quickAction['quickActionIndex'] == 'null'
                 ? null
                 : int.parse(quickAction['quickActionIndex']),
-            needSync: quickAction['needSync'] == 'YES' ? true : false,
+            needSync: quickAction['needSync'] == dbTrue ? true : false,
           );
         },
       ).toList();
@@ -187,12 +188,12 @@ class QuickActionsProvider extends ChangeNotifier {
                 : TransactionType.outcome,
 
             //? sqlite doesn't support bool datatype so i will store it as string then fetch it and decide
-            isFavorite: quickAction['isFavorite'] == 'YES' ? true : false,
+            isFavorite: quickAction['isFavorite'] == dbTrue ? true : false,
             profileId: quickAction['profileId'],
             quickActionIndex: quickAction['quickActionIndex'] == 'null'
                 ? null
                 : int.parse(quickAction['quickActionIndex']),
-            needSync: quickAction['needSync'] == 'YES' ? true : false,
+            needSync: quickAction['needSync'] == dbTrue ? true : false,
           );
         },
       ).toList();
@@ -243,10 +244,10 @@ class QuickActionsProvider extends ChangeNotifier {
             newQuickAction.transactionType == TransactionType.income
                 ? 'income'
                 : 'outcome',
-        'isFavorite': newQuickAction.isFavorite ? 'YES' : 'NO',
+        'isFavorite': newQuickAction.isFavorite ? dbTrue : dbFalse,
         'profileId': newQuickAction.profileId,
         'quickActionIndex': newQuickAction.quickActionIndex.toString(),
-        'needSync': newQuickAction.needSync ? 'YES' : 'NO',
+        'needSync': newQuickAction.needSync ? dbTrue : dbFalse,
       });
     } catch (error) {
       if (kDebugMode) {

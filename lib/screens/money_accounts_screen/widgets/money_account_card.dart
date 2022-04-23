@@ -163,7 +163,7 @@ class MoneyAccountCard extends StatelessWidget {
             //? that was for previewing the lastActivated date on each profile card for testing
             // Text(
             //   profileModel.lastActivatedDate == null
-            //        ? 'No'
+            //        ? dbFalse
             //       : profileModel.lastActivatedDate!.toIso8601String(),
             // ),
             Row(

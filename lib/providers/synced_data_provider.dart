@@ -20,16 +20,14 @@ class SyncedDataProvider extends ChangeNotifier {
       TransactionProvider transactionProvider,
       QuickActionsProvider quickActionsProvider) async {
     try {
-      for (var profile in profilesProvider.profiles) {
-        if (kDebugMode) {
-          print(' profile ${profile.syncFlag != SyncFlags.none}');
-        }
+      for (var profile in profilesProvider.allProfiles) {
         if (profile.syncFlag == SyncFlags.add) {
           await addProfile(profile);
         } else if (profile.syncFlag == SyncFlags.edit) {
           await updateProfile(profile);
-        } else {
-          // await deleteProfile(profile);
+        } else if (profile.syncFlag == SyncFlags.delete) {
+          //* for deleting a profile i will just update the deleted property in the profile to be true
+          await updateProfile(profile);
         }
         await profilesProvider.changeSyncFlag(profile.id, SyncFlags.none);
       }
@@ -70,14 +68,6 @@ class SyncedDataProvider extends ChangeNotifier {
         .collection(profilesCollectionName)
         .doc(profile.id)
         .update(profile.toJSON());
-
-//   Future<void> updateUser() {
-//   return users
-//     .doc('ABC123')
-//     .update({'company': 'Stokes and Sons'})
-//     .then((value) => print("User Updated"))
-//     .catchError((error) => print("Failed to update user: $error"));
-// }
   }
 
   Future<void> addProfile(

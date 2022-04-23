@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:smart_wallet/constants/db_shortage_constants.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/utils/trans_periods_utils.dart';
 import '../constants/db_constants.dart';
@@ -143,7 +144,7 @@ class TransactionProvider extends ChangeNotifier {
             transactionType == TransactionType.income ? 'income' : 'outcome',
         'ratioToTotal': ratioToTotal.toString(),
         'profileId': profileId,
-        'needSync': 'YES',
+        'needSync': dbTrue,
       });
     } catch (error) {
       if (kDebugMode) {
@@ -188,7 +189,7 @@ class TransactionProvider extends ChangeNotifier {
                 transaction['ratioToTotal'],
               ),
               profileId: transaction['profileId'],
-              needSync: transaction['needSync'] == 'YES' ? true : false,
+              needSync: transaction['needSync'] == dbTrue ? true : false,
             ),
           )
           .toList();
@@ -229,7 +230,7 @@ class TransactionProvider extends ChangeNotifier {
                 transaction['ratioToTotal'],
               ),
               profileId: transaction['profileId'],
-              needSync: transaction['needSync'] == 'YES' ? true : false,
+              needSync: transaction['needSync'] == dbTrue ? true : false,
             ),
           )
           .toList();
@@ -315,7 +316,7 @@ class TransactionProvider extends ChangeNotifier {
                 : 'outcome',
         'ratioToTotal': newTransaction.ratioToTotal.toString(),
         'profileId': newTransaction.profileId,
-        'needSync': newTransaction.needSync ? 'YES' : 'NO',
+        'needSync': newTransaction.needSync ? dbTrue : dbFalse,
       });
     } catch (error) {
       if (kDebugMode) {
