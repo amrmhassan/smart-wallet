@@ -106,7 +106,7 @@ class TransactionProvider extends ChangeNotifier {
 
 //? getting a transaction by id
   TransactionModel getTransactionById(String id) {
-    return allTransactions.firstWhere((element) => element.id == id);
+    return _transactions.firstWhere((element) => element.id == id);
   }
 
 //? getting the last transaction in the list
@@ -257,8 +257,10 @@ class TransactionProvider extends ChangeNotifier {
 //? deleting a transaction by id
   Future<void> deleteTransaction(String id) async {
     //* if that transaction is income and deleting it will make the total by negative then throw an error that you can't delete that transaction , you can only edit it to a lower amount but not lower than the current total amount in that profile
+    print('-----------------------------1');
     TransactionModel deletedTransaction = getTransactionById(id);
     deletedTransaction.deleted = true;
+    print('-----------------------------2');
 
     if (deletedTransaction.syncFlag == SyncFlags.add) {
       return editTransaction(id, deletedTransaction);

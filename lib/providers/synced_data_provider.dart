@@ -30,7 +30,7 @@ class SyncedDataProvider extends ChangeNotifier {
         }
         await profilesProvider.changeSyncFlag(profile.id, SyncFlags.none);
       }
-      for (var transaction in transactionProvider.allTransactions) {
+      for (var transaction in transactionProvider.notSyncedTransactions) {
         if (transaction.syncFlag == SyncFlags.add) {
           await addTransaction(transaction);
         } else if (transaction.syncFlag == SyncFlags.edit) {
@@ -57,6 +57,7 @@ class SyncedDataProvider extends ChangeNotifier {
       if (kDebugMode) {
         print(error.toString());
       }
+      rethrow;
     }
   }
 

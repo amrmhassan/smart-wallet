@@ -24,6 +24,7 @@ class AuthenticationProvider extends ChangeNotifier {
     } catch (error) {
       if (kDebugMode) {
         print(error.toString());
+        rethrow;
       }
     }
   }
@@ -36,6 +37,7 @@ class AuthenticationProvider extends ChangeNotifier {
       if (kDebugMode) {
         print(error);
       }
+      rethrow;
     }
   }
 }

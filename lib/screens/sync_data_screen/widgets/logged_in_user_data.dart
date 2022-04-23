@@ -60,10 +60,10 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
         quickActionsProvider,
       );
 
-      await Provider.of<TransactionProvider>(context, listen: false)
-          .fetchAndUpdateAllTransactions();
-      await Provider.of<QuickActionsProvider>(context, listen: false)
-          .fetchAndUpdateAllQuickActions();
+      // await Provider.of<TransactionProvider>(context, listen: false)
+      //     .fetchAndUpdateAllTransactions();
+      // await Provider.of<QuickActionsProvider>(context, listen: false)
+      //     .fetchAndUpdateAllQuickActions();
       setState(() {
         _syncing = false;
       });
@@ -71,6 +71,7 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
       if (kDebugMode) {
         print(error.toString());
       }
+      rethrow;
     }
   }
 

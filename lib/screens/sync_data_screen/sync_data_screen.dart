@@ -100,13 +100,10 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
                             StreamBuilder(
                               stream: FirebaseAuth.instance.authStateChanges(),
                               builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  //! a glitch occurs here when start syncing the data it start rendering that widget(Text)
-                                  return Text('Loading');
-                                } else if (snapshot.hasError) {
-                                  return Text('Error');
-                                } else if (snapshot.hasData) {
+                                if ((snapshot.hasData ||
+                                        snapshot.connectionState ==
+                                            ConnectionState.waiting) &&
+                                    snapshot.data != null) {
                                   User user = snapshot.data as User;
 
                                   return LoggedInUserData(

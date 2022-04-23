@@ -106,6 +106,7 @@ class ProfilesProvider extends ChangeNotifier {
       if (kDebugMode) {
         print('Error fetching activated profile id');
       }
+      rethrow;
     }
   }
 
@@ -147,9 +148,8 @@ class ProfilesProvider extends ChangeNotifier {
     } catch (error) {
       if (kDebugMode) {
         print('Error fetching profiles from the database');
-        rethrow;
       }
-      // rethrow;
+      rethrow;
     }
     notifyListeners();
   }
@@ -344,6 +344,7 @@ class ProfilesProvider extends ChangeNotifier {
         print(error);
         print('Error setting the lastActivated Property in the profile');
       }
+      rethrow;
     }
   }
 

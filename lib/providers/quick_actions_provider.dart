@@ -164,7 +164,7 @@ class QuickActionsProvider extends ChangeNotifier {
         print(error);
         print('Error fetching quick actions from the database');
       }
-      // rethrow;
+      rethrow;
     }
   }
 
@@ -204,7 +204,7 @@ class QuickActionsProvider extends ChangeNotifier {
         print(error);
         print('Error fetching quick actions from the database');
       }
-      // rethrow;
+      rethrow;
     }
     return fetchedQuickActions;
   }
@@ -219,6 +219,7 @@ class QuickActionsProvider extends ChangeNotifier {
         print(error);
         print('An error occurred during deleting a quick action');
       }
+      rethrow;
     }
 
     quickActions.removeWhere((element) => element.id == id);
