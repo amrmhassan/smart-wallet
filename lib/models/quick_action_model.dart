@@ -11,7 +11,8 @@ class QuickActionModel {
   int? quickActionIndex;
   String? userId;
   String profileId;
-  bool needSync;
+  bool deleted;
+  SyncFlags syncFlag;
 
   QuickActionModel({
     required this.id,
@@ -24,6 +25,23 @@ class QuickActionModel {
     required this.profileId,
     this.quickActionIndex,
     this.userId,
-    this.needSync = true,
+    this.deleted = false,
+    this.syncFlag = SyncFlags.none,
   });
+
+  Map<String, dynamic> toJSON() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'amount': amount,
+      'createdAt': createdAt,
+      'transactionType': transactionType.name,
+      'isFavorite': isFavorite,
+      'profileId': profileId,
+      'quickActionIndex': quickActionIndex,
+      'userID': userId,
+      'deleted': deleted,
+    };
+  }
 }

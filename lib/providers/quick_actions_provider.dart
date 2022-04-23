@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:smart_wallet/constants/db_shortage_constants.dart';
+import 'package:smart_wallet/models/synced_elements_model.dart';
 import 'package:uuid/uuid.dart';
 import '../constants/db_constants.dart';
 import '../constants/types.dart';
@@ -9,18 +10,19 @@ import '../models/quick_action_model.dart';
 
 import '../helpers/db_helper.dart';
 
-//! make the quickActionIndex property nullable
-//! it will only exist in the favorite quick actions
-
 class QuickActionsProvider extends ChangeNotifier {
   //? a) quick actions stuff
-  List<QuickActionModel> quickActions = [];
+  List<QuickActionModel> _quickActions = [];
   List<QuickActionModel> allQuickActions = [];
 
   List<QuickActionModel> get notSyncedQuickActions {
     return allQuickActions
-        .where((element) => element.needSync == true)
+        .where((element) => element.syncFlag != SyncFlags.none)
         .toList();
+  }
+
+  List<QuickActionModel> get quickActions {
+    return _quickActions.where((element) => element.deleted == false).toList();
   }
 
   int get quickActionsLength {
@@ -68,7 +70,7 @@ class QuickActionsProvider extends ChangeNotifier {
 
   //* for getting a quick actions by its id
   QuickActionModel getQuickById(String id) {
-    return quickActions.firstWhere((element) => element.id == id);
+    return _quickActions.firstWhere((element) => element.id == id);
   }
 
   //? 3- methods to control the quickActions
@@ -100,7 +102,8 @@ class QuickActionsProvider extends ChangeNotifier {
         'isFavorite': quickActions.isEmpty ? dbTrue : dbFalse,
         'profileId': profileId,
         'quickActionIndex': quickActionIndex.toString(),
-        'needSync': dbTrue,
+        'syncFlag': SyncFlags.add.name,
+        'deleted': dbFalse,
       });
     } catch (error) {
       if (kDebugMode) {
@@ -119,8 +122,10 @@ class QuickActionsProvider extends ChangeNotifier {
       isFavorite: quickActions.isEmpty ? true : false,
       profileId: profileId,
       quickActionIndex: quickActionIndex,
+      syncFlag: SyncFlags.add,
+      deleted: false,
     );
-    quickActions.add(quickActionModel);
+    _quickActions.add(quickActionModel);
     notifyListeners();
   }
 
@@ -148,7 +153,8 @@ class QuickActionsProvider extends ChangeNotifier {
             quickActionIndex: quickAction['quickActionIndex'] == 'null'
                 ? null
                 : int.parse(quickAction['quickActionIndex']),
-            needSync: quickAction['needSync'] == dbTrue ? true : false,
+            deleted: quickAction['deleted'] == dbTrue ? true : false,
+            syncFlag: stringToSyncFlag(quickAction['syncFlag']),
           );
         },
       ).toList();
@@ -156,7 +162,7 @@ class QuickActionsProvider extends ChangeNotifier {
       fetchedQuickActions.sort((a, b) {
         return a.createdAt.difference(b.createdAt).inSeconds;
       });
-      quickActions = fetchedQuickActions;
+      _quickActions = fetchedQuickActions;
 
       notifyListeners();
     } catch (error) {
@@ -193,7 +199,8 @@ class QuickActionsProvider extends ChangeNotifier {
             quickActionIndex: quickAction['quickActionIndex'] == 'null'
                 ? null
                 : int.parse(quickAction['quickActionIndex']),
-            needSync: quickAction['needSync'] == dbTrue ? true : false,
+            deleted: quickAction['deleted'] == dbTrue ? true : false,
+            syncFlag: stringToSyncFlag(quickAction['syncFlag']),
           );
         },
       ).toList();
@@ -209,27 +216,25 @@ class QuickActionsProvider extends ChangeNotifier {
     return fetchedQuickActions;
   }
 
-//* for deleting a quickActions
+// deleting a quickAction by id
   Future<void> deleteQuickActions(String id) async {
-    //* delete from the database first
-    try {
-      await DBHelper.deleteById(id, quickActionsTableName);
-    } catch (error) {
-      if (kDebugMode) {
-        print(error);
-        print('An error occurred during deleting a quick action');
-      }
-      rethrow;
-    }
+    //* if that transaction is income and deleting it will make the total by negative then throw an error that you can't delete that transaction , you can only edit it to a lower amount but not lower than the current total amount in that profile
+    QuickActionModel deletedQuickAction = getQuickById(id);
+    deletedQuickAction.deleted = true;
 
-    quickActions.removeWhere((element) => element.id == id);
-    notifyListeners();
+    if (deletedQuickAction.syncFlag == SyncFlags.add) {
+      return editQuickAction(deletedQuickAction);
+    } else {
+      deletedQuickAction.syncFlag = SyncFlags.delete;
+      return editQuickAction(deletedQuickAction);
+    }
   }
 
-  Future<void> toggleQuickActionNeedSync(String id) async {
+  Future<void> changeSyncFlag(String id, SyncFlags newSyncFlag) async {
     QuickActionModel quickAction = getQuickById(id);
-    quickAction.needSync = !quickAction.needSync;
-    await editQuickAction(quickAction);
+    quickAction.syncFlag = newSyncFlag;
+
+    return editQuickAction(quickAction);
   }
 
   Future<void> editQuickActionOnDataBaseOnly(
@@ -248,7 +253,8 @@ class QuickActionsProvider extends ChangeNotifier {
         'isFavorite': newQuickAction.isFavorite ? dbTrue : dbFalse,
         'profileId': newQuickAction.profileId,
         'quickActionIndex': newQuickAction.quickActionIndex.toString(),
-        'needSync': newQuickAction.needSync ? dbTrue : dbFalse,
+        'syncFlag': newQuickAction.syncFlag.name,
+        'deleted': newQuickAction.deleted ? dbTrue : dbFalse,
       });
     } catch (error) {
       if (kDebugMode) {
@@ -264,9 +270,9 @@ class QuickActionsProvider extends ChangeNotifier {
     //* editing quick action on database first
     await editQuickActionOnDataBaseOnly(newQuickAction);
     int quickActionIndex =
-        quickActions.indexWhere((element) => element.id == newQuickAction.id);
-    quickActions.removeWhere((element) => element.id == newQuickAction.id);
-    quickActions.insert(quickActionIndex, newQuickAction);
+        _quickActions.indexWhere((element) => element.id == newQuickAction.id);
+    _quickActions.removeWhere((element) => element.id == newQuickAction.id);
+    _quickActions.insert(quickActionIndex, newQuickAction);
     notifyListeners();
   }
 

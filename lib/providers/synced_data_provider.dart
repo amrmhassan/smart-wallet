@@ -43,15 +43,17 @@ class SyncedDataProvider extends ChangeNotifier {
             transaction.id, SyncFlags.none);
       }
 
-      for (var quickAction in quickActionsProvider.allQuickActions) {
-        if (kDebugMode) {
-          print(' quickAction ${quickAction.needSync}');
-        }
-
-        if (quickAction.needSync) {
+      for (var quickAction in quickActionsProvider.notSyncedQuickActions) {
+        print(quickAction.toJSON());
+        if (quickAction.syncFlag == SyncFlags.add) {
           await addQuickAction(quickAction);
-          await quickActionsProvider.toggleQuickActionNeedSync(quickAction.id);
+        } else if (quickAction.syncFlag == SyncFlags.edit) {
+          await editQuickAction(quickAction);
+        } else if (quickAction.syncFlag == SyncFlags.delete) {
+          await editQuickAction(quickAction);
         }
+        await quickActionsProvider.changeSyncFlag(
+            quickAction.id, SyncFlags.none);
       }
     } catch (error) {
       if (kDebugMode) {
@@ -110,6 +112,18 @@ class SyncedDataProvider extends ChangeNotifier {
         .update(transactionModel.toJSON());
   }
 
+  Future<void> editQuickAction(QuickActionModel quickActionModel) async {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    var dbRef = FirebaseFirestore.instance;
+
+    await dbRef
+        .collection(usersCollectionName)
+        .doc(userId)
+        .collection(quickActionsCollectionName)
+        .doc(quickActionModel.id)
+        .update(quickActionModel.toJSON());
+  }
+
   Future<void> addQuickAction(QuickActionModel quickActionModel) async {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     var dbRef = FirebaseFirestore.instance;
@@ -118,21 +132,8 @@ class SyncedDataProvider extends ChangeNotifier {
         .collection(usersCollectionName)
         .doc(userId)
         .collection(quickActionsCollectionName)
-        .add({
-      'id': quickActionModel.id,
-      'title': quickActionModel.title,
-      'description': quickActionModel.description,
-      'amount': quickActionModel.amount,
-      'createdAt': quickActionModel.createdAt,
-      'transactionType':
-          quickActionModel.transactionType == TransactionType.income
-              ? 'income'
-              : 'outcome',
-      'isFavorite': quickActionModel.isFavorite,
-      'profileId': quickActionModel.profileId,
-      'quickActionIndex': quickActionModel.quickActionIndex,
-      'userId': userId,
-    });
+        .doc(quickActionModel.id)
+        .set(quickActionModel.toJSON());
   }
 
   Future<List<ProfileModel>> fetchSyncedProfiles() async {
