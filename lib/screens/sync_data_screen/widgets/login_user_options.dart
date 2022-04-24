@@ -35,8 +35,10 @@ class LogInUserOptions extends StatelessWidget {
     ).googleLogin();
 
     var profileProvider = Provider.of<ProfilesProvider>(context, listen: false);
+
     var transactionProvider =
         Provider.of<TransactionProvider>(context, listen: false);
+
     var quickActionsProvider =
         Provider.of<QuickActionsProvider>(context, listen: false);
 

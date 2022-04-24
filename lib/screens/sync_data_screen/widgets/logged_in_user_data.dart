@@ -124,7 +124,8 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
         SizedBox(
           height: kDefaultPadding,
         ),
-        LogInUserOptions(),
+        //! implement this button and then fix the error with it
+        // LogInUserOptions(),
       ],
     );
   }
