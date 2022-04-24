@@ -265,11 +265,12 @@ class QuickActionsProvider extends ChangeNotifier {
     }
   }
 
+//! use this only with the syncing provider
   Future<void> changeSyncFlag(String id, SyncFlags newSyncFlag) async {
     QuickActionModel quickAction = getQuickById(id);
     quickAction.syncFlag = newSyncFlag;
 
-    return editQuickAction(quickAction);
+    return editQuickAction(quickAction, true);
   }
 
   Future<void> editQuickActionOnDataBaseOnly(
@@ -301,13 +302,13 @@ class QuickActionsProvider extends ChangeNotifier {
   }
 
 //* for editing a quick action
-  Future<void> editQuickAction(QuickActionModel newQuickAction) async {
-    if (newQuickAction.syncFlag == SyncFlags.add) {
-      newQuickAction.syncFlag = SyncFlags.add;
-    } else {
-      newQuickAction.syncFlag = newQuickAction.syncFlag;
+  Future<void> editQuickAction(QuickActionModel newQuickAction,
+      [bool syncing = false]) async {
+    if (syncing) {
+      newQuickAction.syncFlag = SyncFlags.none;
+    } else if (newQuickAction.syncFlag != SyncFlags.add) {
+      newQuickAction.syncFlag = SyncFlags.edit;
     }
-
     //* editing quick action on database first
     await editQuickActionOnDataBaseOnly(newQuickAction);
     int quickActionIndex =
@@ -329,8 +330,11 @@ class QuickActionsProvider extends ChangeNotifier {
     } else {
       newQuickAction.quickActionIndex == null;
     }
-    newQuickAction.syncFlag = SyncFlags.edit;
-
+    // if (newQuickAction.syncFlag == SyncFlags.add) {
+    //   newQuickAction.syncFlag = SyncFlags.add;
+    // } else {
+    //   newQuickAction.syncFlag = SyncFlags.edit;
+    // }
     return editQuickAction(newQuickAction);
   }
 

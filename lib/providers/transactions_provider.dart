@@ -322,10 +322,10 @@ class TransactionProvider extends ChangeNotifier {
         throw CustomError('This expense is larger than your balance.');
       }
     }
-    if (newTransaction.syncFlag == SyncFlags.add) {
-      newTransaction.syncFlag = SyncFlags.add;
-    } else {
-      newTransaction.syncFlag = newTransaction.syncFlag;
+    if (syncing) {
+      newTransaction.syncFlag = SyncFlags.none;
+    } else if (newTransaction.syncFlag != SyncFlags.add) {
+      newTransaction.syncFlag = SyncFlags.edit;
     }
 
     //* editing transaction on database first

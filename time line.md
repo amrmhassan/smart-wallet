@@ -44,6 +44,11 @@ DONE - so the savings always equal to the total (income from the first day to th
 [Pending]
 add a lastActivatedDate to each profile 
 --then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)
+# fix the change in the syncing flag on the quick actions and transactions when editing them
+# through the favoriting or, actual editing
+# if they are still new (add keep it add)
+# else if it is (none keep it none)
+# else make it (edit) 
 
 
 
