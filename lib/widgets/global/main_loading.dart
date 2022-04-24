@@ -8,8 +8,10 @@ import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 
 class MainLoading extends StatelessWidget {
+  final String? message;
   const MainLoading({
     Key? key,
+    this.message,
   }) : super(key: key);
 
   @override
@@ -42,6 +44,7 @@ class MainLoading extends StatelessWidget {
               duration: Duration(seconds: 1),
             ),
           ),
+          if (message != null) Text(message!)
         ],
       ),
     );
