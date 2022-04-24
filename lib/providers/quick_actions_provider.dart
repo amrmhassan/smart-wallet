@@ -15,15 +15,39 @@ class QuickActionsProvider extends ChangeNotifier {
   List<QuickActionModel> _quickActions = [];
   List<QuickActionModel> allQuickActions = [];
 
-  Future<void> clearAllQuickActions() async {
+  void clearAllQuickActions() async {
     _quickActions.clear();
     allQuickActions.clear();
-    notifyListeners();
   }
 
   Future<void> setQuickActions(List<QuickActionModel> quickActions) async {
     allQuickActions = quickActions;
-    notifyListeners();
+    for (var quickAction in quickActions) {
+      try {
+        await DBHelper.insert(quickActionsTableName, {
+          'id': quickAction.id,
+          'title': quickAction.title,
+          'description': quickAction.description,
+          'amount': quickAction.amount.toString(),
+          'createdAt': quickAction.createdAt.toIso8601String(),
+          'transactionType':
+              quickAction.transactionType == TransactionType.income
+                  ? 'income'
+                  : 'outcome',
+          'isFavorite': quickAction.isFavorite ? dbTrue : dbFalse,
+          'profileId': quickAction.profileId,
+          'quickActionIndex': quickAction.quickActionIndex.toString(),
+          'syncFlag': quickAction.syncFlag.name,
+          'deleted': quickAction.deleted == true ? dbTrue : dbFalse,
+        });
+      } catch (error) {
+        if (kDebugMode) {
+          print(
+              'Error inserting new transaction , check the transaction provider');
+        }
+        rethrow;
+      }
+    }
   }
 
   List<QuickActionModel> get notSyncedQuickActions {
@@ -278,6 +302,12 @@ class QuickActionsProvider extends ChangeNotifier {
 
 //* for editing a quick action
   Future<void> editQuickAction(QuickActionModel newQuickAction) async {
+    if (newQuickAction.syncFlag == SyncFlags.add) {
+      newQuickAction.syncFlag = SyncFlags.add;
+    } else {
+      newQuickAction.syncFlag = newQuickAction.syncFlag;
+    }
+
     //* editing quick action on database first
     await editQuickActionOnDataBaseOnly(newQuickAction);
     int quickActionIndex =

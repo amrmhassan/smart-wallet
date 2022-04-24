@@ -20,6 +20,14 @@ class LogInUserOptions extends StatelessWidget {
   }) : super(key: key);
 
   Future googleLogin(BuildContext context) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      //* this means there is already a user signed in so sign out first then sign in with another user
+      await Provider.of<AuthenticationProvider>(
+        context,
+        listen: false,
+      ).googleLogout();
+    }
     //! here i want to implement the loading of logging in
     await Provider.of<AuthenticationProvider>(
       context,
@@ -87,7 +95,7 @@ class LogInUserOptions extends StatelessWidget {
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (ctx, snapshot) => GoogleSignInButton(
                 onTap: snapshot.hasData
-                    ? () {}
+                    ? () async => await googleLogin(context)
                     : () async => await googleLogin(context),
               ),
             )

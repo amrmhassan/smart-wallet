@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
+import 'package:smart_wallet/helpers/db_helper.dart';
 import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/models/quick_action_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
@@ -153,13 +154,26 @@ class SyncedDataProvider extends ChangeNotifier {
     List<TransactionModel> transactions = await getTransactions();
     List<QuickActionModel> quickActions = await getQuickActions();
 
-    await profilesProvider.clearAllProfiles();
-    await transactionProvider.clearAllTransactions();
-    await quickActionsProvider.clearAllQuickActions();
+//! there is an error in fetching the quick actions and it is about getting isFavorite and quickActionIndex
+    profilesProvider.clearAllProfiles();
+    transactionProvider.clearAllTransactions();
+    quickActionsProvider.clearAllQuickActions();
+    await DBHelper.deleteDatabase(dbName);
+    await profilesProvider.clearActiveProfileId();
 
     await profilesProvider.setProfiles(profiles);
     await transactionProvider.setTransactions(transactions);
     await quickActionsProvider.setQuickActions(quickActions);
+
+    await profilesProvider.fetchAndUpdateProfiles();
+    await profilesProvider.fetchAndUpdateActivatedProfileId();
+    String activeProfileId = profilesProvider.activatedProfileId;
+    await transactionProvider
+        .fetchAndUpdateProfileTransactions(activeProfileId);
+    await quickActionsProvider
+        .fetchAndUpdateProfileQuickActions(activeProfileId);
+    await transactionProvider.fetchAndUpdateAllTransactions();
+    await quickActionsProvider.fetchAndUpdateAllQuickActions();
   }
 
   Future<List<ProfileModel>> getProfiles() async {
@@ -227,29 +241,29 @@ class SyncedDataProvider extends ChangeNotifier {
     var data = await dbRef
         .collection(usersCollectionName)
         .doc(userId)
-        .collection(transactionsCollectionName)
+        .collection(quickActionsCollectionName)
         .get();
-    List<QuickActionModel> fetchedQuickActions = data.docs
-        .map(
-          (quickAction) => QuickActionModel(
-            id: quickAction['id'],
-            title: quickAction['title'],
-            description: quickAction['description'],
-            amount: quickAction['amount'],
-            createdAt: (quickAction['createdAt'] as Timestamp).toDate(),
-            profileId: quickAction['profileId'],
-            transactionType:
-                quickAction['transactionType'] == TransactionType.income.name
-                    ? TransactionType.income
-                    : TransactionType.outcome,
-            deleted: quickAction['deleted'],
-            syncFlag: SyncFlags.none,
-            userId: quickAction['userId'],
-            isFavorite: quickAction['isFavorite'],
-            quickActionIndex: quickAction['quickActionIndex'],
-          ),
-        )
-        .toList();
+    List<QuickActionModel> fetchedQuickActions = data.docs.map(
+      (quickAction) {
+        return QuickActionModel(
+          id: quickAction['id'],
+          title: quickAction['title'],
+          description: quickAction['description'],
+          amount: quickAction['amount'],
+          createdAt: (quickAction['createdAt'] as Timestamp).toDate(),
+          profileId: quickAction['profileId'],
+          transactionType:
+              quickAction['transactionType'] == TransactionType.income.name
+                  ? TransactionType.income
+                  : TransactionType.outcome,
+          deleted: quickAction['deleted'],
+          syncFlag: SyncFlags.none,
+          userId: quickAction['userId'],
+          isFavorite: quickAction['isFavorite'],
+          quickActionIndex: quickAction['quickActionIndex'],
+        );
+      },
+    ).toList();
     return fetchedQuickActions;
   }
 }

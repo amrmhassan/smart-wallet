@@ -15,3 +15,8 @@ const String usersCollectionName = 'users';
 const String profilesCollectionName = 'profiles';
 const String transactionsCollectionName = 'transactions';
 const String quickActionsCollectionName = 'quickActions';
+
+//////////////////
+const String userPreferencesCollectionName = 'userPreferences';
+const String activeProfileFireStoreKeyName = 'activeProfile';
+const String activeThemeFireStoreKeyName = 'activeProfile';

@@ -18,15 +18,31 @@ class ProfilesProvider extends ChangeNotifier {
   //? holding the active profile id
   String _activatedProfileId = '';
 
-  Future<void> clearAllProfiles() async {
+  void clearAllProfiles() async {
     _profiles.clear();
-    notifyListeners();
   }
 
   Future<void> setProfiles(List<ProfileModel> profiles) async {
     _profiles = profiles;
     //! here add the profiles to the local database
-    notifyListeners();
+    for (var profile in profiles) {
+      try {
+        await DBHelper.insert(profilesTableName, {
+          'id': profile.id,
+          'name': profile.name,
+          'income': profile.income,
+          'outcome': profile.outcome,
+          'createdAt': profile.createdAt.toIso8601String(),
+          'syncFlag': profile.syncFlag.name,
+          'deleted': profile.deleted == true ? dbTrue : dbFalse,
+        });
+      } catch (error) {
+        if (kDebugMode) {
+          print('Error setting profiles from firestore');
+        }
+        rethrow;
+      }
+    }
   }
 
   List<ProfileModel> get notSyncedProfiles {
@@ -86,9 +102,15 @@ class ProfilesProvider extends ChangeNotifier {
     //* before loading them from the database
     // fix that error , this will create an error first time the app loads cause
     // i think this is called before the profiles loads
-    return _profiles.firstWhere(
-      (element) => element.id == activatedProfileId,
-    );
+    // no this the error beause the this is called before the activatedProfileId update from the fetch and update profile Id
+    try {
+      return _profiles.firstWhere(
+        (element) => element.id == activatedProfileId,
+      );
+    } catch (error) {
+      //! this is not the final solution
+      return _profiles[0];
+    }
   }
 
   //? getting profile age
@@ -375,5 +397,9 @@ class ProfilesProvider extends ChangeNotifier {
     //* edit the lastActivated property in the profile
     // add that code to the first created profile
     editLastActivatedForProfile();
+  }
+
+  Future<bool> clearActiveProfileId() async {
+    return SharedPrefHelper.removeKey(kActivatedProfileIdKey);
   }
 }

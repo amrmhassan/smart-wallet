@@ -14,17 +14,38 @@ class TransactionProvider extends ChangeNotifier {
   List<TransactionModel> _transactions = [];
   List<TransactionModel> allTransactions = [];
 
-  Future<void> clearAllTransactions() async {
+  void clearAllTransactions() async {
     _transactions.clear();
     allTransactions.clear();
-    notifyListeners();
   }
 
   Future<void> setTransactions(List<TransactionModel> transactions) async {
     allTransactions = transactions;
-    //! here set the _transactions to the current active profile transactions
-    //! add the transactions to the database
-    notifyListeners();
+
+    for (var transaction in transactions) {
+      try {
+        await DBHelper.insert(transactionsTableName, {
+          'id': transaction.id,
+          'title': transaction.title,
+          'description': transaction.description,
+          'amount': transaction.amount.toString(),
+          'createdAt': transaction.createdAt.toIso8601String(),
+          'transactionType':
+              transaction.transactionType == TransactionType.income
+                  ? TransactionType.income.name
+                  : TransactionType.outcome.name,
+          'ratioToTotal': transaction.ratioToTotal.toString(),
+          'profileId': transaction.profileId,
+          'syncFlag': transaction.syncFlag.name,
+          'deleted': transaction.deleted == true ? dbTrue : dbFalse,
+        });
+      } catch (error) {
+        if (kDebugMode) {
+          print('Error inserting transactions get from the firestore');
+        }
+        rethrow;
+      }
+    }
   }
 
   List<TransactionModel> get notSyncedTransactions {
@@ -300,6 +321,11 @@ class TransactionProvider extends ChangeNotifier {
           newTransaction.transactionType == TransactionType.outcome) {
         throw CustomError('This expense is larger than your balance.');
       }
+    }
+    if (newTransaction.syncFlag == SyncFlags.add) {
+      newTransaction.syncFlag = SyncFlags.add;
+    } else {
+      newTransaction.syncFlag = newTransaction.syncFlag;
     }
 
     //* editing transaction on database first

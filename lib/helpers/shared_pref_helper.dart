@@ -8,6 +8,11 @@ class SharedPrefHelper {
     return prefs.setString(key, value);
   }
 
+  static Future<bool> removeKey(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.remove(key);
+  }
+
   static Future<String?> getString(String key) async {
     final prefs = await SharedPreferences.getInstance();
     String? value = prefs.getString(key);
