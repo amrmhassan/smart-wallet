@@ -27,6 +27,21 @@ class SyncDataScreen extends StatefulWidget {
 
 class _SyncDataScreenState extends State<SyncDataScreen> {
   bool _loading = false;
+  bool _loggingIn = false;
+  bool _loggingOut = false;
+
+  void toggleLogin() {
+    setState(() {
+      _loggingIn = !_loggingIn;
+    });
+  }
+
+  void toggleLogOut() {
+    setState(() {
+      _loggingOut = !_loggingOut;
+    });
+  }
+
   @override
   void initState() {
     fetchData();

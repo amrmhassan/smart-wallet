@@ -14,6 +14,19 @@ class TransactionProvider extends ChangeNotifier {
   List<TransactionModel> _transactions = [];
   List<TransactionModel> allTransactions = [];
 
+  Future<void> clearAllTransactions() async {
+    _transactions.clear();
+    allTransactions.clear();
+    notifyListeners();
+  }
+
+  Future<void> setTransactions(List<TransactionModel> transactions) async {
+    allTransactions = transactions;
+    //! here set the _transactions to the current active profile transactions
+    //! add the transactions to the database
+    notifyListeners();
+  }
+
   List<TransactionModel> get notSyncedTransactions {
     return allTransactions
         .where((element) => element.syncFlag != SyncFlags.none)
@@ -272,18 +285,21 @@ class TransactionProvider extends ChangeNotifier {
     TransactionModel transaction = getTransactionById(id);
     transaction.syncFlag = newSyncFlag;
 
-    return editTransaction(id, transaction);
+    return editTransaction(id, transaction, true);
   }
 
 //? editing a transaction
   Future<void> editTransaction(
-      String transactionId, TransactionModel newTransaction) async {
+      String transactionId, TransactionModel newTransaction,
+      [bool syncing = false]) async {
     //* checking if the transactin is outcome and the it is greater than the current total money
     //* this is the amount that should be compared to the amount of the newTransaction
-    double newAmount = totalMoney - newTransaction.amount;
-    if (newTransaction.amount > newAmount &&
-        newTransaction.transactionType == TransactionType.outcome) {
-      throw CustomError('This expense is larger than your balance.');
+    if (!syncing) {
+      double newAmount = totalMoney - newTransaction.amount;
+      if (newTransaction.amount > newAmount &&
+          newTransaction.transactionType == TransactionType.outcome) {
+        throw CustomError('This expense is larger than your balance.');
+      }
     }
 
     //* editing transaction on database first

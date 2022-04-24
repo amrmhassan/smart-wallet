@@ -40,7 +40,7 @@ class QuickActionModel {
       'isFavorite': isFavorite,
       'profileId': profileId,
       'quickActionIndex': quickActionIndex,
-      'userID': userId,
+      'userId': userId,
       'deleted': deleted,
     };
   }

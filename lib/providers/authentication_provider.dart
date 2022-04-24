@@ -31,7 +31,8 @@ class AuthenticationProvider extends ChangeNotifier {
 
   Future<void> googleLogout() async {
     try {
-      await googleSignIn.disconnect();
+      await googleSignIn.signOut();
+      // await googleSignIn.disconnect();
       FirebaseAuth.instance.signOut();
     } catch (error) {
       if (kDebugMode) {

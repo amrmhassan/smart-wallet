@@ -11,7 +11,7 @@ class TransactionModel {
   //* this property i will need to provide the ratio of this transaction to the total amount of money i have right now in this profile
   double ratioToTotal;
   String profileId;
-  String? userID;
+  String? userId;
   bool deleted;
   SyncFlags syncFlag;
 
@@ -24,7 +24,7 @@ class TransactionModel {
     required this.transactionType,
     required this.ratioToTotal,
     required this.profileId,
-    this.userID,
+    this.userId,
     this.deleted = false,
     this.syncFlag = SyncFlags.none,
   });
@@ -39,7 +39,7 @@ class TransactionModel {
       'transactionType': transactionType.name,
       'ratioToTotal': ratioToTotal,
       'profileId': profileId,
-      'userID': userID,
+      'userId': userId,
       'deleted': deleted,
     };
   }

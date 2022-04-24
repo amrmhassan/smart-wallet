@@ -15,6 +15,17 @@ class QuickActionsProvider extends ChangeNotifier {
   List<QuickActionModel> _quickActions = [];
   List<QuickActionModel> allQuickActions = [];
 
+  Future<void> clearAllQuickActions() async {
+    _quickActions.clear();
+    allQuickActions.clear();
+    notifyListeners();
+  }
+
+  Future<void> setQuickActions(List<QuickActionModel> quickActions) async {
+    allQuickActions = quickActions;
+    notifyListeners();
+  }
+
   List<QuickActionModel> get notSyncedQuickActions {
     return allQuickActions
         .where((element) => element.syncFlag != SyncFlags.none)

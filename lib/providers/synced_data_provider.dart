@@ -11,10 +11,8 @@ import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 
 class SyncedDataProvider extends ChangeNotifier {
-  List<String> profilesIDsToSync = [];
-  List<String> transactionsIDsToSync = [];
-  List<String> quickActionsIDsToSync = [];
-
+  //# ********* Syncing data to firestore **********#//
+//? for syncing all data( profiles, transactions, quick Actions)
   Future<void> syncAllData(
       ProfilesProvider profilesProvider,
       TransactionProvider transactionProvider,
@@ -44,7 +42,6 @@ class SyncedDataProvider extends ChangeNotifier {
       }
 
       for (var quickAction in quickActionsProvider.notSyncedQuickActions) {
-        print(quickAction.toJSON());
         if (quickAction.syncFlag == SyncFlags.add) {
           await addQuickAction(quickAction);
         } else if (quickAction.syncFlag == SyncFlags.edit) {
@@ -63,6 +60,8 @@ class SyncedDataProvider extends ChangeNotifier {
     }
   }
 
+//# 1] profiles
+//? for adding a profile to the firestore for the first time
   Future<void> addProfile(
     ProfileModel profile,
   ) async {
@@ -77,6 +76,20 @@ class SyncedDataProvider extends ChangeNotifier {
         .set(profile.toJSON());
   }
 
+//? for updating an existing profile in the firestore
+  Future<void> updateProfile(ProfileModel profile) async {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    var dbRef = FirebaseFirestore.instance;
+    await dbRef
+        .collection(usersCollectionName)
+        .doc(userId)
+        .collection(profilesCollectionName)
+        .doc(profile.id)
+        .update(profile.toJSON());
+  }
+
+//# 2] transactions
+//? for adding a transaction to the firestore for the first time
   Future<void> addTransaction(TransactionModel transactionModel) async {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     var dbRef = FirebaseFirestore.instance;
@@ -89,17 +102,7 @@ class SyncedDataProvider extends ChangeNotifier {
         .set(transactionModel.toJSON());
   }
 
-  Future<void> updateProfile(ProfileModel profile) async {
-    String userId = FirebaseAuth.instance.currentUser!.uid;
-    var dbRef = FirebaseFirestore.instance;
-    await dbRef
-        .collection(usersCollectionName)
-        .doc(userId)
-        .collection(profilesCollectionName)
-        .doc(profile.id)
-        .update(profile.toJSON());
-  }
-
+//? for editing a transaction
   Future<void> editTransaction(TransactionModel transactionModel) async {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     var dbRef = FirebaseFirestore.instance;
@@ -112,18 +115,8 @@ class SyncedDataProvider extends ChangeNotifier {
         .update(transactionModel.toJSON());
   }
 
-  Future<void> editQuickAction(QuickActionModel quickActionModel) async {
-    String userId = FirebaseAuth.instance.currentUser!.uid;
-    var dbRef = FirebaseFirestore.instance;
-
-    await dbRef
-        .collection(usersCollectionName)
-        .doc(userId)
-        .collection(quickActionsCollectionName)
-        .doc(quickActionModel.id)
-        .update(quickActionModel.toJSON());
-  }
-
+//# 3] quick actions
+//? adding a quick Action
   Future<void> addQuickAction(QuickActionModel quickActionModel) async {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     var dbRef = FirebaseFirestore.instance;
@@ -136,7 +129,40 @@ class SyncedDataProvider extends ChangeNotifier {
         .set(quickActionModel.toJSON());
   }
 
-  Future<List<ProfileModel>> fetchSyncedProfiles() async {
+//? editing a quick Action
+  Future<void> editQuickAction(QuickActionModel quickActionModel) async {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    var dbRef = FirebaseFirestore.instance;
+
+    await dbRef
+        .collection(usersCollectionName)
+        .doc(userId)
+        .collection(quickActionsCollectionName)
+        .doc(quickActionModel.id)
+        .update(quickActionModel.toJSON());
+  }
+
+  //# ********* Fetching data from firestore **********#//
+
+  Future<void> getAllData(
+    ProfilesProvider profilesProvider,
+    TransactionProvider transactionProvider,
+    QuickActionsProvider quickActionsProvider,
+  ) async {
+    List<ProfileModel> profiles = await getProfiles();
+    List<TransactionModel> transactions = await getTransactions();
+    List<QuickActionModel> quickActions = await getQuickActions();
+
+    await profilesProvider.clearAllProfiles();
+    await transactionProvider.clearAllTransactions();
+    await quickActionsProvider.clearAllQuickActions();
+
+    await profilesProvider.setProfiles(profiles);
+    await transactionProvider.setTransactions(transactions);
+    await quickActionsProvider.setQuickActions(quickActions);
+  }
+
+  Future<List<ProfileModel>> getProfiles() async {
     var dbRef = FirebaseFirestore.instance;
     String userId = FirebaseAuth.instance.currentUser!.uid;
     var data = await dbRef
@@ -157,9 +183,73 @@ class SyncedDataProvider extends ChangeNotifier {
                 : DateTime.parse(profile['lastActivatedDate']),
             userId: profile['userId'],
             syncFlag: SyncFlags.none,
+            deleted: profile['deleted'],
           ),
         )
         .toList();
     return fetchedProfiles;
+  }
+
+  Future<List<TransactionModel>> getTransactions() async {
+    var dbRef = FirebaseFirestore.instance;
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    var data = await dbRef
+        .collection(usersCollectionName)
+        .doc(userId)
+        .collection(transactionsCollectionName)
+        .get();
+    List<TransactionModel> fetchedTransactions = data.docs
+        .map(
+          (transaction) => TransactionModel(
+            id: transaction['id'],
+            title: transaction['title'],
+            description: transaction['description'],
+            amount: transaction['amount'],
+            createdAt: (transaction['createdAt'] as Timestamp).toDate(),
+            profileId: transaction['profileId'],
+            ratioToTotal: transaction['ratioToTotal'],
+            transactionType:
+                transaction['transactionType'] == TransactionType.income.name
+                    ? TransactionType.income
+                    : TransactionType.outcome,
+            deleted: transaction['deleted'],
+            syncFlag: SyncFlags.none,
+            userId: transaction['userId'],
+          ),
+        )
+        .toList();
+    return fetchedTransactions;
+  }
+
+  Future<List<QuickActionModel>> getQuickActions() async {
+    var dbRef = FirebaseFirestore.instance;
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    var data = await dbRef
+        .collection(usersCollectionName)
+        .doc(userId)
+        .collection(transactionsCollectionName)
+        .get();
+    List<QuickActionModel> fetchedQuickActions = data.docs
+        .map(
+          (quickAction) => QuickActionModel(
+            id: quickAction['id'],
+            title: quickAction['title'],
+            description: quickAction['description'],
+            amount: quickAction['amount'],
+            createdAt: (quickAction['createdAt'] as Timestamp).toDate(),
+            profileId: quickAction['profileId'],
+            transactionType:
+                quickAction['transactionType'] == TransactionType.income.name
+                    ? TransactionType.income
+                    : TransactionType.outcome,
+            deleted: quickAction['deleted'],
+            syncFlag: SyncFlags.none,
+            userId: quickAction['userId'],
+            isFavorite: quickAction['isFavorite'],
+            quickActionIndex: quickAction['quickActionIndex'],
+          ),
+        )
+        .toList();
+    return fetchedQuickActions;
   }
 }

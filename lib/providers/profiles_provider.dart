@@ -18,6 +18,17 @@ class ProfilesProvider extends ChangeNotifier {
   //? holding the active profile id
   String _activatedProfileId = '';
 
+  Future<void> clearAllProfiles() async {
+    _profiles.clear();
+    notifyListeners();
+  }
+
+  Future<void> setProfiles(List<ProfileModel> profiles) async {
+    _profiles = profiles;
+    //! here add the profiles to the local database
+    notifyListeners();
+  }
+
   List<ProfileModel> get notSyncedProfiles {
     return _profiles
         .where((element) => element.syncFlag != SyncFlags.none)
