@@ -13,6 +13,10 @@ class SyncDataButton extends StatelessWidget {
   final VoidCallback onTap;
   final bool syncing;
 
+  bool enableButton(BuildContext context) {
+    return !syncing && enableSyncButton(context);
+  }
+
   const SyncDataButton({
     Key? key,
     required this.onTap,
@@ -32,6 +36,17 @@ class SyncDataButton extends StatelessWidget {
         quickActions.isNotEmpty;
   }
 
+  bool allDataSynced(BuildContext context) {
+    var profiles =
+        Provider.of<ProfilesProvider>(context, listen: false).notSyncedProfiles;
+    var transactions = Provider.of<TransactionProvider>(context, listen: false)
+        .notSyncedTransactions;
+    var quickActions = Provider.of<QuickActionsProvider>(context, listen: false)
+        .notSyncedQuickActions;
+
+    return profiles.isEmpty && transactions.isEmpty && quickActions.isEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
@@ -42,20 +57,29 @@ class SyncDataButton extends StatelessWidget {
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          color: themeProvider.getThemeColor(ThemeColors.kButtonColor),
+          color: enableButton(context)
+              ? themeProvider.getThemeColor(ThemeColors.kButtonColor)
+              : themeProvider.getThemeColor(ThemeColors.kCardBackgroundColor),
           borderRadius: BorderRadius.circular(kDefaultBorderRadius / 4),
         ),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: (syncing || !enableSyncButton(context)) ? null : onTap,
+            onTap: enableButton(context) ? onTap : null,
             child: Container(
               padding: EdgeInsets.symmetric(vertical: kDefaultPadding / 3),
               alignment: Alignment.center,
               child: Text(
-                syncing ? 'Syncing...' : 'Sync Data',
-                style: themeProvider
-                    .getTextStyle(ThemeTextStyles.kActivateProfileTextStyle),
+                syncing
+                    ? 'Syncing...'
+                    : allDataSynced(context)
+                        ? 'Data Synced'
+                        : 'Sync Data',
+                style: enableButton(context)
+                    ? themeProvider
+                        .getTextStyle(ThemeTextStyles.kActivateProfileTextStyle)
+                    : themeProvider.getTextStyle(
+                        ThemeTextStyles.kActivatedProfileTextStyle),
               ),
             ),
           ),

@@ -32,7 +32,7 @@ class LogOutButton extends StatelessWidget {
         quickActionsProvider.notSyncedQuickActions.isNotEmpty) {
       await AwesomeDialog(
         context: context,
-        dialogType: DialogType.WARNING,
+        dialogType: DialogType.ERROR,
         animType: AnimType.BOTTOMSLIDE,
         title: 'Data needs to be synced first, Logout anyway?',
         btnCancelOnPress: () {},

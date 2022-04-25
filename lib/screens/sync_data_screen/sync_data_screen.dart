@@ -104,7 +104,9 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
                             StreamBuilder(
                               stream: FirebaseAuth.instance.authStateChanges(),
                               builder: (ctx, snapshot) => MyAppBar(
-                                title: 'Sync Data',
+                                title: _loggingIn
+                                    ? 'Syncing ...'
+                                    : 'Cloud Syncing',
                                 enableTapping: false,
                                 rightIcon: snapshot.hasData
                                     ? LogOutButton(
