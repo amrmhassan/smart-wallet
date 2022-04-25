@@ -1,21 +1,9 @@
 import 'package:smart_wallet/constants/db_shortage_constants.dart';
+import 'package:smart_wallet/constants/models_properties_constants.dart';
 import 'package:smart_wallet/models/synced_elements_model.dart';
 
 import '../constants/types.dart';
 
-String idString = 'id';
-String titleString = 'title';
-String descriptionString = 'description';
-String createdAtString = 'createdAt';
-String amountString = 'amount';
-String transactionTypeString = 'transactionType';
-String ratioToTotalString = 'ratioToTotal';
-String profileIdString = 'profileId';
-String userIdString = 'userId';
-String deletedString = 'deleted';
-String syncFlagString = 'syncFlag';
-
-//! remove the needSync property from the transaction model and it's followers
 class TransactionModel {
   String id;
   String title;

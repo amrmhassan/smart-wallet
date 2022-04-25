@@ -1,20 +1,8 @@
 import 'package:smart_wallet/constants/db_shortage_constants.dart';
+import 'package:smart_wallet/constants/models_properties_constants.dart';
 import 'package:smart_wallet/models/synced_elements_model.dart';
 
 import '../constants/types.dart';
-
-String idString = 'id';
-String titleString = 'title';
-String descriptionString = 'description';
-String amountString = 'amount';
-String createdAtString = 'createdAt';
-String transactionTypeString = 'transactionType';
-String isFavoriteString = 'isFavorite';
-String quickActionIndexString = 'quickActionIndex';
-String userIdString = 'userId';
-String profileIdString = 'profileId';
-String deletedString = 'deleted';
-String syncFlagString = 'syncFlag';
 
 class QuickActionModel {
   String id;

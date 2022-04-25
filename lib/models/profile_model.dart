@@ -1,17 +1,8 @@
 import 'package:smart_wallet/constants/db_shortage_constants.dart';
+import 'package:smart_wallet/constants/models_properties_constants.dart';
 import 'package:smart_wallet/constants/profiles_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/models/synced_elements_model.dart';
-
-String idString = 'id';
-String nameString = 'name';
-String incomeString = 'income';
-String outcomeString = 'outcome';
-String createdAtString = 'createdAt';
-String lastActivatedDateString = 'lastActivatedDate';
-String userIdString = 'userId';
-String deletedString = 'deleted';
-String syncFlagString = 'syncFlag';
 
 const double _goodLimit = .70; // when it is from 70% to 100% it will be good
 const double _moderateLimit =

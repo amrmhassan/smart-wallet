@@ -1,3 +1,4 @@
+import 'package:smart_wallet/constants/models_properties_constants.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:path/path.dart' as path;
 
@@ -14,13 +15,13 @@ class DBHelper {
       onCreate: (db, version) async {
         //* creating transactions table
         await db.execute(
-            'CREATE TABLE $transactionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT, ratioToTotal TEXT, profileId TEXT, syncFlag TEXT, deleted TEXT  )');
+            'CREATE TABLE $transactionsTableName ($idString TEXT PRIMARY KEY,$titleString TEXT, $descriptionString TEXT,$amountString TEXT, $createdAtString TEXT, $transactionTypeString TEXT, $ratioToTotalString TEXT, $profileIdString TEXT, $syncFlagString TEXT, $deletedString TEXT , $userIdString TEXT )');
         //* creating profiles table
         await db.execute(
-            'CREATE TABLE $profilesTableName (id TEXT PRIMARY KEY,name TEXT, income TEXT, outcome TEXT, createdAt TEXT, lastActivatedDate TEXT , syncFlag TEXT, deleted TEXT)');
+            'CREATE TABLE $profilesTableName ($idString TEXT PRIMARY KEY,$nameString TEXT, $incomeString TEXT, $outcomeString TEXT, $createdAtString TEXT, $lastActivatedDateString TEXT , $syncFlagString TEXT, $deletedString TEXT, $userIdString TEXT)');
         //* creating quick actions table
         return db.execute(
-            'CREATE TABLE $quickActionsTableName (id TEXT PRIMARY KEY,title TEXT, description TEXT,amount TEXT, createdAt TEXT, transactionType TEXT,  isFavorite TEXT, profileId TEXT , quickActionIndex TEXT,syncFlag TEXT, deleted TEXT )');
+            'CREATE TABLE $quickActionsTableName ($idString TEXT PRIMARY KEY,$titleString TEXT, $descriptionString TEXT,$amountString TEXT, $createdAtString TEXT, $transactionTypeString TEXT,  $isFavoriteString TEXT, $profileIdString TEXT , $quickActionIndexString TEXT,$syncFlagString TEXT, $deletedString TEXT , $userIdString TEXT)');
       },
       version: 1,
     );
