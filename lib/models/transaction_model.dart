@@ -42,13 +42,15 @@ class TransactionModel {
       transactionTypeString: transactionType.name,
       ratioToTotalString: ratioToTotal.toString(),
       profileIdString: profileId,
-      userIdString: userId,
+      userIdString: userId ?? dbNull,
       syncFlagString: syncFlag.name,
       deletedString: deleted == true ? dbTrue : dbFalse,
     };
   }
 
   static TransactionModel fromJSON(Map<String, dynamic> transactionJSON) {
+    //! in the dates just make sure if it is a timestamp or just a date
+    //! cause this will convert the data from the firestore and the local database as well
     String idJ = transactionJSON[idString];
     String titleJ = transactionJSON[titleString];
     String descriptionJ = transactionJSON[descriptionString];
@@ -62,7 +64,7 @@ class TransactionModel {
     String profileIdJ = transactionJSON[profileIdString];
     bool deletedJ = transactionJSON[deletedString] == dbTrue ? true : false;
     SyncFlags syncFlagJ = stringToSyncFlag(transactionJSON[syncFlagString]);
-    String userIdJ = transactionJSON[userIdString] == 'null'
+    String userIdJ = transactionJSON[userIdString] == dbNull
         ? null
         : transactionJSON[userIdString];
     return TransactionModel(

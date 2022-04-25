@@ -187,21 +187,7 @@ class SyncedDataProvider extends ChangeNotifier {
         .collection(profilesCollectionName)
         .get();
     List<ProfileModel> fetchedProfiles = data.docs
-        .map(
-          (profile) => ProfileModel(
-            id: profile['id'],
-            name: profile['name'],
-            income: profile['income'],
-            outcome: profile['outcome'],
-            createdAt: DateTime.parse(profile['createdAt']),
-            lastActivatedDate: profile['lastActivatedDate'] == 'null'
-                ? null
-                : DateTime.parse(profile['lastActivatedDate']),
-            userId: profile['userId'],
-            syncFlag: SyncFlags.none,
-            deleted: profile['deleted'],
-          ),
-        )
+        .map((profile) => ProfileModel.fromJSON(profile.data()))
         .toList();
     return fetchedProfiles;
   }
@@ -215,24 +201,7 @@ class SyncedDataProvider extends ChangeNotifier {
         .collection(transactionsCollectionName)
         .get();
     List<TransactionModel> fetchedTransactions = data.docs
-        .map(
-          (transaction) => TransactionModel(
-            id: transaction['id'],
-            title: transaction['title'],
-            description: transaction['description'],
-            amount: transaction['amount'],
-            createdAt: (transaction['createdAt'] as Timestamp).toDate(),
-            profileId: transaction['profileId'],
-            ratioToTotal: transaction['ratioToTotal'],
-            transactionType:
-                transaction['transactionType'] == TransactionType.income.name
-                    ? TransactionType.income
-                    : TransactionType.outcome,
-            deleted: transaction['deleted'],
-            syncFlag: SyncFlags.none,
-            userId: transaction['userId'],
-          ),
-        )
+        .map((transaction) => TransactionModel.fromJSON(transaction.data()))
         .toList();
     return fetchedTransactions;
   }
@@ -247,23 +216,7 @@ class SyncedDataProvider extends ChangeNotifier {
         .get();
     List<QuickActionModel> fetchedQuickActions = data.docs.map(
       (quickAction) {
-        return QuickActionModel(
-          id: quickAction['id'],
-          title: quickAction['title'],
-          description: quickAction['description'],
-          amount: quickAction['amount'],
-          createdAt: (quickAction['createdAt'] as Timestamp).toDate(),
-          profileId: quickAction['profileId'],
-          transactionType:
-              quickAction['transactionType'] == TransactionType.income.name
-                  ? TransactionType.income
-                  : TransactionType.outcome,
-          deleted: quickAction['deleted'],
-          syncFlag: SyncFlags.none,
-          userId: quickAction['userId'],
-          isFavorite: quickAction['isFavorite'],
-          quickActionIndex: quickAction['quickActionIndex'],
-        );
+        return QuickActionModel.fromJSON(quickAction.data());
       },
     ).toList();
     return fetchedQuickActions;

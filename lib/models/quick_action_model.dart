@@ -65,10 +65,10 @@ class QuickActionModel {
     SyncFlags syncFlagJ = stringToSyncFlag(quickActionJSON[syncFlagString]);
     bool isFavoriteJ =
         quickActionJSON[isFavoriteString] == dbTrue ? true : false;
-    int? quickActionIndexJ = quickActionJSON['quickActionIndex'] == 'null'
+    int? quickActionIndexJ = quickActionJSON[quickActionIndexString] == dbNull
         ? null
-        : int.parse(quickActionJSON['quickActionIndex']);
-    String userIdJ = quickActionJSON[userIdString] == 'null'
+        : int.parse(quickActionJSON[quickActionIndexString]);
+    String userIdJ = quickActionJSON[userIdString] == dbNull
         ? null
         : quickActionJSON[userIdString];
 

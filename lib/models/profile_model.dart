@@ -66,7 +66,7 @@ class ProfileModel {
       lastActivatedDateString: lastActivatedDate == null
           ? dbNull
           : lastActivatedDate!.toIso8601String(),
-      userIdString: userId,
+      userIdString: userId ?? dbNull,
       deletedString: deleted,
       syncFlagString: syncFlag.name,
     };
