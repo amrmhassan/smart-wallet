@@ -1,6 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:smart_wallet/constants/db_shortage_constants.dart';
-import 'package:smart_wallet/models/synced_elements_model.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/utils/trans_periods_utils.dart';
 import '../constants/db_constants.dart';
@@ -10,57 +8,22 @@ import '../helpers/db_helper.dart';
 import '../models/transaction_model.dart';
 
 class TransactionProvider extends ChangeNotifier {
-  //? all profile transactions
+  //? profile transactions
   List<TransactionModel> _transactions = [];
+  //? all transactions
   List<TransactionModel> allTransactions = [];
 
-  void clearAllTransactions() async {
-    _transactions.clear();
-    allTransactions.clear();
-  }
-
-  Future<void> setTransactions(List<TransactionModel> transactions) async {
-    for (var transaction in transactions) {
-      try {
-        await DBHelper.insert(transactionsTableName, {
-          'id': transaction.id,
-          'title': transaction.title,
-          'description': transaction.description,
-          'amount': transaction.amount.toString(),
-          'createdAt': transaction.createdAt.toIso8601String(),
-          'transactionType':
-              transaction.transactionType == TransactionType.income
-                  ? TransactionType.income.name
-                  : TransactionType.outcome.name,
-          'ratioToTotal': transaction.ratioToTotal.toString(),
-          'profileId': transaction.profileId,
-          'syncFlag': transaction.syncFlag.name,
-          'deleted': transaction.deleted == true ? dbTrue : dbFalse,
-        });
-      } catch (error) {
-        if (kDebugMode) {
-          print('Error inserting transactions get from the firestore');
-        }
-        rethrow;
-      }
-    }
-  }
-
+//? not synced transactions from the all transactions
   List<TransactionModel> get notSyncedTransactions {
     return allTransactions
         .where((element) => element.syncFlag != SyncFlags.none)
         .toList();
   }
 
+//? not deleted transactions
   List<TransactionModel> get transactions {
     return _transactions.where((element) => element.deleted == false).toList();
   }
-  // List<TransactionModel> getProfileTransactions(String profileId) {
-  //   return transactions
-  //       .where((element) =>
-  //           (element.profileId == profileId && element.deleted == false))
-  //       .toList();
-  // }
 
 //? getting income transactions
   List<TransactionModel> get _incomeTransactions {
@@ -136,6 +99,26 @@ class TransactionProvider extends ChangeNotifier {
         0, (previousValue, element) => previousValue + element.amount);
   }
 
+//? clear transactions arrays
+  void clearAllTransactions() async {
+    _transactions.clear();
+    allTransactions.clear();
+  }
+
+//? add an array of transactions to the local database
+  Future<void> setTransactions(List<TransactionModel> transactions) async {
+    for (var transaction in transactions) {
+      try {
+        await DBHelper.insert(transactionsTableName, transaction.toJSON());
+      } catch (error) {
+        if (kDebugMode) {
+          print('Error inserting transactions get from the firestore');
+        }
+        rethrow;
+      }
+    }
+  }
+
 //? getting a transaction by id
   TransactionModel getTransactionById(String id) {
     return _transactions.firstWhere((element) => element.id == id);
@@ -169,29 +152,6 @@ class TransactionProvider extends ChangeNotifier {
     //* this line is to ensure that .......
     ratioToTotal = ratioToTotal == double.infinity ? 1 : ratioToTotal;
 
-    //* here i will add the new transaction to the database
-    try {
-      await DBHelper.insert(transactionsTableName, {
-        'id': id,
-        'title': title,
-        'description': description,
-        'amount': amount.toString(),
-        'createdAt': createdAt.toIso8601String(),
-        'transactionType':
-            transactionType == TransactionType.income ? 'income' : 'outcome',
-        'ratioToTotal': ratioToTotal.toString(),
-        'profileId': profileId,
-        'syncFlag': SyncFlags.add.name,
-        'deleted': dbFalse,
-      });
-    } catch (error) {
-      if (kDebugMode) {
-        print(
-            'Error inserting new transaction , check the transaction provider');
-      }
-      rethrow;
-    }
-
     TransactionModel newTransaction = TransactionModel(
       id: id,
       title: title,
@@ -203,7 +163,19 @@ class TransactionProvider extends ChangeNotifier {
       profileId: profileId,
       syncFlag: SyncFlags.add,
       deleted: false,
+      userId: null,
     );
+    //* here i will add the new transaction to the database
+    try {
+      await DBHelper.insert(transactionsTableName, newTransaction.toJSON());
+    } catch (error) {
+      if (kDebugMode) {
+        print(
+            'Error inserting new transaction , check the transaction provider');
+      }
+      rethrow;
+    }
+
     _transactions.add(newTransaction);
     notifyListeners();
   }
@@ -216,22 +188,7 @@ class TransactionProvider extends ChangeNotifier {
 
       List<TransactionModel> fetchedTransactions = data
           .map(
-            (transaction) => TransactionModel(
-              id: transaction['id'],
-              title: transaction['title'],
-              description: transaction['description'],
-              amount: double.parse(transaction['amount']),
-              createdAt: DateTime.parse(transaction['createdAt']),
-              transactionType: transaction['transactionType'] == 'income'
-                  ? TransactionType.income
-                  : TransactionType.outcome,
-              ratioToTotal: double.parse(
-                transaction['ratioToTotal'],
-              ),
-              profileId: transaction['profileId'],
-              deleted: transaction['deleted'] == dbTrue ? true : false,
-              syncFlag: stringToSyncFlag(transaction['syncFlag']),
-            ),
+            (transaction) => TransactionModel.fromJSON(transaction),
           )
           .toList();
 
@@ -258,22 +215,7 @@ class TransactionProvider extends ChangeNotifier {
 
       fetchedTransactions = data
           .map(
-            (transaction) => TransactionModel(
-              id: transaction['id'],
-              title: transaction['title'],
-              description: transaction['description'],
-              amount: double.parse(transaction['amount']),
-              createdAt: DateTime.parse(transaction['createdAt']),
-              transactionType: transaction['transactionType'] == 'income'
-                  ? TransactionType.income
-                  : TransactionType.outcome,
-              ratioToTotal: double.parse(
-                transaction['ratioToTotal'],
-              ),
-              profileId: transaction['profileId'],
-              deleted: transaction['deleted'] == dbTrue ? true : false,
-              syncFlag: stringToSyncFlag(transaction['syncFlag']),
-            ),
+            (transaction) => TransactionModel.fromJSON(transaction),
           )
           .toList();
       allTransactions = fetchedTransactions;
@@ -328,21 +270,7 @@ class TransactionProvider extends ChangeNotifier {
 
     //* editing transaction on database first
     try {
-      await DBHelper.insert(transactionsTableName, {
-        'id': newTransaction.id,
-        'title': newTransaction.title,
-        'description': newTransaction.description,
-        'amount': newTransaction.amount.toString(),
-        'createdAt': newTransaction.createdAt.toIso8601String(),
-        'transactionType':
-            newTransaction.transactionType == TransactionType.income
-                ? 'income'
-                : 'outcome',
-        'ratioToTotal': newTransaction.ratioToTotal.toString(),
-        'profileId': newTransaction.profileId,
-        'syncFlag': newTransaction.syncFlag.name,
-        'deleted': newTransaction.deleted ? dbTrue : dbFalse,
-      });
+      await DBHelper.insert(transactionsTableName, newTransaction.toJSON());
     } catch (error) {
       if (kDebugMode) {
         print('Error Editing transaction , check the transaction provider');

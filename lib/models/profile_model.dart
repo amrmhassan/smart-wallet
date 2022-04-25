@@ -81,9 +81,9 @@ class ProfileModel {
             profileJSON['lastActivatedDate'] == 'null'
         ? null
         : DateTime.parse(profileJSON['lastActivatedDate']);
-    String? userIdJ = profileJSON['userId'];
     bool deletedJ = profileJSON['deleted'] == dbTrue ? true : false;
     SyncFlags syncFlagsJ = stringToSyncFlag(profileJSON['syncFlag']);
+    // String? userIdJ = profileJSON['userId'];
 
     return ProfileModel(
       id: idJ,
@@ -93,8 +93,8 @@ class ProfileModel {
       createdAt: createdAtJ,
       deleted: deletedJ,
       lastActivatedDate: lastActivatedDateJ,
-      userId: userIdJ,
       syncFlag: syncFlagsJ,
+      // userId: userIdJ,
     );
   }
 }
