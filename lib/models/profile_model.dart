@@ -3,6 +3,16 @@ import 'package:smart_wallet/constants/profiles_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/models/synced_elements_model.dart';
 
+String idString = 'id';
+String nameString = 'name';
+String incomeString = 'income';
+String outcomeString = 'outcome';
+String createdAtString = 'createdAt';
+String lastActivatedDateString = 'lastActivatedDate';
+String userIdString = 'userId';
+String deletedString = 'deleted';
+String syncFlagString = 'syncFlag';
+
 const double _goodLimit = .70; // when it is from 70% to 100% it will be good
 const double _moderateLimit =
     .55; // when it is from 55% to 70% it will be moderate
@@ -57,34 +67,35 @@ class ProfileModel {
 
   Map<String, dynamic> toJSON() {
     return {
-      'id': id,
-      'name': name,
-      'income': income,
-      'outcome': outcome,
-      'createdAt': createdAt.toIso8601String(),
-      'lastActivatedDate': lastActivatedDate == null
-          ? 'null'
+      idString: id,
+      nameString: name,
+      incomeString: income,
+      outcomeString: outcome,
+      createdAtString: createdAt.toIso8601String(),
+      lastActivatedDateString: lastActivatedDate == null
+          ? dbNull
           : lastActivatedDate!.toIso8601String(),
-      'userId': userId,
-      'deleted': deleted,
-      'syncFlag': syncFlag.name,
+      userIdString: userId,
+      deletedString: deleted,
+      syncFlagString: syncFlag.name,
     };
   }
 
   static ProfileModel fromJSON(Map<String, dynamic> profileJSON) {
-    String idJ = profileJSON['id'];
-    String nameJ = profileJSON['name'];
-    double incomeJ = double.parse(profileJSON['income']);
-    double outcomeJ = double.parse(profileJSON['outcome']);
-    DateTime createdAtJ = DateTime.parse(profileJSON['createdAt']);
-    DateTime? lastActivatedDateJ = profileJSON['lastActivatedDate'] == null ||
-            profileJSON['lastActivatedDate'] == 'null'
-        ? null
-        : DateTime.parse(profileJSON['lastActivatedDate']);
-    bool deletedJ = profileJSON['deleted'] == dbTrue ? true : false;
-    SyncFlags syncFlagsJ = stringToSyncFlag(profileJSON['syncFlag']);
-    // String? userIdJ = profileJSON['userId'];
-
+    String idJ = profileJSON[idString];
+    String nameJ = profileJSON[nameString];
+    double incomeJ = double.parse(profileJSON[incomeString]);
+    double outcomeJ = double.parse(profileJSON[outcomeString]);
+    DateTime createdAtJ = DateTime.parse(profileJSON[createdAtString]);
+    DateTime? lastActivatedDateJ =
+        profileJSON[lastActivatedDateString] == null ||
+                profileJSON[lastActivatedDateString] == dbNull
+            ? null
+            : DateTime.parse(profileJSON[lastActivatedDateString]);
+    bool deletedJ = profileJSON[deletedString] == dbTrue ? true : false;
+    SyncFlags syncFlagsJ = stringToSyncFlag(profileJSON[syncFlagString]);
+    String userIdJ =
+        profileJSON[userIdString] == dbNull ? null : profileJSON[userIdString];
     return ProfileModel(
       id: idJ,
       name: nameJ,
@@ -94,7 +105,7 @@ class ProfileModel {
       deleted: deletedJ,
       lastActivatedDate: lastActivatedDateJ,
       syncFlag: syncFlagsJ,
-      // userId: userIdJ,
+      userId: userIdJ,
     );
   }
 }

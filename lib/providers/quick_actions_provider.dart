@@ -1,8 +1,6 @@
 // ignore_for_file: unused_element, prefer_const_constructors
 
 import 'package:flutter/foundation.dart';
-import 'package:smart_wallet/constants/db_shortage_constants.dart';
-import 'package:smart_wallet/models/synced_elements_model.dart';
 import 'package:uuid/uuid.dart';
 import '../constants/db_constants.dart';
 import '../constants/types.dart';
@@ -23,22 +21,7 @@ class QuickActionsProvider extends ChangeNotifier {
   Future<void> setQuickActions(List<QuickActionModel> quickActions) async {
     for (var quickAction in quickActions) {
       try {
-        await DBHelper.insert(quickActionsTableName, {
-          'id': quickAction.id,
-          'title': quickAction.title,
-          'description': quickAction.description,
-          'amount': quickAction.amount.toString(),
-          'createdAt': quickAction.createdAt.toIso8601String(),
-          'transactionType':
-              quickAction.transactionType == TransactionType.income
-                  ? 'income'
-                  : 'outcome',
-          'isFavorite': quickAction.isFavorite ? dbTrue : dbFalse,
-          'profileId': quickAction.profileId,
-          'quickActionIndex': quickAction.quickActionIndex.toString(),
-          'syncFlag': quickAction.syncFlag.name,
-          'deleted': quickAction.deleted == true ? dbTrue : dbFalse,
-        });
+        await DBHelper.insert(quickActionsTableName, quickAction.toJSON());
       } catch (error) {
         if (kDebugMode) {
           print(
@@ -123,29 +106,6 @@ class QuickActionsProvider extends ChangeNotifier {
       quickActionIndex = null;
     }
 
-    //* here i will add the new transaction to the database
-    try {
-      await DBHelper.insert(quickActionsTableName, {
-        'id': id,
-        'title': title,
-        'description': description,
-        'amount': amount.toString(),
-        'createdAt': createdAt.toIso8601String(),
-        'transactionType':
-            transactionType == TransactionType.income ? 'income' : 'outcome',
-        'isFavorite': quickActions.isEmpty ? dbTrue : dbFalse,
-        'profileId': profileId,
-        'quickActionIndex': quickActionIndex.toString(),
-        'syncFlag': SyncFlags.add.name,
-        'deleted': dbFalse,
-      });
-    } catch (error) {
-      if (kDebugMode) {
-        print(
-            'Error inserting new transaction , check the transaction provider');
-      }
-      rethrow;
-    }
     QuickActionModel quickActionModel = QuickActionModel(
       id: id,
       title: title,
@@ -159,6 +119,16 @@ class QuickActionsProvider extends ChangeNotifier {
       syncFlag: SyncFlags.add,
       deleted: false,
     );
+    //* here i will add the new transaction to the database
+    try {
+      await DBHelper.insert(quickActionsTableName, quickActionModel.toJSON());
+    } catch (error) {
+      if (kDebugMode) {
+        print(
+            'Error inserting new transaction , check the transaction provider');
+      }
+      rethrow;
+    }
     _quickActions.add(quickActionModel);
     notifyListeners();
   }
@@ -171,25 +141,7 @@ class QuickActionsProvider extends ChangeNotifier {
 
       List<QuickActionModel> fetchedQuickActions = data.map(
         (quickAction) {
-          return QuickActionModel(
-            id: quickAction['id'],
-            title: quickAction['title'],
-            description: quickAction['description'],
-            amount: double.parse(quickAction['amount']),
-            createdAt: DateTime.parse(quickAction['createdAt']),
-            transactionType: quickAction['transactionType'] == 'income'
-                ? TransactionType.income
-                : TransactionType.outcome,
-
-            //? sqlite doesn't support bool datatype so i will store it as string then fetch it and decide
-            isFavorite: quickAction['isFavorite'] == dbTrue ? true : false,
-            profileId: quickAction['profileId'],
-            quickActionIndex: quickAction['quickActionIndex'] == 'null'
-                ? null
-                : int.parse(quickAction['quickActionIndex']),
-            deleted: quickAction['deleted'] == dbTrue ? true : false,
-            syncFlag: stringToSyncFlag(quickAction['syncFlag']),
-          );
+          return QuickActionModel.fromJSON(quickAction);
         },
       ).toList();
 
@@ -217,25 +169,7 @@ class QuickActionsProvider extends ChangeNotifier {
 
       fetchedQuickActions = data.map(
         (quickAction) {
-          return QuickActionModel(
-            id: quickAction['id'],
-            title: quickAction['title'],
-            description: quickAction['description'],
-            amount: double.parse(quickAction['amount']),
-            createdAt: DateTime.parse(quickAction['createdAt']),
-            transactionType: quickAction['transactionType'] == 'income'
-                ? TransactionType.income
-                : TransactionType.outcome,
-
-            //? sqlite doesn't support bool datatype so i will store it as string then fetch it and decide
-            isFavorite: quickAction['isFavorite'] == dbTrue ? true : false,
-            profileId: quickAction['profileId'],
-            quickActionIndex: quickAction['quickActionIndex'] == 'null'
-                ? null
-                : int.parse(quickAction['quickActionIndex']),
-            deleted: quickAction['deleted'] == dbTrue ? true : false,
-            syncFlag: stringToSyncFlag(quickAction['syncFlag']),
-          );
+          return QuickActionModel.fromJSON(quickAction);
         },
       ).toList();
       allQuickActions = fetchedQuickActions;
@@ -275,22 +209,7 @@ class QuickActionsProvider extends ChangeNotifier {
   Future<void> editQuickActionOnDataBaseOnly(
       QuickActionModel newQuickAction) async {
     try {
-      await DBHelper.insert(quickActionsTableName, {
-        'id': newQuickAction.id,
-        'title': newQuickAction.title,
-        'description': newQuickAction.description,
-        'amount': newQuickAction.amount.toString(),
-        'createdAt': newQuickAction.createdAt.toIso8601String(),
-        'transactionType':
-            newQuickAction.transactionType == TransactionType.income
-                ? 'income'
-                : 'outcome',
-        'isFavorite': newQuickAction.isFavorite ? dbTrue : dbFalse,
-        'profileId': newQuickAction.profileId,
-        'quickActionIndex': newQuickAction.quickActionIndex.toString(),
-        'syncFlag': newQuickAction.syncFlag.name,
-        'deleted': newQuickAction.deleted ? dbTrue : dbFalse,
-      });
+      await DBHelper.insert(quickActionsTableName, newQuickAction.toJSON());
     } catch (error) {
       if (kDebugMode) {
         print(

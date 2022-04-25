@@ -163,7 +163,6 @@ class TransactionProvider extends ChangeNotifier {
       profileId: profileId,
       syncFlag: SyncFlags.add,
       deleted: false,
-      userId: null,
     );
     //* here i will add the new transaction to the database
     try {

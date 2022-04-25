@@ -74,8 +74,9 @@ class TransactionModel {
     String profileIdJ = transactionJSON[profileIdString];
     bool deletedJ = transactionJSON[deletedString] == dbTrue ? true : false;
     SyncFlags syncFlagJ = stringToSyncFlag(transactionJSON[syncFlagString]);
-    // String userIdJ = transactionJSON[userIdString];
-
+    String userIdJ = transactionJSON[userIdString] == 'null'
+        ? null
+        : transactionJSON[userIdString];
     return TransactionModel(
       id: idJ,
       title: titleJ,
@@ -87,7 +88,7 @@ class TransactionModel {
       profileId: profileIdJ,
       deleted: deletedJ,
       syncFlag: syncFlagJ,
-      // userId: userIdJ,
+      userId: userIdJ,
     );
   }
 }
