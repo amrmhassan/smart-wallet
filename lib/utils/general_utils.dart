@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
@@ -43,4 +45,17 @@ void showSnackBar(
       ),
     ),
   );
+}
+
+Future<bool> isOnline() async {
+  bool online = false;
+  try {
+    var result = await InternetAddress.lookup('google.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      online = true;
+    }
+  } catch (error) {
+    online = false;
+  }
+  return online;
 }

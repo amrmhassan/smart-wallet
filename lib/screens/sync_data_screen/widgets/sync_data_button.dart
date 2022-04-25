@@ -12,15 +12,17 @@ import 'package:smart_wallet/providers/transactions_provider.dart';
 class SyncDataButton extends StatelessWidget {
   final VoidCallback onTap;
   final bool syncing;
+  final bool online;
 
   bool enableButton(BuildContext context) {
-    return !syncing && enableSyncButton(context);
+    return !syncing && enableSyncButton(context) && online;
   }
 
   const SyncDataButton({
     Key? key,
     required this.onTap,
     required this.syncing,
+    required this.online,
   }) : super(key: key);
 
   bool enableSyncButton(BuildContext context) {

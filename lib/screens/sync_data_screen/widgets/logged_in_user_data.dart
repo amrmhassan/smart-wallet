@@ -20,6 +20,7 @@ class LoggedInUserData extends StatefulWidget {
   final TransactionProvider transactions;
   final QuickActionsProvider quickActions;
   final Future<void> Function() googleLogIn;
+  final bool online;
 
   const LoggedInUserData({
     Key? key,
@@ -28,6 +29,7 @@ class LoggedInUserData extends StatefulWidget {
     required this.transactions,
     required this.quickActions,
     required this.googleLogIn,
+    required this.online,
   }) : super(key: key);
 
   @override
@@ -93,6 +95,7 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
         SyncDataButton(
           onTap: () async => await syncData(context),
           syncing: _syncing,
+          online: widget.online,
         ),
 
         SizedBox(

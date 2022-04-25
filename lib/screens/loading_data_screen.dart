@@ -8,6 +8,7 @@ import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/holder_screen/holder_screen.dart';
+import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/widgets/global/main_loading.dart';
 
 class LoadingDataScreen extends StatefulWidget {
@@ -41,10 +42,16 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
     // //? 5] fetching the quick actions
     await Provider.of<QuickActionsProvider>(context, listen: false)
         .fetchAndUpdateProfileQuickActions(activeProfileId);
+
+    // bool online = await isOnline();
+    // print('--------------------');
+    // print(online);
+    // print('--------------------');
   }
 
   @override
   void initState() {
+    //! this work very well in debugging mode but in production mode the problem happens and i can't debug the problem in production mode
     //! i have no other solution but this to fix the ultimate fucken problem
     //! this will run first
     Future.delayed(Duration.zero).then((value) async {
@@ -53,7 +60,7 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
           .fetchAndSetActiveTheme();
     });
     //! if you made this of zero duration the loading will be infinitely loading in the production
-    Future.delayed(Duration.zero).then((value) async {
+    Future.delayed(Duration(seconds: 1)).then((value) async {
       await fetchData();
       Navigator.pushReplacementNamed(context, HolderScreen.routeName);
     });

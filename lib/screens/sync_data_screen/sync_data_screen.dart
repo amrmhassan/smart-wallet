@@ -9,6 +9,7 @@ import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/logged_in_user_data.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/logout_button.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/not_logged_in_user_data.dart';
+import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/utils/synced_data_utils.dart';
 import '../../constants/sizes.dart';
 
@@ -30,6 +31,7 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
   bool _loading = false;
   bool _loggingIn = false;
   bool _loggingOut = false;
+  bool _isOnline = false;
 
   void toggleLogin() {
     setState(() {
@@ -60,6 +62,10 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
     // //? 7] fetching all  quick actions
     await Provider.of<QuickActionsProvider>(context, listen: false)
         .fetchAndUpdateAllQuickActions();
+    bool online = await isOnline();
+    setState(() {
+      _isOnline = online;
+    });
     setState(() {
       _loading = false;
     });
@@ -136,6 +142,7 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
                                   User user = snapshot.data as User;
 
                                   return LoggedInUserData(
+                                    online: _isOnline,
                                     user: user,
                                     profiles: profileProvider,
                                     transactions: transactionProvider,

@@ -65,16 +65,31 @@ class ProfileModel {
           : lastActivatedDate!.toIso8601String(),
       'userId': userId,
       'deleted': deleted,
+      'syncFlag': syncFlag.name,
     };
+  }
 
-    //     String id;
-    // String name;
-    // double income;
-    // double outcome;
-    // DateTime createdAt;
-    // DateTime? lastActivatedDate;
-    // String? userId;
-    // SyncFlags syncFlag;
-    // bool deleted;
+  ProfileModel fromJSON(Map<String, dynamic> profileJSON) {
+    String idJ = profileJSON['id'];
+    String nameJ = profileJSON['name'];
+    double incomeJ = profileJSON['income'];
+    double outcomeJ = profileJSON['outcome'];
+    DateTime createdAtJ = profileJSON['createdAt'];
+    DateTime? lastActivatedDateJ = profileJSON['lastActivatedDate'];
+    String? userIdJ = profileJSON['userId'];
+    bool deletedJ = profileJSON['deleted'];
+    SyncFlags syncFlagsJ = profileJSON['syncFlag'];
+
+    return ProfileModel(
+      id: idJ,
+      name: nameJ,
+      income: incomeJ,
+      outcome: outcomeJ,
+      createdAt: createdAtJ,
+      deleted: deletedJ,
+      lastActivatedDate: lastActivatedDateJ,
+      userId: userIdJ,
+      syncFlag: syncFlagsJ,
+    );
   }
 }

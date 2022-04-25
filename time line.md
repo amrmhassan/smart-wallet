@@ -38,22 +38,21 @@ DONE - the saving of today isn't equal to the income of that day minus the outco
 DONE - it equals to the savings of the pervious days + income of that day - outcome of that day= totalIncome-totalOutcome
 DONE - after chaning the theme restart the app programatically(Fixied with other solution)
 DONE - so the savings always equal to the total (income from the first day to the current day ) - (total outcome from the first day to the current day) it will make difference in the chart of the savings-- cause the savings of each day will equal to the income of the previous days - the outcome of the previous days
+DONE - when logging in for the first time (not switching users) the transactions are deleted so ask the user if he want to delete the existing daat or not
+DONE - fix the change in the syncing flag on the quick actions and transactions when editing them
+DONE - through the favoriting or, actual editing
+DONE - if they are still new (add keep it add)
+DONE - else if it is (none keep it none)
+DONE - else make it (edit)
 
 
 
 [Pending]
 add a lastActivatedDate to each profile 
 --then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)
-# fix the change in the syncing flag on the quick actions and transactions when editing them
-# through the favoriting or, actual editing
-# if they are still new (add keep it add)
-# else if it is (none keep it none)
-# else make it (edit) 
-when logging in for the first time (not switching users) the transactions are deleted so ask the user if he want to delete the existing daat or not
- if there is another user logged in don't ask him just delete after showing the dialog to delete 
- in the current implementation i will ask the user to delete or not
- because the user will log out first before logging in with a different account
- after fixing the login with another email button implement the deleting without asking the user if there is another email logged in and all the data synced
+ 
+
+
 
 
 
@@ -90,8 +89,10 @@ add a method for each model to convert it to json or from json
 
 
 [Bad]
-NO
-
+if there is another user logged in don't ask him just delete after showing the dialog to delete 
+in the current implementation i will ask the user to delete or not
+because the user will log out first before logging in with a different account
+after fixing the login with another email button implement the deleting without asking the user if there is another email logged in and all the data synced
 
 
 
