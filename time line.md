@@ -49,6 +49,11 @@ add a lastActivatedDate to each profile
 # if they are still new (add keep it add)
 # else if it is (none keep it none)
 # else make it (edit) 
+when logging in for the first time (not switching users) the transactions are deleted so ask the user if he want to delete the existing daat or not
+ if there is another user logged in don't ask him just delete after showing the dialog to delete 
+ in the current implementation i will ask the user to delete or not
+ because the user will log out first before logging in with a different account
+ after fixing the login with another email button implement the deleting without asking the user if there is another email logged in and all the data synced
 
 
 

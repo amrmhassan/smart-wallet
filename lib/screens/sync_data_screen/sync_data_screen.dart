@@ -9,6 +9,7 @@ import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/logged_in_user_data.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/logout_button.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/not_logged_in_user_data.dart';
+import 'package:smart_wallet/utils/synced_data_utils.dart';
 import '../../constants/sizes.dart';
 
 import '../../widgets/app_bar/my_app_bar.dart';
@@ -105,8 +106,19 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
                               builder: (ctx, snapshot) => MyAppBar(
                                 title: 'Sync Data',
                                 enableTapping: false,
-                                rightIcon:
-                                    snapshot.hasData ? LogOutButton() : null,
+                                rightIcon: snapshot.hasData
+                                    ? LogOutButton(
+                                        logOut: () async {
+                                          setState(() {
+                                            _loggingOut = true;
+                                          });
+                                          await logOut(context);
+                                          setState(() {
+                                            _loggingOut = false;
+                                          });
+                                        },
+                                      )
+                                    : null,
                               ),
                             ),
                             SizedBox(
@@ -123,11 +135,20 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
 
                                   return LoggedInUserData(
                                     user: user,
-                                    profiles: profileProvider.notSyncedProfiles,
-                                    transactions: transactionProvider
-                                        .notSyncedTransactions,
-                                    quickActions: quickActionsProvider
-                                        .notSyncedQuickActions,
+                                    profiles: profileProvider,
+                                    transactions: transactionProvider,
+                                    quickActions: quickActionsProvider,
+                                    googleLogIn: () async {
+                                      setState(() {
+                                        _loggingIn = true;
+                                      });
+                                      await googleLogin(
+                                        context,
+                                      );
+                                      setState(() {
+                                        _loggingIn = false;
+                                      });
+                                    },
                                   );
                                 } else {
                                   return NotLoggedInUserData(
@@ -136,6 +157,16 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
                                         .notSyncedTransactions,
                                     quickActions: quickActionsProvider
                                         .notSyncedQuickActions,
+                                    googleLogIn: () async {
+                                      setState(() {
+                                        _loggingIn = true;
+                                      });
+
+                                      await googleLogin(context);
+                                      setState(() {
+                                        _loggingIn = false;
+                                      });
+                                    },
                                   );
                                 }
                               },

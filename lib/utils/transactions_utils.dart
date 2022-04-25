@@ -57,7 +57,7 @@ Future<void> showApplyQuickActionDialog(
 
   await AwesomeDialog(
     context: context,
-    dialogType: DialogType.SUCCES,
+    dialogType: DialogType.INFO,
     animType: AnimType.BOTTOMSLIDE,
     title: 'Apply Quick Action?',
     btnCancelOnPress: () {},

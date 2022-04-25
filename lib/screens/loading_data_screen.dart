@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/helpers/shared_pref_helper.dart';
+import 'package:smart_wallet/providers/profiles_provider.dart';
+import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/holder_screen/holder_screen.dart';
 import 'package:smart_wallet/widgets/global/main_loading.dart';
 
@@ -19,45 +21,42 @@ class LoadingDataScreen extends StatefulWidget {
 class _LoadingDataScreenState extends State<LoadingDataScreen> {
   bool firstTimeRunApp = true;
 
+  Future<void> fetchData() async {
+    //? 2] fetching the profiles
+    await Provider.of<ProfilesProvider>(context, listen: false)
+        .fetchAndUpdateProfiles();
+
+    //? 3] fetching the active profile id
+    await Provider.of<ProfilesProvider>(context, listen: false)
+        .fetchAndUpdateActivatedProfileId();
+
+    String activeProfileId =
+        Provider.of<ProfilesProvider>(context, listen: false)
+            .activatedProfileId;
+
+    // //? 4] fetching the transactions from the database
+    await Provider.of<TransactionProvider>(context, listen: false)
+        .fetchAndUpdateProfileTransactions(activeProfileId);
+
+    // //? 5] fetching the quick actions
+    await Provider.of<QuickActionsProvider>(context, listen: false)
+        .fetchAndUpdateProfileQuickActions(activeProfileId);
+  }
+
   @override
   void initState() {
-    //* i needed the trick of duration zero here
-    //* here i will fetch and update the transactions
-
-    //? 1]  fetching the active theme
+    //! i have no other solution but this to fix the ultimate fucken problem
+    //! this will run first
     Future.delayed(Duration.zero).then((value) async {
-      // await Provider.of<ThemeProvider>(context, listen: false)
-      //     .fetchAndSetActiveTheme();
-      // });
-      // Future.delayed(Duration.zero).then((value) async {
-      // //? 2] fetching the profiles
-      // await Provider.of<ProfilesProvider>(context, listen: false)
-      //     .fetchAndUpdateProfiles();
-      // //? 3] fetching the active profile id
-      // //* foe getting the active profile id and default one if empty
-      // await Provider.of<ProfilesProvider>(context, listen: false)
-      //     .fetchAndUpdateActivatedProfileId();
-
-      // //? 4] fetching the transactions from the database
-      // await Provider.of<TransactionProvider>(context, listen: false)
-      //     .fetchAllTransactionsFromDataBase();
-
-      //? 5] fetching the quick actions
-      // await Provider.of<QuickActionsProvider>(context, listen: false)
-      //     .fetchAllQuickActionsFromDataBase();
-//! this error happened because i was using pushReplacementNamed and this disposes the providers used here
-//! so i think i might need to refresh the providers in the holder screen to user them again after disposing this widget
-
-      //? 6] forwarding the holder screen
-      await Future.delayed(Duration.zero).then((value) async =>
-          await Navigator.pushReplacementNamed(
-              context, HolderScreen.routeName));
-      if (await SharedPrefHelper.firstTimeRunApp()) {
-      } else {
-        await Navigator.pushReplacementNamed(context, HolderScreen.routeName);
-      }
+      //? 1]  fetching the active theme
+      await Provider.of<ThemeProvider>(context, listen: false)
+          .fetchAndSetActiveTheme();
     });
-
+    //! if you made this of zero duration the loading will be infinitely loading in the production
+    Future.delayed(Duration.zero).then((value) async {
+      await fetchData();
+      Navigator.pushReplacementNamed(context, HolderScreen.routeName);
+    });
     super.initState();
   }
 

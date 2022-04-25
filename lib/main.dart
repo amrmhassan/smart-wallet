@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: HolderScreen.routeName,
+        initialRoute: LoadingDataScreen.routeName,
         routes: {
           LoadingDataScreen.routeName: (ctx) => const LoadingDataScreen(),
           HolderScreen.routeName: (ctx) => const HolderScreen(),

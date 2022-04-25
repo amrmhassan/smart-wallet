@@ -21,7 +21,6 @@ class QuickActionsProvider extends ChangeNotifier {
   }
 
   Future<void> setQuickActions(List<QuickActionModel> quickActions) async {
-    allQuickActions = quickActions;
     for (var quickAction in quickActions) {
       try {
         await DBHelper.insert(quickActionsTableName, {

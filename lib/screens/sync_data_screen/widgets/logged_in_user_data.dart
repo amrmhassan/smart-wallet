@@ -5,9 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/sizes.dart';
-import 'package:smart_wallet/models/profile_model.dart';
-import 'package:smart_wallet/models/quick_action_model.dart';
-import 'package:smart_wallet/models/transaction_model.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/synced_data_provider.dart';
@@ -18,18 +15,20 @@ import 'package:smart_wallet/screens/sync_data_screen/widgets/sync_data_button.d
 import 'package:smart_wallet/screens/sync_data_screen/widgets/user_info_viewer.dart';
 
 class LoggedInUserData extends StatefulWidget {
+  final User user;
+  final ProfilesProvider profiles;
+  final TransactionProvider transactions;
+  final QuickActionsProvider quickActions;
+  final Future<void> Function() googleLogIn;
+
   const LoggedInUserData({
     Key? key,
     required this.user,
     required this.profiles,
     required this.transactions,
     required this.quickActions,
+    required this.googleLogIn,
   }) : super(key: key);
-
-  final User user;
-  final List<ProfileModel> profiles;
-  final List<TransactionModel> transactions;
-  final List<QuickActionModel> quickActions;
 
   @override
   State<LoggedInUserData> createState() => _LoggedInUserDataState();
@@ -104,9 +103,9 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
         DataCard(
           title: 'Not Synced Data',
           data: {
-            'Profiles': widget.profiles.length,
-            'Transactions': widget.transactions.length,
-            'Quick Actions': widget.quickActions.length,
+            'Profiles': widget.profiles.notSyncedProfiles.length,
+            'Transactions': widget.transactions.notSyncedTransactions.length,
+            'Quick Actions': widget.quickActions.notSyncedQuickActions.length,
           },
         ),
         SizedBox(
@@ -114,18 +113,20 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
         ),
         //* for showing the synced data info
         DataCard(
-          title: 'Synced Data',
+          title: 'All Data',
           data: {
-            'Profiles': 10,
-            'Transactions': 53,
-            'Quick Actions': 6,
+            'Profiles': widget.profiles.profiles.length,
+            'Transactions': widget.transactions.allTransactions.length,
+            'Quick Actions': widget.quickActions.allQuickActions.length,
           },
         ),
         SizedBox(
           height: kDefaultPadding,
         ),
         //! implement this button and then fix the error with it
-        // LogInUserOptions(),
+        LogInUserOptions(
+          googleLogin: () async => await widget.googleLogIn(),
+        ),
       ],
     );
   }

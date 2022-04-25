@@ -9,11 +9,13 @@ import 'package:smart_wallet/screens/sync_data_screen/widgets/data_card.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/login_user_options.dart';
 
 class NotLoggedInUserData extends StatelessWidget {
+  final Future<void> Function() googleLogIn;
   const NotLoggedInUserData({
     Key? key,
     required this.profiles,
     required this.transactions,
     required this.quickActions,
+    required this.googleLogIn,
   }) : super(key: key);
 
   final List<ProfileModel> profiles;
@@ -24,7 +26,7 @@ class NotLoggedInUserData extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        LogInUserOptions(),
+        LogInUserOptions(googleLogin: () async => await googleLogIn()),
         SizedBox(
           height: kDefaultPadding,
         ),

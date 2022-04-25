@@ -23,7 +23,6 @@ class ProfilesProvider extends ChangeNotifier {
   }
 
   Future<void> setProfiles(List<ProfileModel> profiles) async {
-    _profiles = profiles;
     //! here add the profiles to the local database
     for (var profile in profiles) {
       try {

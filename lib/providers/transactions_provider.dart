@@ -20,8 +20,6 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   Future<void> setTransactions(List<TransactionModel> transactions) async {
-    allTransactions = transactions;
-
     for (var transaction in transactions) {
       try {
         await DBHelper.insert(transactionsTableName, {

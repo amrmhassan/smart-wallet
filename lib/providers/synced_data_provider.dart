@@ -148,18 +148,20 @@ class SyncedDataProvider extends ChangeNotifier {
   Future<void> getAllData(
     ProfilesProvider profilesProvider,
     TransactionProvider transactionProvider,
-    QuickActionsProvider quickActionsProvider,
-  ) async {
+    QuickActionsProvider quickActionsProvider, [
+    bool delete = false,
+  ]) async {
     List<ProfileModel> profiles = await getProfiles();
     List<TransactionModel> transactions = await getTransactions();
     List<QuickActionModel> quickActions = await getQuickActions();
-
-//! there is an error in fetching the quick actions and it is about getting isFavorite and quickActionIndex
-    profilesProvider.clearAllProfiles();
-    transactionProvider.clearAllTransactions();
-    quickActionsProvider.clearAllQuickActions();
-    await DBHelper.deleteDatabase(dbName);
-    await profilesProvider.clearActiveProfileId();
+//? i will only delete the data if the user chose to when logging in and there is no logged in user already
+    if (delete) {
+      profilesProvider.clearAllProfiles();
+      transactionProvider.clearAllTransactions();
+      quickActionsProvider.clearAllQuickActions();
+      await DBHelper.deleteDatabase(dbName);
+      await profilesProvider.clearActiveProfileId();
+    }
 
     await profilesProvider.setProfiles(profiles);
     await transactionProvider.setTransactions(transactions);
