@@ -20,38 +20,48 @@ class SyncedDataProvider extends ChangeNotifier {
       QuickActionsProvider quickActionsProvider) async {
     try {
       for (var profile in profilesProvider.notSyncedProfiles) {
-        if (profile.syncFlag == SyncFlags.add) {
+        //* i made this just to prevent syncing the profile with the sync flag add or anything else
+        //* and to ensure that it would by synced with the none flag to the firestore
+        SyncFlags currentSyncFlag = profile.syncFlag;
+        profile.syncFlag = SyncFlags.none;
+        await profilesProvider.changeSyncFlag(profile.id, SyncFlags.none);
+
+        if (currentSyncFlag == SyncFlags.add) {
           await addProfile(profile);
-        } else if (profile.syncFlag == SyncFlags.edit) {
+        } else if (currentSyncFlag == SyncFlags.edit) {
           await updateProfile(profile);
-        } else if (profile.syncFlag == SyncFlags.delete) {
+        } else if (currentSyncFlag == SyncFlags.delete) {
           await updateProfile(profile);
         }
-        await profilesProvider.changeSyncFlag(profile.id, SyncFlags.none);
       }
       for (var transaction in transactionProvider.notSyncedTransactions) {
-        if (transaction.syncFlag == SyncFlags.add) {
-          await addTransaction(transaction);
-        } else if (transaction.syncFlag == SyncFlags.edit) {
-          await editTransaction(transaction);
-        } else if (transaction.syncFlag == SyncFlags.delete) {
-          await editTransaction(transaction);
-        }
-
+        SyncFlags currentSyncFlag = transaction.syncFlag;
+        transaction.syncFlag = SyncFlags.none;
         await transactionProvider.changeSyncFlag(
             transaction.id, SyncFlags.none);
+
+        if (currentSyncFlag == SyncFlags.add) {
+          await addTransaction(transaction);
+        } else if (currentSyncFlag == SyncFlags.edit) {
+          await editTransaction(transaction);
+        } else if (currentSyncFlag == SyncFlags.delete) {
+          await editTransaction(transaction);
+        }
       }
 
       for (var quickAction in quickActionsProvider.notSyncedQuickActions) {
-        if (quickAction.syncFlag == SyncFlags.add) {
-          await addQuickAction(quickAction);
-        } else if (quickAction.syncFlag == SyncFlags.edit) {
-          await editQuickAction(quickAction);
-        } else if (quickAction.syncFlag == SyncFlags.delete) {
-          await editQuickAction(quickAction);
-        }
+        SyncFlags currentSyncFlag = quickAction.syncFlag;
         await quickActionsProvider.changeSyncFlag(
             quickAction.id, SyncFlags.none);
+        quickAction.syncFlag = SyncFlags.none;
+
+        if (currentSyncFlag == SyncFlags.add) {
+          await addQuickAction(quickAction);
+        } else if (currentSyncFlag == SyncFlags.edit) {
+          await editQuickAction(quickAction);
+        } else if (currentSyncFlag == SyncFlags.delete) {
+          await editQuickAction(quickAction);
+        }
       }
     } catch (error) {
       if (kDebugMode) {

@@ -43,8 +43,8 @@ class QuickActionModel {
       transactionTypeString: transactionType.name,
       isFavoriteString: isFavorite ? dbTrue : dbFalse,
       profileIdString: profileId,
-      quickActionIndexString: quickActionIndex.toString(),
-      userIdString: userId,
+      quickActionIndexString: quickActionIndex ?? dbNull,
+      userIdString: userId ?? dbNull,
       deletedString: deleted ? dbTrue : dbFalse,
       syncFlagString: syncFlag.name,
     };
@@ -54,7 +54,7 @@ class QuickActionModel {
     String idJ = quickActionJSON[idString];
     String titleJ = quickActionJSON[titleString];
     String descriptionJ = quickActionJSON[descriptionString];
-    double amountJ = double.parse(quickActionJSON[amountString]);
+    double amountJ = double.parse(quickActionJSON[amountString].toString());
     TransactionType transactionTypeJ =
         quickActionJSON[transactionTypeString] == TransactionType.income.name
             ? TransactionType.income
@@ -67,8 +67,8 @@ class QuickActionModel {
         quickActionJSON[isFavoriteString] == dbTrue ? true : false;
     int? quickActionIndexJ = quickActionJSON[quickActionIndexString] == dbNull
         ? null
-        : int.parse(quickActionJSON[quickActionIndexString]);
-    String userIdJ = quickActionJSON[userIdString] == dbNull
+        : int.parse(quickActionJSON[quickActionIndexString].toString());
+    String? userIdJ = quickActionJSON[userIdString] == dbNull
         ? null
         : quickActionJSON[userIdString];
 

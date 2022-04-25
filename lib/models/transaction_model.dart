@@ -54,17 +54,18 @@ class TransactionModel {
     String idJ = transactionJSON[idString];
     String titleJ = transactionJSON[titleString];
     String descriptionJ = transactionJSON[descriptionString];
-    double amountJ = double.parse(transactionJSON[amountString]);
+    double amountJ = double.parse(transactionJSON[amountString].toString());
     TransactionType transactionTypeJ =
         transactionJSON[transactionTypeString] == TransactionType.income.name
             ? TransactionType.income
             : TransactionType.outcome;
     DateTime createdAtJ = DateTime.parse(transactionJSON[createdAtString]);
-    double ratioToTotalJ = double.parse(transactionJSON[ratioToTotalString]);
+    double ratioToTotalJ =
+        double.parse(transactionJSON[ratioToTotalString].toString());
     String profileIdJ = transactionJSON[profileIdString];
     bool deletedJ = transactionJSON[deletedString] == dbTrue ? true : false;
     SyncFlags syncFlagJ = stringToSyncFlag(transactionJSON[syncFlagString]);
-    String userIdJ = transactionJSON[userIdString] == dbNull
+    String? userIdJ = transactionJSON[userIdString] == dbNull
         ? null
         : transactionJSON[userIdString];
     return TransactionModel(

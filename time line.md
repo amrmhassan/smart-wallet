@@ -50,7 +50,8 @@ DONE - else make it (edit)
 [Pending]
 add a lastActivatedDate to each profile 
 --then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)
- 
+in the from json (transactions, profiles, quick actions) dates just make sure if it is a timestamp or just a date
+cause this will convert the data from the firestore and the local database as well
 
 
 

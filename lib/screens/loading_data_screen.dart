@@ -8,7 +8,6 @@ import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/holder_screen/holder_screen.dart';
-import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/widgets/global/main_loading.dart';
 
 class LoadingDataScreen extends StatefulWidget {
@@ -21,6 +20,7 @@ class LoadingDataScreen extends StatefulWidget {
 
 class _LoadingDataScreenState extends State<LoadingDataScreen> {
   bool firstTimeRunApp = true;
+  //! here load the data form the firestore if there is internet connection and the user is logged in and it the first time to open the app
 
   Future<void> fetchData() async {
     //? 2] fetching the profiles

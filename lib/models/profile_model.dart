@@ -67,7 +67,7 @@ class ProfileModel {
           ? dbNull
           : lastActivatedDate!.toIso8601String(),
       userIdString: userId ?? dbNull,
-      deletedString: deleted,
+      deletedString: deleted ? dbTrue : dbFalse,
       syncFlagString: syncFlag.name,
     };
   }
@@ -75,8 +75,8 @@ class ProfileModel {
   static ProfileModel fromJSON(Map<String, dynamic> profileJSON) {
     String idJ = profileJSON[idString];
     String nameJ = profileJSON[nameString];
-    double incomeJ = double.parse(profileJSON[incomeString]);
-    double outcomeJ = double.parse(profileJSON[outcomeString]);
+    double incomeJ = double.parse(profileJSON[incomeString].toString());
+    double outcomeJ = double.parse(profileJSON[outcomeString].toString());
     DateTime createdAtJ = DateTime.parse(profileJSON[createdAtString]);
     DateTime? lastActivatedDateJ =
         profileJSON[lastActivatedDateString] == null ||
@@ -85,7 +85,7 @@ class ProfileModel {
             : DateTime.parse(profileJSON[lastActivatedDateString]);
     bool deletedJ = profileJSON[deletedString] == dbTrue ? true : false;
     SyncFlags syncFlagsJ = stringToSyncFlag(profileJSON[syncFlagString]);
-    String userIdJ =
+    String? userIdJ =
         profileJSON[userIdString] == dbNull ? null : profileJSON[userIdString];
     return ProfileModel(
       id: idJ,
