@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:smart_wallet/constants/db_shortage_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
-import 'package:smart_wallet/models/synced_elements_model.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
 import 'package:smart_wallet/constants/shared_pref_constants.dart';
@@ -13,37 +11,12 @@ import '../constants/profiles_constants.dart';
 import '../helpers/db_helper.dart';
 
 class ProfilesProvider extends ChangeNotifier {
-  //? holding the profiles
+  //? all user profiles
   List<ProfileModel> _profiles = [];
-  //? holding the active profile id
+  //? active profile id
   String _activatedProfileId = '';
 
-  void clearAllProfiles() async {
-    _profiles.clear();
-  }
-
-  Future<void> setProfiles(List<ProfileModel> profiles) async {
-    //! here add the profiles to the local database
-    for (var profile in profiles) {
-      try {
-        await DBHelper.insert(profilesTableName, {
-          'id': profile.id,
-          'name': profile.name,
-          'income': profile.income,
-          'outcome': profile.outcome,
-          'createdAt': profile.createdAt.toIso8601String(),
-          'syncFlag': profile.syncFlag.name,
-          'deleted': profile.deleted == true ? dbTrue : dbFalse,
-        });
-      } catch (error) {
-        if (kDebugMode) {
-          print('Error setting profiles from firestore');
-        }
-        rethrow;
-      }
-    }
-  }
-
+//? need syncing profiles
   List<ProfileModel> get notSyncedProfiles {
     return _profiles
         .where((element) => element.syncFlag != SyncFlags.none)
@@ -71,6 +44,24 @@ class ProfilesProvider extends ChangeNotifier {
     return [..._profiles];
   }
 
+  //? getting the active profile info
+  ProfileModel get getActiveProfile {
+    //* fixed by setting the currentActiveId when fetching profile and there is no profiles
+    //* and by adding the loading to the holder screen to prevent showing the home screen that will ask for the current active id
+    //* before loading them from the database
+    // fix that error , this will create an error first time the app loads cause
+    // i think this is called before the profiles loads
+    // no this the error beause the this is called before the activatedProfileId update from the fetch and update profile Id
+    try {
+      return _profiles.firstWhere(
+        (element) => element.id == activatedProfileId,
+      );
+    } catch (error) {
+      //! this is not the final solution
+      return _profiles[0];
+    }
+  }
+
   //? getting the total money in all profiles
   double getTotalMoney() {
     return _profiles.fold(
@@ -94,21 +85,23 @@ class ProfilesProvider extends ChangeNotifier {
     return _profiles.firstWhere((element) => id == element.id);
   }
 
-  //? getting the active profile info
-  ProfileModel get getActiveProfile {
-    //* fixed by setting the currentActiveId when fetching profile and there is no profiles
-    //* and by adding the loading to the holder screen to prevent showing the home screen that will ask for the current active id
-    //* before loading them from the database
-    // fix that error , this will create an error first time the app loads cause
-    // i think this is called before the profiles loads
-    // no this the error beause the this is called before the activatedProfileId update from the fetch and update profile Id
-    try {
-      return _profiles.firstWhere(
-        (element) => element.id == activatedProfileId,
-      );
-    } catch (error) {
-      //! this is not the final solution
-      return _profiles[0];
+//? clear the proriles array
+  void clearAllProfiles() async {
+    _profiles.clear();
+  }
+
+//? adding an array of profiles to the local databas
+  Future<void> setProfiles(List<ProfileModel> profiles) async {
+    //! here add the profiles to the local database
+    for (var profile in profiles) {
+      try {
+        await DBHelper.insert(profilesTableName, profile.toJSON());
+      } catch (error) {
+        if (kDebugMode) {
+          print('Error setting profiles from firestore');
+        }
+        rethrow;
+      }
     }
   }
 
@@ -152,24 +145,10 @@ class ProfilesProvider extends ChangeNotifier {
         String id = await addProfile(defaultProfile.name);
         return setActivatedProfile(id);
       }
-      //? i will need to rearrange the profiles according to the lastActivated date then the createdAt date
+      // i will need to rearrange the profiles according to the lastActivated date then the createdAt date
       List<ProfileModel> fetchedProfiles = data.map(
         (profile) {
-          ProfileModel profileModel = ProfileModel(
-            id: profile['id'],
-            name: profile['name'],
-            income: double.parse(profile['income']),
-            outcome: double.parse(profile['outcome']),
-            createdAt: DateTime.parse(profile['createdAt']),
-            lastActivatedDate: profile['lastActivatedDate'] == null ||
-                    profile['lastActivatedDate'] == 'null'
-                ? null
-                : DateTime.parse(profile['lastActivatedDate']),
-            syncFlag: stringToSyncFlag(profile['syncFlag']),
-            deleted: profile['deleted'] == dbTrue ? true : false,
-          );
-
-          return profileModel;
+          return ProfileModel.fromJSON(profile);
         },
       ).toList();
 
@@ -209,24 +188,6 @@ class ProfilesProvider extends ChangeNotifier {
     String id = const Uuid().v4();
     DateTime createdAt = DateTime.now();
 
-    //* here i will add the new transaction to the database
-    try {
-      await DBHelper.insert(profilesTableName, {
-        'id': id,
-        'name': name,
-        'income': 0,
-        'outcome': 0,
-        'createdAt': createdAt.toIso8601String(),
-        'syncFlag': SyncFlags.add.name,
-        'deleted': dbFalse,
-      });
-    } catch (error) {
-      if (kDebugMode) {
-        print('Error creating new money profile');
-      }
-      rethrow;
-    }
-
     ProfileModel newProfile = ProfileModel(
       id: id,
       name: name,
@@ -236,6 +197,17 @@ class ProfilesProvider extends ChangeNotifier {
       syncFlag: SyncFlags.add,
       deleted: false,
     );
+
+    //* here i will add the new transaction to the database
+    try {
+      await DBHelper.insert(profilesTableName, newProfile.toJSON());
+    } catch (error) {
+      if (kDebugMode) {
+        print('Error creating new money profile');
+      }
+      rethrow;
+    }
+
     _profiles.add(newProfile);
     notifyListeners();
     return id;
@@ -246,14 +218,15 @@ class ProfilesProvider extends ChangeNotifier {
   }
 
   //? editing an existing profile
-  Future<void> editProfile(
-      {required String id,
-      String? name,
-      double? income,
-      double? outcome,
-      DateTime? lastActivatedDate,
-      SyncFlags? syncFlags,
-      bool? deleted}) async {
+  Future<void> editProfile({
+    required String id,
+    String? name,
+    double? income,
+    double? outcome,
+    DateTime? lastActivatedDate,
+    SyncFlags? syncFlags,
+    bool? deleted,
+  }) async {
     //* rejecting edit if no argument is provided
     if (name == null &&
         income == null &&
@@ -285,42 +258,32 @@ class ProfilesProvider extends ChangeNotifier {
     DateTime createdAt = editedProfile.createdAt;
     DateTime? newLastActiveDate =
         lastActivatedDate ?? editedProfile.lastActivatedDate;
-    //? if syncFlags is null, check if the profile flag is add to add it cause it won't be there is firestore for editing
-    //? and if it not add then mark it as edit
-    //? and if the syncFlags is set it will be only SyncFlags.none
+    // if syncFlags is null, check if the profile flag is add to add it cause it won't be there is firestore for editing
+    // and if it not add then mark it as edit
+    // and if the syncFlags is set it will be only SyncFlags.none
     SyncFlags newSyncFlag = syncFlags ??
         (editedProfile.syncFlag == SyncFlags.add
             ? SyncFlags.add
             : SyncFlags.edit);
     bool newDeleted = deleted ?? editedProfile.deleted;
+    ProfileModel newProfile = ProfileModel(
+      id: id,
+      name: newName,
+      income: newIncome,
+      outcome: newOutcome,
+      createdAt: createdAt,
+      lastActivatedDate: newLastActiveDate,
+      syncFlag: newSyncFlag,
+      deleted: newDeleted,
+    );
     //* edit the profile in database first
     try {
-      await DBHelper.insert(profilesTableName, {
-        'id': id,
-        'name': newName,
-        'income': newIncome,
-        'outcome': newOutcome,
-        'createdAt': createdAt.toIso8601String(),
-        'lastActivatedDate': newLastActiveDate == null
-            ? 'null'
-            : newLastActiveDate.toIso8601String(),
-        'syncFlag': newSyncFlag.name,
-        'deleted': newDeleted ? dbTrue : dbFalse,
-      });
+      await DBHelper.insert(profilesTableName, newProfile.toJSON());
 
       //* edit it on the _profiles
       int index = _profiles.indexOf(editedProfile);
       _profiles.removeAt(index);
-      ProfileModel newProfile = ProfileModel(
-        id: id,
-        name: newName,
-        income: newIncome,
-        outcome: newOutcome,
-        createdAt: createdAt,
-        lastActivatedDate: newLastActiveDate,
-        syncFlag: newSyncFlag,
-        deleted: newDeleted,
-      );
+
       _profiles.insert(index, newProfile);
       notifyListeners();
     } catch (error) {
@@ -356,8 +319,8 @@ class ProfilesProvider extends ChangeNotifier {
     if (profileId == activatedProfileId) {
       throw CustomError('You can\'t delete the active profile');
     }
-    //? here i need to check if the profile is flagged as add
-    //? if it is still new (add flag) then you can't update it in the firestore so you need to keep the add flag
+    // here i need to check if the profile is flagged as add
+    // if it is still new (add flag) then you can't update it in the firestore so you need to keep the add flag
     ProfileModel profileToDelete = getProfileById(profileId);
     if (profileToDelete.syncFlag == SyncFlags.add) {
       return editProfile(id: profileId, deleted: true);
@@ -395,9 +358,10 @@ class ProfilesProvider extends ChangeNotifier {
 
     //* edit the lastActivated property in the profile
     // add that code to the first created profile
-    editLastActivatedForProfile();
+    return editLastActivatedForProfile();
   }
 
+//? clear the active profile id from the shared preferences
   Future<bool> clearActiveProfileId() async {
     return SharedPrefHelper.removeKey(kActivatedProfileIdKey);
   }

@@ -1,5 +1,7 @@
+import 'package:smart_wallet/constants/db_shortage_constants.dart';
 import 'package:smart_wallet/constants/profiles_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
+import 'package:smart_wallet/models/synced_elements_model.dart';
 
 const double _goodLimit = .70; // when it is from 70% to 100% it will be good
 const double _moderateLimit =
@@ -69,16 +71,19 @@ class ProfileModel {
     };
   }
 
-  ProfileModel fromJSON(Map<String, dynamic> profileJSON) {
+  static ProfileModel fromJSON(Map<String, dynamic> profileJSON) {
     String idJ = profileJSON['id'];
     String nameJ = profileJSON['name'];
-    double incomeJ = profileJSON['income'];
-    double outcomeJ = profileJSON['outcome'];
-    DateTime createdAtJ = profileJSON['createdAt'];
-    DateTime? lastActivatedDateJ = profileJSON['lastActivatedDate'];
+    double incomeJ = double.parse(profileJSON['income']);
+    double outcomeJ = double.parse(profileJSON['outcome']);
+    DateTime createdAtJ = DateTime.parse(profileJSON['createdAt']);
+    DateTime? lastActivatedDateJ = profileJSON['lastActivatedDate'] == null ||
+            profileJSON['lastActivatedDate'] == 'null'
+        ? null
+        : DateTime.parse(profileJSON['lastActivatedDate']);
     String? userIdJ = profileJSON['userId'];
-    bool deletedJ = profileJSON['deleted'];
-    SyncFlags syncFlagsJ = profileJSON['syncFlag'];
+    bool deletedJ = profileJSON['deleted'] == dbTrue ? true : false;
+    SyncFlags syncFlagsJ = stringToSyncFlag(profileJSON['syncFlag']);
 
     return ProfileModel(
       id: idJ,
