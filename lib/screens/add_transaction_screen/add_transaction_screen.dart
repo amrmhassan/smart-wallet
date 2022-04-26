@@ -88,7 +88,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         : _descriptionController.text.trim();
     TransactionType transactionType = currentActiveTransactionType;
     ProfileModel activeProfile =
-        Provider.of<ProfilesProvider>(context, listen: false).getActiveProfile;
+        Provider.of<ProfilesProvider>(context, listen: false)
+            .getActiveProfile();
 
     if (widget.addTransactionScreenOperations ==
         AddTransactionScreenOperations.addQuickAction) {
@@ -193,7 +194,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       //* 2] making the current active transaction type to be income if the current active profile total money is lower 0
       double currentActiveProfileTotalMoney =
           Provider.of<ProfilesProvider>(context, listen: false)
-              .getActiveProfile
+              .getActiveProfile()
               .totalMoney;
       if (currentActiveProfileTotalMoney <= 0) {
         setcurrentActiveTransactionType(TransactionType.income);

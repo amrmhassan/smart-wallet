@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               HomeHeading(
                 title: Provider.of<ProfilesProvider>(context)
-                    .getActiveProfile
+                    .getActiveProfile()
                     .name,
               ),
               SizedBox(height: kDefaultPadding),

@@ -10,7 +10,7 @@ enum MoneyAccountStatus {
 
 ProfileModel defaultProfile = ProfileModel(
   id: const Uuid().v4(),
-  name: 'Pro 1',
+  name: 'Default Profile',
   income: 0,
   outcome: 0,
   createdAt: DateTime.now(),

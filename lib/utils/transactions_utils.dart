@@ -22,7 +22,7 @@ Future<void> showAddHighTransactionDialog({
   required double amount,
 }) async {
   double totalMoney = Provider.of<ProfilesProvider>(context, listen: false)
-      .getActiveProfile
+      .getActiveProfile()
       .totalMoney;
 
   if (transactionType == TransactionType.outcome && amount > totalMoney) {
@@ -236,7 +236,7 @@ Future<void> deleteTransaction(
 
   //* getting the curret active profile to update it
   ProfileModel activeProfile =
-      Provider.of<ProfilesProvider>(context, listen: false).getActiveProfile;
+      Provider.of<ProfilesProvider>(context, listen: false).getActiveProfile();
   //* checking the transaction type to update the profile according to that
   if (transaction.transactionType == TransactionType.income) {
     await Provider.of<ProfilesProvider>(context, listen: false)
@@ -262,7 +262,8 @@ Future<void> applyQuickAction(
 
     //* here i will edit the current active profile
     ProfileModel activeProfile =
-        Provider.of<ProfilesProvider>(context, listen: false).getActiveProfile;
+        Provider.of<ProfilesProvider>(context, listen: false)
+            .getActiveProfile();
     //* cheching the added transaction type and then update the profile depending on that
 
     if (quickAction.transactionType == TransactionType.income) {

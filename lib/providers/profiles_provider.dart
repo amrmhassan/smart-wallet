@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:smart_wallet/constants/types.dart';
+import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
 import 'package:smart_wallet/constants/shared_pref_constants.dart';
@@ -45,7 +47,7 @@ class ProfilesProvider extends ChangeNotifier {
   }
 
   //? getting the active profile info
-  ProfileModel get getActiveProfile {
+  ProfileModel getActiveProfile() {
     //* fixed by setting the currentActiveId when fetching profile and there is no profiles
     //* and by adding the loading to the holder screen to prevent showing the home screen that will ask for the current active id
     //* before loading them from the database
@@ -58,7 +60,12 @@ class ProfilesProvider extends ChangeNotifier {
       );
     } catch (error) {
       //! this is not the final solution
-      return _profiles[0];
+      return ProfileModel(
+          id: 'id',
+          name: 'name',
+          income: 0,
+          outcome: 0,
+          createdAt: DateTime.now());
     }
   }
 
@@ -136,30 +143,48 @@ class ProfilesProvider extends ChangeNotifier {
   }
 
   //? fetching and updating profiles from database
-  Future<void> fetchAndUpdateProfiles() async {
+  Future<void> fetchAndUpdateProfiles([BuildContext? context]) async {
+    showStackedSnackBar(context, '1 getting the profiles');
     try {
       List<Map<String, dynamic>> data =
           await DBHelper.getData(profilesTableName);
+      showStackedSnackBar(context, '2 profiles get from database');
+
       //* if there is no profile yet just create the default one and add it to the _profiles
       if (data.isEmpty) {
         String id = await addProfile(defaultProfile.name);
+        showStackedSnackBar(context, '3 the first profile added');
         return setActivatedProfile(id);
       }
+      showStackedSnackBar(context, '4 after adding the first profile');
+      //* getting the profiles again after adding the default profile
+      data = await DBHelper.getData(profilesTableName);
+      showStackedSnackBar(context,
+          '5 after getting the profiles from database for the second time');
+
       // i will need to rearrange the profiles according to the lastActivated date then the createdAt date
+
       List<ProfileModel> fetchedProfiles = data.map(
         (profile) {
           return ProfileModel.fromJSON(profile);
         },
       ).toList();
 
+      showStackedSnackBar(
+          context, '6 after setting the fetched profiles array');
+      await setActivatedProfile('id');
+      showStackedSnackBar(context,
+          '7 fetched profiles set with length of ${fetchedProfiles.length}');
+
       fetchedProfiles.sort((a, b) {
         return a.createdAt.difference(b.createdAt).inSeconds;
       });
       _profiles = fetchedProfiles;
-    } catch (error) {
+    } catch (error, stackTrace) {
       if (kDebugMode) {
         print('Error fetching profiles from the database');
       }
+      showStackedSnackBar(context, error.toString() + stackTrace.toString());
       throw CustomError(error);
     }
     notifyListeners();
@@ -302,7 +327,7 @@ class ProfilesProvider extends ChangeNotifier {
     DateTime? lastActivatedDate,
   }) async {
     //* setting the active profile to the current active profile
-    ProfileModel activeProfile = getActiveProfile;
+    ProfileModel activeProfile = getActiveProfile();
     String id = activeProfile.id;
     return editProfile(
       id: id,
@@ -344,10 +369,16 @@ class ProfilesProvider extends ChangeNotifier {
   }
 
   //? setting the active profile id
-  Future<void> setActivatedProfile(String id) async {
+  Future<void> setActivatedProfile(String id, [BuildContext? context]) async {
+    showStackedSnackBar(context, '44 before setting the active profile');
     try {
+      showStackedSnackBar(context, '55 before setting the active profile');
       await SharedPrefHelper.setString(kActivatedProfileIdKey, id);
+      showStackedSnackBar(context, '66 after setting the active profile');
+
       _activatedProfileId = id;
+      showStackedSnackBar(context, '77 before notifying listeners');
+
       notifyListeners();
     } catch (error) {
       if (kDebugMode) {

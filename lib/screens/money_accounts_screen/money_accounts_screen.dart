@@ -21,7 +21,7 @@ class _MoneyAccountsScreenState extends State<MoneyAccountsScreen> {
         Column(
           children: const [
             HomeHeading(
-              title: 'Money Accounts',
+              title: 'Money Profiles',
             ),
             SizedBox(
               height: kDefaultPadding,

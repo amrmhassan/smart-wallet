@@ -1,14 +1,17 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/main.dart';
 import 'package:smart_wallet/providers/authentication_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/holder_screen/holder_screen.dart';
+import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/widgets/global/main_loading.dart';
 
 class LoadingDataScreen extends StatefulWidget {
@@ -25,8 +28,9 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
 
   Future<void> fetchData() async {
     //? 2] fetching the profiles
+    showStackedSnackBar(context, 'before fetching the profiles');
     await Provider.of<ProfilesProvider>(context, listen: false)
-        .fetchAndUpdateProfiles();
+        .fetchAndUpdateProfiles(context);
 
     //? 3] fetching the active profile id
     await Provider.of<ProfilesProvider>(context, listen: false)
@@ -47,11 +51,6 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
       context,
       listen: false,
     ).fetchAndUpdateUserPhoto();
-
-    // bool online = await isOnline();
-    // print('--------------------');
-    // print(online);
-    // print('--------------------');
   }
 
   @override
@@ -65,7 +64,7 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
           .fetchAndSetActiveTheme();
     });
     //! if you made this of zero duration the loading will be infinitely loading in the production
-    Future.delayed(Duration(seconds: 1)).then((value) async {
+    Future.delayed(Duration.zero).then((value) async {
       await fetchData();
       Navigator.pushReplacementNamed(context, HolderScreen.routeName);
     });
@@ -79,7 +78,12 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
     return Scaffold(
       backgroundColor:
           themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
-      body: MainLoading(),
+      body: Stack(
+        children: [
+          MainLoading(),
+          if (showLoggingBanner) CustomHelperWidget(),
+        ],
+      ),
     );
   }
 }

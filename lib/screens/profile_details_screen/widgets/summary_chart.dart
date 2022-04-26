@@ -69,7 +69,7 @@ class _SummaryChartState extends State<SummaryChart> {
                     firstDate: Provider.of<ProfilesProvider>(
                       context,
                       listen: false,
-                    ).getActiveProfile.createdAt,
+                    ).getActiveProfile().createdAt,
                   ).getTotalSavingsData(),
                   xValueMapper: (CustomChartData chartData, ctx) =>
                       chartData.date,

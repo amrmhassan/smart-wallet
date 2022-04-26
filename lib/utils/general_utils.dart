@@ -47,6 +47,43 @@ void showSnackBar(
   );
 }
 
+void showStackedSnackBar(
+  BuildContext? context,
+  String message, [
+  SnackBarType snackBarType = SnackBarType.info,
+  bool aboveBottomNavBar = false,
+]) {
+  if (context == null) {
+    return;
+  }
+  var themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      // margin: aboveBottomNavBar
+      //     ? const EdgeInsets.only(bottom: kBottomNavigationBarHeight + 50)
+      //     : null,
+      behavior: aboveBottomNavBar ? SnackBarBehavior.floating : null,
+      content: Text(
+        message,
+      ),
+      backgroundColor: snackBarType == SnackBarType.success
+          ? Colors.green
+          : snackBarType == SnackBarType.error
+              ? themeProvider.getThemeColor(ThemeColors.kOutcomeColor)
+              : null,
+      action: SnackBarAction(
+        label: 'Ok',
+        textColor: snackBarType == SnackBarType.error ||
+                snackBarType == SnackBarType.success ||
+                snackBarType == SnackBarType.info
+            ? Colors.white
+            : null,
+        onPressed: () {},
+      ),
+    ),
+  );
+}
+
 Future<bool> isOnline() async {
   bool online = false;
   try {

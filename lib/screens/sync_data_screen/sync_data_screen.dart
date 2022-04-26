@@ -68,7 +68,8 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
         CustomError.beautifyError(error),
         SnackBarType.error,
       );
-      Provider.of<AuthenticationProvider>(context).setUserPhoto(null);
+      Provider.of<AuthenticationProvider>(context, listen: false)
+          .setUserPhoto(null);
       await handleDeleteUserPhoto();
     }
     setState(() {

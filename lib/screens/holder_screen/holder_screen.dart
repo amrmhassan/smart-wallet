@@ -3,6 +3,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/globals.dart';
+import 'package:smart_wallet/main.dart';
 import 'package:smart_wallet/screens/holder_screen/widgets/holder_screen.dart';
 import 'package:smart_wallet/screens/money_accounts_screen/money_accounts_screen.dart';
 import 'package:smart_wallet/screens/settings_screen/settings_screen.dart';
@@ -234,6 +236,7 @@ class _HolderScreenState extends State<HolderScreen> {
             activeIndex: _activeBottomNavBarIndex,
             setActiveBottomNavBarIcon: _setActiveNavBarIconIndex,
           ),
+          if (showLoggingBanner) CustomHelperWidget(),
         ],
       ),
     );

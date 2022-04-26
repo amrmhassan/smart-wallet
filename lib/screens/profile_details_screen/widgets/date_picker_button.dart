@@ -20,7 +20,7 @@ class DatePickerButton extends StatelessWidget {
 
   Future<void> pickCustomDate(BuildContext context) async {
     DateTime firstDate = Provider.of<ProfilesProvider>(context, listen: false)
-        .getActiveProfile
+        .getActiveProfile()
         .createdAt;
 
     DateTime? pickedDate = await showDatePicker(

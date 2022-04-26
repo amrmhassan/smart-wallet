@@ -9,6 +9,7 @@ import 'package:smart_wallet/providers/synced_data_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/authentication_screen/authentication_screen.dart';
 import 'package:smart_wallet/screens/loading_data_screen.dart';
+import 'package:smart_wallet/screens/logging_screen/logging_screen.dart';
 import 'package:smart_wallet/screens/sync_data_screen/sync_data_screen.dart';
 import 'package:smart_wallet/tests/testing_widget.dart';
 import './providers/quick_actions_provider.dart';
@@ -70,6 +71,14 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         initialRoute: LoadingDataScreen.routeName,
+        builder: (context, child) {
+          return Stack(
+            alignment: Alignment.topRight,
+            children: [
+              child!,
+            ],
+          );
+        },
         routes: {
           LoadingDataScreen.routeName: (ctx) => const LoadingDataScreen(),
           HolderScreen.routeName: (ctx) => const HolderScreen(),
@@ -77,7 +86,28 @@ class _MyAppState extends State<MyApp> {
           TestingWidget.routeName: (ctx) => TestingWidget(),
           AuthenticationScreen.routeName: (ctx) => AuthenticationScreen(),
           SyncDataScreen.routeName: (ctx) => SyncDataScreen(),
+          LoggingScreen.routeName: (ctx) => LoggingScreen(),
         },
+      ),
+    );
+  }
+}
+
+class CustomHelperWidget extends StatelessWidget {
+  const CustomHelperWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, LoggingScreen.routeName);
+      },
+      child: Container(
+        width: 20,
+        height: 100,
+        color: Colors.red,
       ),
     );
   }
