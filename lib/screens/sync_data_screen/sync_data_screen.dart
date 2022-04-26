@@ -50,6 +50,32 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
     });
   }
 
+  Future<void> handleGoogleLogIn() async {
+    setState(() {
+      _loggingIn = true;
+    });
+
+    try {
+      bool online = await isOnline();
+      if (!online) {
+        throw CustomError('network_error');
+      }
+      await googleLogin(context);
+    } catch (error) {
+      showSnackBar(
+        context,
+        error.toString().contains('network_error')
+            ? 'No Internet Connection'
+            : 'Error Occurred!',
+        SnackBarType.error,
+      );
+      await handleDeleteUserPhoto();
+    }
+    setState(() {
+      _loggingIn = false;
+    });
+  }
+
   @override
   void initState() {
     fetchData();
@@ -161,17 +187,7 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
                                     profiles: profileProvider,
                                     transactions: transactionProvider,
                                     quickActions: quickActionsProvider,
-                                    googleLogIn: () async {
-                                      setState(() {
-                                        _loggingIn = true;
-                                      });
-                                      await googleLogin(
-                                        context,
-                                      );
-                                      setState(() {
-                                        _loggingIn = false;
-                                      });
-                                    },
+                                    googleLogIn: handleGoogleLogIn,
                                   );
                                 } else {
                                   return NotLoggedInUserData(
@@ -180,32 +196,7 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
                                         .notSyncedTransactions,
                                     quickActions: quickActionsProvider
                                         .notSyncedQuickActions,
-                                    googleLogIn: () async {
-                                      setState(() {
-                                        _loggingIn = true;
-                                      });
-
-                                      try {
-                                        bool online = await isOnline();
-                                        if (!online) {
-                                          throw CustomError('network_error');
-                                        }
-                                        await googleLogin(context);
-                                      } catch (error) {
-                                        showSnackBar(
-                                          context,
-                                          error
-                                                  .toString()
-                                                  .contains('network_error')
-                                              ? 'No Internet Connection'
-                                              : 'Error Occurred!',
-                                          SnackBarType.error,
-                                        );
-                                      }
-                                      setState(() {
-                                        _loggingIn = false;
-                                      });
-                                    },
+                                    googleLogIn: handleGoogleLogIn,
                                     online: _isOnline,
                                   );
                                 }

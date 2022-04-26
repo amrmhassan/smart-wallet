@@ -55,6 +55,7 @@ DONE - make the profile name textField focus when it appears and show the keyboa
 [Pending]
 add a lastActivatedDate to each profile 
 --then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)
+when logging in to another user the user photo doesn's change until the user reopen the app
 
 
 
