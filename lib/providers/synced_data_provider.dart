@@ -65,9 +65,6 @@ class SyncedDataProvider extends ChangeNotifier {
         }
       }
     } catch (error) {
-      if (kDebugMode) {
-        print(error.toString());
-      }
       throw CustomError(error);
     }
   }

@@ -24,10 +24,6 @@ class QuickActionsProvider extends ChangeNotifier {
       try {
         await DBHelper.insert(quickActionsTableName, quickAction.toJSON());
       } catch (error) {
-        if (kDebugMode) {
-          print(
-              'Error inserting new transaction , check the transaction provider');
-        }
         throw CustomError(error);
       }
     }
@@ -124,10 +120,6 @@ class QuickActionsProvider extends ChangeNotifier {
     try {
       await DBHelper.insert(quickActionsTableName, quickActionModel.toJSON());
     } catch (error) {
-      if (kDebugMode) {
-        print(
-            'Error inserting new transaction , check the transaction provider');
-      }
       throw CustomError(error);
     }
     _quickActions.add(quickActionModel);
@@ -153,10 +145,6 @@ class QuickActionsProvider extends ChangeNotifier {
 
       notifyListeners();
     } catch (error) {
-      if (kDebugMode) {
-        print(error);
-        print('Error fetching quick actions from the database');
-      }
       throw CustomError(error);
     }
   }
@@ -176,10 +164,6 @@ class QuickActionsProvider extends ChangeNotifier {
       allQuickActions = fetchedQuickActions;
       notifyListeners();
     } catch (error) {
-      if (kDebugMode) {
-        print(error);
-        print('Error fetching quick actions from the database');
-      }
       throw CustomError(error);
     }
     return fetchedQuickActions;
@@ -212,10 +196,6 @@ class QuickActionsProvider extends ChangeNotifier {
     try {
       await DBHelper.insert(quickActionsTableName, newQuickAction.toJSON());
     } catch (error) {
-      if (kDebugMode) {
-        print(
-            'Error Editing quick Action in database only , check the quickAction provider');
-      }
       throw CustomError(error);
     }
   }

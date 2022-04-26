@@ -111,9 +111,6 @@ class TransactionProvider extends ChangeNotifier {
       try {
         await DBHelper.insert(transactionsTableName, transaction.toJSON());
       } catch (error) {
-        if (kDebugMode) {
-          print('Error inserting transactions get from the firestore');
-        }
         throw CustomError(error);
       }
     }
@@ -168,10 +165,6 @@ class TransactionProvider extends ChangeNotifier {
     try {
       await DBHelper.insert(transactionsTableName, newTransaction.toJSON());
     } catch (error) {
-      if (kDebugMode) {
-        print(
-            'Error inserting new transaction , check the transaction provider');
-      }
       throw CustomError(error);
     }
 
@@ -198,9 +191,6 @@ class TransactionProvider extends ChangeNotifier {
 
       notifyListeners();
     } catch (error) {
-      if (kDebugMode) {
-        print('An error occurred fetching all transactions form database ');
-      }
       throw CustomError(error);
     }
   }
@@ -220,9 +210,6 @@ class TransactionProvider extends ChangeNotifier {
       allTransactions = fetchedTransactions;
       notifyListeners();
     } catch (error) {
-      if (kDebugMode) {
-        print('An error occurred fetching all transactions form database ');
-      }
       throw CustomError(error);
     }
   }
@@ -271,9 +258,6 @@ class TransactionProvider extends ChangeNotifier {
     try {
       await DBHelper.insert(transactionsTableName, newTransaction.toJSON());
     } catch (error) {
-      if (kDebugMode) {
-        print('Error Editing transaction , check the transaction provider');
-      }
       throw CustomError(error);
     }
     int transactionIndex =

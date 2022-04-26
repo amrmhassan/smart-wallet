@@ -4,7 +4,6 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
@@ -147,9 +146,6 @@ Future<void> handleDownloadUserPhoto() async {
           photoLocalPath,
         );
       } catch (error) {
-        if (kDebugMode) {
-          print(error);
-        }
         throw CustomError(error);
       }
     }
@@ -162,9 +158,7 @@ Future<void> handleDeleteUserPhoto() async {
     File userPhoto = File(photoLocalPath);
     await userPhoto.delete();
   } catch (error) {
-    if (kDebugMode) {
-      print(error);
-    }
+    throw CustomError(error);
   }
 }
 

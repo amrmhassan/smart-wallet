@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
@@ -165,10 +164,7 @@ class ProfilesProvider extends ChangeNotifier {
         return a.createdAt.difference(b.createdAt).inSeconds;
       });
       _profiles = fetchedProfiles;
-    } catch (error, stackTrace) {
-      if (kDebugMode) {
-        print('Error fetching profiles from the database');
-      }
+    } catch (error) {
       throw CustomError(error);
     }
     notifyListeners();
@@ -205,9 +201,6 @@ class ProfilesProvider extends ChangeNotifier {
     try {
       await DBHelper.insert(profilesTableName, newProfile.toJSON());
     } catch (error) {
-      if (kDebugMode) {
-        print('Error creating new money profile');
-      }
       throw CustomError(error);
     }
 
@@ -294,9 +287,6 @@ class ProfilesProvider extends ChangeNotifier {
       _profiles.insert(index, newProfile);
       notifyListeners();
     } catch (error) {
-      if (kDebugMode) {
-        print('Error editting the profile new money profile');
-      }
       throw CustomError(error);
     }
   }
@@ -342,10 +332,6 @@ class ProfilesProvider extends ChangeNotifier {
     try {
       return editActiveProfile(lastActivatedDate: DateTime.now());
     } catch (error) {
-      if (kDebugMode) {
-        print(error);
-        print('Error setting the lastActivated Property in the profile');
-      }
       throw CustomError(error);
     }
   }
@@ -359,9 +345,6 @@ class ProfilesProvider extends ChangeNotifier {
 
       notifyListeners();
     } catch (error) {
-      if (kDebugMode) {
-        print('Error setting the active profile');
-      }
       throw CustomError(error);
     }
 

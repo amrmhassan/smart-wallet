@@ -182,10 +182,6 @@ class _HolderScreenState extends State<HolderScreen> {
                             ),
                           )
                         : MyAppBar(),
-                //* here i showed that you can know which environment you are on (development or production)
-                //* and i worked successfully
-                // if (kDebugMode) Text('In debug Mode'),
-                // if (kReleaseMode) Text('In release  Mode'),
 
                 Expanded(
                   //* main pages of the app

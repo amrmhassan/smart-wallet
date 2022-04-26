@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -76,24 +75,22 @@ class CustomAppDrawer extends StatelessWidget {
                   ),
 
                   //* only show this option if the app is in debug mode
-                  if (kDebugMode)
-                    DrawerlistItem(
-                      title: 'Delete Database',
-                      onTap: () async => deleteDatabaseAndRestart(context),
-                      iconData: Icons.delete,
-                      color: themeProvider
-                          .getThemeColor(ThemeColors.kOutcomeColor),
-                    ),
-                  if (kDebugMode)
-                    DrawerlistItem(
-                      title: 'Restart App',
-                      onTap: () async {
-                        Navigator.pushReplacementNamed(
-                            context, LoadingDataScreen.routeName);
-                      },
-                      iconData: FontAwesomeIcons.bolt,
-                      color: kModerateProfileStatusColor,
-                    ),
+                  DrawerlistItem(
+                    title: 'Delete Database',
+                    onTap: () async => deleteDatabaseAndRestart(context),
+                    iconData: Icons.delete,
+                    color:
+                        themeProvider.getThemeColor(ThemeColors.kOutcomeColor),
+                  ),
+                  DrawerlistItem(
+                    title: 'Restart App',
+                    onTap: () async {
+                      Navigator.pushReplacementNamed(
+                          context, LoadingDataScreen.routeName);
+                    },
+                    iconData: FontAwesomeIcons.bolt,
+                    color: kModerateProfileStatusColor,
+                  ),
                 ],
               ),
             ),
