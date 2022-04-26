@@ -75,10 +75,12 @@ class AddProfileModal extends StatelessWidget {
                     maxLines: 1,
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color:
-                          themeProvider.getThemeColor(ThemeColors.kMainColor),
+                      color: themeProvider
+                          .getThemeColor(ThemeColors.kMainColor)
+                          .withOpacity(0.3),
                     ),
-                    hintText: 'Enter The Profile Name',
+                    hintText: 'Enter A Profile Name',
+                    autoFocus: true,
                     textStyle: TextStyle(
                       color:
                           themeProvider.getThemeColor(ThemeColors.kMainColor),

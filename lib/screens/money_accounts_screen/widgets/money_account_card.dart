@@ -69,7 +69,7 @@ class MoneyAccountCard extends StatelessWidget {
         context: context,
         profileNameController: _editedProfileNameController,
         onTap: () async {
-          String newName = _editedProfileNameController.text;
+          String newName = _editedProfileNameController.text.trim();
           await editProfileName(context, newName, oldName);
         },
         profileOperationType: ProfileOperationType.edit,

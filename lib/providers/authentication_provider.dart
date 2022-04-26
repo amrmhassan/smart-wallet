@@ -1,9 +1,28 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:smart_wallet/utils/synced_data_utils.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
   final googleSignIn = GoogleSignIn();
+  File? userPhoto;
+
+  void setUserPhoto(File? uP) {
+    userPhoto = uP;
+    notifyListeners();
+  }
+
+  Future<void> fetchAndUpdateUserPhoto() async {
+    try {
+      File file = await handleGetUserPhoto();
+      setUserPhoto(file);
+    } catch (error) {
+      setUserPhoto(null);
+    }
+  }
+
   GoogleSignInAccount? _userGoogle;
   GoogleSignInAccount get userGoogle => _userGoogle!;
 
@@ -24,8 +43,8 @@ class AuthenticationProvider extends ChangeNotifier {
     } catch (error) {
       if (kDebugMode) {
         print(error.toString());
-        rethrow;
       }
+      rethrow;
     }
   }
 

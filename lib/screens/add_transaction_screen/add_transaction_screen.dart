@@ -80,11 +80,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 //* this method will be executed whenever the save button in the calculator is clicked
   Future<void> handleSaveButtonClick() async {
     //* preparing the needed info to add the new thing(transaction or quick action)
-    String title =
-        _titleController.text.isEmpty ? 'Empty Title' : _titleController.text;
+    String title = _titleController.text.isEmpty
+        ? 'Empty Title'
+        : _titleController.text.trim();
     String description = _descriptionController.text.isEmpty
         ? 'Empty Description'
-        : _descriptionController.text;
+        : _descriptionController.text.trim();
     TransactionType transactionType = currentActiveTransactionType;
     ProfileModel activeProfile =
         Provider.of<ProfilesProvider>(context, listen: false).getActiveProfile;

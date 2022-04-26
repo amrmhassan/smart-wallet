@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/sizes.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/user_photo.dart';
+import 'package:smart_wallet/utils/synced_data_utils.dart';
 
 import '../../../constants/theme_constants.dart';
 import '../../../providers/theme_provider.dart';
@@ -25,7 +28,26 @@ class UserInfoViewer extends StatelessWidget {
 
     return Column(
       children: [
-        if (photoUrl != null) UserPhoto(photoUrl: photoUrl!),
+        FutureBuilder(
+          future: handleGetUserPhoto(),
+          builder: ((context, snapshot) {
+            if (snapshot.hasData) {
+              File userPhotoFile = snapshot.data as File;
+              return UserPhoto(
+                photoFile: userPhotoFile,
+              );
+            } else {
+              return Container(
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(1000),
+                ),
+                width: 80,
+                height: 80,
+              );
+            }
+          }),
+        ),
         SizedBox(
           height: kDefaultPadding / 2,
         ),

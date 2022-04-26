@@ -129,6 +129,7 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
         //! implement this button and then fix the error with it
         LogInUserOptions(
           googleLogin: () async => await widget.googleLogIn(),
+          // isOnline: widget.online,
         ),
       ],
     );

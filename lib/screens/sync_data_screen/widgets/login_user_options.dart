@@ -11,9 +11,11 @@ import 'package:smart_wallet/widgets/global/line.dart';
 
 class LogInUserOptions extends StatelessWidget {
   final Future<void> Function() googleLogin;
+  // final bool isOnline;
   const LogInUserOptions({
     Key? key,
     required this.googleLogin,
+    // required this.isOnline,
   }) : super(key: key);
 
   @override
@@ -62,8 +64,9 @@ class LogInUserOptions extends StatelessWidget {
           children: [
             StreamBuilder(
               stream: FirebaseAuth.instance.authStateChanges(),
-              builder: (ctx, snapshot) =>
-                  GoogleSignInButton(onTap: () async => await googleLogin()),
+              builder: (ctx, snapshot) => GoogleSignInButton(
+                onTap: () async => await googleLogin(),
+              ),
             )
           ],
         ),

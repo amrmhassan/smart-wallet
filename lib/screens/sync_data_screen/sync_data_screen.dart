@@ -2,9 +2,14 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
+import 'package:smart_wallet/constants/types.dart';
+import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/logged_in_user_data.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/logout_button.dart';
@@ -76,7 +81,7 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
     var profileProvider = Provider.of<ProfilesProvider>(context);
     var transactionProvider = Provider.of<TransactionProvider>(context);
     var quickActionsProvider = Provider.of<QuickActionsProvider>(context);
-
+    var themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
@@ -89,7 +94,16 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
       ),
       //? this gesture detector will remove the focus whenever anything else is clicked in the screen
       body: _loading
-          ? Text('Loading')
+          ? Container(
+              color:
+                  themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
+              child: Center(
+                  child: SpinKitCubeGrid(
+                color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+                size: 100,
+                duration: Duration(seconds: 1),
+              )),
+            )
           : GestureDetector(
               onTap: () {
                 FocusScope.of(context).requestFocus(FocusNode());
@@ -171,11 +185,28 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
                                         _loggingIn = true;
                                       });
 
-                                      await googleLogin(context);
+                                      try {
+                                        bool online = await isOnline();
+                                        if (!online) {
+                                          throw CustomError('network_error');
+                                        }
+                                        await googleLogin(context);
+                                      } catch (error) {
+                                        showSnackBar(
+                                          context,
+                                          error
+                                                  .toString()
+                                                  .contains('network_error')
+                                              ? 'No Internet Connection'
+                                              : 'Error Occurred!',
+                                          SnackBarType.error,
+                                        );
+                                      }
                                       setState(() {
                                         _loggingIn = false;
                                       });
                                     },
+                                    online: _isOnline,
                                   );
                                 }
                               },

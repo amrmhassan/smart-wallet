@@ -44,21 +44,24 @@ DONE - through the favoriting or, actual editing
 DONE - if they are still new (add keep it add)
 DONE - else if it is (none keep it none)
 DONE - else make it (edit)
+DONE - in the from json (transactions, profiles, quick actions) dates just make sure if it is a timestamp or just a date
+DONE - cause this will convert the data from the firestore and the local database as well
+DONE - trimming the title name of transactions, profiles
+DONE - make the profile name textField focus when it appears and show the keyboard
+
 
 
 
 [Pending]
 add a lastActivatedDate to each profile 
 --then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)
-in the from json (transactions, profiles, quick actions) dates just make sure if it is a timestamp or just a date
-cause this will convert the data from the firestore and the local database as well
+
 
 
 
 
 
 [Soon]
-make the profile name textField focus when it appears and show the keyboard
 when editing a profile the new profile is pushed to the start of the profiles
 --(fix that by sorting them according to the lastActivated time and the createdAt time)
 the dept will have a seperate screen that can be accessed from the sideBar (Debts)

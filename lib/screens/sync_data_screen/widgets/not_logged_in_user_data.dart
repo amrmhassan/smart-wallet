@@ -10,12 +10,14 @@ import 'package:smart_wallet/screens/sync_data_screen/widgets/login_user_options
 
 class NotLoggedInUserData extends StatelessWidget {
   final Future<void> Function() googleLogIn;
+  final bool online;
   const NotLoggedInUserData({
     Key? key,
     required this.profiles,
     required this.transactions,
     required this.quickActions,
     required this.googleLogIn,
+    required this.online,
   }) : super(key: key);
 
   final List<ProfileModel> profiles;
@@ -26,7 +28,10 @@ class NotLoggedInUserData extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        LogInUserOptions(googleLogin: () async => await googleLogIn()),
+        LogInUserOptions(
+          googleLogin: () async => await googleLogIn(),
+          // isOnline: online,
+        ),
         SizedBox(
           height: kDefaultPadding,
         ),

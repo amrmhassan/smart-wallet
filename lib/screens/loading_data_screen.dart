@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/providers/authentication_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
@@ -42,6 +43,10 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
     // //? 5] fetching the quick actions
     await Provider.of<QuickActionsProvider>(context, listen: false)
         .fetchAndUpdateProfileQuickActions(activeProfileId);
+    await Provider.of<AuthenticationProvider>(
+      context,
+      listen: false,
+    ).fetchAndUpdateUserPhoto();
 
     // bool online = await isOnline();
     // print('--------------------');

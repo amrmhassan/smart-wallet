@@ -1,9 +1,17 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/helpers/custom_error.dart';
+import 'package:smart_wallet/providers/authentication_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/user_photo.dart';
+import 'package:smart_wallet/utils/synced_data_utils.dart';
 
 import '../../constants/sizes.dart';
 
@@ -14,9 +22,19 @@ class PersonIcon extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
+  Future<File> personIconFuture() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw CustomError('No User Logged In');
+    }
+
+    return handleGetUserPhoto();
+  }
+
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
+    var authProvider = Provider.of<AuthenticationProvider>(context);
 
     return Container(
       clipBehavior: Clip.hardEdge,
@@ -28,22 +46,17 @@ class PersonIcon extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          child: StreamBuilder(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (ctx, snapshot) {
-              if (snapshot.hasData) {
-                User user = snapshot.data as User;
-                return Container(
+          child: authProvider.userPhoto != null
+              ? Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                   ),
                   child: UserPhoto(
-                    photoUrl: user.photoURL ?? '',
+                    photoFile: authProvider.userPhoto as File,
                     raduis: 40,
                   ),
-                );
-              } else {
-                return Container(
+                )
+              : Container(
                   padding: const EdgeInsets.all(2),
                   decoration: BoxDecoration(
                     border: Border.all(
@@ -58,10 +71,7 @@ class PersonIcon extends StatelessWidget {
                     color: themeProvider.getThemeColor(ThemeColors.kMainColor),
                     size: kDefaultIconSize,
                   ),
-                );
-              }
-            },
-          ),
+                ),
         ),
       ),
     );

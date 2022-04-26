@@ -1,8 +1,15 @@
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
+import 'package:smart_wallet/constants/globals.dart';
+import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/helpers/db_helper.dart';
 import 'package:smart_wallet/providers/authentication_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
@@ -15,17 +22,29 @@ Future googleLogin(BuildContext context) async {
   bool deleteAfterLoggingIn = false;
   User? user = FirebaseAuth.instance.currentUser;
   if (user != null) {
-    //* this means there is already a user signed in so sign out first then sign in with another user
+    try {
+      //* this means there is already a user signed in so sign out first then sign in with another user
+      await Provider.of<AuthenticationProvider>(
+        context,
+        listen: false,
+      ).googleLogout();
+    } catch (error) {
+      throw CustomError(error.toString());
+    }
+  }
+
+  try {
     await Provider.of<AuthenticationProvider>(
       context,
       listen: false,
-    ).googleLogout();
+    ).googleLogin();
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      throw CustomError('not_logged_in');
+    }
+  } catch (error) {
+    throw CustomError(error.toString());
   }
-  //! here i want to implement the loading of logging in
-  await Provider.of<AuthenticationProvider>(
-    context,
-    listen: false,
-  ).googleLogin();
 
   var profileProvider = Provider.of<ProfilesProvider>(context, listen: false);
 
@@ -52,6 +71,11 @@ Future googleLogin(BuildContext context) async {
     quickActionsProvider,
     deleteAfterLoggingIn,
   );
+  await handleDeleteUserPhoto();
+  await handleDownloadUserPhoto();
+
+  Provider.of<AuthenticationProvider>(context, listen: false)
+      .fetchAndUpdateUserPhoto();
 }
 
 //? 2] google logout
@@ -95,6 +119,9 @@ Future<void> logOut(BuildContext context) async {
     await DBHelper.deleteDatabase(dbName);
     await profileProvider.clearActiveProfileId();
   }
+  await handleDeleteUserPhoto();
+  Provider.of<AuthenticationProvider>(context, listen: false)
+      .setUserPhoto(null);
 
   await profileProvider.fetchAndUpdateProfiles();
   await profileProvider.fetchAndUpdateActivatedProfileId();
@@ -103,4 +130,56 @@ Future<void> logOut(BuildContext context) async {
   await quickActionsProvider.fetchAndUpdateProfileQuickActions(activeProfileId);
   await transactionProvider.fetchAndUpdateAllTransactions();
   await quickActionsProvider.fetchAndUpdateAllQuickActions();
+}
+
+Future<void> handleDownloadUserPhoto() async {
+  User? currentUser = FirebaseAuth.instance.currentUser;
+
+  if (currentUser != null && currentUser.photoURL != null) {
+    String? photoUrl = currentUser.photoURL;
+    if (photoUrl != null) {
+      try {
+        String photoLocalPath = await getUserPhotoPath();
+
+        Dio dio = Dio();
+        await dio.download(
+          photoUrl,
+          photoLocalPath,
+        );
+      } catch (error) {
+        if (kDebugMode) {
+          print(error);
+        }
+        rethrow;
+      }
+    }
+  }
+}
+
+Future<void> handleDeleteUserPhoto() async {
+  try {
+    String photoLocalPath = await getUserPhotoPath();
+    File userPhoto = File(photoLocalPath);
+    await userPhoto.delete();
+  } catch (error) {
+    if (kDebugMode) {
+      print(error);
+    }
+  }
+}
+
+Future<String> getUserPhotoPath() async {
+  String docDirPath = (await getApplicationDocumentsDirectory()).path;
+  String photoLocalPath = '$docDirPath/$userProfilePhotoName.jpg';
+  return photoLocalPath;
+}
+
+Future<File> handleGetUserPhoto() async {
+  String photoPath = await getUserPhotoPath();
+  File file = File(photoPath);
+  bool exists = await file.exists();
+  if (!exists) {
+    throw CustomError('No user Photo');
+  }
+  return file;
 }

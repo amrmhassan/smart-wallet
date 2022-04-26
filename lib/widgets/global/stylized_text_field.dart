@@ -29,6 +29,7 @@ class StylizedTextField extends StatefulWidget {
   final TextEditingController? controller;
   final bool showPasswordController;
   final int? maxLines;
+  final bool autoFocus;
 
   const StylizedTextField({
     Key? key,
@@ -52,6 +53,7 @@ class StylizedTextField extends StatefulWidget {
     this.controller,
     this.showPasswordController = true,
     this.maxLines,
+    this.autoFocus = false,
   }) : super(key: key);
 
   @override
@@ -93,6 +95,7 @@ class _StylizedTextFieldState extends State<StylizedTextField> {
           data: Theme.of(context).copyWith(primaryColor: Colors.red),
           child: TextField(
             maxLines: widget.maxLines,
+            autofocus: widget.autoFocus,
             controller: widget.controller,
             style: widget.textStyle ?? _Defaults.textStyle,
             onChanged: (value) => widget.onChanged(value),
