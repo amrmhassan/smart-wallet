@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
+import 'package:smart_wallet/providers/authentication_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
@@ -64,11 +65,10 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
     } catch (error) {
       showSnackBar(
         context,
-        error.toString().contains('network_error')
-            ? 'No Internet Connection'
-            : 'Error Occurred!',
+        CustomError.beautifyError(error),
         SnackBarType.error,
       );
+      Provider.of<AuthenticationProvider>(context).setUserPhoto(null);
       await handleDeleteUserPhoto();
     }
     setState(() {

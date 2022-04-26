@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/sizes.dart';
+import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/synced_data_provider.dart';
@@ -72,7 +73,7 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
       if (kDebugMode) {
         print(error.toString());
       }
-      rethrow;
+      throw CustomError(error);
     }
   }
 

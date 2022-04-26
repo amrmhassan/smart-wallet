@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
+import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/helpers/db_helper.dart';
 import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/models/quick_action_model.dart';
@@ -67,7 +68,7 @@ class SyncedDataProvider extends ChangeNotifier {
       if (kDebugMode) {
         print(error.toString());
       }
-      rethrow;
+      throw CustomError(error);
     }
   }
 

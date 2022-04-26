@@ -4,6 +4,7 @@ import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
+import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/helpers/responsive.dart';
 import 'package:smart_wallet/utils/transactions_utils.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
@@ -41,7 +42,7 @@ class AllQuickActionsCard extends StatelessWidget {
               .deleteQuickActions(quickAction.id);
         } catch (error) {
           showSnackBar(context, error.toString(), SnackBarType.error);
-          rethrow;
+          throw CustomError(error);
         }
         confirmDelete = true;
       },

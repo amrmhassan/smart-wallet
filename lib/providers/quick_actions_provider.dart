@@ -1,6 +1,7 @@
 // ignore_for_file: unused_element, prefer_const_constructors
 
 import 'package:flutter/foundation.dart';
+import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:uuid/uuid.dart';
 import '../constants/db_constants.dart';
 import '../constants/types.dart';
@@ -27,7 +28,7 @@ class QuickActionsProvider extends ChangeNotifier {
           print(
               'Error inserting new transaction , check the transaction provider');
         }
-        rethrow;
+        throw CustomError(error);
       }
     }
   }
@@ -127,7 +128,7 @@ class QuickActionsProvider extends ChangeNotifier {
         print(
             'Error inserting new transaction , check the transaction provider');
       }
-      rethrow;
+      throw CustomError(error);
     }
     _quickActions.add(quickActionModel);
     notifyListeners();
@@ -156,7 +157,7 @@ class QuickActionsProvider extends ChangeNotifier {
         print(error);
         print('Error fetching quick actions from the database');
       }
-      rethrow;
+      throw CustomError(error);
     }
   }
 
@@ -179,7 +180,7 @@ class QuickActionsProvider extends ChangeNotifier {
         print(error);
         print('Error fetching quick actions from the database');
       }
-      rethrow;
+      throw CustomError(error);
     }
     return fetchedQuickActions;
   }
@@ -215,7 +216,7 @@ class QuickActionsProvider extends ChangeNotifier {
         print(
             'Error Editing quick Action in database only , check the quickAction provider');
       }
-      rethrow;
+      throw CustomError(error);
     }
   }
 

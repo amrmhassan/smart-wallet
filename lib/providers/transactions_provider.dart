@@ -114,7 +114,7 @@ class TransactionProvider extends ChangeNotifier {
         if (kDebugMode) {
           print('Error inserting transactions get from the firestore');
         }
-        rethrow;
+        throw CustomError(error);
       }
     }
   }
@@ -172,7 +172,7 @@ class TransactionProvider extends ChangeNotifier {
         print(
             'Error inserting new transaction , check the transaction provider');
       }
-      rethrow;
+      throw CustomError(error);
     }
 
     _transactions.add(newTransaction);
@@ -201,7 +201,7 @@ class TransactionProvider extends ChangeNotifier {
       if (kDebugMode) {
         print('An error occurred fetching all transactions form database ');
       }
-      rethrow;
+      throw CustomError(error);
     }
   }
 
@@ -223,7 +223,7 @@ class TransactionProvider extends ChangeNotifier {
       if (kDebugMode) {
         print('An error occurred fetching all transactions form database ');
       }
-      rethrow;
+      throw CustomError(error);
     }
   }
 
@@ -274,7 +274,7 @@ class TransactionProvider extends ChangeNotifier {
       if (kDebugMode) {
         print('Error Editing transaction , check the transaction provider');
       }
-      rethrow;
+      throw CustomError(error);
     }
     int transactionIndex =
         _transactions.indexWhere((element) => element.id == transactionId);

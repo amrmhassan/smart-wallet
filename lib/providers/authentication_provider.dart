@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/utils/synced_data_utils.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
@@ -44,7 +45,7 @@ class AuthenticationProvider extends ChangeNotifier {
       if (kDebugMode) {
         print(error.toString());
       }
-      rethrow;
+      throw CustomError(error);
     }
   }
 
@@ -57,7 +58,7 @@ class AuthenticationProvider extends ChangeNotifier {
       if (kDebugMode) {
         print(error);
       }
-      rethrow;
+      throw CustomError(error);
     }
   }
 }

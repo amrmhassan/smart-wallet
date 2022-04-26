@@ -150,7 +150,7 @@ Future<void> handleDownloadUserPhoto() async {
         if (kDebugMode) {
           print(error);
         }
-        rethrow;
+        throw CustomError(error);
       }
     }
   }

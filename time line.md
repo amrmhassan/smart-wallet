@@ -56,6 +56,15 @@ DONE - make the profile name textField focus when it appears and show the keyboa
 add a lastActivatedDate to each profile 
 --then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)
 when logging in to another user the user photo doesn's change until the user reopen the app
+edit the custom error file to handle any type of objects and then turn it into a string 
+replace all rethrow with the throw CustomError
+handle errors in the custom error and return error in a beatiful format depending on the error type or error name
+create errors constant file with the following 
+String networkErrorName = 'network_error' ==> the beautified version of the error is 'No Internet Connection'
+log all the errors in the user device and from that custom error file to use them in the production version
+add a method (log) for the custom erro and it will be used instead of the print in the production mode
+# you can learn about loggin from youtube https://www.youtube.com/watch?v=GUi0n9c33os
+
 
 
 

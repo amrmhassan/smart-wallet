@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/types.dart';
+import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
@@ -97,7 +98,7 @@ class MoneyAccountCard extends StatelessWidget {
     } catch (error) {
       Navigator.pop(context);
       showSnackBar(context, error.toString(), SnackBarType.error);
-      rethrow;
+      throw CustomError(error);
     }
   }
 

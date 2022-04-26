@@ -100,7 +100,7 @@ class ProfilesProvider extends ChangeNotifier {
         if (kDebugMode) {
           print('Error setting profiles from firestore');
         }
-        rethrow;
+        throw CustomError(error);
       }
     }
   }
@@ -131,7 +131,7 @@ class ProfilesProvider extends ChangeNotifier {
       if (kDebugMode) {
         print('Error fetching activated profile id');
       }
-      rethrow;
+      throw CustomError(error);
     }
   }
 
@@ -160,7 +160,7 @@ class ProfilesProvider extends ChangeNotifier {
       if (kDebugMode) {
         print('Error fetching profiles from the database');
       }
-      rethrow;
+      throw CustomError(error);
     }
     notifyListeners();
   }
@@ -205,7 +205,7 @@ class ProfilesProvider extends ChangeNotifier {
       if (kDebugMode) {
         print('Error creating new money profile');
       }
-      rethrow;
+      throw CustomError(error);
     }
 
     _profiles.add(newProfile);
@@ -290,7 +290,7 @@ class ProfilesProvider extends ChangeNotifier {
       if (kDebugMode) {
         print('Error editting the profile new money profile');
       }
-      rethrow;
+      throw CustomError(error);
     }
   }
 
@@ -339,7 +339,7 @@ class ProfilesProvider extends ChangeNotifier {
         print(error);
         print('Error setting the lastActivated Property in the profile');
       }
-      rethrow;
+      throw CustomError(error);
     }
   }
 
@@ -353,7 +353,7 @@ class ProfilesProvider extends ChangeNotifier {
       if (kDebugMode) {
         print('Error setting the active profile');
       }
-      rethrow;
+      throw CustomError(error);
     }
 
     //* edit the lastActivated property in the profile
