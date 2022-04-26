@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import '../../constants/sizes.dart';
 import '../../providers/quick_actions_provider.dart';
@@ -21,8 +22,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-//* this is the build method of this widget
+  late ProfileModel activeProfile;
+  @override
+  void initState() {
+    activeProfile = Provider.of<ProfilesProvider>(context, listen: false)
+        .getActiveProfile();
 
+    super.initState();
+  }
+
+//* this is the build method of this widget
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
@@ -36,9 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               HomeHeading(
-                title: Provider.of<ProfilesProvider>(context)
-                    .getActiveProfile()
-                    .name,
+                title: activeProfile.name,
               ),
               SizedBox(height: kDefaultPadding),
               //* this has the summery of the current active profile like (outcome, income of this day or month or year..., and the current total amount that currently exist in the profile)

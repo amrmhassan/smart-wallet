@@ -46,6 +46,7 @@ class ProfilesProvider extends ChangeNotifier {
 
   //? getting the active profile info
   ProfileModel getActiveProfile() {
+    print('[[[[[[[[[getActiveProfile]]]]]]]]]]]');
     //* fixed by setting the currentActiveId when fetching profile and there is no profiles
     //* and by adding the loading to the holder screen to prevent showing the home screen that will ask for the current active id
     //* before loading them from the database
@@ -104,7 +105,7 @@ class ProfilesProvider extends ChangeNotifier {
       try {
         await DBHelper.insert(profilesTableName, profile.toJSON());
       } catch (error) {
-        throw CustomError(error);
+        CustomError.log(error);
       }
     }
   }
@@ -119,6 +120,7 @@ class ProfilesProvider extends ChangeNotifier {
 
   //? getting the active profile id from the shared preferences
   Future<void> fetchAndUpdateActivatedProfileId() async {
+    print('[[[[[[[[fetchAndUpdateActivatedProfileId]]]]]]]]]]');
     String activatedId;
 
     try {
@@ -132,12 +134,14 @@ class ProfilesProvider extends ChangeNotifier {
       }
       _activatedProfileId = activatedId;
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
   }
 
   //? fetching and updating profiles from database
   Future<void> fetchAndUpdateProfiles([BuildContext? context]) async {
+    print('[[[[[[[[fetchAndUpdateProfiles]]]]]]]]]]');
+
     try {
       List<Map<String, dynamic>> data =
           await DBHelper.getData(profilesTableName);
@@ -148,7 +152,6 @@ class ProfilesProvider extends ChangeNotifier {
         return setActivatedProfile(id);
       }
       //* getting the profiles again after adding the default profile
-      data = await DBHelper.getData(profilesTableName);
 
       // i will need to rearrange the profiles according to the lastActivated date then the createdAt date
 
@@ -158,14 +161,12 @@ class ProfilesProvider extends ChangeNotifier {
         },
       ).toList();
 
-      await setActivatedProfile('id');
-
       fetchedProfiles.sort((a, b) {
         return a.createdAt.difference(b.createdAt).inSeconds;
       });
       _profiles = fetchedProfiles;
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
     notifyListeners();
   }
@@ -180,7 +181,7 @@ class ProfilesProvider extends ChangeNotifier {
       }
     }
     if (profileNameExists) {
-      throw CustomError('Profile Name already exists');
+      CustomError.log('Profile Name already exists');
     }
 
     //* initializing the transaction data like (createdAt, id, ratioToTotal...)
@@ -201,7 +202,7 @@ class ProfilesProvider extends ChangeNotifier {
     try {
       await DBHelper.insert(profilesTableName, newProfile.toJSON());
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
 
     _profiles.add(newProfile);
@@ -230,7 +231,7 @@ class ProfilesProvider extends ChangeNotifier {
         lastActivatedDate == null &&
         syncFlags == null &&
         deleted == null) {
-      throw CustomError(
+      CustomError.log(
           'You must enter one argument at least to edit the profile');
     }
 
@@ -242,7 +243,7 @@ class ProfilesProvider extends ChangeNotifier {
       }
     }
     if (profileNameExists) {
-      throw CustomError('Profile Name already exists');
+      CustomError.log('Profile Name already exists');
     }
     ProfileModel editedProfile;
     try {
@@ -287,7 +288,7 @@ class ProfilesProvider extends ChangeNotifier {
       _profiles.insert(index, newProfile);
       notifyListeners();
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
   }
 
@@ -299,10 +300,8 @@ class ProfilesProvider extends ChangeNotifier {
     DateTime? lastActivatedDate,
   }) async {
     //* setting the active profile to the current active profile
-    ProfileModel activeProfile = getActiveProfile();
-    String id = activeProfile.id;
     return editProfile(
-      id: id,
+      id: activatedProfileId,
       name: name,
       income: income,
       outcome: outcome,
@@ -314,7 +313,7 @@ class ProfilesProvider extends ChangeNotifier {
   Future<void> deleteProfile(String profileId) async {
     //* checking if the deleted profile is the active profile
     if (profileId == activatedProfileId) {
-      throw CustomError('You can\'t delete the active profile');
+      CustomError.log('You can\'t delete the active profile');
     }
     // here i need to check if the profile is flagged as add
     // if it is still new (add flag) then you can't update it in the firestore so you need to keep the add flag
@@ -332,7 +331,7 @@ class ProfilesProvider extends ChangeNotifier {
     try {
       return editActiveProfile(lastActivatedDate: DateTime.now());
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
   }
 
@@ -345,7 +344,7 @@ class ProfilesProvider extends ChangeNotifier {
 
       notifyListeners();
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
 
     //* edit the lastActivated property in the profile

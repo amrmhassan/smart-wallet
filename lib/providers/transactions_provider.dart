@@ -111,7 +111,7 @@ class TransactionProvider extends ChangeNotifier {
       try {
         await DBHelper.insert(transactionsTableName, transaction.toJSON());
       } catch (error) {
-        throw CustomError(error);
+        CustomError.log(error);
       }
     }
   }
@@ -133,7 +133,7 @@ class TransactionProvider extends ChangeNotifier {
     //* checking if the transaction added will make the current balance negative
     //* i removed this cause i will ask the user to add this even it is greater than his current money
     if (amount > totalMoney && transactionType == TransactionType.outcome) {
-      throw CustomError(
+      CustomError.log(
           'This expense is larger than your balance. You can add a debt instead.');
     }
 
@@ -165,7 +165,7 @@ class TransactionProvider extends ChangeNotifier {
     try {
       await DBHelper.insert(transactionsTableName, newTransaction.toJSON());
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
 
     _transactions.add(newTransaction);
@@ -191,7 +191,7 @@ class TransactionProvider extends ChangeNotifier {
 
       notifyListeners();
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
   }
 
@@ -210,7 +210,7 @@ class TransactionProvider extends ChangeNotifier {
       allTransactions = fetchedTransactions;
       notifyListeners();
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
   }
 
@@ -245,7 +245,7 @@ class TransactionProvider extends ChangeNotifier {
       double newAmount = totalMoney - newTransaction.amount;
       if (newTransaction.amount > newAmount &&
           newTransaction.transactionType == TransactionType.outcome) {
-        throw CustomError('This expense is larger than your balance.');
+        CustomError.log('This expense is larger than your balance.');
       }
     }
     if (syncing) {
@@ -258,7 +258,7 @@ class TransactionProvider extends ChangeNotifier {
     try {
       await DBHelper.insert(transactionsTableName, newTransaction.toJSON());
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
     int transactionIndex =
         _transactions.indexWhere((element) => element.id == transactionId);

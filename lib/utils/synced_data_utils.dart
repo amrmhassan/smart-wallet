@@ -28,7 +28,7 @@ Future googleLogin(BuildContext context) async {
         listen: false,
       ).googleLogout();
     } catch (error) {
-      throw CustomError(error.toString());
+      CustomError.log(error.toString());
     }
   }
 
@@ -39,10 +39,10 @@ Future googleLogin(BuildContext context) async {
     ).googleLogin();
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
-      throw CustomError('not_logged_in');
+      CustomError.log('not_logged_in');
     }
   } catch (error) {
-    throw CustomError(error.toString());
+    CustomError.log(error.toString());
   }
 
   var profileProvider = Provider.of<ProfilesProvider>(context, listen: false);
@@ -146,7 +146,7 @@ Future<void> handleDownloadUserPhoto() async {
           photoLocalPath,
         );
       } catch (error) {
-        throw CustomError(error);
+        CustomError.log(error);
       }
     }
   }
@@ -156,15 +156,17 @@ Future<void> handleDeleteUserPhoto() async {
   try {
     String photoLocalPath = await getUserPhotoPath();
     File userPhoto = File(photoLocalPath);
-    await userPhoto.delete();
+    if (userPhoto.existsSync()) {
+      await userPhoto.delete();
+    }
   } catch (error) {
-    throw CustomError(error);
+    CustomError.log(error);
   }
 }
 
 Future<String> getUserPhotoPath() async {
   String docDirPath = (await getApplicationDocumentsDirectory()).path;
-  String photoLocalPath = '$docDirPath/$userProfilePhotoName.jpg';
+  String photoLocalPath = '$docDirPath/$userProfilePhotoName';
   return photoLocalPath;
 }
 
@@ -173,7 +175,7 @@ Future<File> handleGetUserPhoto() async {
   File file = File(photoPath);
   bool exists = await file.exists();
   if (!exists) {
-    throw CustomError('No user Photo');
+    CustomError.log('No user Photo');
   }
   return file;
 }

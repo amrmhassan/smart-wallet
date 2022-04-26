@@ -40,7 +40,7 @@ class FileOutPut extends LogOutput {
             encoding: Encoding.getByName('utf-8') as Encoding);
       }
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
   }
 }

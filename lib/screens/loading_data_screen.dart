@@ -68,7 +68,7 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
     Future.delayed(Duration.zero).then((value) async {
       await fetchData();
       //! this is not good but i have no other way around this right now
-      await fetchData();
+      // await fetchData();
       Navigator.pushReplacementNamed(context, HolderScreen.routeName);
     });
   }

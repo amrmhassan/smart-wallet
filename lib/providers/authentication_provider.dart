@@ -42,7 +42,7 @@ class AuthenticationProvider extends ChangeNotifier {
       await FirebaseAuth.instance.signInWithCredential(credential);
       notifyListeners();
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
   }
 
@@ -52,7 +52,7 @@ class AuthenticationProvider extends ChangeNotifier {
       // await googleSignIn.disconnect();
       FirebaseAuth.instance.signOut();
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
   }
 }

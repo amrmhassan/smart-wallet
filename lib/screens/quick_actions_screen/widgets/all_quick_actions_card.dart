@@ -42,7 +42,7 @@ class AllQuickActionsCard extends StatelessWidget {
               .deleteQuickActions(quickAction.id);
         } catch (error) {
           showSnackBar(context, error.toString(), SnackBarType.error);
-          throw CustomError(error);
+          CustomError.log(error);
         }
         confirmDelete = true;
       },

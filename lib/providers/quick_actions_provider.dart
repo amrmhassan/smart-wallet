@@ -24,7 +24,7 @@ class QuickActionsProvider extends ChangeNotifier {
       try {
         await DBHelper.insert(quickActionsTableName, quickAction.toJSON());
       } catch (error) {
-        throw CustomError(error);
+        CustomError.log(error);
       }
     }
   }
@@ -120,7 +120,7 @@ class QuickActionsProvider extends ChangeNotifier {
     try {
       await DBHelper.insert(quickActionsTableName, quickActionModel.toJSON());
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
     _quickActions.add(quickActionModel);
     notifyListeners();
@@ -145,7 +145,7 @@ class QuickActionsProvider extends ChangeNotifier {
 
       notifyListeners();
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
   }
 
@@ -164,7 +164,7 @@ class QuickActionsProvider extends ChangeNotifier {
       allQuickActions = fetchedQuickActions;
       notifyListeners();
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
     return fetchedQuickActions;
   }
@@ -196,7 +196,7 @@ class QuickActionsProvider extends ChangeNotifier {
     try {
       await DBHelper.insert(quickActionsTableName, newQuickAction.toJSON());
     } catch (error) {
-      throw CustomError(error);
+      CustomError.log(error);
     }
   }
 

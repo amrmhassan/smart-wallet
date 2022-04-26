@@ -24,7 +24,7 @@ class PersonIcon extends StatelessWidget {
   Future<File> personIconFuture() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      throw CustomError('No User Logged In');
+      CustomError.log('No User Logged In');
     }
 
     return handleGetUserPhoto();

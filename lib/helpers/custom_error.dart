@@ -12,6 +12,12 @@ class CustomError implements Exception {
     log.e(error);
   }
 
+  static void log(Object error) {
+    print('Should be logging right now');
+    var log = logger;
+    log.e(error.toString());
+  }
+
   @override
   String toString() {
     return error.toString();

@@ -194,7 +194,7 @@ class ProfileDetailsProvider extends ChangeNotifier {
     bool update = false,
   }) {
     if (newStartingDate == null && newEndDate == null) {
-      throw CustomError('You must specify one date at least');
+      CustomError.log('You must specify one date at least');
     }
     if (newStartingDate != null) {
       startingDate = newStartingDate;

@@ -59,18 +59,22 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
     try {
       bool online = await isOnline();
       if (!online) {
-        throw CustomError('network_error');
+        CustomError.log('network_error');
       }
       await googleLogin(context);
     } catch (error) {
-      showSnackBar(
-        context,
-        CustomError.beautifyError(error),
-        SnackBarType.error,
-      );
-      Provider.of<AuthenticationProvider>(context, listen: false)
-          .setUserPhoto(null);
-      await handleDeleteUserPhoto();
+      try {
+        showSnackBar(
+          context,
+          CustomError.beautifyError(error),
+          SnackBarType.error,
+        );
+        Provider.of<AuthenticationProvider>(context, listen: false)
+            .setUserPhoto(null);
+        await handleDeleteUserPhoto();
+      } catch (error) {
+        CustomError.log(error);
+      }
     }
     setState(() {
       _loggingIn = false;
