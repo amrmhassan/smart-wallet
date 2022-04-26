@@ -24,8 +24,8 @@ class SyncedDataProvider extends ChangeNotifier {
         //* i made this just to prevent syncing the profile with the sync flag add or anything else
         //* and to ensure that it would by synced with the none flag to the firestore
         SyncFlags currentSyncFlag = profile.syncFlag;
-        profile.syncFlag = SyncFlags.none;
-        await profilesProvider.changeSyncFlag(profile.id, SyncFlags.none);
+        profile.syncFlag = SyncFlags.noSyncing;
+        await profilesProvider.changeSyncFlag(profile.id, SyncFlags.noSyncing);
 
         if (currentSyncFlag == SyncFlags.add) {
           await addProfile(profile);
@@ -37,9 +37,9 @@ class SyncedDataProvider extends ChangeNotifier {
       }
       for (var transaction in transactionProvider.notSyncedTransactions) {
         SyncFlags currentSyncFlag = transaction.syncFlag;
-        transaction.syncFlag = SyncFlags.none;
+        transaction.syncFlag = SyncFlags.noSyncing;
         await transactionProvider.changeSyncFlag(
-            transaction.id, SyncFlags.none);
+            transaction.id, SyncFlags.noSyncing);
 
         if (currentSyncFlag == SyncFlags.add) {
           await addTransaction(transaction);
@@ -53,8 +53,8 @@ class SyncedDataProvider extends ChangeNotifier {
       for (var quickAction in quickActionsProvider.notSyncedQuickActions) {
         SyncFlags currentSyncFlag = quickAction.syncFlag;
         await quickActionsProvider.changeSyncFlag(
-            quickAction.id, SyncFlags.none);
-        quickAction.syncFlag = SyncFlags.none;
+            quickAction.id, SyncFlags.noSyncing);
+        quickAction.syncFlag = SyncFlags.noSyncing;
 
         if (currentSyncFlag == SyncFlags.add) {
           await addQuickAction(quickAction);

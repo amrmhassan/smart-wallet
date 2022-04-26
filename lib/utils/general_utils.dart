@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import '../constants/theme_constants.dart';
 import '../constants/types.dart';
@@ -53,6 +54,9 @@ void showStackedSnackBar(
   SnackBarType snackBarType = SnackBarType.info,
   bool aboveBottomNavBar = false,
 ]) {
+  if (!showHelperSnackBars) {
+    return;
+  }
   if (context == null) {
     return;
   }

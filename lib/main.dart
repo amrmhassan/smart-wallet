@@ -71,18 +71,10 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         initialRoute: LoadingDataScreen.routeName,
-        builder: (context, child) {
-          return Stack(
-            alignment: Alignment.topRight,
-            children: [
-              child!,
-            ],
-          );
-        },
         routes: {
-          LoadingDataScreen.routeName: (ctx) => const LoadingDataScreen(),
-          HolderScreen.routeName: (ctx) => const HolderScreen(),
-          QuickActionsScreen.routeName: (ctx) => const QuickActionsScreen(),
+          LoadingDataScreen.routeName: (ctx) => LoadingDataScreen(),
+          HolderScreen.routeName: (ctx) => HolderScreen(),
+          QuickActionsScreen.routeName: (ctx) => QuickActionsScreen(),
           TestingWidget.routeName: (ctx) => TestingWidget(),
           AuthenticationScreen.routeName: (ctx) => AuthenticationScreen(),
           SyncDataScreen.routeName: (ctx) => SyncDataScreen(),

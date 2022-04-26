@@ -30,7 +30,7 @@ class QuickActionModel {
     this.quickActionIndex,
     this.userId,
     this.deleted = false,
-    this.syncFlag = SyncFlags.none,
+    this.syncFlag = SyncFlags.noSyncing,
   });
 
   Map<String, dynamic> toJSON() {

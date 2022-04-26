@@ -35,7 +35,7 @@ class QuickActionsProvider extends ChangeNotifier {
 
   List<QuickActionModel> get notSyncedQuickActions {
     return allQuickActions
-        .where((element) => element.syncFlag != SyncFlags.none)
+        .where((element) => element.syncFlag != SyncFlags.noSyncing)
         .toList();
   }
 
@@ -224,7 +224,7 @@ class QuickActionsProvider extends ChangeNotifier {
   Future<void> editQuickAction(QuickActionModel newQuickAction,
       [bool syncing = false]) async {
     if (syncing) {
-      newQuickAction.syncFlag = SyncFlags.none;
+      newQuickAction.syncFlag = SyncFlags.noSyncing;
     } else if (newQuickAction.syncFlag != SyncFlags.add) {
       newQuickAction.syncFlag = SyncFlags.edit;
     }

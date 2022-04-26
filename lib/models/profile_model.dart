@@ -31,7 +31,7 @@ class ProfileModel {
     required this.createdAt,
     this.lastActivatedDate,
     this.userId,
-    this.syncFlag = SyncFlags.none,
+    this.syncFlag = SyncFlags.noSyncing,
     this.deleted = false,
   }) {
     //? for setting the total money
@@ -84,7 +84,8 @@ class ProfileModel {
             ? null
             : DateTime.parse(profileJSON[lastActivatedDateString]);
     bool deletedJ = profileJSON[deletedString] == dbTrue ? true : false;
-    SyncFlags syncFlagsJ = stringToSyncFlag(profileJSON[syncFlagString]);
+    SyncFlags syncFlagsJ = stringToSyncFlag(
+        profileJSON[syncFlagString] ?? SyncFlags.noSyncing.name);
     String? userIdJ =
         profileJSON[userIdString] == dbNull ? null : profileJSON[userIdString];
     return ProfileModel(

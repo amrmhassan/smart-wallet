@@ -16,7 +16,7 @@ class TransactionProvider extends ChangeNotifier {
 //? not synced transactions from the all transactions
   List<TransactionModel> get notSyncedTransactions {
     return allTransactions
-        .where((element) => element.syncFlag != SyncFlags.none)
+        .where((element) => element.syncFlag != SyncFlags.noSyncing)
         .toList();
   }
 
@@ -262,7 +262,7 @@ class TransactionProvider extends ChangeNotifier {
       }
     }
     if (syncing) {
-      newTransaction.syncFlag = SyncFlags.none;
+      newTransaction.syncFlag = SyncFlags.noSyncing;
     } else if (newTransaction.syncFlag != SyncFlags.add) {
       newTransaction.syncFlag = SyncFlags.edit;
     }

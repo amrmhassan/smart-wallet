@@ -21,7 +21,7 @@ class ProfilesProvider extends ChangeNotifier {
 //? need syncing profiles
   List<ProfileModel> get notSyncedProfiles {
     return _profiles
-        .where((element) => element.syncFlag != SyncFlags.none)
+        .where((element) => element.syncFlag != SyncFlags.noSyncing)
         .toList();
   }
 
@@ -61,11 +61,13 @@ class ProfilesProvider extends ChangeNotifier {
     } catch (error) {
       //! this is not the final solution
       return ProfileModel(
-          id: 'id',
-          name: 'name',
-          income: 0,
-          outcome: 0,
-          createdAt: DateTime.now());
+        id: 'id',
+        name: 'name',
+        income: 0,
+        outcome: 0,
+        createdAt: DateTime.now(),
+        lastActivatedDate: DateTime.now(),
+      );
     }
   }
 
@@ -166,6 +168,8 @@ class ProfilesProvider extends ChangeNotifier {
 
       List<ProfileModel> fetchedProfiles = data.map(
         (profile) {
+          showStackedSnackBar(
+              context, profile.entries.toString() + profile.values.toString());
           return ProfileModel.fromJSON(profile);
         },
       ).toList();
@@ -273,10 +277,14 @@ class ProfilesProvider extends ChangeNotifier {
     if (profileNameExists) {
       throw CustomError('Profile Name already exists');
     }
+    ProfileModel editedProfile;
+    try {
+      //* setting the active profile to the current active profile
+      editedProfile = _profiles.firstWhere((element) => element.id == id);
+    } catch (error) {
+      return;
+    }
 
-    //* setting the active profile to the current active profile
-    ProfileModel editedProfile =
-        _profiles.firstWhere((element) => element.id == id);
     String newName = name ?? editedProfile.name;
     double newIncome = income ?? editedProfile.income;
     double newOutcome = outcome ?? editedProfile.outcome;
@@ -285,7 +293,7 @@ class ProfilesProvider extends ChangeNotifier {
         lastActivatedDate ?? editedProfile.lastActivatedDate;
     // if syncFlags is null, check if the profile flag is add to add it cause it won't be there is firestore for editing
     // and if it not add then mark it as edit
-    // and if the syncFlags is set it will be only SyncFlags.none
+    // and if the syncFlags is set it will be only SyncFlags.noSyncing
     SyncFlags newSyncFlag = syncFlags ??
         (editedProfile.syncFlag == SyncFlags.add
             ? SyncFlags.add

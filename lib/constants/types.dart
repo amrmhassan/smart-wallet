@@ -11,7 +11,7 @@ enum SnackBarType {
 }
 
 enum SyncFlags {
-  none,
+  noSyncing,
   add,
   edit,
   delete,
