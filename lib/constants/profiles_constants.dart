@@ -15,27 +15,3 @@ ProfileModel defaultProfile = ProfileModel(
   outcome: 0,
   createdAt: DateTime.now(),
 );
-
-List<ProfileModel> dummyProfiles = [
-  ProfileModel(
-    id: const Uuid().v4(),
-    name: 'Suez Account',
-    income: 600,
-    outcome: 200,
-    createdAt: DateTime.now().subtract(const Duration(days: 10)),
-  ),
-  ProfileModel(
-    id: const Uuid().v4(),
-    name: 'Private Account',
-    income: 200,
-    outcome: 200,
-    createdAt: DateTime.now().subtract(const Duration(days: 100)),
-  ),
-  ProfileModel(
-    id: const Uuid().v4(),
-    name: 'Marsafa Account',
-    income: 250,
-    outcome: 200,
-    createdAt: DateTime.now().subtract(const Duration(days: 365)),
-  ),
-];

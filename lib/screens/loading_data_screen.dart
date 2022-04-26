@@ -27,8 +27,11 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
   //! here load the data form the firestore if there is internet connection and the user is logged in and it the first time to open the app
 
   Future<void> fetchData() async {
+    //? 1]  fetching the active theme
+    await Provider.of<ThemeProvider>(context, listen: false)
+        .fetchAndSetActiveTheme();
+
     //? 2] fetching the profiles
-    showStackedSnackBar(context, 'before fetching the profiles');
     await Provider.of<ProfilesProvider>(context, listen: false)
         .fetchAndUpdateProfiles(context);
 
@@ -47,6 +50,7 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
     // //? 5] fetching the quick actions
     await Provider.of<QuickActionsProvider>(context, listen: false)
         .fetchAndUpdateProfileQuickActions(activeProfileId);
+
     await Provider.of<AuthenticationProvider>(
       context,
       listen: false,
@@ -55,20 +59,19 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
 
   @override
   void initState() {
-    //! this work very well in debugging mode but in production mode the problem happens and i can't debug the problem in production mode
-    //! i have no other solution but this to fix the ultimate fucken problem
-    //! this will run first
+    super.initState();
+
+    // this work very well in debugging mode but in production mode the problem happens and i can't debug the problem in production mode
+    // i have no other solution but this to fix the ultimate fucken problem
+    // this will run first
+
+    // if you made this of zero duration the loading will be infinitely loading in the production
     Future.delayed(Duration.zero).then((value) async {
-      //? 1]  fetching the active theme
-      await Provider.of<ThemeProvider>(context, listen: false)
-          .fetchAndSetActiveTheme();
-    });
-    //! if you made this of zero duration the loading will be infinitely loading in the production
-    Future.delayed(Duration.zero).then((value) async {
+      await fetchData();
+      //! this is not good but i have no other way around this right now
       await fetchData();
       Navigator.pushReplacementNamed(context, HolderScreen.routeName);
     });
-    super.initState();
   }
 
   @override

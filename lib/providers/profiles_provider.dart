@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:smart_wallet/constants/types.dart';
-import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
 import 'package:smart_wallet/constants/shared_pref_constants.dart';
@@ -106,9 +105,6 @@ class ProfilesProvider extends ChangeNotifier {
       try {
         await DBHelper.insert(profilesTableName, profile.toJSON());
       } catch (error) {
-        if (kDebugMode) {
-          print('Error setting profiles from firestore');
-        }
         throw CustomError(error);
       }
     }
@@ -137,48 +133,33 @@ class ProfilesProvider extends ChangeNotifier {
       }
       _activatedProfileId = activatedId;
     } catch (error) {
-      if (kDebugMode) {
-        print('Error fetching activated profile id');
-      }
       throw CustomError(error);
     }
   }
 
   //? fetching and updating profiles from database
   Future<void> fetchAndUpdateProfiles([BuildContext? context]) async {
-    showStackedSnackBar(context, '1 getting the profiles');
     try {
       List<Map<String, dynamic>> data =
           await DBHelper.getData(profilesTableName);
-      showStackedSnackBar(context, '2 profiles get from database');
 
       //* if there is no profile yet just create the default one and add it to the _profiles
       if (data.isEmpty) {
         String id = await addProfile(defaultProfile.name);
-        showStackedSnackBar(context, '3 the first profile added');
         return setActivatedProfile(id);
       }
-      showStackedSnackBar(context, '4 after adding the first profile');
       //* getting the profiles again after adding the default profile
       data = await DBHelper.getData(profilesTableName);
-      showStackedSnackBar(context,
-          '5 after getting the profiles from database for the second time');
 
       // i will need to rearrange the profiles according to the lastActivated date then the createdAt date
 
       List<ProfileModel> fetchedProfiles = data.map(
         (profile) {
-          showStackedSnackBar(
-              context, profile.entries.toString() + profile.values.toString());
           return ProfileModel.fromJSON(profile);
         },
       ).toList();
 
-      showStackedSnackBar(
-          context, '6 after setting the fetched profiles array');
       await setActivatedProfile('id');
-      showStackedSnackBar(context,
-          '7 fetched profiles set with length of ${fetchedProfiles.length}');
 
       fetchedProfiles.sort((a, b) {
         return a.createdAt.difference(b.createdAt).inSeconds;
@@ -188,15 +169,8 @@ class ProfilesProvider extends ChangeNotifier {
       if (kDebugMode) {
         print('Error fetching profiles from the database');
       }
-      showStackedSnackBar(context, error.toString() + stackTrace.toString());
       throw CustomError(error);
     }
-    notifyListeners();
-  }
-
-  //? fetching dummy profiles only for testing
-  void fetchDummyProfiles() {
-    _profiles = _profiles + dummyProfiles;
     notifyListeners();
   }
 
@@ -378,14 +352,10 @@ class ProfilesProvider extends ChangeNotifier {
 
   //? setting the active profile id
   Future<void> setActivatedProfile(String id, [BuildContext? context]) async {
-    showStackedSnackBar(context, '44 before setting the active profile');
     try {
-      showStackedSnackBar(context, '55 before setting the active profile');
       await SharedPrefHelper.setString(kActivatedProfileIdKey, id);
-      showStackedSnackBar(context, '66 after setting the active profile');
 
       _activatedProfileId = id;
-      showStackedSnackBar(context, '77 before notifying listeners');
 
       notifyListeners();
     } catch (error) {
