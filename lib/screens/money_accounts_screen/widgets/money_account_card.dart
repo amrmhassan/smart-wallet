@@ -18,7 +18,7 @@ import '../../../models/profile_model.dart';
 import '../../../providers/profiles_provider.dart';
 import '../../../providers/theme_provider.dart';
 import '../../profile_details_screen/profile_details_screen.dart';
-import 'activate_profile_button.dart';
+import 'custom_button.dart';
 import 'add_profile_modal.dart';
 import 'edit_profile_button.dart';
 import 'profile_details_button.dart';
@@ -209,13 +209,20 @@ class MoneyAccountCard extends StatelessWidget {
             const SizedBox(
               height: kDefaultPadding / 2,
             ),
-            activated
-                ? const ActivatedProfileButton()
-                : NotActivateProfileButton(
-                    onTap: () async {
-                      await changeActivatedProfile(context);
-                    },
-                  ),
+            // activated
+            //     ? const ActivatedProfileButton()
+            //     : NotActivateProfileButton(
+            //         onTap: () async {
+            //           await changeActivatedProfile(context);
+            //         },
+            //       ),
+            CustomButton(
+              onTap: () async {
+                await changeActivatedProfile(context);
+              },
+              title: activated ? 'Activated' : 'Activate',
+              active: !activated,
+            ),
             SizedBox(
               height:
                   profileModel.moneyAccountStatus == MoneyAccountStatus.empty

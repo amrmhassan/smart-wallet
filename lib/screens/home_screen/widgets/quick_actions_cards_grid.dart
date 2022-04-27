@@ -100,7 +100,7 @@ class _QuickActionsCardsGridState extends State<QuickActionsCardsGrid> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'No Favorite Quick Actions, Add one?',
+                            'No Quick Actions, Click to add one.',
                             style: themeProvider.getTextStyle(
                                 ThemeTextStyles.kParagraphTextStyle),
                           ),
