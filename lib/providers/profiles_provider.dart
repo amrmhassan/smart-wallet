@@ -46,7 +46,6 @@ class ProfilesProvider extends ChangeNotifier {
 
   //? getting the active profile info
   ProfileModel getActiveProfile() {
-    print('[[[[[[[[[getActiveProfile]]]]]]]]]]]');
     //* fixed by setting the currentActiveId when fetching profile and there is no profiles
     //* and by adding the loading to the holder screen to prevent showing the home screen that will ask for the current active id
     //* before loading them from the database
@@ -120,7 +119,6 @@ class ProfilesProvider extends ChangeNotifier {
 
   //? getting the active profile id from the shared preferences
   Future<void> fetchAndUpdateActivatedProfileId() async {
-    print('[[[[[[[[fetchAndUpdateActivatedProfileId]]]]]]]]]]');
     String activatedId;
 
     try {
@@ -140,8 +138,6 @@ class ProfilesProvider extends ChangeNotifier {
 
   //? fetching and updating profiles from database
   Future<void> fetchAndUpdateProfiles([BuildContext? context]) async {
-    print('[[[[[[[[fetchAndUpdateProfiles]]]]]]]]]]');
-
     try {
       List<Map<String, dynamic>> data =
           await DBHelper.getData(profilesTableName);

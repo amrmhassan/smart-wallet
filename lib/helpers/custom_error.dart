@@ -13,7 +13,6 @@ class CustomError implements Exception {
   }
 
   static void log(Object error) {
-    print('Should be logging right now');
     var log = logger;
     log.e(error.toString());
   }

@@ -6,7 +6,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
 
-var logger = Logger(output: FileOutPut(), printer: CustomPrinter());
+var logger = Logger(
+  output: FileOutPut(),
+  printer: CustomPrinter(),
+);
 
 class CustomPrinter extends LogPrinter {
   @override

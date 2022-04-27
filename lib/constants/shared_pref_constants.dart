@@ -1,3 +1,4 @@
-String kActivatedProfileIdKey = 'activatedProtileIdKey';
-String kFirstTimeRunKey = 'firstTimeRunKey';
-String kCurrentActiveTheme = 'kCurrentActiveTheme';
+const String kActivatedProfileIdKey = 'activatedProtileIdKey';
+const String kFirstTimeRunKey = 'firstTimeRunKey';
+const String kCurrentActiveTheme = 'kCurrentActiveTheme';
+const String kNeedSyncDownKey = 'needsyncdownkeyname';

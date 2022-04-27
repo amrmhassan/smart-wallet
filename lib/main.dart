@@ -84,23 +84,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-class CustomHelperWidget extends StatelessWidget {
-  const CustomHelperWidget({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, LoggingScreen.routeName);
-      },
-      child: Container(
-        width: 20,
-        height: 100,
-        color: Colors.red,
-      ),
-    );
-  }
-}
