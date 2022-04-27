@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_function_declarations_over_variables
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -6,22 +8,26 @@ import 'package:path_provider/path_provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
 
-var logger = Logger(
-  output: FileOutPut(),
-  printer: CustomPrinter(),
-);
+var logger = (StackTrace? sTrace) => Logger(
+      output: FileOutPut(),
+      printer: CustomPrinter(stackTrace: sTrace),
+    );
 
 class CustomPrinter extends LogPrinter {
+  final StackTrace? stackTrace;
+
+  CustomPrinter({
+    this.stackTrace,
+  });
   @override
   List<String> log(LogEvent event) {
     // final color = PrettyPrinter.levelColors[event.level];
     // final emoji = PrettyPrinter.levelEmojis[event.level];
     final levelString = event.level.name.toUpperCase();
     final message = event.message;
-    final stack = event.stackTrace;
 
-    String separator = '\n----------\n';
-    return ['[$levelString] - $message == $stack $separator'];
+    String separator = '\n------------------\n';
+    return ['[$levelString] - $message == $stackTrace  $separator'];
   }
 }
 
@@ -42,8 +48,8 @@ class FileOutPut extends LogOutput {
             mode: FileMode.append,
             encoding: Encoding.getByName('utf-8') as Encoding);
       }
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
   }
 }

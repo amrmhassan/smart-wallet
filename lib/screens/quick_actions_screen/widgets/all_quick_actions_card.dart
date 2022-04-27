@@ -40,9 +40,9 @@ class AllQuickActionsCard extends StatelessWidget {
         try {
           await Provider.of<QuickActionsProvider>(context, listen: false)
               .deleteQuickActions(quickAction.id);
-        } catch (error) {
+        } catch (error, stackTrace) {
           showSnackBar(context, error.toString(), SnackBarType.error);
-          CustomError.log(error);
+          CustomError.log(error, stackTrace);
         }
         confirmDelete = true;
       },

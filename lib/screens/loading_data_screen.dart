@@ -14,6 +14,7 @@ import 'package:smart_wallet/providers/synced_data_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/holder_screen/holder_screen.dart';
+import 'package:smart_wallet/screens/intro_screen/intro_screen.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/widgets/global/main_loading.dart';
 import 'package:smart_wallet/widgets/global/open_logging_screen.dart';
@@ -31,7 +32,7 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
     //* never delete the data or make the delete to be true
     if (delete) {
       throw CustomError(
-          'Don\'t delete the data cause the user might have some ');
+          'Don\'t delete the data cause the user might have some ', null);
     }
 //* here load the data form the firestore if there is internet connection and the user is logged in and it the first time to open the app
     var profilesProvider =
@@ -58,6 +59,10 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
     bool loggedIn =
         Provider.of<AuthenticationProvider>(context, listen: false).loggedIn();
 
+    if (firstTimeOpenApp && !loggedIn) {
+      await Navigator.pushReplacementNamed(context, IntroScreen.routeName);
+      return;
+    }
     if (loggedIn) {
       //? 0] fetching the user photo from the( should be run here before any returns that come next)
       await Provider.of<AuthenticationProvider>(

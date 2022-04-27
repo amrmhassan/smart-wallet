@@ -56,7 +56,8 @@ class ProfilesProvider extends ChangeNotifier {
       return _profiles.firstWhere(
         (element) => element.id == activatedProfileId,
       );
-    } catch (error) {
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
       //! this is not the final solution
       return ProfileModel(
         id: 'id',
@@ -103,8 +104,8 @@ class ProfilesProvider extends ChangeNotifier {
     for (var profile in profiles) {
       try {
         await DBHelper.insert(profilesTableName, profile.toJSON());
-      } catch (error) {
-        CustomError.log(error);
+      } catch (error, stackTrace) {
+        CustomError.log(error, stackTrace);
       }
     }
   }
@@ -131,8 +132,8 @@ class ProfilesProvider extends ChangeNotifier {
         activatedId = savedActivatedId;
       }
       _activatedProfileId = activatedId;
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
   }
 
@@ -167,8 +168,8 @@ class ProfilesProvider extends ChangeNotifier {
         return a.createdAt.difference(b.createdAt).inSeconds;
       });
       _profiles = fetchedProfiles;
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
     notifyListeners();
   }
@@ -183,7 +184,7 @@ class ProfilesProvider extends ChangeNotifier {
       }
     }
     if (profileNameExists) {
-      CustomError.log('Profile Name already exists', true);
+      CustomError.log('Profile Name already exists', null, true);
     }
 
     //* initializing the transaction data like (createdAt, id, ratioToTotal...)
@@ -203,8 +204,8 @@ class ProfilesProvider extends ChangeNotifier {
     //* here i will add the new transaction to the database
     try {
       await DBHelper.insert(profilesTableName, newProfile.toJSON());
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
 
     _profiles.add(newProfile);
@@ -234,7 +235,9 @@ class ProfilesProvider extends ChangeNotifier {
         syncFlags == null &&
         deleted == null) {
       return CustomError.log(
-          'You must enter one argument at least to edit the profile', true);
+          'You must enter one argument at least to edit the profile',
+          null,
+          true);
     }
 
     //* checking if the profile name already exists if the changing parameter is the name
@@ -245,13 +248,14 @@ class ProfilesProvider extends ChangeNotifier {
       }
     }
     if (profileNameExists) {
-      CustomError.log('Profile Name already exists', true);
+      CustomError.log('Profile Name already exists', null, true);
     }
     ProfileModel editedProfile;
     try {
       //* setting the active profile to the current active profile
       editedProfile = _profiles.firstWhere((element) => element.id == id);
-    } catch (error) {
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
       return;
     }
 
@@ -289,8 +293,8 @@ class ProfilesProvider extends ChangeNotifier {
 
       _profiles.insert(index, newProfile);
       notifyListeners();
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
   }
 
@@ -317,6 +321,7 @@ class ProfilesProvider extends ChangeNotifier {
     if (profileId == activatedProfileId) {
       CustomError.log(
         'You can\'t delete the active profile',
+        null,
         true,
       );
     }
@@ -335,8 +340,8 @@ class ProfilesProvider extends ChangeNotifier {
   Future<void> editLastActivatedForProfile() async {
     try {
       return editActiveProfile(lastActivatedDate: DateTime.now());
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
   }
 
@@ -348,8 +353,8 @@ class ProfilesProvider extends ChangeNotifier {
       _activatedProfileId = id;
 
       notifyListeners();
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
 
     //* edit the lastActivated property in the profile

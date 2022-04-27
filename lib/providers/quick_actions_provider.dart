@@ -23,8 +23,8 @@ class QuickActionsProvider extends ChangeNotifier {
     for (var quickAction in quickActions) {
       try {
         await DBHelper.insert(quickActionsTableName, quickAction.toJSON());
-      } catch (error) {
-        CustomError.log(error);
+      } catch (error, stackTrace) {
+        CustomError.log(error, stackTrace);
       }
     }
   }
@@ -119,8 +119,8 @@ class QuickActionsProvider extends ChangeNotifier {
     //* here i will add the new transaction to the database
     try {
       await DBHelper.insert(quickActionsTableName, quickActionModel.toJSON());
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
     _quickActions.add(quickActionModel);
     notifyListeners();
@@ -144,8 +144,8 @@ class QuickActionsProvider extends ChangeNotifier {
       _quickActions = fetchedQuickActions;
 
       notifyListeners();
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
   }
 
@@ -163,8 +163,8 @@ class QuickActionsProvider extends ChangeNotifier {
       ).toList();
       allQuickActions = fetchedQuickActions;
       notifyListeners();
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
     return fetchedQuickActions;
   }
@@ -195,8 +195,8 @@ class QuickActionsProvider extends ChangeNotifier {
       QuickActionModel newQuickAction) async {
     try {
       await DBHelper.insert(quickActionsTableName, newQuickAction.toJSON());
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
   }
 

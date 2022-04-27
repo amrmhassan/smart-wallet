@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/helpers/custom_error.dart';
 
 import '../constants/types.dart';
 import '../providers/profiles_provider.dart';
@@ -42,7 +43,8 @@ Future<void> addProfile(
       'Profile Added',
       SnackBarType.success,
     );
-  } catch (error) {
+  } catch (error, stackTrace) {
+    CustomError.log(error, stackTrace);
     Navigator.pop(context);
     showSnackBar(
       context,
@@ -87,7 +89,8 @@ Future<void> showDeleteProfileModal(BuildContext context, String profileId,
           listen: false,
         ).deleteProfile(profileId);
         showSnackBar(context, 'Profile deleted', SnackBarType.info);
-      } catch (error) {
+      } catch (error, stackTrace) {
+        CustomError.log(error, stackTrace);
         showSnackBar(context, error.toString(), SnackBarType.error);
       }
     },

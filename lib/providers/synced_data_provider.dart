@@ -64,8 +64,8 @@ class SyncedDataProvider extends ChangeNotifier {
           await editQuickAction(quickAction);
         }
       }
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
   }
 

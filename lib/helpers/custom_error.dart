@@ -4,22 +4,22 @@ import 'package:smart_wallet/models/logger_model.dart';
 //! you can learn about loggin from youtube https://www.youtube.com/watch?v=GUi0n9c33os
 class CustomError implements Exception {
   Object error;
+  StackTrace? stackTrace;
 
-  CustomError(
-    this.error,
-  ) {
+  CustomError(this.error, this.stackTrace) {
     var log = logger;
-    log.e(error);
+    log(stackTrace).e(error);
   }
 
   static void log(
     Object error, [
+    StackTrace? stackTrace,
     bool rethrowError = false,
   ]) {
     var log = logger;
-    log.e(error.toString());
+    log(stackTrace).e(error.toString());
     if (rethrowError) {
-      throw CustomError(error);
+      throw CustomError(error, stackTrace);
     }
   }
 

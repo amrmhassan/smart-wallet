@@ -110,7 +110,8 @@ class TransactionProvider extends ChangeNotifier {
     for (var transaction in transactions) {
       try {
         await DBHelper.insert(transactionsTableName, transaction.toJSON());
-      } catch (error) {
+      } catch (error, stackTrace) {
+        CustomError.log(error, stackTrace);
         CustomError.log(error);
       }
     }
@@ -135,6 +136,7 @@ class TransactionProvider extends ChangeNotifier {
     if (amount > totalMoney && transactionType == TransactionType.outcome) {
       CustomError.log(
         'This expense is larger than your balance. You can add a debt instead.',
+        null,
         true,
       );
     }
@@ -166,8 +168,8 @@ class TransactionProvider extends ChangeNotifier {
     //* here i will add the new transaction to the database
     try {
       await DBHelper.insert(transactionsTableName, newTransaction.toJSON());
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
 
     _transactions.add(newTransaction);
@@ -192,8 +194,8 @@ class TransactionProvider extends ChangeNotifier {
       _transactions = fetchedTransactions;
 
       notifyListeners();
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
   }
 
@@ -211,8 +213,8 @@ class TransactionProvider extends ChangeNotifier {
           .toList();
       allTransactions = fetchedTransactions;
       notifyListeners();
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
   }
 
@@ -249,6 +251,7 @@ class TransactionProvider extends ChangeNotifier {
           newTransaction.transactionType == TransactionType.outcome) {
         CustomError.log(
           'This expense is larger than your balance.',
+          null,
           true,
         );
       }
@@ -262,8 +265,8 @@ class TransactionProvider extends ChangeNotifier {
     //* editing transaction on database first
     try {
       await DBHelper.insert(transactionsTableName, newTransaction.toJSON());
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
     int transactionIndex =
         _transactions.indexWhere((element) => element.id == transactionId);

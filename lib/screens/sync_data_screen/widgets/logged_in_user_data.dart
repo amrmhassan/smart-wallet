@@ -68,8 +68,8 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
       setState(() {
         _syncing = false;
       });
-    } catch (error) {
-      CustomError.log(error);
+    } catch (error, stackTrace) {
+      CustomError.log(error, stackTrace);
     }
   }
 

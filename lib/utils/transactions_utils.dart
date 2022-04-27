@@ -2,6 +2,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/models/quick_action_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
 
@@ -105,7 +106,8 @@ Future<void> addTransaction({
       showSnackBar(context, 'Transaction Added', SnackBarType.success);
     }
     Navigator.pop(context);
-  } catch (error) {
+  } catch (error, stackTrace) {
+    CustomError.log(error, stackTrace);
     if (allowSnackBar) {
       showSnackBar(context, error.toString(), SnackBarType.error);
     }
@@ -129,7 +131,8 @@ Future<void> addQuickAction({
 
     showSnackBar(context, 'Quick Action Added', SnackBarType.success);
     Navigator.pop(context);
-  } catch (error) {
+  } catch (error, stackTrace) {
+    CustomError.log(error, stackTrace);
     showSnackBar(context, error.toString(), SnackBarType.error);
   }
 }
@@ -180,7 +183,8 @@ Future<void> editTransaction({
 
     showSnackBar(context, 'Transaction Updated', SnackBarType.success);
     Navigator.pop(context);
-  } catch (error) {
+  } catch (error, stackTrace) {
+    CustomError.log(error, stackTrace);
     showSnackBar(context, error.toString(), SnackBarType.error);
   }
 }
@@ -219,7 +223,8 @@ Future<void> editQuickAction({
         .editQuickAction(newQuickAction);
     showSnackBar(context, 'Quick Action Updated', SnackBarType.success);
     Navigator.pop(context);
-  } catch (error) {
+  } catch (error, stackTrace) {
+    CustomError.log(error, stackTrace);
     showSnackBar(context, error.toString(), SnackBarType.error);
   }
 }
@@ -278,7 +283,8 @@ Future<void> applyQuickAction(
               outcome: activeProfile.outcome + quickAction.amount);
     }
     showSnackBar(context, 'Transaction Added', SnackBarType.success, true);
-  } catch (error) {
+  } catch (error, stackTrace) {
+    CustomError.log(error, stackTrace);
     showSnackBar(context, error.toString(), SnackBarType.error, true);
   }
 }

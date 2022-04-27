@@ -6,6 +6,7 @@ import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
+import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/helpers/responsive.dart';
 import 'package:smart_wallet/screens/quick_actions_screen/widgets/all_quick_actions_card.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
@@ -39,7 +40,8 @@ class TranscationCard extends StatelessWidget {
         try {
           await deleteTransaction(context, transaction);
           confirmDelete = true;
-        } catch (error) {
+        } catch (error, stackTrace) {
+          CustomError.log(error, stackTrace);
           showSnackBar(context, error.toString(), SnackBarType.error);
           confirmDelete = false;
         }

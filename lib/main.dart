@@ -8,6 +8,7 @@ import 'package:smart_wallet/providers/profile_details_provider.dart';
 import 'package:smart_wallet/providers/synced_data_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/authentication_screen/authentication_screen.dart';
+import 'package:smart_wallet/screens/intro_screen/intro_screen.dart';
 import 'package:smart_wallet/screens/loading_data_screen.dart';
 import 'package:smart_wallet/screens/logging_screen/logging_screen.dart';
 import 'package:smart_wallet/screens/sync_data_screen/sync_data_screen.dart';
@@ -79,6 +80,7 @@ class _MyAppState extends State<MyApp> {
           AuthenticationScreen.routeName: (ctx) => AuthenticationScreen(),
           SyncDataScreen.routeName: (ctx) => SyncDataScreen(),
           LoggingScreen.routeName: (ctx) => LoggingScreen(),
+          IntroScreen.routeName: (ctx) => IntroScreen(),
         },
       ),
     );

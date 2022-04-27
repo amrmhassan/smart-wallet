@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
+import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import '../constants/theme_constants.dart';
 import '../constants/types.dart';
@@ -11,7 +12,8 @@ String doubleToString(double amount) {
   try {
     String string = amount.toStringAsFixed(2);
     return string.replaceFirst('.00', '');
-  } catch (error) {
+  } catch (error, stackTrace) {
+    CustomError.log(error, stackTrace);
     return 'error converting double to string';
   }
 }
@@ -95,7 +97,8 @@ Future<bool> isOnline() async {
     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
       online = true;
     }
-  } catch (error) {
+  } catch (error, stackTrace) {
+    CustomError.log(error, stackTrace);
     online = false;
   }
   return online;

@@ -15,7 +15,7 @@ class OpenLoggingScreen extends StatelessWidget {
       child: Container(
         width: 20,
         height: 100,
-        color: Colors.red,
+        color: Colors.transparent,
       ),
     );
   }
