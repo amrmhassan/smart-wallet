@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/constants/errors_types.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
@@ -59,7 +60,10 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
     try {
       bool online = await isOnline();
       if (!online) {
-        CustomError.log('network_error', null, true);
+        CustomError.log(
+          errorType: ErrorTypes.networkError,
+          rethrowError: true,
+        );
       }
       await googleLogin(context);
     } catch (error, stackTrace) {
@@ -67,7 +71,7 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
       try {
         showSnackBar(
           context,
-          CustomError.beautifyError(error),
+          CustomError.beautifyError(ErrorTypes.networkError),
           SnackBarType.error,
         );
         Provider.of<AuthenticationProvider>(context, listen: false)

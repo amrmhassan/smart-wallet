@@ -239,9 +239,8 @@ class ProfilesProvider extends ChangeNotifier {
         syncFlags == null &&
         deleted == null) {
       return CustomError.log(
-          'You must enter one argument at least to edit the profile',
-          null,
-          true);
+          error: 'You must enter one argument at least to edit the profile',
+          rethrowError: true);
     }
 
     //* checking if the profile name already exists if the changing parameter is the name
@@ -252,7 +251,10 @@ class ProfilesProvider extends ChangeNotifier {
       }
     }
     if (profileNameExists) {
-      CustomError.log('Profile Name already exists', null, true);
+      CustomError.log(
+        errorType: ErrorTypes.profileNameExists,
+        rethrowError: true,
+      );
     }
     ProfileModel editedProfile;
     try {
@@ -324,10 +326,7 @@ class ProfilesProvider extends ChangeNotifier {
     //* checking if the deleted profile is the active profile
     if (profileId == activatedProfileId) {
       CustomError.log(
-        ErrorTypes.deleteActiveProfile,
-        null,
-        true,
-      );
+          errorType: ErrorTypes.deleteActiveProfile, rethrowError: true);
     }
     // here i need to check if the profile is flagged as add
     // if it is still new (add flag) then you can't update it in the firestore so you need to keep the add flag

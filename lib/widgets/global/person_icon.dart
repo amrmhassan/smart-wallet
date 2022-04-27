@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/errors_types.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
@@ -24,7 +25,7 @@ class PersonIcon extends StatelessWidget {
   Future<File> personIconFuture() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      CustomError.log('No User Logged In');
+      CustomError.log(errorType: ErrorTypes.noUserLoggedIn);
     }
 
     return handleGetUserPhoto();

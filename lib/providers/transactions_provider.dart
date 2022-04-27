@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:smart_wallet/constants/errors_types.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/utils/trans_periods_utils.dart';
 import '../constants/db_constants.dart';
@@ -112,7 +113,6 @@ class TransactionProvider extends ChangeNotifier {
         await DBHelper.insert(transactionsTableName, transaction.toJSON());
       } catch (error, stackTrace) {
         CustomError.log(error: error, stackTrace: stackTrace);
-        CustomError.log(error);
       }
     }
   }
@@ -135,9 +135,8 @@ class TransactionProvider extends ChangeNotifier {
     //* i removed this cause i will ask the user to add this even it is greater than his current money
     if (amount > totalMoney && transactionType == TransactionType.outcome) {
       CustomError.log(
-        'This expense is larger than your balance. You can add a debt instead.',
-        null,
-        true,
+        errorType: ErrorTypes.expenseIsLargeAddDebt,
+        rethrowError: true,
       );
     }
 
@@ -250,9 +249,8 @@ class TransactionProvider extends ChangeNotifier {
       if (newTransaction.amount > newAmount &&
           newTransaction.transactionType == TransactionType.outcome) {
         CustomError.log(
-          'This expense is larger than your balance.',
-          null,
-          true,
+          errorType: ErrorTypes.expenseLargeNoDebt,
+          rethrowError: true,
         );
       }
     }

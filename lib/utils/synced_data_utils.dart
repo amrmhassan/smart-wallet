@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
+import 'package:smart_wallet/constants/errors_types.dart';
 import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/helpers/db_helper.dart';
@@ -29,7 +30,6 @@ Future googleLogin(BuildContext context) async {
       ).googleLogout();
     } catch (error, stackTrace) {
       CustomError.log(error: error, stackTrace: stackTrace);
-      CustomError.log(error.toString());
     }
   }
 
@@ -41,14 +41,12 @@ Future googleLogin(BuildContext context) async {
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
       CustomError.log(
-        'not_logged_in',
-        null,
-        true,
+        errorType: ErrorTypes.notLoggedInUser,
+        rethrowError: true,
       );
     }
   } catch (error, stackTrace) {
     CustomError.log(error: error, stackTrace: stackTrace);
-    CustomError.log(error.toString());
   }
 
   var profileProvider = Provider.of<ProfilesProvider>(context, listen: false);
@@ -153,7 +151,6 @@ Future<void> handleDownloadUserPhoto() async {
         );
       } catch (error, stackTrace) {
         CustomError.log(error: error, stackTrace: stackTrace);
-        CustomError.log(error);
       }
     }
   }
@@ -168,7 +165,6 @@ Future<void> handleDeleteUserPhoto() async {
     }
   } catch (error, stackTrace) {
     CustomError.log(error: error, stackTrace: stackTrace);
-    CustomError.log(error);
   }
 }
 
@@ -183,7 +179,7 @@ Future<File> handleGetUserPhoto() async {
   File file = File(photoPath);
   bool exists = await file.exists();
   if (!exists) {
-    CustomError.log('No user Photo');
+    CustomError.log(errorType: ErrorTypes.noUserPhoto);
   }
   return file;
 }

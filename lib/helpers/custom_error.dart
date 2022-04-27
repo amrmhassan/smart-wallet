@@ -23,7 +23,7 @@ class CustomError implements Exception {
     }
     //? if the error type presets then i will use the beatified error , else Use the actual error or the 'Unknown error' word
     var log = logger(stackTrace);
-    String beautifiedError = 'Unknown Error';
+    String beautifiedError = error.toString();
     if (errorType != null) {
       beautifiedError = CustomError.beautifyError(errorType).toString();
     }
@@ -39,7 +39,8 @@ class CustomError implements Exception {
     return error.toString();
   }
 
-  static String? beautifyError(ErrorTypes error) {
-    return errorsTypes[error];
+  static String beautifyError(ErrorTypes error) {
+    String msg = 'Unknown Error';
+    return errorsTypes[error] ?? msg;
   }
 }

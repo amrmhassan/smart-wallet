@@ -99,7 +99,6 @@ class MoneyAccountCard extends StatelessWidget {
       CustomError.log(error: error, stackTrace: stackTrace);
       Navigator.pop(context);
       showSnackBar(context, error.toString(), SnackBarType.error);
-      CustomError.log(error);
     }
   }
 
