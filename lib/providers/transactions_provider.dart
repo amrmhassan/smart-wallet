@@ -134,7 +134,9 @@ class TransactionProvider extends ChangeNotifier {
     //* i removed this cause i will ask the user to add this even it is greater than his current money
     if (amount > totalMoney && transactionType == TransactionType.outcome) {
       CustomError.log(
-          'This expense is larger than your balance. You can add a debt instead.');
+        'This expense is larger than your balance. You can add a debt instead.',
+        true,
+      );
     }
 
     //* initializing the transaction data like (createdAt, id, ratioToTotal...)
@@ -245,7 +247,10 @@ class TransactionProvider extends ChangeNotifier {
       double newAmount = totalMoney - newTransaction.amount;
       if (newTransaction.amount > newAmount &&
           newTransaction.transactionType == TransactionType.outcome) {
-        CustomError.log('This expense is larger than your balance.');
+        CustomError.log(
+          'This expense is larger than your balance.',
+          true,
+        );
       }
     }
     if (syncing) {

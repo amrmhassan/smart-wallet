@@ -141,21 +141,27 @@ class ProfilesProvider extends ChangeNotifier {
     try {
       List<Map<String, dynamic>> data =
           await DBHelper.getData(profilesTableName);
+      List<ProfileModel> fetchedProfiles = data.map(
+        (profile) {
+          return ProfileModel.fromJSON(profile);
+        },
+      ).toList();
+      bool isEmpty = true;
+      for (var profile in fetchedProfiles) {
+        if (!profile.deleted) {
+          isEmpty = true;
+          break;
+        }
+      }
 
       //* if there is no profile yet just create the default one and add it to the _profiles
-      if (data.isEmpty) {
+      if (isEmpty) {
         String id = await addProfile(defaultProfile.name);
         return setActivatedProfile(id);
       }
       //* getting the profiles again after adding the default profile
 
       // i will need to rearrange the profiles according to the lastActivated date then the createdAt date
-
-      List<ProfileModel> fetchedProfiles = data.map(
-        (profile) {
-          return ProfileModel.fromJSON(profile);
-        },
-      ).toList();
 
       fetchedProfiles.sort((a, b) {
         return a.createdAt.difference(b.createdAt).inSeconds;
@@ -177,7 +183,7 @@ class ProfilesProvider extends ChangeNotifier {
       }
     }
     if (profileNameExists) {
-      CustomError.log('Profile Name already exists');
+      CustomError.log('Profile Name already exists', true);
     }
 
     //* initializing the transaction data like (createdAt, id, ratioToTotal...)
@@ -227,8 +233,8 @@ class ProfilesProvider extends ChangeNotifier {
         lastActivatedDate == null &&
         syncFlags == null &&
         deleted == null) {
-      CustomError.log(
-          'You must enter one argument at least to edit the profile');
+      return CustomError.log(
+          'You must enter one argument at least to edit the profile', true);
     }
 
     //* checking if the profile name already exists if the changing parameter is the name
@@ -309,7 +315,10 @@ class ProfilesProvider extends ChangeNotifier {
   Future<void> deleteProfile(String profileId) async {
     //* checking if the deleted profile is the active profile
     if (profileId == activatedProfileId) {
-      CustomError.log('You can\'t delete the active profile');
+      CustomError.log(
+        'You can\'t delete the active profile',
+        true,
+      );
     }
     // here i need to check if the profile is flagged as add
     // if it is still new (add flag) then you can't update it in the firestore so you need to keep the add flag
