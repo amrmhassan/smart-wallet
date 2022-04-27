@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:smart_wallet/constants/errors_types.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
@@ -57,7 +58,7 @@ class ProfilesProvider extends ChangeNotifier {
         (element) => element.id == activatedProfileId,
       );
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
       //! this is not the final solution
       return ProfileModel(
         id: 'id',
@@ -105,7 +106,7 @@ class ProfilesProvider extends ChangeNotifier {
       try {
         await DBHelper.insert(profilesTableName, profile.toJSON());
       } catch (error, stackTrace) {
-        CustomError.log(error, stackTrace);
+        CustomError.log(error: error, stackTrace: stackTrace);
       }
     }
   }
@@ -133,7 +134,7 @@ class ProfilesProvider extends ChangeNotifier {
       }
       _activatedProfileId = activatedId;
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
     }
   }
 
@@ -169,7 +170,7 @@ class ProfilesProvider extends ChangeNotifier {
       });
       _profiles = fetchedProfiles;
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
     }
     notifyListeners();
   }
@@ -184,7 +185,10 @@ class ProfilesProvider extends ChangeNotifier {
       }
     }
     if (profileNameExists) {
-      CustomError.log('Profile Name already exists', null, true);
+      CustomError.log(
+        errorType: ErrorTypes.profileNameExists,
+        rethrowError: true,
+      );
     }
 
     //* initializing the transaction data like (createdAt, id, ratioToTotal...)
@@ -205,7 +209,7 @@ class ProfilesProvider extends ChangeNotifier {
     try {
       await DBHelper.insert(profilesTableName, newProfile.toJSON());
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
     }
 
     _profiles.add(newProfile);
@@ -255,7 +259,7 @@ class ProfilesProvider extends ChangeNotifier {
       //* setting the active profile to the current active profile
       editedProfile = _profiles.firstWhere((element) => element.id == id);
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
       return;
     }
 
@@ -294,7 +298,7 @@ class ProfilesProvider extends ChangeNotifier {
       _profiles.insert(index, newProfile);
       notifyListeners();
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
     }
   }
 
@@ -320,7 +324,7 @@ class ProfilesProvider extends ChangeNotifier {
     //* checking if the deleted profile is the active profile
     if (profileId == activatedProfileId) {
       CustomError.log(
-        'You can\'t delete the active profile',
+        ErrorTypes.deleteActiveProfile,
         null,
         true,
       );
@@ -341,7 +345,7 @@ class ProfilesProvider extends ChangeNotifier {
     try {
       return editActiveProfile(lastActivatedDate: DateTime.now());
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
     }
   }
 
@@ -354,7 +358,7 @@ class ProfilesProvider extends ChangeNotifier {
 
       notifyListeners();
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
     }
 
     //* edit the lastActivated property in the profile

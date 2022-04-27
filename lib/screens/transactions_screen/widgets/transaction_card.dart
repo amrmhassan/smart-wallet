@@ -41,7 +41,7 @@ class TranscationCard extends StatelessWidget {
           await deleteTransaction(context, transaction);
           confirmDelete = true;
         } catch (error, stackTrace) {
-          CustomError.log(error, stackTrace);
+          CustomError.log(error: error, stackTrace: stackTrace);
           showSnackBar(context, error.toString(), SnackBarType.error);
           confirmDelete = false;
         }

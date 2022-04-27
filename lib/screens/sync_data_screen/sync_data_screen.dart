@@ -63,7 +63,7 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
       }
       await googleLogin(context);
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
       try {
         showSnackBar(
           context,
@@ -74,7 +74,7 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
             .setUserPhoto(null);
         await handleDeleteUserPhoto();
       } catch (error, stackTrace) {
-        CustomError.log(error, stackTrace);
+        CustomError.log(error: error, stackTrace: stackTrace);
       }
     }
     setState(() {

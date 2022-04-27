@@ -27,7 +27,7 @@ class CustomPrinter extends LogPrinter {
     final message = event.message;
 
     String separator = '\n------------------\n';
-    return ['[$levelString] - $message == $stackTrace  $separator'];
+    return ['[$levelString] - \n - $message \n $stackTrace \n $separator'];
   }
 }
 
@@ -49,7 +49,7 @@ class FileOutPut extends LogOutput {
             encoding: Encoding.getByName('utf-8') as Encoding);
       }
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
     }
   }
 }

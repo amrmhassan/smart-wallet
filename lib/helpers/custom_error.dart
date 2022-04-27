@@ -7,19 +7,30 @@ class CustomError implements Exception {
   StackTrace? stackTrace;
 
   CustomError(this.error, this.stackTrace) {
-    var log = logger;
-    log(stackTrace).e(error);
+    var log = logger(stackTrace);
+    log.e(error);
   }
 
-  static void log(
-    Object error, [
+  static void log({
+    Object? error,
+    ErrorTypes? errorType,
     StackTrace? stackTrace,
     bool rethrowError = false,
-  ]) {
-    var log = logger;
-    log(stackTrace).e(error.toString());
+  }) {
+    if (error == null && errorType == null) {
+      throw CustomError(
+          'You must provide error or errorType or both', stackTrace);
+    }
+    //? if the error type presets then i will use the beatified error , else Use the actual error or the 'Unknown error' word
+    var log = logger(stackTrace);
+    String beautifiedError = 'Unknown Error';
+    if (errorType != null) {
+      beautifiedError = CustomError.beautifyError(errorType).toString();
+    }
+    log.e(error.toString());
+
     if (rethrowError) {
-      throw CustomError(error, stackTrace);
+      throw CustomError(beautifiedError, stackTrace);
     }
   }
 
@@ -28,14 +39,7 @@ class CustomError implements Exception {
     return error.toString();
   }
 
-  static String beautifyError(Object error) {
-    String stringError = error.toString();
-    String beautifiedError = 'Unknown Error Occurred';
-    errorsTypes.forEach((key, value) {
-      if (stringError.contains(key)) {
-        beautifiedError = value;
-      }
-    });
-    return beautifiedError;
+  static String? beautifyError(ErrorTypes error) {
+    return errorsTypes[error];
   }
 }

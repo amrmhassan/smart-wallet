@@ -28,7 +28,7 @@ Future googleLogin(BuildContext context) async {
         listen: false,
       ).googleLogout();
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
       CustomError.log(error.toString());
     }
   }
@@ -47,7 +47,7 @@ Future googleLogin(BuildContext context) async {
       );
     }
   } catch (error, stackTrace) {
-    CustomError.log(error, stackTrace);
+    CustomError.log(error: error, stackTrace: stackTrace);
     CustomError.log(error.toString());
   }
 
@@ -152,7 +152,7 @@ Future<void> handleDownloadUserPhoto() async {
           photoLocalPath,
         );
       } catch (error, stackTrace) {
-        CustomError.log(error, stackTrace);
+        CustomError.log(error: error, stackTrace: stackTrace);
         CustomError.log(error);
       }
     }
@@ -167,7 +167,7 @@ Future<void> handleDeleteUserPhoto() async {
       await userPhoto.delete();
     }
   } catch (error, stackTrace) {
-    CustomError.log(error, stackTrace);
+    CustomError.log(error: error, stackTrace: stackTrace);
     CustomError.log(error);
   }
 }

@@ -13,7 +13,7 @@ String doubleToString(double amount) {
     String string = amount.toStringAsFixed(2);
     return string.replaceFirst('.00', '');
   } catch (error, stackTrace) {
-    CustomError.log(error, stackTrace);
+    CustomError.log(error: error, stackTrace: stackTrace);
     return 'error converting double to string';
   }
 }
@@ -98,7 +98,7 @@ Future<bool> isOnline() async {
       online = true;
     }
   } catch (error, stackTrace) {
-    CustomError.log(error, stackTrace);
+    CustomError.log(error: error, stackTrace: stackTrace);
     online = false;
   }
   return online;

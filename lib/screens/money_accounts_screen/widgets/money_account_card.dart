@@ -96,7 +96,7 @@ class MoneyAccountCard extends StatelessWidget {
           context, "Profile Name edited Successfully", SnackBarType.success);
       Navigator.pop(context);
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
       Navigator.pop(context);
       showSnackBar(context, error.toString(), SnackBarType.error);
       CustomError.log(error);

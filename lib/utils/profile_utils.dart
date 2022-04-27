@@ -44,7 +44,7 @@ Future<void> addProfile(
       SnackBarType.success,
     );
   } catch (error, stackTrace) {
-    CustomError.log(error, stackTrace);
+    CustomError.log(error: error, stackTrace: stackTrace);
     Navigator.pop(context);
     showSnackBar(
       context,
@@ -90,7 +90,7 @@ Future<void> showDeleteProfileModal(BuildContext context, String profileId,
         ).deleteProfile(profileId);
         showSnackBar(context, 'Profile deleted', SnackBarType.info);
       } catch (error, stackTrace) {
-        CustomError.log(error, stackTrace);
+        CustomError.log(error: error, stackTrace: stackTrace);
         showSnackBar(context, error.toString(), SnackBarType.error);
       }
     },

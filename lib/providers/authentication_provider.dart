@@ -20,7 +20,7 @@ class AuthenticationProvider extends ChangeNotifier {
       File file = await handleGetUserPhoto();
       setUserPhoto(file);
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
       setUserPhoto(null);
     }
   }
@@ -33,7 +33,7 @@ class AuthenticationProvider extends ChangeNotifier {
         logged = false;
       }
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
       logged = false;
     }
     return logged;
@@ -57,7 +57,7 @@ class AuthenticationProvider extends ChangeNotifier {
       await FirebaseAuth.instance.signInWithCredential(credential);
       notifyListeners();
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
     }
   }
 
@@ -67,7 +67,7 @@ class AuthenticationProvider extends ChangeNotifier {
       // await googleSignIn.disconnect();
       FirebaseAuth.instance.signOut();
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
     }
   }
 }

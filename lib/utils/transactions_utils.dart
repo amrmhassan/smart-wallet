@@ -107,7 +107,7 @@ Future<void> addTransaction({
     }
     Navigator.pop(context);
   } catch (error, stackTrace) {
-    CustomError.log(error, stackTrace);
+    CustomError.log(error: error, stackTrace: stackTrace);
     if (allowSnackBar) {
       showSnackBar(context, error.toString(), SnackBarType.error);
     }
@@ -132,7 +132,7 @@ Future<void> addQuickAction({
     showSnackBar(context, 'Quick Action Added', SnackBarType.success);
     Navigator.pop(context);
   } catch (error, stackTrace) {
-    CustomError.log(error, stackTrace);
+    CustomError.log(error: error, stackTrace: stackTrace);
     showSnackBar(context, error.toString(), SnackBarType.error);
   }
 }
@@ -184,7 +184,7 @@ Future<void> editTransaction({
     showSnackBar(context, 'Transaction Updated', SnackBarType.success);
     Navigator.pop(context);
   } catch (error, stackTrace) {
-    CustomError.log(error, stackTrace);
+    CustomError.log(error: error, stackTrace: stackTrace);
     showSnackBar(context, error.toString(), SnackBarType.error);
   }
 }
@@ -224,7 +224,7 @@ Future<void> editQuickAction({
     showSnackBar(context, 'Quick Action Updated', SnackBarType.success);
     Navigator.pop(context);
   } catch (error, stackTrace) {
-    CustomError.log(error, stackTrace);
+    CustomError.log(error: error, stackTrace: stackTrace);
     showSnackBar(context, error.toString(), SnackBarType.error);
   }
 }
@@ -284,7 +284,7 @@ Future<void> applyQuickAction(
     }
     showSnackBar(context, 'Transaction Added', SnackBarType.success, true);
   } catch (error, stackTrace) {
-    CustomError.log(error, stackTrace);
+    CustomError.log(error: error, stackTrace: stackTrace);
     showSnackBar(context, error.toString(), SnackBarType.error, true);
   }
 }

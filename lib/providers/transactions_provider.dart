@@ -111,7 +111,7 @@ class TransactionProvider extends ChangeNotifier {
       try {
         await DBHelper.insert(transactionsTableName, transaction.toJSON());
       } catch (error, stackTrace) {
-        CustomError.log(error, stackTrace);
+        CustomError.log(error: error, stackTrace: stackTrace);
         CustomError.log(error);
       }
     }
@@ -169,7 +169,7 @@ class TransactionProvider extends ChangeNotifier {
     try {
       await DBHelper.insert(transactionsTableName, newTransaction.toJSON());
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
     }
 
     _transactions.add(newTransaction);
@@ -195,7 +195,7 @@ class TransactionProvider extends ChangeNotifier {
 
       notifyListeners();
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
     }
   }
 
@@ -214,7 +214,7 @@ class TransactionProvider extends ChangeNotifier {
       allTransactions = fetchedTransactions;
       notifyListeners();
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
     }
   }
 
@@ -266,7 +266,7 @@ class TransactionProvider extends ChangeNotifier {
     try {
       await DBHelper.insert(transactionsTableName, newTransaction.toJSON());
     } catch (error, stackTrace) {
-      CustomError.log(error, stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace);
     }
     int transactionIndex =
         _transactions.indexWhere((element) => element.id == transactionId);
