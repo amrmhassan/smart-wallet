@@ -65,8 +65,12 @@ class _LoggingScreenState extends State<LoggingScreen> {
 
   Future<void> deleteLogs() async {
     //? the user needs to click the delete button 3 times before actually deleting the logs file
-    if (timesDeleteClicked < 3) {
+    if (timesDeleteClicked < 2) {
       timesDeleteClicked++;
+      showSnackBar(
+          context,
+          'Remaining ${3 - timesDeleteClicked} Clicks to delete!',
+          SnackBarType.info);
       return;
     }
     String fullPath = await logsFilePath();
@@ -82,7 +86,7 @@ class _LoggingScreenState extends State<LoggingScreen> {
       });
     }
     timesDeleteClicked = 0;
-    showSnackBar(context, 'Logs delted successfully', SnackBarType.info);
+    showSnackBar(context, 'Logs deleted successfully', SnackBarType.info);
   }
 
   @override
@@ -100,7 +104,10 @@ class _LoggingScreenState extends State<LoggingScreen> {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showSnackBar(context, 'Exporting the logs (coming soon)',
+                  SnackBarType.info);
+            },
             icon: Icon(
               Icons.send,
               color: Colors.white,
@@ -112,21 +119,25 @@ class _LoggingScreenState extends State<LoggingScreen> {
           ? Text('Loading')
           : error.isNotEmpty
               ? Text(error)
-              : SizedBox(
-                  height: double.infinity,
-                  width: double.infinity,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 15),
-                          child: Text(logs),
+              : logs.isEmpty
+                  ? Center(
+                      child: Text('Logs are empty '),
+                    )
+                  : SizedBox(
+                      height: double.infinity,
+                      width: double.infinity,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 15),
+                              child: Text(logs),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
     );
   }
 }

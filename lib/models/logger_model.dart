@@ -25,9 +25,12 @@ class CustomPrinter extends LogPrinter {
     // final emoji = PrettyPrinter.levelEmojis[event.level];
     final levelString = event.level.name.toUpperCase();
     final message = event.message;
+    final DateTime dateTime = DateTime.now();
 
-    String separator = '\n------------------\n';
-    return ['[$levelString] - \n - $message \n $stackTrace \n $separator'];
+    String separator = '\n||||||||||||||||||||||||||||||||||\n';
+    return [
+      '[$levelString] - \n $dateTime \n - $message \n $stackTrace \n $separator'
+    ];
   }
 }
 

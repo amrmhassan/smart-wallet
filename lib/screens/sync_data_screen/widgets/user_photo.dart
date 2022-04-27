@@ -37,6 +37,11 @@ class UserPhoto extends StatelessWidget {
         child: Image.file(
           photoFile,
           fit: BoxFit.contain,
+          errorBuilder: (_, __, ___) {
+            return Container(
+              color: Colors.blueGrey,
+            );
+          },
         ),
       ),
     );

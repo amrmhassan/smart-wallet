@@ -40,13 +40,18 @@ Future googleLogin(BuildContext context) async {
     ).googleLogin();
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
+      // if this error happened just don't show the dialog of deleting data
       CustomError.log(
-        errorType: ErrorTypes.notLoggedInUser,
+        errorType: ErrorTypes.notLoggedInSuccessfully,
         rethrowError: true,
       );
     }
   } catch (error, stackTrace) {
-    CustomError.log(error: error, stackTrace: stackTrace);
+    return CustomError.log(
+      error: error,
+      stackTrace: stackTrace,
+      rethrowError: true,
+    );
   }
 
   var profileProvider = Provider.of<ProfilesProvider>(context, listen: false);
@@ -56,6 +61,11 @@ Future googleLogin(BuildContext context) async {
 
   var quickActionsProvider =
       Provider.of<QuickActionsProvider>(context, listen: false);
+
+  await handleDownloadUserPhoto();
+  await Provider.of<AuthenticationProvider>(context, listen: false)
+      .fetchAndUpdateUserPhoto();
+
   //? here asking the user to delete the current existing data or not
   await AwesomeDialog(
     context: context,
@@ -74,11 +84,6 @@ Future googleLogin(BuildContext context) async {
     quickActionsProvider,
     deleteAfterLoggingIn,
   );
-  await handleDeleteUserPhoto();
-  await handleDownloadUserPhoto();
-
-  Provider.of<AuthenticationProvider>(context, listen: false)
-      .fetchAndUpdateUserPhoto();
 }
 
 //? 2] google logout

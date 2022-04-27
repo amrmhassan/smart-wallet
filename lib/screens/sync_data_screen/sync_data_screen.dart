@@ -67,17 +67,18 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
       }
       await googleLogin(context);
     } catch (error, stackTrace) {
-      CustomError.log(error: error, stackTrace: stackTrace);
       try {
-        showSnackBar(
-          context,
-          CustomError.beautifyError(ErrorTypes.networkError),
-          SnackBarType.error,
-        );
+        CustomError.log(
+            error: error,
+            stackTrace: stackTrace,
+            rethrowError: true,
+            errorType: ErrorTypes.notLoggedInSuccessfully);
+
         Provider.of<AuthenticationProvider>(context, listen: false)
             .setUserPhoto(null);
         await handleDeleteUserPhoto();
       } catch (error, stackTrace) {
+        showSnackBar(context, error.toString(), SnackBarType.error);
         CustomError.log(error: error, stackTrace: stackTrace);
       }
     }

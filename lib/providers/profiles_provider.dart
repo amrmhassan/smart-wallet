@@ -151,7 +151,7 @@ class ProfilesProvider extends ChangeNotifier {
       bool isEmpty = true;
       for (var profile in fetchedProfiles) {
         if (!profile.deleted) {
-          isEmpty = true;
+          isEmpty = false;
           break;
         }
       }
