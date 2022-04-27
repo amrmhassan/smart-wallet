@@ -12,12 +12,18 @@ class TransactionProvider extends ChangeNotifier {
   //? profile transactions
   List<TransactionModel> _transactions = [];
   //? all transactions
-  List<TransactionModel> allTransactions = [];
+  List<TransactionModel> _allTransactions = [];
 
 //? not synced transactions from the all transactions
   List<TransactionModel> get notSyncedTransactions {
-    return allTransactions
+    return _allTransactions
         .where((element) => element.syncFlag != SyncFlags.noSyncing)
+        .toList();
+  }
+
+  List<TransactionModel> get allTransactions {
+    return _allTransactions
+        .where((element) => element.deleted == false)
         .toList();
   }
 
@@ -103,7 +109,7 @@ class TransactionProvider extends ChangeNotifier {
 //? clear transactions arrays
   void clearAllTransactions() async {
     _transactions.clear();
-    allTransactions.clear();
+    _allTransactions.clear();
   }
 
 //? add an array of transactions to the local database
@@ -175,22 +181,29 @@ class TransactionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  //? get  a profile transactions by its id
+  Future<List<TransactionModel>> getProfileTransations(String profileId) async {
+    List<Map<String, dynamic>> data = await DBHelper.getDataWhere(
+        transactionsTableName, 'profileId', profileId);
+
+    List<TransactionModel> fetchedTransactions = data
+        .map(
+          (transaction) => TransactionModel.fromJSON(transaction),
+        )
+        .toList();
+
+    return fetchedTransactions;
+  }
+
 //? get transactinons by a profile id
   Future<void> fetchAndUpdateProfileTransactions(String profileId) async {
     try {
-      List<Map<String, dynamic>> data = await DBHelper.getDataWhere(
-          transactionsTableName, 'profileId', profileId);
-
-      List<TransactionModel> fetchedTransactions = data
-          .map(
-            (transaction) => TransactionModel.fromJSON(transaction),
-          )
-          .toList();
-
-      fetchedTransactions.sort((a, b) {
+      List<TransactionModel> profileTransactions =
+          await getProfileTransations(profileId);
+      profileTransactions.sort((a, b) {
         return a.createdAt.difference(b.createdAt).inSeconds;
       });
-      _transactions = fetchedTransactions;
+      _transactions = profileTransactions;
 
       notifyListeners();
     } catch (error, stackTrace) {
@@ -210,7 +223,7 @@ class TransactionProvider extends ChangeNotifier {
             (transaction) => TransactionModel.fromJSON(transaction),
           )
           .toList();
-      allTransactions = fetchedTransactions;
+      _allTransactions = fetchedTransactions;
       notifyListeners();
     } catch (error, stackTrace) {
       CustomError.log(error: error, stackTrace: stackTrace);

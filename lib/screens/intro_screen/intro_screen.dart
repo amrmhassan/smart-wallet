@@ -3,14 +3,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
-import 'package:smart_wallet/providers/profiles_provider.dart';
-import 'package:smart_wallet/providers/quick_actions_provider.dart';
-import 'package:smart_wallet/providers/theme_provider.dart';
-import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/holder_screen/holder_screen.dart';
-import 'package:smart_wallet/utils/initializing_app_utils.dart';
 import 'package:smart_wallet/widgets/global/open_logging_screen.dart';
 
 import '../home_screen/widgets/background.dart';

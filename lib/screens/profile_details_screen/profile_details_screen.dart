@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/models/profile_model.dart';
+import 'package:smart_wallet/models/transaction_model.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/home_screen/widgets/background.dart';
@@ -49,13 +50,18 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
   void initState() {
     Future.delayed(Duration.zero).then((value) async {
       setLoading(true);
+      List<TransactionModel> profileTransactions =
+          await Provider.of<TransactionProvider>(context, listen: false)
+              .getProfileTransations(widget.profileId);
 
-      await Provider.of<ProfileDetailsProvider>(context, listen: false)
-          .fetchTransactions(widget.profileId);
       profile = Provider.of<ProfilesProvider>(
         context,
         listen: false,
       ).getProfileById(widget.profileId);
+
+      await Provider.of<ProfileDetailsProvider>(context, listen: false)
+          .fetchTransactions(profileTransactions, profile);
+
       profileAge = Provider.of<ProfilesProvider>(context, listen: false)
           .getProfileAgeInDays(profile);
       setLoading(false);

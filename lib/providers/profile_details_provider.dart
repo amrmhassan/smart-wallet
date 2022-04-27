@@ -18,17 +18,8 @@ enum TransPeriod {
 }
 
 class ProfileDetailsProvider extends ChangeNotifier {
-  //? in action profile
+  //? a profile to get it's details
   ProfileModel? profile;
-//? all transactions of a profile
-  List<TransactionModel> allTransactions;
-  //? getting a profile by id form the proxy provider from main
-  Function(String id) getProfileById;
-
-  ProfileDetailsProvider({
-    required this.allTransactions,
-    required this.getProfileById,
-  });
   //? one profile transactions
   List<TransactionModel> profileTransactions = [];
 
@@ -41,14 +32,12 @@ class ProfileDetailsProvider extends ChangeNotifier {
   DateTime endDate = DateTime.now();
 
 //? fetching transaction by a profile id
-  Future<void> fetchTransactions(String profileId) async {
-    ProfileModel profile = await getProfileById(profileId);
+  Future<void> fetchTransactions(
+    List<TransactionModel> pTransactions,
+    ProfileModel profile,
+  ) async {
     _setProfile(profile);
-    profileTransactions = allTransactions
-        .where(
-          (element) => element.profileId == profile.id,
-        )
-        .toList();
+    profileTransactions = pTransactions;
 
     fetchAndUpdateViewedTransactions(notifyListers: false);
     notifyListeners();

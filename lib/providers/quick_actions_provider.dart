@@ -12,11 +12,11 @@ import '../helpers/db_helper.dart';
 class QuickActionsProvider extends ChangeNotifier {
   //? a) quick actions stuff
   List<QuickActionModel> _quickActions = [];
-  List<QuickActionModel> allQuickActions = [];
+  List<QuickActionModel> _allQuickActions = [];
 
   void clearAllQuickActions() async {
     _quickActions.clear();
-    allQuickActions.clear();
+    _allQuickActions.clear();
   }
 
   Future<void> setQuickActions(List<QuickActionModel> quickActions) async {
@@ -30,8 +30,14 @@ class QuickActionsProvider extends ChangeNotifier {
   }
 
   List<QuickActionModel> get notSyncedQuickActions {
-    return allQuickActions
+    return _allQuickActions
         .where((element) => element.syncFlag != SyncFlags.noSyncing)
+        .toList();
+  }
+
+  List<QuickActionModel> get allQuickActions {
+    return _allQuickActions
+        .where((element) => element.deleted == false)
         .toList();
   }
 
@@ -161,7 +167,7 @@ class QuickActionsProvider extends ChangeNotifier {
           return QuickActionModel.fromJSON(quickAction);
         },
       ).toList();
-      allQuickActions = fetchedQuickActions;
+      _allQuickActions = fetchedQuickActions;
       notifyListeners();
     } catch (error, stackTrace) {
       CustomError.log(error: error, stackTrace: stackTrace);

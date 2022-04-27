@@ -46,28 +46,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (ctx) => TransactionProvider()),
         ChangeNotifierProvider(create: (ctx) => QuickActionsProvider()),
         ChangeNotifierProvider(create: (ctx) => SyncedDataProvider()),
-        ChangeNotifierProxyProvider2<ProfilesProvider, TransactionProvider,
-            ProfileDetailsProvider>(
-          create: (
-            ctx,
-          ) {
-            return ProfileDetailsProvider(
-              allTransactions: [],
-              getProfileById: (String id) {},
-            );
-          },
-          update: (
-            ctx,
-            profileData,
-            transactions,
-            oldStatistics,
-          ) {
-            return ProfileDetailsProvider(
-              allTransactions: transactions.transactions,
-              getProfileById: profileData.getProfileById,
-            );
-          },
-        ),
+        ChangeNotifierProvider(create: (ctx) => ProfileDetailsProvider())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
