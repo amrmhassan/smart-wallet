@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 
@@ -11,9 +13,9 @@ Map<ThemeColors, Color> darkColors = {
   ThemeColors.kIncomeColor: const Color(0xffAEE607),
   ThemeColors.kOutcomeColor: const Color(0xffEF2D2D),
   ThemeColors.kDeleteColor: const Color.fromARGB(255, 204, 24, 11),
-  ThemeColors.kButtonColor: const Color.fromARGB(255, 22, 46, 67),
+  ThemeColors.kActiveButtonColor: const Color.fromARGB(255, 22, 46, 67),
+  ThemeColors.kInActiveButtonColor: Color.fromARGB(255, 50, 66, 84),
 };
-
 Map<ThemeBoxShadow, BoxShadow> darkBoxShadows = {
   ThemeBoxShadow.kDefaultBoxShadow: const BoxShadow(),
   ThemeBoxShadow.kBottomNavBarShadow: const BoxShadow(),

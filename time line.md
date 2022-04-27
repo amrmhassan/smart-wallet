@@ -10,14 +10,14 @@ DONE - make the quick action operations possible through the quick actions scree
 DONE - make to calculator to handle the float values with the period (.)
 DONE - test the calculator by many probabilities then integrate it with the add transaction screen
 DONE - for the profiles
-DONE - -- in the fetchTransactions make it request only the transactions with the account profile id
-DONE - -- and make the _transactions only has the transactions of the activated profile
+DONE --- in the fetchTransactions make it request only the transactions with the account profile id
+DONE --- and make the _transactions only has the transactions of the activated profile
 DONE - add the update profile method in the profileProvider then use it to update when adding, deleting, editing a transaction
 DONE - update the current active profile when editting a transaction 
 DONE - update the current active profile when deleting a transaction
 DONE - create a utils file for operation_on_transactions and put the add transaction method in there and the 
 DONE - delete, edit then use them in the add transaction screen
-DONE -- do the last step for the quick actions as well
+DONE --- do the last step for the quick actions as well
 DONE - add a constant to check if it the first time to run the app or not it will save a shared preference variable
 DONE - implement the statistics page (this will have the current profile statistics and the debts , income, outcome)
 DONE - with time amounts and predictions and other stuff
@@ -28,7 +28,7 @@ DONE - fix the dialaogs of deleteing a teransaction or a quick action and fix th
 DONE - in the profile details page i will show a statistics page of that only profile
 DONE - the user can go to the statistcs page by clicking the profile card itself or the details button
 DONE - make a profile statisctics widget which will show the statistics about a profile with it's id
-DONE -- that will be added to the statistics page that in the holder page
+DONE --- that will be added to the statistics page that in the holder page
 DONE - the user can't add a transaction that is higher than his totalMoney
 DONE - to add a debt the user will find that option in the sideBar 
 DONE - convert the transaction card to dismissible
@@ -48,6 +48,19 @@ DONE - in the from json (transactions, profiles, quick actions) dates just make 
 DONE - cause this will convert the data from the firestore and the local database as well
 DONE - trimming the title name of transactions, profiles
 DONE - make the profile name textField focus when it appears and show the keyboard
+DONE - edit the custom error file to handle any type of objects and then turn it into a string 
+DONE --- replace all rethrow with the throw CustomError
+DONE --- handle errors in the custom error and return error in a beatiful format depending on the error type or error name
+DONE --- create errors constant file with the following 
+DONE --- String networkErrorName = 'network_error' ==> the beautified version of the error is 'No Internet Connection'
+DONE --- log all the errors in the user device and from that custom error file to use them in the production version
+DONE --- add a method (log) for the custom erro and it will be used instead of the print in the production mode
+DONE - in each data provider(profile, transactions, quick actions)
+DONE - make a variable that will return an array of data needing to be synced wit ha flag of what you need to do
+DONE - for example this will return an array of ProfileSync(flag:SyncFlags.add, profile:ProfileModel)
+DONE - and the same for transactions and quick actions
+DONE - add a method for each model to convert it to json or from json
+DONE --- i will use this methods to save the model to the database or fetch it from the data base
 
 
 
@@ -56,16 +69,9 @@ DONE - make the profile name textField focus when it appears and show the keyboa
 add a lastActivatedDate to each profile 
 --then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)
 # when logging in to another user the user photo doesn's change until the user reopen the app
-# edit the custom error file to handle any type of objects and then turn it into a string 
-replace all rethrow with the throw CustomError
-handle errors in the custom error and return error in a beatiful format depending on the error type or error name
-create errors constant file with the following 
-String networkErrorName = 'network_error' ==> the beautified version of the error is 'No Internet Connection'
-log all the errors in the user device and from that custom error file to use them in the production version
-add a method (log) for the custom erro and it will be used instead of the print in the production mode
-# you can learn about loggin from youtube https://www.youtube.com/watch?v=GUi0n9c33os
-
 # start implementing the welcoming screens for the normal users to use the app and show them how to use the app
+
+# start implemeting the transaction details screen , it might be a modal that show some info about the transaction, and the user can edit the data of the transaction from that modal
 
 
 
@@ -90,14 +96,7 @@ add a property to profiles, transactions, quick actions called index
 -- for the quick actions allow the user to drag and rearrange them in the favorites(home screen) with the recordable list
 allow the user to open a profile even if it is still empty 
 -- or show a dialog to delete empty profile when clicking  it's card if it is empty instead of opening it 
-----------------------------------
-for syncing data
-in each data provider(profile, transactions, quick actions)
-make a variable that will return an array of data needing to be synced wit ha flag of what you need to do
-for example this will return an array of ProfileSync(flag:SyncFlags.add, profile:ProfileModel)
-and the same for transactions and quick actions
-add a method for each model to convert it to json or from json
--- i will use this methods to save the model to the database or fetch it from the data base
+
 
 
 

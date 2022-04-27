@@ -137,7 +137,7 @@ class AddProfileButton extends StatelessWidget {
       width: Responsive.getWidth(context) / 7,
       height: Responsive.getWidth(context) / 7,
       decoration: BoxDecoration(
-        color: themeProvider.getThemeColor(ThemeColors.kButtonColor),
+        color: themeProvider.getThemeColor(ThemeColors.kActiveButtonColor),
         boxShadow: [
           BoxShadow(
             offset: const Offset(0, 0),

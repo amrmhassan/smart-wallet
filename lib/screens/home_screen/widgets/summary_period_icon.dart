@@ -46,7 +46,7 @@ class SummaryPeriodIcon extends StatelessWidget {
     Color kBackgroundColor() {
       if (enabled) {
         if (active) {
-          return themeProvider.getThemeColor(ThemeColors.kButtonColor);
+          return themeProvider.getThemeColor(ThemeColors.kActiveButtonColor);
         } else {
           return themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor);
         }

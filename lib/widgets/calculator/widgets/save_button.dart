@@ -23,7 +23,7 @@ class SaveButton extends StatelessWidget {
       width: Responsive.getWidth(context) / 7,
       height: Responsive.getWidth(context) / 7,
       decoration: BoxDecoration(
-        color: themeProvider.getThemeColor(ThemeColors.kButtonColor),
+        color: themeProvider.getThemeColor(ThemeColors.kActiveButtonColor),
         boxShadow: [themeProvider.getBoxShadow(ThemeBoxShadow.kIconBoxShadow)],
         borderRadius: BorderRadius.circular(
           kDefaultBorderRadius / 2,

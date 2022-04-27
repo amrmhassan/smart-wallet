@@ -11,7 +11,8 @@ Map<ThemeColors, Color> basicColors = {
   ThemeColors.kIncomeColor: const Color(0xff01AD01),
   ThemeColors.kOutcomeColor: const Color(0xffD60000),
   ThemeColors.kDeleteColor: const Color.fromARGB(255, 204, 24, 11),
-  ThemeColors.kButtonColor: const Color(0xff565D94),
+  ThemeColors.kActiveButtonColor: const Color(0xff565D94),
+  ThemeColors.kInActiveButtonColor: const Color(0xff565D94),
 };
 
 Map<ThemeBoxShadow, BoxShadow> basicBoxShadows = {

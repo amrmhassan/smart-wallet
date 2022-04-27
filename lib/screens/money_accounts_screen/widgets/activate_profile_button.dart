@@ -25,7 +25,7 @@ class NotActivateProfileButton extends StatelessWidget {
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          color: themeProvider.getThemeColor(ThemeColors.kButtonColor),
+          color: themeProvider.getThemeColor(ThemeColors.kActiveButtonColor),
           borderRadius: BorderRadius.circular(kDefaultBorderRadius / 4),
         ),
         child: Material(

@@ -23,14 +23,14 @@ class SubmitFormButton extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(1000),
-          color: themeProvider.getThemeColor(ThemeColors.kButtonColor),
+          color: themeProvider.getThemeColor(ThemeColors.kActiveButtonColor),
           border: Border.all(
             width: 2,
             color: themeProvider.getThemeColor(ThemeColors.kMainColor),
           ),
         ),
         child: Material(
-          color: themeProvider.getThemeColor(ThemeColors.kButtonColor),
+          color: themeProvider.getThemeColor(ThemeColors.kActiveButtonColor),
           child: InkWell(
             onTap: () {},
             child: SizedBox(

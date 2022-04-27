@@ -14,7 +14,8 @@ enum ThemeColors {
   kOutcomeColor,
   kSavingsColor,
   kDeleteColor,
-  kButtonColor,
+  kActiveButtonColor,
+  kInActiveButtonColor,
 }
 
 enum ThemeTextStyles {

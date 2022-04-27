@@ -60,7 +60,7 @@ class SyncDataButton extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           color: enableButton(context)
-              ? themeProvider.getThemeColor(ThemeColors.kButtonColor)
+              ? themeProvider.getThemeColor(ThemeColors.kActiveButtonColor)
               : themeProvider.getThemeColor(ThemeColors.kCardBackgroundColor),
           borderRadius: BorderRadius.circular(kDefaultBorderRadius / 4),
         ),
