@@ -59,7 +59,7 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
     try {
       bool online = await isOnline();
       if (!online) {
-        CustomError.log('network_error');
+        CustomError.log('network_error', true);
       }
       await googleLogin(context);
     } catch (error) {

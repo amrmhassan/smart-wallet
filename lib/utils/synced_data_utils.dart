@@ -39,7 +39,10 @@ Future googleLogin(BuildContext context) async {
     ).googleLogin();
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
-      CustomError.log('not_logged_in');
+      CustomError.log(
+        'not_logged_in',
+        true,
+      );
     }
   } catch (error) {
     CustomError.log(error.toString());

@@ -1,10 +1,5 @@
-import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:smart_wallet/constants/errors_types.dart';
-import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/models/logger_model.dart';
-import 'package:smart_wallet/utils/general_utils.dart';
 
 //! you can learn about loggin from youtube https://www.youtube.com/watch?v=GUi0n9c33os
 class CustomError implements Exception {

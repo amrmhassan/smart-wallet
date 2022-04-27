@@ -245,7 +245,7 @@ class ProfilesProvider extends ChangeNotifier {
       }
     }
     if (profileNameExists) {
-      CustomError.log('Profile Name already exists');
+      CustomError.log('Profile Name already exists', true);
     }
     ProfileModel editedProfile;
     try {
