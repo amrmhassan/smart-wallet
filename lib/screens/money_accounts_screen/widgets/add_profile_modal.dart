@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/screens/money_accounts_screen/widgets/add_profile_button.dart';
+import 'package:smart_wallet/screens/money_accounts_screen/widgets/clear_profile_name_icon.dart';
+import 'package:smart_wallet/widgets/calculator/widgets/save_button.dart';
 
 import '../../../helpers/responsive.dart';
 import '../../../constants/sizes.dart';
@@ -111,103 +114,10 @@ class AddProfileModal extends StatelessWidget {
             const SizedBox(
               width: kDefaultPadding / 2,
             ),
-            AddProfileButton(onTap: onTap)
+            AddProfileButton(onTap: onTap),
           ],
         ),
       ),
-    );
-  }
-}
-
-class AddProfileButton extends StatelessWidget {
-  const AddProfileButton({
-    Key? key,
-    required this.onTap,
-  }) : super(key: key);
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    var themeProvider = Provider.of<ThemeProvider>(context);
-
-    return Container(
-      clipBehavior: Clip.hardEdge,
-      alignment: Alignment.center,
-      width: Responsive.getWidth(context) / 7,
-      height: Responsive.getWidth(context) / 7,
-      decoration: BoxDecoration(
-        color: themeProvider.getThemeColor(ThemeColors.kActiveButtonColor),
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(0, 0),
-            color: themeProvider
-                .getThemeColor(ThemeColors.kMainColor)
-                .withOpacity(0.2),
-            blurRadius: 6,
-          )
-        ],
-        borderRadius: BorderRadius.circular(
-          kDefaultBorderRadius / 2,
-        ),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          child: Container(
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.save,
-              color: themeProvider.getThemeColor(ThemeColors.kMainColor),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ClearProfileNameIcon extends StatelessWidget {
-  final VoidCallback onTap;
-  const ClearProfileNameIcon({
-    Key? key,
-    required this.onTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var themeProvider = Provider.of<ThemeProvider>(context);
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          clipBehavior: Clip.hardEdge,
-          margin: const EdgeInsets.only(
-            right: kDefaultPadding / 4,
-          ),
-          decoration: BoxDecoration(
-            color:
-                themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
-            borderRadius: BorderRadius.circular(kDefaultBorderRadius / 2),
-          ),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: onTap,
-              child: Container(
-                alignment: Alignment.center,
-                width: 40,
-                height: 40,
-                child: Icon(
-                  Icons.close,
-                  color: themeProvider.getThemeColor(ThemeColors.kDeleteColor),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
