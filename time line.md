@@ -61,19 +61,20 @@ DONE - for example this will return an array of ProfileSync(flag:SyncFlags.add, 
 DONE - and the same for transactions and quick actions
 DONE - add a method for each model to convert it to json or from json
 DONE --- i will use this methods to save the model to the database or fetch it from the data base
-
+DONE - start implementing the welcoming screens for the normal users to use the app and show them how to use the app
+DONE - start implemeting the transaction details screen , it might be a modal that show some info about the transaction, and the user can edit the data of the transaction from that modal
 
 
 
 [Pending]
 add a lastActivatedDate to each profile 
 --then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)
-# when logging in to another user the user photo doesn's change until the user reopen the app
-# start implementing the welcoming screens for the normal users to use the app and show them how to use the app
 
-# start implemeting the transaction details screen , it might be a modal that show some info about the transaction, and the user can edit the data of the transaction from that modal
 
-# fix the problem with the user photo
+
+
+# user the syncfusion date time picker to edit, pick date
+
 
 
 
@@ -108,6 +109,11 @@ if there is another user logged in don't ask him just delete after showing the d
 in the current implementation i will ask the user to delete or not
 because the user will log out first before logging in with a different account
 after fixing the login with another email button implement the deleting without asking the user if there is another email logged in and all the data synced
+
+
+[FAILD]
+FAILD - fix the problem with the user photo
+FAILD - when logging in to another user the user photo doesn's change until the user reopen the app
 
 
 

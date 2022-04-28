@@ -3,12 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
-import 'package:smart_wallet/constants/types.dart';
-import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/providers/authentication_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
-import 'package:smart_wallet/utils/general_utils.dart';
-import 'package:smart_wallet/utils/synced_data_utils.dart';
 
 class UserPhoto extends StatefulWidget {
   final double? raduis;
