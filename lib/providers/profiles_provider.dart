@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:smart_wallet/constants/errors_types.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/constants/db_constants.dart';

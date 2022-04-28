@@ -7,8 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
-import 'package:smart_wallet/constants/errors_types.dart';
 import 'package:smart_wallet/constants/globals.dart';
+import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/helpers/db_helper.dart';
 import 'package:smart_wallet/providers/authentication_provider.dart';
@@ -16,24 +16,34 @@ import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/synced_data_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
+import 'package:smart_wallet/utils/general_utils.dart';
 
 //? 1] google login
 Future googleLogin(BuildContext context) async {
+  // if not online throw an error and log it
+  bool online = await isOnline();
+  if (!online) {
+    CustomError.log(
+      errorType: ErrorTypes.networkError,
+      rethrowError: true,
+    );
+  }
   bool deleteAfterLoggingIn = false;
   User? user = FirebaseAuth.instance.currentUser;
   if (user != null) {
+    //! show a dialog here first to warn the user if he wants to sign the current user out or not
+    //! showing a message that all the user data will be deleted form this device
     try {
       //* this means there is already a user signed in so sign out first then sign in with another user
-      await Provider.of<AuthenticationProvider>(
-        context,
-        listen: false,
-      ).googleLogout();
+      await logOut(context);
     } catch (error, stackTrace) {
       CustomError.log(error: error, stackTrace: stackTrace);
     }
   }
 
   try {
+    // if there is no user logged in just return from the function
+    // if any problem occurs just return
     await Provider.of<AuthenticationProvider>(
       context,
       listen: false,
@@ -41,7 +51,7 @@ Future googleLogin(BuildContext context) async {
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
       // if this error happened just don't show the dialog of deleting data
-      CustomError.log(
+      return CustomError.log(
         errorType: ErrorTypes.notLoggedInSuccessfully,
         rethrowError: true,
       );
@@ -53,6 +63,7 @@ Future googleLogin(BuildContext context) async {
       rethrowError: true,
     );
   }
+  await handleDownloadUserPhoto(context);
 
   var profileProvider = Provider.of<ProfilesProvider>(context, listen: false);
 
@@ -61,10 +72,6 @@ Future googleLogin(BuildContext context) async {
 
   var quickActionsProvider =
       Provider.of<QuickActionsProvider>(context, listen: false);
-
-  await handleDownloadUserPhoto();
-  await Provider.of<AuthenticationProvider>(context, listen: false)
-      .fetchAndUpdateUserPhoto();
 
   //? here asking the user to delete the current existing data or not
   await AwesomeDialog(
@@ -127,9 +134,7 @@ Future<void> logOut(BuildContext context) async {
     await DBHelper.deleteDatabase(dbName);
     await profileProvider.clearActiveProfileId();
   }
-  await handleDeleteUserPhoto();
-  Provider.of<AuthenticationProvider>(context, listen: false)
-      .setUserPhoto(null);
+  await handleDeleteUserPhoto(context);
 
   await profileProvider.fetchAndUpdateProfiles();
   await profileProvider.fetchAndUpdateActivatedProfileId();
@@ -140,7 +145,8 @@ Future<void> logOut(BuildContext context) async {
   await quickActionsProvider.fetchAndUpdateAllQuickActions();
 }
 
-Future<void> handleDownloadUserPhoto() async {
+//? 3] download user photo and return the local path after downloading it
+Future<void> handleDownloadUserPhoto(BuildContext context) async {
   User? currentUser = FirebaseAuth.instance.currentUser;
 
   if (currentUser != null && currentUser.photoURL != null) {
@@ -148,12 +154,16 @@ Future<void> handleDownloadUserPhoto() async {
     if (photoUrl != null) {
       try {
         String photoLocalPath = await getUserPhotoPath();
+        await handleDeleteUserPhoto(context);
 
         Dio dio = Dio();
         await dio.download(
           photoUrl,
           photoLocalPath,
         );
+        File userPhoto = File(photoLocalPath);
+        Provider.of<AuthenticationProvider>(context, listen: false)
+            .setUserPhoto(userPhoto);
       } catch (error, stackTrace) {
         CustomError.log(error: error, stackTrace: stackTrace);
       }
@@ -161,30 +171,35 @@ Future<void> handleDownloadUserPhoto() async {
   }
 }
 
-Future<void> handleDeleteUserPhoto() async {
+//? deleting user photo and setting the user photo provider to null
+Future<void> handleDeleteUserPhoto(BuildContext context) async {
   try {
     String photoLocalPath = await getUserPhotoPath();
     File userPhoto = File(photoLocalPath);
     if (userPhoto.existsSync()) {
       await userPhoto.delete();
     }
+    Provider.of<AuthenticationProvider>(context, listen: false)
+        .setUserPhoto(null);
   } catch (error, stackTrace) {
     CustomError.log(error: error, stackTrace: stackTrace);
   }
 }
 
+//? getting the user photo local path
 Future<String> getUserPhotoPath() async {
   String docDirPath = (await getApplicationDocumentsDirectory()).path;
   String photoLocalPath = '$docDirPath/$userProfilePhotoName';
   return photoLocalPath;
 }
 
-Future<File> handleGetUserPhoto() async {
+//? loading the user photo file and updating it to the returned file
+Future<void> handleGetUserPhoto(Function(File? uP) setUserPhoto) async {
   String photoPath = await getUserPhotoPath();
   File file = File(photoPath);
   bool exists = await file.exists();
   if (!exists) {
-    CustomError.log(errorType: ErrorTypes.noUserPhoto);
+    CustomError.log(errorType: ErrorTypes.noUserPhoto, rethrowError: true);
   }
-  return file;
+  setUserPhoto(file);
 }

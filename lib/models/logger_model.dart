@@ -6,30 +6,39 @@ import 'dart:io';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
+import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
 
-var logger = (StackTrace? sTrace) => Logger(
+var logger = (StackTrace? sTrace, [LogTypes? logType]) => Logger(
       output: FileOutPut(),
-      printer: CustomPrinter(stackTrace: sTrace),
+      printer: CustomPrinter(
+        stackTrace: sTrace,
+        logType: logType,
+      ),
     );
 
 class CustomPrinter extends LogPrinter {
   final StackTrace? stackTrace;
+  final LogTypes? logType;
 
   CustomPrinter({
     this.stackTrace,
+    this.logType,
   });
   @override
-  List<String> log(LogEvent event) {
+  List<String> log(
+    LogEvent event,
+  ) {
     // final color = PrettyPrinter.levelColors[event.level];
     // final emoji = PrettyPrinter.levelEmojis[event.level];
-    final levelString = event.level.name.toUpperCase();
+    // final levelString = event.level.name.toUpperCase();
     final message = event.message;
     final DateTime dateTime = DateTime.now();
+    final logTypeString = (logType ?? LogTypes.error).name.toUpperCase();
 
     String separator = '\n||||||||||||||||||||||||||||||||||\n';
     return [
-      '[$levelString] - \n $dateTime \n - $message \n $stackTrace \n $separator'
+      '[$logTypeString] - \n $dateTime \n - $message \n $stackTrace \n $separator'
     ];
   }
 }

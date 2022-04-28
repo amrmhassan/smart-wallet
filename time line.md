@@ -73,6 +73,8 @@ add a lastActivatedDate to each profile
 
 # start implemeting the transaction details screen , it might be a modal that show some info about the transaction, and the user can edit the data of the transaction from that modal
 
+# fix the problem with the user photo
+
 
 
 

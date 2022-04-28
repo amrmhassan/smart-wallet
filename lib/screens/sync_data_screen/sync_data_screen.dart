@@ -4,11 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/constants/errors_types.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
-import 'package:smart_wallet/providers/authentication_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
@@ -74,9 +72,7 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
             rethrowError: true,
             errorType: ErrorTypes.notLoggedInSuccessfully);
 
-        Provider.of<AuthenticationProvider>(context, listen: false)
-            .setUserPhoto(null);
-        await handleDeleteUserPhoto();
+        await handleDeleteUserPhoto(context);
       } catch (error, stackTrace) {
         showSnackBar(context, error.toString(), SnackBarType.error);
         CustomError.log(error: error, stackTrace: stackTrace);

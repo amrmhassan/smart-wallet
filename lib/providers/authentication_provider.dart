@@ -17,8 +17,7 @@ class AuthenticationProvider extends ChangeNotifier {
 
   Future<void> fetchAndUpdateUserPhoto() async {
     try {
-      File file = await handleGetUserPhoto();
-      setUserPhoto(file);
+      await handleGetUserPhoto(setUserPhoto);
     } catch (error, stackTrace) {
       CustomError.log(error: error, stackTrace: stackTrace);
       setUserPhoto(null);

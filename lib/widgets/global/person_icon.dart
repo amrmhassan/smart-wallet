@@ -1,17 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_wallet/constants/errors_types.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/providers/authentication_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/user_photo.dart';
-import 'package:smart_wallet/utils/synced_data_utils.dart';
 
 import '../../constants/sizes.dart';
 
@@ -21,15 +15,6 @@ class PersonIcon extends StatelessWidget {
     Key? key,
     required this.onTap,
   }) : super(key: key);
-
-  Future<File> personIconFuture() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      CustomError.log(errorType: ErrorTypes.noUserLoggedIn);
-    }
-
-    return handleGetUserPhoto();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +37,6 @@ class PersonIcon extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50),
                   ),
                   child: UserPhoto(
-                    photoFile: authProvider.userPhoto as File,
                     raduis: 40,
                   ),
                 )

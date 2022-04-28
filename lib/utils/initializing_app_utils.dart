@@ -30,14 +30,12 @@ Future<void> handleInitialzingApp(BuildContext context) async {
     await logOut(
       context,
     );
-    Provider.of<AuthenticationProvider>(
-      context,
-      listen: false,
-    ).setUserPhoto(null);
+
+    await handleDeleteUserPhoto(context);
   }
 
   //* if logged in set the user photo file to be viewed
-  if (loggedIn) {
+  if (Provider.of<AuthenticationProvider>(context, listen: false).loggedIn()) {
     //* 0] fetching the user photo from the( should be run here before any returns that come next)
     await fetchUserPhoto(context);
   }

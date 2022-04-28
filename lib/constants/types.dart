@@ -16,3 +16,19 @@ enum SyncFlags {
   edit,
   delete,
 }
+enum ErrorTypes {
+  networkError,
+  deleteActiveProfile,
+  profileNameExists,
+  expenseIsLargeAddDebt,
+  expenseLargeNoDebt,
+  notLoggedInSuccessfully,
+  noUserPhoto,
+  noUserLoggedIn,
+}
+
+enum LogTypes {
+  error,
+  info,
+  done,
+}

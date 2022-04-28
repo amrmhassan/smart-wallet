@@ -1,3 +1,5 @@
+import 'package:smart_wallet/constants/types.dart';
+
 const Map<ErrorTypes, String> errorsTypes = {
   ErrorTypes.networkError: 'No Internet Connection',
   ErrorTypes.deleteActiveProfile: 'You can\'t delete the active profile',
@@ -9,13 +11,3 @@ const Map<ErrorTypes, String> errorsTypes = {
   ErrorTypes.noUserPhoto: 'No user Photo',
   ErrorTypes.noUserLoggedIn: 'No User Logged In'
 };
-enum ErrorTypes {
-  networkError,
-  deleteActiveProfile,
-  profileNameExists,
-  expenseIsLargeAddDebt,
-  expenseLargeNoDebt,
-  notLoggedInSuccessfully,
-  noUserPhoto,
-  noUserLoggedIn,
-}
