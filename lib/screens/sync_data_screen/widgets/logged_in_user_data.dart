@@ -1,20 +1,25 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/constants/db_constants.dart';
 import 'package:smart_wallet/constants/sizes.dart';
+import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
-import 'package:smart_wallet/models/quick_action_model.dart';
-import 'package:smart_wallet/models/transaction_model.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/synced_data_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
+import 'package:smart_wallet/screens/money_accounts_screen/widgets/custom_button.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/data_card.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/login_user_options.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/sync_data_button.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/user_info_viewer.dart';
+import 'package:smart_wallet/utils/general_utils.dart';
 
 class LoggedInUserData extends StatefulWidget {
   final User user;
@@ -63,16 +68,40 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
         quickActionsProvider,
       );
 
-      await Provider.of<TransactionProvider>(context, listen: false)
-          .fetchAndUpdateAllTransactions();
-      await Provider.of<QuickActionsProvider>(context, listen: false)
-          .fetchAndUpdateAllQuickActions();
+      // await Provider.of<TransactionProvider>(context, listen: false)
+      //     .fetchAndUpdateAllTransactions();
+      // await Provider.of<QuickActionsProvider>(context, listen: false)
+      //     .fetchAndUpdateAllQuickActions();
       setState(() {
         _syncing = false;
       });
     } catch (error, stackTrace) {
       CustomError.log(error: error, stackTrace: stackTrace);
+      showSnackBar(context, error.toString(), SnackBarType.error);
     }
+  }
+
+  Future<void> deleteFireStoreData() async {
+    await AwesomeDialog(
+      context: context,
+      dialogType: DialogType.WARNING,
+      animType: AnimType.BOTTOMSLIDE,
+      title: 'Delete all user data on the cloud?',
+      btnCancelOnPress: () {},
+      btnOkOnPress: () async {
+        //? here deleting the firesotore data
+        String userId = FirebaseAuth.instance.currentUser!.uid;
+        var dbRef = FirebaseFirestore.instance;
+
+        await FirebaseFirestore.instance
+            .runTransaction((Transaction myTransaction) async {
+          myTransaction
+              .delete(dbRef.collection(usersCollectionName).doc(userId));
+        });
+
+        showSnackBar(context, 'All User data deleted', SnackBarType.info);
+      },
+    ).show();
   }
 
   @override
@@ -96,6 +125,16 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
           syncing: _syncing,
           online: widget.online,
         ),
+        if (kDebugMode)
+          SizedBox(
+            height: kDefaultPadding / 2,
+          ),
+        if (kDebugMode)
+          CustomButton(
+            onTap: () async => await deleteFireStoreData(),
+            title: 'Delete Firestore',
+            backgroundColor: Colors.red,
+          ),
 
         SizedBox(
           height: kDefaultPadding / 2,

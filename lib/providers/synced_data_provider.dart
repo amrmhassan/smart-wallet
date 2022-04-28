@@ -65,7 +65,7 @@ class SyncedDataProvider extends ChangeNotifier {
         }
       }
     } catch (error, stackTrace) {
-      CustomError.log(error: error, stackTrace: stackTrace);
+      CustomError.log(error: error, stackTrace: stackTrace, rethrowError: true);
     }
   }
 

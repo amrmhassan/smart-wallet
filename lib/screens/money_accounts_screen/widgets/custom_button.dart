@@ -15,6 +15,7 @@ class CustomButton extends StatelessWidget {
   final double borderRadius;
   final double height;
   final Duration? duration;
+  final Color? backgroundColor;
 
   const CustomButton({
     Key? key,
@@ -24,6 +25,7 @@ class CustomButton extends StatelessWidget {
     this.borderRadius = kDefaultBorderRadius / 4,
     this.height = 100,
     this.duration,
+    this.backgroundColor,
   }) : super(key: key);
 
   @override
@@ -38,10 +40,12 @@ class CustomButton extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           color: active
-              ? themeProvider.getThemeColor(ThemeColors.kActiveButtonColor)
-              : themeProvider
-                  .getThemeColor(ThemeColors.kActiveButtonColor)
-                  .withOpacity(.2),
+              ? (backgroundColor ??
+                  themeProvider.getThemeColor(ThemeColors.kActiveButtonColor))
+              : (backgroundColor ??
+                      themeProvider
+                          .getThemeColor(ThemeColors.kActiveButtonColor))
+                  .withOpacity(.3),
           borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: Material(

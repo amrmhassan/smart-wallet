@@ -100,7 +100,7 @@ class ChartTypesFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var themeProvider = Provider.of<ThemeProvider>(context);
+    // var themeProvider = Provider.of<ThemeProvider>(context);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,

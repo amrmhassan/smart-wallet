@@ -241,8 +241,8 @@ class TransactionProvider extends ChangeNotifier {
     //* if that transaction is income and deleting it will make the total by negative then throw an error that you can't delete that transaction , you can only edit it to a lower amount but not lower than the current total amount in that profile
     TransactionModel deletedTransaction = getTransactionById(id);
     deletedTransaction.deleted = true;
-    bool deletingOutcome =
-        deletedTransaction.transactionType == TransactionType.outcome;
+    // bool deletingOutcome =
+    //     deletedTransaction.transactionType == TransactionType.outcome;
 
     if (deletedTransaction.syncFlag == SyncFlags.add) {
       return editTransaction(

@@ -20,10 +20,23 @@ class StatisticsScreen extends StatefulWidget {
 }
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
+  void handleOpenRichestProfile() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => ProfileDetailsScreen(
+          profileId: Provider.of<ProfilesProvider>(context).highestProfile().id,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var profilesProvider = Provider.of<ProfilesProvider>(context);
     var themeProvider = Provider.of<ThemeProvider>(context);
+    var highestProfile =
+        Provider.of<ProfilesProvider>(context).highestProfile();
 
     return Stack(
       alignment: Alignment.bottomRight,
@@ -40,43 +53,33 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               ),
               StatisticsMoneySummary(profilesProvider: profilesProvider),
               SizedBox(height: kDefaultPadding / 2),
-              CustomCard(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Richest Profile',
-                      style: themeProvider.getTextStyle(
-                          ThemeTextStyles.kSmallInActiveParagraphTextStyle),
+              if (!(highestProfile.income == 0 && highestProfile.outcome == 0))
+                GestureDetector(
+                  onTap: handleOpenRichestProfile,
+                  child: CustomCard(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Richest Profile',
+                          style: themeProvider.getTextStyle(
+                              ThemeTextStyles.kSmallInActiveParagraphTextStyle),
+                        ),
+                        SizedBox(
+                          height: kDefaultPadding / 2,
+                        ),
+                        Text(
+                          Provider.of<ProfilesProvider>(context)
+                              .highestProfile()
+                              .name,
+                          style: themeProvider.getTextStyle(
+                              ThemeTextStyles.kParagraphTextStyle),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: kDefaultPadding / 2,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (ctx) => ProfileDetailsScreen(
-                              profileId: Provider.of<ProfilesProvider>(context)
-                                  .highestProfile()
-                                  .id,
-                            ),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        Provider.of<ProfilesProvider>(context)
-                            .highestProfile()
-                            .name,
-                        style: themeProvider
-                            .getTextStyle(ThemeTextStyles.kParagraphTextStyle),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
               SizedBox(height: kDefaultPadding / 2),
               CustomCard(
                   child: Text('total debts will be here',

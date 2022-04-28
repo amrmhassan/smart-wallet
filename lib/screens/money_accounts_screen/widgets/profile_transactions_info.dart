@@ -32,6 +32,7 @@ class ProfileTransactionsInfo extends StatelessWidget {
                 color: color,
                 fontSize: 16,
                 fontWeight: FontWeight.normal,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
             Text(
