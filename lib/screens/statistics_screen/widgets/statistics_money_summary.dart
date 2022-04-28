@@ -10,10 +10,10 @@ import 'package:smart_wallet/widgets/global/custom_card.dart';
 class StatisticsMoneySummary extends StatelessWidget {
   const StatisticsMoneySummary({
     Key? key,
-    required this.profilesData,
+    required this.profilesProvider,
   }) : super(key: key);
 
-  final ProfilesProvider profilesData;
+  final ProfilesProvider profilesProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -22,19 +22,19 @@ class StatisticsMoneySummary extends StatelessWidget {
         children: [
           StatisticsMainSummaryItem(
             title: 'Total Money',
-            amount: profilesData.getTotalMoney(),
+            amount: profilesProvider.getTotalMoney(),
             transactionType: TransactionType.all,
           ),
           SizedBox(height: kDefaultPadding / 2),
           StatisticsMainSummaryItem(
             title: 'Total Income',
-            amount: profilesData.getTotalIncome(),
+            amount: profilesProvider.getTotalIncome(),
             transactionType: TransactionType.income,
           ),
           SizedBox(height: kDefaultPadding / 2),
           StatisticsMainSummaryItem(
             title: 'Total Outcome',
-            amount: profilesData.getTotalOutcome(),
+            amount: profilesProvider.getTotalOutcome(),
             transactionType: TransactionType.outcome,
           ),
         ],

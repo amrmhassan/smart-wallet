@@ -21,7 +21,7 @@ class StatisticsScreen extends StatefulWidget {
 class _StatisticsScreenState extends State<StatisticsScreen> {
   @override
   Widget build(BuildContext context) {
-    var profilesData = Provider.of<ProfilesProvider>(context);
+    var profilesProvider = Provider.of<ProfilesProvider>(context);
     var themeProvider = Provider.of<ThemeProvider>(context);
 
     return Stack(
@@ -37,7 +37,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               SizedBox(
                 height: kDefaultPadding,
               ),
-              StatisticsMoneySummary(profilesData: profilesData),
+              StatisticsMoneySummary(profilesProvider: profilesProvider),
               SizedBox(height: kDefaultPadding / 2),
               CustomCard(
                 child: Text(

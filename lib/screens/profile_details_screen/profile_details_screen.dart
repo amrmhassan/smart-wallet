@@ -2,24 +2,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/models/quick_action_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
-import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/home_screen/widgets/background.dart';
+import 'package:smart_wallet/screens/profile_details_screen/widgets/delete_profile_icon.dart';
 import 'package:smart_wallet/screens/profile_details_screen/widgets/summary_chart.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/data_card.dart';
-import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/widgets/app_bar/my_app_bar.dart';
 
 import '../../constants/sizes.dart';
-import '../../constants/theme_constants.dart';
 import '../../providers/profiles_provider.dart';
 import '../../providers/transactions_provider.dart';
-import '../../utils/profile_utils.dart';
 import 'widgets/profile_summary_statistics.dart';
 
 class ProfileDetailsScreen extends StatefulWidget {
@@ -59,7 +55,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
   }
 
   Future<void> doShowChart(int profileAge) async {
-    if (profileAge > 0 &&
+    if (profileAge >= 1 &&
         (await Provider.of<TransactionProvider>(context, listen: false)
                 .getProfileTransations(profile.id))
             .isNotEmpty) {
@@ -97,6 +93,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
       profileAge = Provider.of<ProfilesProvider>(context, listen: false)
           .getProfileAgeInDays(profile);
       await doShowChart(profileAge);
+      await setActiveProfileData();
 
       setLoading(false);
     });
@@ -135,7 +132,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                           height: kDefaultPadding,
                         ),
                         DataCard(
-                          title: 'Active Profile Data',
+                          title: 'Profile Data',
                           data: {
                             'Transactions': activeProfileTransactions.length,
                             'Quick Actions': activeProfileQuickActions.length,
@@ -159,59 +156,6 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                 ),
               ],
             ),
-    );
-  }
-}
-
-class DeleteProfileIcon extends StatelessWidget {
-  final String profileId;
-
-  const DeleteProfileIcon({
-    Key? key,
-    required this.profileId,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var themeProvider = Provider.of<ThemeProvider>(context);
-    var activeProfileId = Provider.of<ProfilesProvider>(context, listen: false)
-        .activatedProfileId;
-    return GestureDetector(
-      onTap: activeProfileId == profileId
-          ? () {
-              showSnackBar(
-                context,
-                'You can\'t delete the active profile',
-                SnackBarType.error,
-              );
-            }
-          : null,
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(1000),
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: activeProfileId == profileId
-                ? null
-                : () async => await showDeleteProfileModal(
-                    context, profileId, null, true),
-            child: Container(
-              padding: EdgeInsets.all(kDefaultPadding / 2),
-              child: Icon(
-                Icons.delete,
-                color: activeProfileId == profileId
-                    ? themeProvider
-                        .getThemeColor(ThemeColors.kOutcomeColor)
-                        .withOpacity(0.5)
-                    : themeProvider.getThemeColor(ThemeColors.kOutcomeColor),
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

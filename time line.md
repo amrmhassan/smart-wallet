@@ -81,6 +81,8 @@ add a lastActivatedDate to each profile
 
 # there is an error with syncing
 
+# edit the doShowChart in the profile details screen to handle if the age is greater than one but there is no transactions
+
 
 
 

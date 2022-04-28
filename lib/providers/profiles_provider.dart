@@ -72,25 +72,25 @@ class ProfilesProvider extends ChangeNotifier {
 
   //? getting the total money in all profiles
   double getTotalMoney() {
-    return _profiles.fold(
+    return profiles.fold(
         0, (previousValue, profile) => previousValue + profile.totalMoney);
   }
 
   //? getting the total income for all profiles
   double getTotalIncome() {
-    return _profiles.fold(
+    return profiles.fold(
         0, (previousValue, profile) => previousValue + profile.income);
   }
 
 //? getting total outcome for all profiles
   double getTotalOutcome() {
-    return _profiles.fold(
+    return profiles.fold(
         0, (previousValue, profile) => previousValue + profile.outcome);
   }
 
 //? getting a profile by id
   ProfileModel getProfileById(String id) {
-    return _profiles.firstWhere((element) => id == element.id);
+    return profiles.firstWhere((element) => id == element.id);
   }
 
 //? clear the proriles array
@@ -244,7 +244,7 @@ class ProfilesProvider extends ChangeNotifier {
 
     //* checking if the profile name already exists if the changing parameter is the name
     bool profileNameExists = false;
-    for (var element in _profiles) {
+    for (var element in profiles) {
       if (name == element.name) {
         profileNameExists = true;
       }
