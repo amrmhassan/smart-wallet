@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
+import 'package:smart_wallet/models/quick_action_model.dart';
+import 'package:smart_wallet/models/transaction_model.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
@@ -100,6 +102,7 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
     // //? 7] fetching all  quick actions
     await Provider.of<QuickActionsProvider>(context, listen: false)
         .fetchAndUpdateAllQuickActions();
+
     bool online = await isOnline();
     setState(() {
       _isOnline = online;
@@ -115,6 +118,7 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
     var transactionProvider = Provider.of<TransactionProvider>(context);
     var quickActionsProvider = Provider.of<QuickActionsProvider>(context);
     var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,

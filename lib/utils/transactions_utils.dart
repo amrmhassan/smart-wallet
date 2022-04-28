@@ -168,7 +168,7 @@ Future<void> editTransaction({
   try {
     //* sending the updating info to the provider
     await Provider.of<TransactionProvider>(context, listen: false)
-        .editTransaction(id, newTransaction);
+        .editTransaction(newTransaction: newTransaction);
 
     //* editing the current money profile when editing a transaction
     if (transactionType == TransactionType.income) {

@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/models/profile_model.dart';
+import 'package:smart_wallet/models/quick_action_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
+import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/home_screen/widgets/background.dart';
 import 'package:smart_wallet/screens/profile_details_screen/widgets/summary_chart.dart';
+import 'package:smart_wallet/screens/sync_data_screen/widgets/data_card.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/widgets/app_bar/my_app_bar.dart';
 
@@ -35,10 +38,35 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
   late ProfileModel profile;
   late int profileAge;
   late List<TransactionModel> profileTransactions;
+  bool showChart = false;
+  late List<TransactionModel> activeProfileTransactions;
+  late List<QuickActionModel> activeProfileQuickActions;
 
-  bool showChart(int profileAge) {
-    return profileAge > 0 &&
-        Provider.of<TransactionProvider>(context).transactions.isNotEmpty;
+  Future<void> setActiveProfileData() async {
+    String activeProfileId =
+        Provider.of<ProfilesProvider>(context, listen: false)
+            .activatedProfileId;
+    List<TransactionModel> activePTransactions =
+        await Provider.of<TransactionProvider>(context, listen: false)
+            .getProfileTransations(activeProfileId);
+
+    List<QuickActionModel> activePQuickActions =
+        await Provider.of<QuickActionsProvider>(context, listen: false)
+            .getProfileQuickActions(activeProfileId);
+
+    activeProfileQuickActions = activePQuickActions;
+    activeProfileTransactions = activePTransactions;
+  }
+
+  Future<void> doShowChart(int profileAge) async {
+    if (profileAge > 0 &&
+        (await Provider.of<TransactionProvider>(context, listen: false)
+                .getProfileTransations(profile.id))
+            .isNotEmpty) {
+      setState(() {
+        showChart = true;
+      });
+    }
   }
 
   void setLoading(bool l) {
@@ -68,6 +96,8 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
 
       profileAge = Provider.of<ProfilesProvider>(context, listen: false)
           .getProfileAgeInDays(profile);
+      await doShowChart(profileAge);
+
       setLoading(false);
     });
 
@@ -101,10 +131,20 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                         ProfileSummaryStatistics(
                           profileAge: profileAge,
                         ),
+                        SizedBox(
+                          height: kDefaultPadding,
+                        ),
+                        DataCard(
+                          title: 'Active Profile Data',
+                          data: {
+                            'Transactions': activeProfileTransactions.length,
+                            'Quick Actions': activeProfileQuickActions.length,
+                          },
+                        ),
                         const SizedBox(
                           height: kDefaultPadding,
                         ),
-                        if (showChart(profileAge))
+                        if (showChart)
                           SizedBox(
                             height: 250,
                             width: double.infinity,

@@ -93,6 +93,27 @@ class QuickActionsProvider extends ChangeNotifier {
     return _quickActions.firstWhere((element) => element.id == id);
   }
 
+  //? get  a profile transactions by its id
+  Future<List<QuickActionModel>> getProfileQuickActions(String profileId,
+      [getDeleted = false]) async {
+    List<Map<String, dynamic>> data = await DBHelper.getDataWhere(
+        quickActionsTableName, 'profileId', profileId);
+
+    List<QuickActionModel> fetchedQuickActions = data
+        .map(
+          (quickAction) => QuickActionModel.fromJSON(quickAction),
+        )
+        .toList();
+
+    if (getDeleted) {
+      return fetchedQuickActions;
+    } else {
+      return fetchedQuickActions
+          .where((element) => (element.deleted == false))
+          .toList();
+    }
+  }
+
   //? 3- methods to control the quickActions
 //* for adding new quick Actions
   Future<void> addQuickAction(String title, String description, double amount,

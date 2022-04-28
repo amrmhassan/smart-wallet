@@ -32,3 +32,9 @@ enum LogTypes {
   info,
   done,
 }
+
+enum ProfileDetailsChartTypes {
+  income,
+  outcome,
+  savings,
+}

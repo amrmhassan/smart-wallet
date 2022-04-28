@@ -138,12 +138,12 @@ class TransactionProvider extends ChangeNotifier {
       TransactionType transactionType, String profileId) async {
     //* checking if the transaction added will make the current balance negative
     //* i removed this cause i will ask the user to add this even it is greater than his current money
-    if (amount > totalMoney && transactionType == TransactionType.outcome) {
-      CustomError.log(
-        errorType: ErrorTypes.expenseIsLargeAddDebt,
-        rethrowError: true,
-      );
-    }
+    // if (amount > totalMoney && transactionType == TransactionType.outcome) {
+    //   CustomError.log(
+    //     errorType: ErrorTypes.expenseIsLargeAddDebt,
+    //     rethrowError: true,
+    //   );
+    // }
 
     //* initializing the transaction data like (createdAt, id, ratioToTotal...)
     String id = const Uuid().v4();
@@ -241,12 +241,20 @@ class TransactionProvider extends ChangeNotifier {
     //* if that transaction is income and deleting it will make the total by negative then throw an error that you can't delete that transaction , you can only edit it to a lower amount but not lower than the current total amount in that profile
     TransactionModel deletedTransaction = getTransactionById(id);
     deletedTransaction.deleted = true;
+    bool deletingOutcome =
+        deletedTransaction.transactionType == TransactionType.outcome;
 
     if (deletedTransaction.syncFlag == SyncFlags.add) {
-      return editTransaction(id, deletedTransaction);
+      return editTransaction(
+        newTransaction: deletedTransaction,
+        // deletingOutcome: deletingOutcome,
+      );
     } else {
       deletedTransaction.syncFlag = SyncFlags.delete;
-      return editTransaction(id, deletedTransaction);
+      return editTransaction(
+        newTransaction: deletedTransaction,
+        // deletingOutcome: deletingOutcome,
+      );
     }
   }
 
@@ -254,25 +262,30 @@ class TransactionProvider extends ChangeNotifier {
     TransactionModel transaction = getTransactionById(id);
     transaction.syncFlag = newSyncFlag;
 
-    return editTransaction(id, transaction, true);
+    return editTransaction(
+      newTransaction: transaction,
+      syncing: true,
+    );
   }
 
 //? editing a transaction
-  Future<void> editTransaction(
-      String transactionId, TransactionModel newTransaction,
-      [bool syncing = false]) async {
+  Future<void> editTransaction({
+    required TransactionModel newTransaction,
+    bool syncing = false,
+    // bool deletingOutcome = false,
+  }) async {
     //* checking if the transactin is outcome and the it is greater than the current total money
     //* this is the amount that should be compared to the amount of the newTransaction
-    if (!syncing) {
-      double newAmount = totalMoney - newTransaction.amount;
-      if (newTransaction.amount > newAmount &&
-          newTransaction.transactionType == TransactionType.outcome) {
-        CustomError.log(
-          errorType: ErrorTypes.expenseLargeNoDebt,
-          rethrowError: true,
-        );
-      }
-    }
+    // if (!syncing && !deletingOutcome) {
+    //   double newAmount = totalMoney - newTransaction.amount;
+    //   if (newTransaction.amount > newAmount &&
+    //       newTransaction.transactionType == TransactionType.outcome) {
+    //     return CustomError.log(
+    //       errorType: ErrorTypes.expenseLargeNoDebt,
+    //       rethrowError: true,
+    //     );
+    //   }
+    // }
     if (syncing) {
       newTransaction.syncFlag = SyncFlags.noSyncing;
     } else if (newTransaction.syncFlag != SyncFlags.add) {
@@ -286,8 +299,8 @@ class TransactionProvider extends ChangeNotifier {
       CustomError.log(error: error, stackTrace: stackTrace);
     }
     int transactionIndex =
-        _transactions.indexWhere((element) => element.id == transactionId);
-    _transactions.removeWhere((element) => element.id == transactionId);
+        _transactions.indexWhere((element) => element.id == newTransaction.id);
+    _transactions.removeWhere((element) => element.id == newTransaction.id);
     _transactions.insert(transactionIndex, newTransaction);
 
     notifyListeners();

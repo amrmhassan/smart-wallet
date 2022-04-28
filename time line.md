@@ -70,6 +70,8 @@ DONE - start implemeting the transaction details screen , it might be a modal th
 add a lastActivatedDate to each profile 
 --then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)
 
+# skip checking that the transaction will make the savings with minus
+# and for the debts if the profile is minus then this is the debt 
 
 
 
@@ -77,6 +79,7 @@ add a lastActivatedDate to each profile
 
 # implement app auto update using fire base storage
 
+# there is an error with syncing
 
 
 
