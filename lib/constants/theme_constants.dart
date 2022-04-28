@@ -34,6 +34,8 @@ enum ThemeTextStyles {
   kInActiveParagraphTextStyle,
   kSmallInActiveParagraphTextStyle,
   kSmallTextWhiteColorStyle,
+  kInActiveButtonTextStyle,
+  kActiveButtonTextStyle,
 }
 
 enum ThemeBoxShadow {

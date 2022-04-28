@@ -98,6 +98,16 @@ Map<ThemeTextStyles, TextStyle> darkTextStyles = {
     fontSize: 16,
     fontWeight: FontWeight.bold,
   ),
+  ThemeTextStyles.kInActiveButtonTextStyle: TextStyle(
+    color: darkColors[ThemeColors.kInactiveColor],
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  ),
+  ThemeTextStyles.kActiveButtonTextStyle: TextStyle(
+    color: Colors.white,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  ),
   ThemeTextStyles.kSmallInActiveParagraphTextStyle: TextStyle(
     color: darkColors[ThemeColors.kInactiveColor],
     fontSize: 14,

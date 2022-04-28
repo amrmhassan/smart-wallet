@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 
@@ -102,6 +104,16 @@ Map<ThemeTextStyles, TextStyle> basicTextStyles = {
   ),
   ThemeTextStyles.kInActiveParagraphTextStyle: TextStyle(
     color: basicColors[ThemeColors.kInactiveColor]!,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  ),
+  ThemeTextStyles.kInActiveButtonTextStyle: TextStyle(
+    color: basicColors[ThemeColors.kInactiveColor]!,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  ),
+  ThemeTextStyles.kActiveButtonTextStyle: TextStyle(
+    color: Colors.white,
     fontSize: 16,
     fontWeight: FontWeight.bold,
   ),

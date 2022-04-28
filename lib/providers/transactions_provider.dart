@@ -181,7 +181,8 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   //? get  a profile transactions by its id
-  Future<List<TransactionModel>> getProfileTransations(String profileId) async {
+  Future<List<TransactionModel>> getProfileTransations(String profileId,
+      [getDeleted = false]) async {
     List<Map<String, dynamic>> data = await DBHelper.getDataWhere(
         transactionsTableName, 'profileId', profileId);
 
@@ -191,7 +192,13 @@ class TransactionProvider extends ChangeNotifier {
         )
         .toList();
 
-    return fetchedTransactions;
+    if (getDeleted) {
+      return fetchedTransactions;
+    } else {
+      return fetchedTransactions
+          .where((element) => (element.deleted == false))
+          .toList();
+    }
   }
 
 //? get transactinons by a profile id

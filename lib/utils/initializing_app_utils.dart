@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/checkers/theme_checker.dart';
 import 'package:smart_wallet/helpers/shared_pref_helper.dart';
 import 'package:smart_wallet/providers/authentication_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
@@ -24,6 +25,9 @@ Future<void> handleInitialzingApp(BuildContext context) async {
   bool firstTimeOpenApp = await SharedPrefHelper.firstTimeRunApp();
   bool loggedIn =
       Provider.of<AuthenticationProvider>(context, listen: false).loggedIn();
+
+  //* checking themes
+  checkThemes();
 
   //* logging out if first time open the app then continue
   if (firstTimeOpenApp && loggedIn) {

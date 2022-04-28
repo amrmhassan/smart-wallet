@@ -53,10 +53,11 @@ class TranscationCard extends StatelessWidget {
   }
 
   void handleOpenTransactionDetails(
-      BuildContext context, TransactionModel transaction) async {
+    BuildContext context,
+    TransactionModel transaction,
+  ) async {
     var themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     final DateFormat formatter = DateFormat('yyyy-MM-dd, E   hh:mm a');
-
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,

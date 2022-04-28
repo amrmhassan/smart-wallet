@@ -56,9 +56,9 @@ class CustomButton extends StatelessWidget {
                 title,
                 style: active
                     ? themeProvider
-                        .getTextStyle(ThemeTextStyles.kParagraphTextStyle)
-                    : themeProvider.getTextStyle(
-                        ThemeTextStyles.kInActiveParagraphTextStyle),
+                        .getTextStyle(ThemeTextStyles.kActiveButtonTextStyle)
+                    : themeProvider
+                        .getTextStyle(ThemeTextStyles.kInActiveButtonTextStyle),
               ),
             ),
           ),
