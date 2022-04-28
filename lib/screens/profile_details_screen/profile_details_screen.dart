@@ -12,6 +12,7 @@ import 'package:smart_wallet/screens/profile_details_screen/widgets/delete_profi
 import 'package:smart_wallet/screens/profile_details_screen/widgets/summary_chart.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/data_card.dart';
 import 'package:smart_wallet/widgets/app_bar/my_app_bar.dart';
+import 'package:smart_wallet/widgets/global/main_loading.dart';
 
 import '../../constants/sizes.dart';
 import '../../providers/profiles_provider.dart';
@@ -106,7 +107,9 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: loading
-          ? Text('Loading')
+          ? MainLoading(
+              message: 'Loading Profile Data',
+            )
           : Stack(
               children: [
                 const Background(),

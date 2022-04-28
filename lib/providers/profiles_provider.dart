@@ -70,6 +70,14 @@ class ProfilesProvider extends ChangeNotifier {
     }
   }
 
+//? getting the highest profile with total money
+  ProfileModel highestProfile() {
+    List<ProfileModel> arrangedProfiles = [...profiles];
+    //* this will arrage the profile with the lowest first
+    arrangedProfiles.sort((a, b) => a.totalMoney.compareTo(b.totalMoney));
+    return arrangedProfiles.last;
+  }
+
   //? getting the total money in all profiles
   double getTotalMoney() {
     return profiles.fold(

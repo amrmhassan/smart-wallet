@@ -26,7 +26,7 @@ class MainLoading extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Smart Wallet',
+            message ?? 'Smart Wallet',
             style: TextStyle(
               color: themeProvider.getThemeColor(ThemeColors.kMainColor),
               fontSize: 36,
@@ -44,7 +44,6 @@ class MainLoading extends StatelessWidget {
               duration: Duration(seconds: 1),
             ),
           ),
-          if (message != null) Text(message!)
         ],
       ),
     );

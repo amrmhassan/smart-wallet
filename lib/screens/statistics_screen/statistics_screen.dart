@@ -5,6 +5,7 @@ import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/screens/profile_details_screen/profile_details_screen.dart';
 import 'package:smart_wallet/screens/statistics_screen/widgets/statistics_money_summary.dart';
 
 import '../../constants/sizes.dart';
@@ -40,10 +41,40 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               StatisticsMoneySummary(profilesProvider: profilesProvider),
               SizedBox(height: kDefaultPadding / 2),
               CustomCard(
-                child: Text(
-                  'The highest profile with total money will be here ',
-                  style: themeProvider.getTextStyle(
-                      ThemeTextStyles.kSmallInActiveParagraphTextStyle),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Richest Profile',
+                      style: themeProvider.getTextStyle(
+                          ThemeTextStyles.kSmallInActiveParagraphTextStyle),
+                    ),
+                    SizedBox(
+                      height: kDefaultPadding / 2,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => ProfileDetailsScreen(
+                              profileId: Provider.of<ProfilesProvider>(context)
+                                  .highestProfile()
+                                  .id,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        Provider.of<ProfilesProvider>(context)
+                            .highestProfile()
+                            .name,
+                        style: themeProvider
+                            .getTextStyle(ThemeTextStyles.kParagraphTextStyle),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: kDefaultPadding / 2),
