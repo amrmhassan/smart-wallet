@@ -34,6 +34,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
   bool loading = true;
   late ProfileModel profile;
   late int profileAge;
+  late List<TransactionModel> profileTransactions;
 
   bool showChart(int profileAge) {
     return profileAge > 0 &&
@@ -48,19 +49,22 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
 
   @override
   void initState() {
+    setLoading(true);
     Future.delayed(Duration.zero).then((value) async {
-      setLoading(true);
-      List<TransactionModel> profileTransactions =
+      List<TransactionModel> pTransactions =
           await Provider.of<TransactionProvider>(context, listen: false)
               .getProfileTransations(widget.profileId);
 
-      profile = Provider.of<ProfilesProvider>(
-        context,
-        listen: false,
-      ).getProfileById(widget.profileId);
+      setState(() {
+        profile = Provider.of<ProfilesProvider>(
+          context,
+          listen: false,
+        ).getProfileById(widget.profileId);
+        profileTransactions = pTransactions;
+      });
 
       await Provider.of<ProfileDetailsProvider>(context, listen: false)
-          .fetchTransactions(profileTransactions, profile);
+          .fetchTransactions(pTransactions, profile);
 
       profileAge = Provider.of<ProfilesProvider>(context, listen: false)
           .getProfileAgeInDays(profile);
@@ -101,10 +105,13 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                           height: kDefaultPadding,
                         ),
                         if (showChart(profileAge))
-                          const SizedBox(
+                          SizedBox(
                             height: 250,
                             width: double.infinity,
-                            child: SummaryChart(),
+                            child: SummaryChart(
+                              profile: profile,
+                              profileTransactions: profileTransactions,
+                            ),
                           ),
                       ],
                     ),

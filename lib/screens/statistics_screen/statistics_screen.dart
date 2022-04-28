@@ -3,11 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/constants/globals.dart';
-import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
-import 'package:smart_wallet/utils/general_utils.dart';
+import 'package:smart_wallet/screens/statistics_screen/widgets/statistics_money_summary.dart';
 
 import '../../constants/sizes.dart';
 import '../../widgets/app_bar/home_heading.dart';
@@ -43,7 +41,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               SizedBox(height: kDefaultPadding / 2),
               CustomCard(
                 child: Text(
-                  'The hight profile with total money will be here ',
+                  'The highest profile with total money will be here ',
                   style: themeProvider.getTextStyle(
                       ThemeTextStyles.kSmallInActiveParagraphTextStyle),
                 ),
@@ -54,102 +52,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       style: themeProvider.getTextStyle(
                           ThemeTextStyles.kSmallInActiveParagraphTextStyle))),
             ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class StatisticsMoneySummary extends StatelessWidget {
-  const StatisticsMoneySummary({
-    Key? key,
-    required this.profilesData,
-  }) : super(key: key);
-
-  final ProfilesProvider profilesData;
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomCard(
-      child: Column(
-        children: [
-          StatisticsMainSummaryItem(
-            title: 'Total Money',
-            amount: profilesData.getTotalMoney(),
-            transactionType: TransactionType.all,
-          ),
-          SizedBox(height: kDefaultPadding / 2),
-          StatisticsMainSummaryItem(
-            title: 'Total Income',
-            amount: profilesData.getTotalIncome(),
-            transactionType: TransactionType.income,
-          ),
-          SizedBox(height: kDefaultPadding / 2),
-          StatisticsMainSummaryItem(
-            title: 'Total Outcome',
-            amount: profilesData.getTotalOutcome(),
-            transactionType: TransactionType.outcome,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class StatisticsMainSummaryItem extends StatelessWidget {
-  final String title;
-  final double amount;
-  final TransactionType transactionType;
-
-  const StatisticsMainSummaryItem({
-    Key? key,
-    required this.title,
-    required this.amount,
-    required this.transactionType,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var themeProvider = Provider.of<ThemeProvider>(context);
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: transactionType == TransactionType.all
-                ? FontWeight.bold
-                : FontWeight.w400,
-            color: transactionType == TransactionType.income
-                ? themeProvider
-                    .getThemeColor(ThemeColors.kIncomeColor)
-                    .withOpacity(0.6)
-                : transactionType == TransactionType.outcome
-                    ? themeProvider
-                        .getThemeColor(ThemeColors.kOutcomeColor)
-                        .withOpacity(0.6)
-                    : themeProvider.getThemeColor(ThemeColors.kSavingsColor),
-          ),
-        ),
-        Text(
-          '${doubleToString(amount)} $currency',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: transactionType == TransactionType.all
-                ? FontWeight.bold
-                : FontWeight.w400,
-            color: transactionType == TransactionType.income
-                ? themeProvider
-                    .getThemeColor(ThemeColors.kIncomeColor)
-                    .withOpacity(0.6)
-                : transactionType == TransactionType.outcome
-                    ? themeProvider
-                        .getThemeColor(ThemeColors.kOutcomeColor)
-                        .withOpacity(0.6)
-                    : themeProvider.getThemeColor(ThemeColors.kSavingsColor),
           ),
         ),
       ],

@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (ctx) => TransactionProvider()),
         ChangeNotifierProvider(create: (ctx) => QuickActionsProvider()),
         ChangeNotifierProvider(create: (ctx) => SyncedDataProvider()),
-        ChangeNotifierProvider(create: (ctx) => ProfileDetailsProvider())
+        ChangeNotifierProvider(create: (ctx) => ProfileDetailsProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

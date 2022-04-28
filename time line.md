@@ -75,6 +75,7 @@ add a lastActivatedDate to each profile
 
 # user the syncfusion date time picker to edit, pick date
 
+# implement app auto update using fire base storage
 
 
 

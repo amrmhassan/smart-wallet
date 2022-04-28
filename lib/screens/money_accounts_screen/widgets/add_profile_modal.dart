@@ -6,9 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/money_accounts_screen/widgets/add_profile_button.dart';
 import 'package:smart_wallet/screens/money_accounts_screen/widgets/clear_profile_name_icon.dart';
-import 'package:smart_wallet/widgets/calculator/widgets/save_button.dart';
 
-import '../../../helpers/responsive.dart';
 import '../../../constants/sizes.dart';
 import '../../../widgets/global/stylized_text_field.dart';
 
