@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -82,26 +81,30 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
   }
 
   Future<void> deleteFireStoreData() async {
-    await AwesomeDialog(
-      context: context,
-      dialogType: DialogType.WARNING,
-      animType: AnimType.BOTTOMSLIDE,
-      title: 'Delete all user data on the cloud?',
-      btnCancelOnPress: () {},
-      btnOkOnPress: () async {
-        //? here deleting the firesotore data
-        String userId = FirebaseAuth.instance.currentUser!.uid;
-        var dbRef = FirebaseFirestore.instance;
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    var dbRef = FirebaseFirestore.instance;
 
-        await FirebaseFirestore.instance
-            .runTransaction((Transaction myTransaction) async {
-          myTransaction
-              .delete(dbRef.collection(usersCollectionName).doc(userId));
-        });
+    await dbRef.collection(usersCollectionName).doc(userId).delete();
+    // await AwesomeDialog(
+    //   context: context,
+    //   dialogType: DialogType.WARNING,
+    //   animType: AnimType.BOTTOMSLIDE,
+    //   title: 'Delete all user data on the cloud?',
+    //   btnCancelOnPress: () {},
+    //   btnOkOnPress: () async {
+    //     //? here deleting the firesotore data
+    //     String userId = FirebaseAuth.instance.currentUser!.uid;
+    //     var dbRef = FirebaseFirestore.instance;
 
-        showSnackBar(context, 'All User data deleted', SnackBarType.info);
-      },
-    ).show();
+    //     await FirebaseFirestore.instance
+    //         .runTransaction((Transaction myTransaction) async {
+    //       myTransaction
+    //           .delete(dbRef.collection(usersCollectionName).doc(userId));
+    //     });
+
+    //     showSnackBar(context, 'All User data deleted', SnackBarType.info);
+    //   },
+    // ).show();
   }
 
   @override

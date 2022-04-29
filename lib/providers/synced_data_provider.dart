@@ -16,10 +16,30 @@ class SyncedDataProvider extends ChangeNotifier {
   //# ********* Syncing data to firestore **********#//
 //? for syncing all data( profiles, transactions, quick Actions)
   Future<void> syncAllData(
-      ProfilesProvider profilesProvider,
-      TransactionProvider transactionProvider,
-      QuickActionsProvider quickActionsProvider) async {
+    ProfilesProvider profilesProvider,
+    TransactionProvider transactionProvider,
+    QuickActionsProvider quickActionsProvider,
+  ) async {
+    CustomError.log(
+      error: 'Start syncing data',
+      logType: LogTypes.info,
+    );
+    await syncProfiles(profilesProvider);
+    await syncTransactions(transactionProvider);
+    await syncQuickActions(quickActionsProvider);
+    CustomError.log(
+      error: 'finished syncing data',
+      logType: LogTypes.info,
+    );
+  }
+
+  //# 1] sync profiles
+  Future<void> syncProfiles(ProfilesProvider profilesProvider) async {
     try {
+      CustomError.log(
+        error: 'Start syncing profile',
+        logType: LogTypes.info,
+      );
       for (var profile in profilesProvider.notSyncedProfiles) {
         //* i made this just to prevent syncing the profile with the sync flag add or anything else
         //* and to ensure that it would by synced with the none flag to the firestore
@@ -35,6 +55,25 @@ class SyncedDataProvider extends ChangeNotifier {
           await updateProfile(profile);
         }
       }
+      CustomError.log(
+        error: 'finished syncing profile',
+        logType: LogTypes.info,
+      );
+    } catch (error, stackTrace) {
+      CustomError.log(
+          error: 'Error syncing profiles $error',
+          rethrowError: true,
+          stackTrace: stackTrace);
+    }
+  }
+
+  //# 2] sync transactions
+  Future<void> syncTransactions(TransactionProvider transactionProvider) async {
+    try {
+      CustomError.log(
+        error: 'start syncing transactions',
+        logType: LogTypes.info,
+      );
       for (var transaction in transactionProvider.notSyncedTransactions) {
         SyncFlags currentSyncFlag = transaction.syncFlag;
         transaction.syncFlag = SyncFlags.noSyncing;
@@ -49,7 +88,26 @@ class SyncedDataProvider extends ChangeNotifier {
           await editTransaction(transaction);
         }
       }
+      CustomError.log(
+        error: 'finished syncing transactions',
+        logType: LogTypes.info,
+      );
+    } catch (error, stackTrace) {
+      CustomError.log(
+          error: 'Error syncing transactions $error',
+          rethrowError: true,
+          stackTrace: stackTrace);
+    }
+  }
 
+  //# 3] sync quick Actions
+  Future<void> syncQuickActions(
+      QuickActionsProvider quickActionsProvider) async {
+    try {
+      CustomError.log(
+        error: 'start syncing quick Actions',
+        logType: LogTypes.info,
+      );
       for (var quickAction in quickActionsProvider.notSyncedQuickActions) {
         SyncFlags currentSyncFlag = quickAction.syncFlag;
         await quickActionsProvider.changeSyncFlag(
@@ -64,8 +122,15 @@ class SyncedDataProvider extends ChangeNotifier {
           await editQuickAction(quickAction);
         }
       }
+      CustomError.log(
+        error: 'finished syncing quick Actions',
+        logType: LogTypes.info,
+      );
     } catch (error, stackTrace) {
-      CustomError.log(error: error, stackTrace: stackTrace, rethrowError: true);
+      CustomError.log(
+          error: 'Error syncing quick Actions $error',
+          rethrowError: true,
+          stackTrace: stackTrace);
     }
   }
 
@@ -77,24 +142,34 @@ class SyncedDataProvider extends ChangeNotifier {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     var dbRef = FirebaseFirestore.instance;
 
-    await dbRef
-        .collection(usersCollectionName)
-        .doc(userId)
-        .collection(profilesCollectionName)
-        .doc(profile.id)
-        .set(profile.toJSON());
+    try {
+      await dbRef
+          .collection(usersCollectionName)
+          .doc(userId)
+          .collection(profilesCollectionName)
+          .doc(profile.id)
+          .set(profile.toJSON());
+    } catch (error) {
+      CustomError.log(
+          error: 'Error syncing adding profile ${profile.id}, $error');
+    }
   }
 
 //? for updating an existing profile in the firestore
   Future<void> updateProfile(ProfileModel profile) async {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     var dbRef = FirebaseFirestore.instance;
-    await dbRef
-        .collection(usersCollectionName)
-        .doc(userId)
-        .collection(profilesCollectionName)
-        .doc(profile.id)
-        .update(profile.toJSON());
+    try {
+      await dbRef
+          .collection(usersCollectionName)
+          .doc(userId)
+          .collection(profilesCollectionName)
+          .doc(profile.id)
+          .update(profile.toJSON());
+    } catch (error) {
+      CustomError.log(
+          error: 'Error syncing updating profile ${profile.id}, $error');
+    }
   }
 
 //# 2] transactions
@@ -103,12 +178,18 @@ class SyncedDataProvider extends ChangeNotifier {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     var dbRef = FirebaseFirestore.instance;
 
-    await dbRef
-        .collection(usersCollectionName)
-        .doc(userId)
-        .collection(transactionsCollectionName)
-        .doc(transactionModel.id)
-        .set(transactionModel.toJSON());
+    try {
+      await dbRef
+          .collection(usersCollectionName)
+          .doc(userId)
+          .collection(transactionsCollectionName)
+          .doc(transactionModel.id)
+          .set(transactionModel.toJSON());
+    } catch (error) {
+      CustomError.log(
+          error:
+              'Error syncing adding transaction ${transactionModel.id}, $error');
+    }
   }
 
 //? for editing a transaction
@@ -116,12 +197,18 @@ class SyncedDataProvider extends ChangeNotifier {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     var dbRef = FirebaseFirestore.instance;
 
-    await dbRef
-        .collection(usersCollectionName)
-        .doc(userId)
-        .collection(transactionsCollectionName)
-        .doc(transactionModel.id)
-        .update(transactionModel.toJSON());
+    try {
+      await dbRef
+          .collection(usersCollectionName)
+          .doc(userId)
+          .collection(transactionsCollectionName)
+          .doc(transactionModel.id)
+          .update(transactionModel.toJSON());
+    } catch (error) {
+      CustomError.log(
+          error:
+              'Error syncing updating transaction ${transactionModel.id}, $error');
+    }
   }
 
 //# 3] quick actions
@@ -130,12 +217,18 @@ class SyncedDataProvider extends ChangeNotifier {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     var dbRef = FirebaseFirestore.instance;
 
-    await dbRef
-        .collection(usersCollectionName)
-        .doc(userId)
-        .collection(quickActionsCollectionName)
-        .doc(quickActionModel.id)
-        .set(quickActionModel.toJSON());
+    try {
+      await dbRef
+          .collection(usersCollectionName)
+          .doc(userId)
+          .collection(quickActionsCollectionName)
+          .doc(quickActionModel.id)
+          .set(quickActionModel.toJSON());
+    } catch (error) {
+      CustomError.log(
+          error:
+              'Error syncing adding quick Action ${quickActionModel.id}, $error');
+    }
   }
 
 //? editing a quick Action
@@ -143,12 +236,18 @@ class SyncedDataProvider extends ChangeNotifier {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     var dbRef = FirebaseFirestore.instance;
 
-    await dbRef
-        .collection(usersCollectionName)
-        .doc(userId)
-        .collection(quickActionsCollectionName)
-        .doc(quickActionModel.id)
-        .update(quickActionModel.toJSON());
+    try {
+      await dbRef
+          .collection(usersCollectionName)
+          .doc(userId)
+          .collection(quickActionsCollectionName)
+          .doc(quickActionModel.id)
+          .update(quickActionModel.toJSON());
+    } catch (error) {
+      CustomError.log(
+          error:
+              'Error syncing updating quick action ${quickActionModel.id}, $error');
+    }
   }
 
   //# ********* Fetching data from firestore **********#//
