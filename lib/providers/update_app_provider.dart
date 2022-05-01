@@ -38,19 +38,19 @@ class UpdateAppProvider extends ChangeNotifier {
 
   Future<void> _startDownloadingUpdatedAPK(Reference ref) async {
     late bool fileCreated;
-    // late Reference? downloadRef;
+    late Reference? downloadRef;
     late String? downloadLink;
     try {
       fileCreated = await createFolder();
-      // downloadRef = await getDownloadRef();
-      // downloadLink = await downloadRef?.getDownloadURL();
+      downloadRef = await getDownloadRef();
+      downloadLink = await downloadRef?.getDownloadURL();
     } catch (error) {
       CustomError.log(error: error);
     }
 
-    // if (!fileCreated || downloadLink == null) {
-    //   return;
-    // }
+    if (!fileCreated || downloadLink == null) {
+      return;
+    }
 
     Dio dio = Dio();
     downloading = true;
