@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -5,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:smart_wallet/constants/app_details.dart';
@@ -12,7 +15,7 @@ import 'package:smart_wallet/constants/update_app_constants.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
 
 //? getting the latest app version from firesotore like 1.0.0
-Future<String?> _getLatestVersion() async {
+Future<String?> getLatestVersion() async {
   var dbRef = FirebaseFirestore.instance;
   try {
     var result = await dbRef
@@ -30,7 +33,7 @@ Future<String?> _getLatestVersion() async {
 //? checking if the app need update or not by comparing the currentVersion and the latest version
 Future<bool> _needUpdate() async {
   try {
-    String? latestVersion = await _getLatestVersion();
+    String? latestVersion = await getLatestVersion();
     if (latestVersion == null) {
       return false;
     } else if (latestVersion == currentAppVersion) {
@@ -50,7 +53,7 @@ Future<Reference?> getDownloadRef() async {
     if (!await _needUpdate()) {
       return null;
     }
-    String latestVersion = (await _getLatestVersion()).toString();
+    String latestVersion = (await getLatestVersion()).toString();
 
     Reference downloadRef =
         FirebaseStorage.instance.ref('/versions').child('$latestVersion.apk');
@@ -86,11 +89,12 @@ Future<void> handleDownloadApp(
   } else {
     await downloadAPK(downloadRef, context);
   }
+  return;
 }
 
 Future<File> getUpdatedAPKFile() async {
-  final dir = await getExternalStorageDirectory();
-  File apkFile = File('${dir!.path}/updatedFile.apk');
+  final dir = await getTemporaryDirectory();
+  File apkFile = File('${dir.path}/updatedFile.apk');
   return apkFile;
 }
 
@@ -128,6 +132,25 @@ Future<void> downloadAPK(Reference ref, BuildContext context) async {
   if (exist) {
     await file.delete();
   }
+  DownloadTask? down = ref.writeToFile(file);
 
-  await ref.writeToFile(file);
+  down.then((p0) async {
+    Future.delayed(Duration(seconds: 1)).then((value) async {
+      await AwesomeDialog(
+        context: context,
+        dialogType: DialogType.INFO,
+        animType: AnimType.BOTTOMSLIDE,
+        title: 'Install update?',
+        btnOkText: 'Install',
+        btnCancelText: 'Cancel',
+        btnCancelOnPress: () {},
+        btnOkOnPress: () async {
+          print(file);
+
+          await OpenFile.open(file.path);
+          await file.delete();
+        },
+      ).show();
+    });
+  });
 }
