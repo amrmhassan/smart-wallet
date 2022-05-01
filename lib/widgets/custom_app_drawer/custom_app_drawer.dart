@@ -99,7 +99,7 @@ class CustomAppDrawer extends StatelessWidget {
                     DrawerlistItem(
                       title: 'Update App',
                       onTap: () async {
-                        await handleUpdateApp(context, false);
+                        await handleDownloadApp(context, false);
                       },
                       iconData: FontAwesomeIcons.download,
                       color: kModerateProfileStatusColor,
