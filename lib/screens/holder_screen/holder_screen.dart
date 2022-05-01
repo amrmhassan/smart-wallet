@@ -7,6 +7,8 @@ import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/screens/holder_screen/widgets/holder_screen.dart';
 import 'package:smart_wallet/screens/money_accounts_screen/money_accounts_screen.dart';
 import 'package:smart_wallet/screens/settings_screen/settings_screen.dart';
+import 'package:smart_wallet/utils/general_utils.dart';
+import 'package:smart_wallet/utils/update_app_utils.dart';
 import 'package:smart_wallet/widgets/global/open_logging_screen.dart';
 import '../home_screen/home_screen.dart';
 import '../transactions_screen/transactions_screen.dart';
@@ -55,11 +57,21 @@ class _HolderScreenState extends State<HolderScreen> {
     }
   }
 
+  Future<void> updateApp() async {
+    bool online = await isOnline();
+
+    //* checking if there is an update for the app
+    if (online) {
+      await handleUpdateApp(context);
+    }
+  }
+
   @override
   void initState() {
     _pageController = PageController(
       initialPage: _activeBottomNavBarIndex,
     );
+    updateApp();
     super.initState();
   }
 

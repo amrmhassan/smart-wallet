@@ -15,6 +15,7 @@ import 'package:smart_wallet/screens/holder_screen/holder_screen.dart';
 import 'package:smart_wallet/screens/loading_data_screen.dart';
 import 'package:smart_wallet/screens/quick_actions_screen/quick_actions_screen.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
+import 'package:smart_wallet/utils/update_app_utils.dart';
 
 import 'widgets/drawer_list_item.dart';
 import 'widgets/drawer_logo.dart';
@@ -92,6 +93,15 @@ class CustomAppDrawer extends StatelessWidget {
                             context, LoadingDataScreen.routeName);
                       },
                       iconData: FontAwesomeIcons.bolt,
+                      color: kModerateProfileStatusColor,
+                    ),
+                  if (kDebugMode)
+                    DrawerlistItem(
+                      title: 'Update App',
+                      onTap: () async {
+                        await handleUpdateApp(context, false);
+                      },
+                      iconData: FontAwesomeIcons.download,
                       color: kModerateProfileStatusColor,
                     ),
                 ],
