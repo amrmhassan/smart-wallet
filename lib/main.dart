@@ -8,6 +8,7 @@ import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
 import 'package:smart_wallet/providers/synced_data_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/providers/update_app_provider.dart';
 import 'package:smart_wallet/screens/about_app/about_app.dart';
 import 'package:smart_wallet/screens/authentication_screen/authentication_screen.dart';
 import 'package:smart_wallet/screens/intro_screen/intro_screen.dart';
@@ -49,6 +50,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (ctx) => QuickActionsProvider()),
         ChangeNotifierProvider(create: (ctx) => SyncedDataProvider()),
         ChangeNotifierProvider(create: (ctx) => ProfileDetailsProvider()),
+        ChangeNotifierProvider(create: (ctx) => UpdateAppProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

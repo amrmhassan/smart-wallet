@@ -6,6 +6,7 @@ import 'package:smart_wallet/constants/app_details.dart';
 import 'package:smart_wallet/constants/sizes.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/providers/update_app_provider.dart';
 import 'package:smart_wallet/screens/home_screen/widgets/background.dart';
 import 'package:smart_wallet/screens/money_accounts_screen/widgets/custom_button.dart';
 import 'package:smart_wallet/utils/update_app_utils.dart';
@@ -26,16 +27,9 @@ class _AboutAppState extends State<AboutApp> {
   bool _loading = false;
   String latestVersion = '';
   bool needUpdate = false;
-  bool _downloading = false;
 
   Future<void> _handleUpdate(BuildContext context) async {
-    setState(() {
-      _downloading = true;
-    });
-    await handleDownloadApp(context, false);
-    setState(() {
-      _downloading = false;
-    });
+    await updateAndInstall(context);
   }
 
   Future<void> fetchLatestVersion() async {
@@ -66,6 +60,9 @@ class _AboutAppState extends State<AboutApp> {
 
   @override
   Widget build(BuildContext context) {
+    // var themeProvider = Provider.of<ThemeProvider>(context);
+    var updateAppProvider = Provider.of<UpdateAppProvider>(context);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       //? this will prevent the screen to resize whenever keyboard is opened
@@ -135,11 +132,19 @@ class _AboutAppState extends State<AboutApp> {
                                         onTap: () async {
                                           await _handleUpdate(context);
                                         },
-                                        title: _downloading
+                                        title: updateAppProvider.downloading
                                             ? 'Downloading'
                                             : 'Update',
-                                        active: !_downloading,
-                                      )
+                                        active: !updateAppProvider.downloading,
+                                      ),
+                                      SizedBox(
+                                        height: kDefaultPadding / 2,
+                                      ),
+                                      if (updateAppProvider.downloading)
+                                        ProgressBar(
+                                          progress: updateAppProvider
+                                              .downloadProgress,
+                                        ),
                                     ],
                                   ),
                               ],
@@ -152,6 +157,45 @@ class _AboutAppState extends State<AboutApp> {
                 ],
               ),
             ),
+    );
+  }
+}
+
+class ProgressBar extends StatelessWidget {
+  final double progress;
+  const ProgressBar({
+    Key? key,
+    required this.progress,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
+    return Container(
+      clipBehavior: Clip.hardEdge,
+      height: 5,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(1000),
+        color: themeProvider
+            .getThemeColor(ThemeColors.kSavingsColor)
+            .withOpacity(.1),
+      ),
+      child: FractionallySizedBox(
+        alignment: Alignment.centerLeft,
+        widthFactor: progress,
+        child: Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: themeProvider.getThemeColor(ThemeColors.kSavingsColor),
+            borderRadius: BorderRadius.circular(
+              1000,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -8,11 +8,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/app_details.dart';
 import 'package:smart_wallet/constants/update_app_constants.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
+import 'package:smart_wallet/providers/update_app_provider.dart';
 
 //? getting the latest app version from firesotore like 1.0.0
 Future<String?> getLatestVersion() async {
@@ -31,7 +32,7 @@ Future<String?> getLatestVersion() async {
 }
 
 //? checking if the app need update or not by comparing the currentVersion and the latest version
-Future<bool> _needUpdate() async {
+Future<bool> needUpdate() async {
   try {
     String? latestVersion = await getLatestVersion();
     if (latestVersion == null) {
@@ -50,9 +51,6 @@ Future<bool> _needUpdate() async {
 //? getting the download url from the firesotore
 Future<Reference?> getDownloadRef() async {
   try {
-    if (!await _needUpdate()) {
-      return null;
-    }
     String latestVersion = (await getLatestVersion()).toString();
 
     Reference downloadRef =
@@ -65,93 +63,80 @@ Future<Reference?> getDownloadRef() async {
   return null;
 }
 
-Future<void> handleDownloadApp(
-  BuildContext context, [
-  bool showDialog = true,
-]) async {
-  Reference? downloadRef = await getDownloadRef();
-  if (downloadRef == null) {
-    return;
+//? for deleting the app and it's directory
+Future<void> deleteApk() async {
+  if (getDownloadDirectory.existsSync()) {
+    await getDownloadDirectory.delete(recursive: true);
   }
-  if (showDialog) {
-    await AwesomeDialog(
-      context: context,
-      dialogType: DialogType.INFO,
-      animType: AnimType.BOTTOMSLIDE,
-      title: 'App Needs Update?',
-      btnOkText: 'Update',
-      btnCancelText: 'Cancel',
-      btnCancelOnPress: () {},
-      btnOkOnPress: () async {
-        await downloadAPK(downloadRef, context);
-      },
-    ).show();
-  } else {
-    await downloadAPK(downloadRef, context);
-  }
-  return;
 }
 
-Future<File> getUpdatedAPKFile() async {
-  final dir = await getApplicationDocumentsDirectory();
-  File apkFile = File('${dir.path}/updatedFile.apk');
+//? getting the apk file for the path
+File get getUpdatedAPKFile {
+  File apkFile = File('sdcard/$downloadFolderName/$updatedAppName');
   return apkFile;
 }
 
-Future<File?> createFolder() async {
+//? getting the downloading directory
+Directory get getDownloadDirectory {
+  Directory dir = Directory('sdcard/$downloadFolderName');
+  return dir;
+}
+
+//? handling permissions and create the downloading folder
+Future<bool> createFolder() async {
   var status = await Permission.storage.request();
-  if (status.isGranted) {
+  var status2 = await Permission.manageExternalStorage.request();
+
+  if (status.isGranted && status2.isGranted) {
     try {
-      File apkFile = await getUpdatedAPKFile();
-      return apkFile;
+      if (!getDownloadDirectory.existsSync()) {
+        await getDownloadDirectory.create();
+      }
+      return true;
     } catch (error) {
       if (kDebugMode) {
         print(error);
       }
-      return null;
+      return false;
     }
   } else {
     if (kDebugMode) {
       print('Premission not granted');
     }
-    return null;
+    return false;
   }
 }
 
-Future<void> downloadAPK(Reference ref, BuildContext context) async {
-  File? file = await createFolder();
-
-  if (file == null) {
-    if (kDebugMode) {
-      print('Error updating the app');
-    }
-
-    return;
+//? installing the update
+Future<void> installApp() async {
+  try {
+    await OpenFile.open(getUpdatedAPKFile.path);
+  } catch (error) {
+    CustomError.log(error: error, rethrowError: true);
   }
-  bool exist = file.existsSync();
-  if (exist) {
-    await file.delete();
+}
+
+//? handling the updating and installing the update
+Future<void> updateAndInstall(BuildContext context,
+    [bool showDialog = false]) async {
+  if (showDialog) {
+    await AwesomeDialog(
+      context: context,
+      dialogType: DialogType.INFO,
+      animType: AnimType.BOTTOMSLIDE,
+      title: 'App Need Update.',
+      btnOkText: 'Update',
+      btnCancelText: 'Cancel',
+      btnCancelOnPress: () {},
+      btnOkOnPress: () async {
+        await Provider.of<UpdateAppProvider>(context, listen: false)
+            .initializeDownloading();
+        await installApp();
+      },
+    ).show();
+  } else {
+    await Provider.of<UpdateAppProvider>(context, listen: false)
+        .initializeDownloading();
+    await installApp();
   }
-  await ref.writeToFile(file);
-
-  await AwesomeDialog(
-    context: context,
-    dialogType: DialogType.INFO,
-    animType: AnimType.BOTTOMSLIDE,
-    title: 'Install update?',
-    btnOkText: 'Install',
-    btnCancelText: 'Cancel',
-    btnCancelOnPress: () {},
-    btnOkOnPress: () async {
-      Directory temp = await getApplicationDocumentsDirectory();
-      var children = temp.listSync();
-      File fileToInstall = await getUpdatedAPKFile();
-      var path = fileToInstall.path;
-      var length = await fileToInstall.length();
-      print(length);
-
-      await OpenFile.open(path);
-      await fileToInstall.delete();
-    },
-  ).show();
 }

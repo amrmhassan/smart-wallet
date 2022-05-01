@@ -62,7 +62,10 @@ class _HolderScreenState extends State<HolderScreen> {
 
     //* checking if there is an update for the app
     if (online) {
-      await handleDownloadApp(context);
+      bool doUpdate = await needUpdate();
+      if (doUpdate) {
+        await updateAndInstall(context, true);
+      }
     }
   }
 
