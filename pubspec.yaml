@@ -60,6 +60,7 @@ dependencies:
   syncfusion_flutter_datepicker: ^19.4.56
   firebase_storage: ^10.2.14
   permission_handler: ^9.2.0
+  open_file: ^3.2.1
 
 
 dev_dependencies:

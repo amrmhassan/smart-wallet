@@ -2,8 +2,13 @@
 
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:io';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 import 'package:smart_wallet/constants/globals.dart';
+import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/screens/holder_screen/widgets/holder_screen.dart';
 import 'package:smart_wallet/screens/money_accounts_screen/money_accounts_screen.dart';
 import 'package:smart_wallet/screens/settings_screen/settings_screen.dart';
@@ -62,7 +67,21 @@ class _HolderScreenState extends State<HolderScreen> {
 
     //* checking if there is an update for the app
     if (online) {
-      await handleUpdateApp(context);
+      await handleDownloadApp(context);
+      showSnackBar(context, 'App Downloaded', SnackBarType.info);
+      await AwesomeDialog(
+        context: context,
+        dialogType: DialogType.INFO,
+        animType: AnimType.BOTTOMSLIDE,
+        title: 'Install downloaded updated?',
+        btnOkText: 'Install',
+        btnCancelText: 'Cancel',
+        btnCancelOnPress: () {},
+        btnOkOnPress: () async {
+          File file = await getUpdatedAPKFile();
+          await OpenFile.open(file.path);
+        },
+      ).show();
     }
   }
 
@@ -72,6 +91,7 @@ class _HolderScreenState extends State<HolderScreen> {
       initialPage: _activeBottomNavBarIndex,
     );
     updateApp();
+
     super.initState();
   }
 
@@ -110,6 +130,7 @@ class _HolderScreenState extends State<HolderScreen> {
                 ? 'assets/images/backgroundLight.jpg'
                 : null,
           ),
+
           SafeArea(
             child: Column(
               children: [

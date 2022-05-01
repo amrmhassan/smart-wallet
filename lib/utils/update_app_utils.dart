@@ -4,13 +4,15 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:smart_wallet/constants/app_details.dart';
-import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/constants/update_app_constants.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
-import 'package:smart_wallet/utils/general_utils.dart';
 
+//? getting the latest app version from firesotore like 1.0.0
 Future<String?> _getLatestVersion() async {
   var dbRef = FirebaseFirestore.instance;
   try {
@@ -26,6 +28,7 @@ Future<String?> _getLatestVersion() async {
   return null;
 }
 
+//? checking if the app need update or not by comparing the currentVersion and the latest version
 Future<bool> _needUpdate() async {
   try {
     String? latestVersion = await _getLatestVersion();
@@ -42,31 +45,30 @@ Future<bool> _needUpdate() async {
   }
 }
 
-Future<String?> getDownloadUrl() async {
+//? getting the download url from the firesotore
+Future<Reference?> getDownloadRef() async {
   try {
     if (!await _needUpdate()) {
       return null;
     }
     String latestVersion = (await _getLatestVersion()).toString();
 
-    String downloadUrl = await FirebaseStorage.instance
-        .ref('/versions')
-        .child('$latestVersion.apk')
-        .getDownloadURL();
+    Reference downloadRef =
+        FirebaseStorage.instance.ref('/versions').child('$latestVersion.apk');
 
-    return downloadUrl;
+    return downloadRef;
   } catch (error) {
     CustomError.log(error: error);
   }
   return null;
 }
 
-Future<void> handleUpdateApp(
+Future<void> handleDownloadApp(
   BuildContext context, [
   bool showDialog = true,
 ]) async {
-  String? link = await getDownloadUrl();
-  if (link == null) {
+  Reference? downloadRef = await getDownloadRef();
+  if (downloadRef == null) {
     return;
   }
   if (showDialog) {
@@ -77,75 +79,56 @@ Future<void> handleUpdateApp(
       title: 'App Needs Update?',
       btnOkText: 'Update',
       btnCancelText: 'Cancel',
-      btnCancelOnPress: () {
-        showSnackBar(context, 'Cancelling updating', SnackBarType.info);
-      },
+      btnCancelOnPress: () {},
       btnOkOnPress: () async {
-        showSnackBar(context, 'start updating', SnackBarType.info);
-        await downloadAPK(link);
-        showSnackBar(context, 'finished downloading', SnackBarType.info);
+        await downloadAPK(downloadRef, context);
       },
     ).show();
   } else {
-    showSnackBar(context, 'start updating', SnackBarType.info);
-    await downloadAPK(link);
-    showSnackBar(context, 'finished downloading', SnackBarType.info);
+    await downloadAPK(downloadRef, context);
   }
 }
 
-String get downloadDir {
-  return 'sdcard/SmartWallet';
+Future<File> getUpdatedAPKFile() async {
+  final dir = await getExternalStorageDirectory();
+  File apkFile = File('${dir!.path}/updatedFile.apk');
+  return apkFile;
 }
 
-Future<String> createFolder() async {
-  final path = Directory(downloadDir);
-  var status = await Permission.storage.status;
-  if (!status.isGranted) {
-    await Permission.storage.request();
-  }
-  if ((await path.exists())) {
-    return path.path;
+Future<File?> createFolder() async {
+  var status = await Permission.storage.request();
+  if (status.isGranted) {
+    try {
+      File apkFile = await getUpdatedAPKFile();
+      return apkFile;
+    } catch (error) {
+      if (kDebugMode) {
+        print(error);
+      }
+      return null;
+    }
   } else {
-    await path.create();
-    return path.path;
+    if (kDebugMode) {
+      print('Premission not granted');
+    }
+    return null;
   }
 }
 
-// Future<bool> _handleCreateDownloadDirAndPermissions() async {
-//   try {
-//     var status = await Permission.storage.request();
-//     if (status.isGranted) {
-//       Directory dir = Directory(downloadDir);
+Future<void> downloadAPK(Reference ref, BuildContext context) async {
+  File? file = await createFolder();
 
-//       if (!dir.existsSync()) {
-//         await dir.create(recursive: true);
-//         print('File created');
-//       } else {
-//         print('File already exist');
-//       }
-//       return true;
-//     } else {
-//       print('Permission denied');
-//       return false;
-//     }
-//   } catch (error) {
-//     if (kDebugMode) {
-//       print(error);
-//     }
-//     CustomError.log(error: error);
-//     return false;
-//   }
-// }
+  if (file == null) {
+    if (kDebugMode) {
+      print('Error updating the app');
+    }
 
-Future<void> downloadAPK(String link) async {
-  await createFolder();
+    return;
+  }
+  bool exist = file.existsSync();
+  if (exist) {
+    await file.delete();
+  }
 
-  // final taskId = await FlutterDownloader.enqueue(
-  //   url: link,
-  //   savedDir: downloadDir,
-  //   showNotification: true,
-  //   openFileFromNotification: true,
-  // );
-  // var res = await FlutterDownloader.loadTasks();
-  // print(res);
+  await ref.writeToFile(file);
 }
