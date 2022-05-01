@@ -26,9 +26,17 @@ class _AboutAppState extends State<AboutApp> {
   bool _loading = false;
   String latestVersion = '';
   bool needUpdate = false;
-  bool _updating = false;
+  bool _downloading = false;
 
-  Future<void> _handleUpdate(BuildContext context) async {}
+  Future<void> _handleUpdate(BuildContext context) async {
+    setState(() {
+      _downloading = true;
+    });
+    await handleDownloadApp(context, false);
+    setState(() {
+      _downloading = false;
+    });
+  }
 
   Future<void> fetchLatestVersion() async {
     setState(() {
@@ -58,7 +66,6 @@ class _AboutAppState extends State<AboutApp> {
 
   @override
   Widget build(BuildContext context) {
-    var themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       //? this will prevent the screen to resize whenever keyboard is opened
@@ -115,20 +122,26 @@ class _AboutAppState extends State<AboutApp> {
                                 InfoElement(
                                     title: 'Latest Version',
                                     value: latestVersion),
-                                SizedBox(height: kDefaultPadding / 4),
-                                Line(
-                                  lineType: LineType.horizontal,
-                                  thickness: 1,
-                                ),
-                                SizedBox(height: kDefaultPadding),
                                 if (needUpdate)
-                                  CustomButton(
-                                    onTap: () async {
-                                      _handleUpdate(context);
-                                    },
-                                    title: 'Update',
-                                    active: !_updating,
-                                  )
+                                  Column(
+                                    children: [
+                                      SizedBox(height: kDefaultPadding / 4),
+                                      Line(
+                                        lineType: LineType.horizontal,
+                                        thickness: 1,
+                                      ),
+                                      SizedBox(height: kDefaultPadding),
+                                      CustomButton(
+                                        onTap: () async {
+                                          await _handleUpdate(context);
+                                        },
+                                        title: _downloading
+                                            ? 'Downloading'
+                                            : 'Update',
+                                        active: !_downloading,
+                                      )
+                                    ],
+                                  ),
                               ],
                             ),
                           ),

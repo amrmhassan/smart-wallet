@@ -93,7 +93,7 @@ Future<void> handleDownloadApp(
 }
 
 Future<File> getUpdatedAPKFile() async {
-  final dir = await getTemporaryDirectory();
+  final dir = await getApplicationDocumentsDirectory();
   File apkFile = File('${dir.path}/updatedFile.apk');
   return apkFile;
 }
@@ -132,25 +132,26 @@ Future<void> downloadAPK(Reference ref, BuildContext context) async {
   if (exist) {
     await file.delete();
   }
-  DownloadTask? down = ref.writeToFile(file);
+  await ref.writeToFile(file);
 
-  down.then((p0) async {
-    Future.delayed(Duration(seconds: 1)).then((value) async {
-      await AwesomeDialog(
-        context: context,
-        dialogType: DialogType.INFO,
-        animType: AnimType.BOTTOMSLIDE,
-        title: 'Install update?',
-        btnOkText: 'Install',
-        btnCancelText: 'Cancel',
-        btnCancelOnPress: () {},
-        btnOkOnPress: () async {
-          print(file);
+  await AwesomeDialog(
+    context: context,
+    dialogType: DialogType.INFO,
+    animType: AnimType.BOTTOMSLIDE,
+    title: 'Install update?',
+    btnOkText: 'Install',
+    btnCancelText: 'Cancel',
+    btnCancelOnPress: () {},
+    btnOkOnPress: () async {
+      Directory temp = await getApplicationDocumentsDirectory();
+      var children = temp.listSync();
+      File fileToInstall = await getUpdatedAPKFile();
+      var path = fileToInstall.path;
+      var length = await fileToInstall.length();
+      print(length);
 
-          await OpenFile.open(file.path);
-          await file.delete();
-        },
-      ).show();
-    });
-  });
+      await OpenFile.open(path);
+      await fileToInstall.delete();
+    },
+  ).show();
 }
