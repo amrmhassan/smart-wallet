@@ -9,6 +9,7 @@ import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/providers/update_app_provider.dart';
 import 'package:smart_wallet/screens/home_screen/widgets/background.dart';
 import 'package:smart_wallet/screens/money_accounts_screen/widgets/custom_button.dart';
+import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/utils/update_app_utils.dart';
 import 'package:smart_wallet/widgets/app_bar/my_app_bar.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
@@ -27,6 +28,7 @@ class _AboutAppState extends State<AboutApp> {
   bool _loading = false;
   String latestVersion = '';
   bool needUpdate = false;
+  bool online = false;
 
   Future<void> _handleUpdate(BuildContext context) async {
     await updateAndInstall(context);
@@ -36,6 +38,8 @@ class _AboutAppState extends State<AboutApp> {
     setState(() {
       _loading = true;
     });
+    bool o = await isOnline();
+
     String? v = await getLatestVersion();
     if (v != null) {
       setState(() {
@@ -48,6 +52,7 @@ class _AboutAppState extends State<AboutApp> {
       });
     }
     setState(() {
+      online = o;
       _loading = false;
     });
   }
@@ -110,16 +115,21 @@ class _AboutAppState extends State<AboutApp> {
                                   title: 'Current Version',
                                   value: currentAppVersion,
                                 ),
-                                SizedBox(height: kDefaultPadding / 4),
-                                Line(
-                                  lineType: LineType.horizontal,
-                                  thickness: 1,
-                                ),
-                                SizedBox(height: kDefaultPadding / 4),
-                                InfoElement(
-                                    title: 'Latest Version',
-                                    value: latestVersion),
-                                if (needUpdate)
+                                if (online)
+                                  Column(
+                                    children: [
+                                      SizedBox(height: kDefaultPadding / 4),
+                                      Line(
+                                        lineType: LineType.horizontal,
+                                        thickness: 1,
+                                      ),
+                                      SizedBox(height: kDefaultPadding / 4),
+                                      InfoElement(
+                                          title: 'Latest Version',
+                                          value: latestVersion),
+                                    ],
+                                  ),
+                                if (needUpdate && online)
                                   Column(
                                     children: [
                                       SizedBox(height: kDefaultPadding / 4),
