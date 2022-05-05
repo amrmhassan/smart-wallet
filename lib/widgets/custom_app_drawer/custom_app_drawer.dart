@@ -100,7 +100,7 @@ class CustomAppDrawer extends StatelessWidget {
                     onTap: () async {
                       Navigator.pushNamed(context, AboutApp.routeName);
                     },
-                    iconData: FontAwesomeIcons.bolt,
+                    iconData: FontAwesomeIcons.info,
                     color: kModerateProfileStatusColor,
                   ),
                 ],

@@ -7,8 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/transactions_screen/widgets/transaction_ratio.dart';
-import 'package:smart_wallet/utils/transactions_utils.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../providers/theme_provider.dart';
 import '../../../constants/sizes.dart';
