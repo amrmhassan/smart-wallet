@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/screens/settings_screen/widgets/setting_element.dart';
 import '../../constants/sizes.dart';
 import '../../widgets/app_bar/home_heading.dart';
-import '../../widgets/global/custom_card.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -16,6 +16,17 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  void changeTheme() {
+    //? this will toggle the theme from dark to basic and vice versa
+    Themes theme =
+        Provider.of<ThemeProvider>(context, listen: false).currentTheme;
+    if (theme == Themes.basic) {
+      Provider.of<ThemeProvider>(context, listen: false).setTheme(Themes.dark);
+    } else {
+      Provider.of<ThemeProvider>(context, listen: false).setTheme(Themes.basic);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
@@ -50,14 +61,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     children: [
                       //! type the theme name and preview it
-                      ThemeChanger(),
-                      CustomCard(
-                        child: Text(
-                          'Appearance',
-                          style: themeProvider.getTextStyle(
-                            ThemeTextStyles.kParagraphTextStyle,
-                          ),
-                        ),
+                      SettingElement(
+                        onTap: changeTheme,
+                        iconPath: 'assets/icons/themes.png',
+                        title: 'Themes',
+                        value: themeProvider.currentTheme == Themes.basic
+                            ? 'Basic'
+                            : 'Dark',
+                      ),
+                      SettingElement(
+                        onTap: () {},
+                        iconPath: 'assets/icons/vision.png',
+                        title: 'Look',
+                        value: 'Default',
                       ),
                     ],
                   ),
@@ -67,86 +83,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class ThemeChanger extends StatelessWidget {
-  const ThemeChanger({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var themeProvider = Provider.of<ThemeProvider>(context);
-    return GestureDetector(
-      onTap: () {
-        //? this will toggle the theme from dark to basic and vice versa
-        Themes theme =
-            Provider.of<ThemeProvider>(context, listen: false).currentTheme;
-        if (theme == Themes.basic) {
-          Provider.of<ThemeProvider>(context, listen: false)
-              .setTheme(Themes.dark);
-        } else {
-          Provider.of<ThemeProvider>(context, listen: false)
-              .setTheme(Themes.basic);
-        }
-      },
-      child: CustomCard(
-        // backgroundImage: DecorationImage(
-        //   image: AssetImage(
-        //     'assets/images/background.jpg',
-        //   ),
-        //   fit: BoxFit.cover,
-        // ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Image.asset(
-                  'assets/icons/themes.png',
-                  width: 30,
-                  fit: BoxFit.contain,
-                ),
-                SizedBox(
-                  width: kDefaultPadding / 2,
-                ),
-                Expanded(
-                  child: FittedBox(
-                    fit: BoxFit.contain,
-                    child: Text(
-                      'Themes',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color:
-                            themeProvider.getThemeColor(ThemeColors.kMainColor),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: kDefaultPadding / 2,
-            ),
-            Expanded(
-              child: Center(
-                child: Text(
-                  themeProvider.currentTheme == Themes.basic ? 'Basic' : 'Dark',
-                  style: TextStyle(
-                    color: themeProvider
-                        .getThemeColor(ThemeColors.kMainColor)
-                        .withOpacity(0.5),
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

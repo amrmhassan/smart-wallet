@@ -71,12 +71,6 @@ add a lastActivatedDate to each profile
 --then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)
 
 
-# user the syncfusion date time picker to edit, pick date
-
-# there is an error with syncing
-
-# edit the doShowChart in the profile details screen to handle if the age is greater than one but there is no transactions
-
 [Soon]
 when editing a profile the new profile is pushed to the start of the profiles
 --(fix that by sorting them according to the lastActivated time and the createdAt time)

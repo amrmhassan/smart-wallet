@@ -81,7 +81,7 @@ class TransactionProvider extends ChangeNotifier {
     return todayAmount;
   }
 
-//? getting yesterday's outcome only
+  //? getting yesterday's outcome only
   double get yesterdayOutcome {
     TransPeriodUtils transPeriodUtils = TransPeriodUtils(
       startDate: DateTime.now(),
@@ -94,24 +94,24 @@ class TransactionProvider extends ChangeNotifier {
     return yesterdayAmount;
   }
 
-//? getting total money for a profile, (savings)
+  //? getting total money for a profile, (savings)
   double get totalMoney {
     return totalIncome - totalOutcome;
   }
 
-//? for folding a list of transactions and sum it's amount
+  //? for folding a list of transactions and sum it's amount
   double foldTransactions(List<TransactionModel> transactions) {
     return transactions.fold(
         0, (previousValue, element) => previousValue + element.amount);
   }
 
-//? clear transactions arrays
+  //? clear transactions arrays
   void clearAllTransactions() async {
     _transactions.clear();
     _allTransactions.clear();
   }
 
-//? add an array of transactions to the local database
+  //? add an array of transactions to the local database
   Future<void> setTransactions(List<TransactionModel> transactions) async {
     for (var transaction in transactions) {
       try {
@@ -122,23 +122,23 @@ class TransactionProvider extends ChangeNotifier {
     }
   }
 
-//? getting a transaction by id
+  //? getting a transaction by id
   TransactionModel getTransactionById(String id) {
     return _allTransactions.firstWhere((element) => element.id == id);
   }
 
-//? getting a transaction by id
+  //? getting a transaction by id
   TransactionModel getActiveProfileTransactionById(String id) {
     return transactions.firstWhere((element) => element.id == id);
   }
 
-//? getting the last transaction in the list
-//* this will be used to check if the current added transaction has the same amount and transaction type as the last transaction in the list
+  //? getting the last transaction in the list
+  //* this will be used to check if the current added transaction has the same amount and transaction type as the last transaction in the list
   TransactionModel getLastTransaction() {
     return transactions[transactions.length - 1];
   }
 
-//? adding new transaction
+  //? adding new transaction
   Future<void> addTransaction(String title, String description, double amount,
       TransactionType transactionType, String profileId) async {
     //* checking if the transaction added will make the current balance negative
@@ -206,7 +206,7 @@ class TransactionProvider extends ChangeNotifier {
     }
   }
 
-//? get transactinons by a profile id
+  //? get transactinons by a profile id
   Future<void> fetchAndUpdateProfileTransactions(String profileId) async {
     try {
       List<TransactionModel> profileTransactions =
@@ -222,7 +222,7 @@ class TransactionProvider extends ChangeNotifier {
     }
   }
 
-//? fetching and updating all transactions
+  //? fetching and updating all transactions
   Future<void> fetchAndUpdateAllTransactions() async {
     List<TransactionModel> fetchedTransactions = [];
     try {
@@ -241,7 +241,7 @@ class TransactionProvider extends ChangeNotifier {
     }
   }
 
-//? deleting a transaction by id
+  //? deleting a transaction by id
   Future<void> deleteTransaction(String id) async {
     //* if that transaction is income and deleting it will make the total by negative then throw an error that you can't delete that transaction , you can only edit it to a lower amount but not lower than the current total amount in that profile
     TransactionModel deletedTransaction = getActiveProfileTransactionById(id);
@@ -275,7 +275,7 @@ class TransactionProvider extends ChangeNotifier {
     );
   }
 
-//? editing a transaction
+  //? editing a transaction
   Future<void> editTransaction(
       {required TransactionModel newTransaction,
       bool syncing = false,

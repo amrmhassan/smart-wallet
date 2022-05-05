@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
-import 'package:smart_wallet/screens/home_screen/widgets/summary_period_icon.dart';
 import 'package:smart_wallet/screens/profile_details_screen/widgets/chart_type_filters.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:smart_wallet/utils/charts_utils.dart';
