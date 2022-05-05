@@ -79,6 +79,13 @@ Future<void> fetchAndUpdatingDataFromSqlite(BuildContext context) async {
   //* 5] fetching the quick actions
   await Provider.of<QuickActionsProvider>(context, listen: false)
       .fetchAndUpdateProfileQuickActions(activeProfileId);
+  //* 6] fetching all the transactions
+  await Provider.of<TransactionProvider>(context, listen: false)
+      .fetchAndUpdateAllTransactions();
+
+  //*7] fetching all  quick actions
+  await Provider.of<QuickActionsProvider>(context, listen: false)
+      .fetchAndUpdateAllQuickActions();
 }
 
 //? syncing data from the firestore

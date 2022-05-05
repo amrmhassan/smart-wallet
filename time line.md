@@ -6,16 +6,16 @@ DONE - add the ability to delete a transaction from the database
 DONE - fix the app bar and make it clean code
 DONE - make the quick actions screen design
 DONE - make the quick action cards
-DONE - make the quick action operations possible through the quick actions screen 
+DONE - make the quick action operations possible through the quick actions screen
 DONE - make to calculator to handle the float values with the period (.)
 DONE - test the calculator by many probabilities then integrate it with the add transaction screen
 DONE - for the profiles
 DONE --- in the fetchTransactions make it request only the transactions with the account profile id
-DONE --- and make the _transactions only has the transactions of the activated profile
+DONE --- and make the \_transactions only has the transactions of the activated profile
 DONE - add the update profile method in the profileProvider then use it to update when adding, deleting, editing a transaction
-DONE - update the current active profile when editting a transaction 
+DONE - update the current active profile when editting a transaction
 DONE - update the current active profile when deleting a transaction
-DONE - create a utils file for operation_on_transactions and put the add transaction method in there and the 
+DONE - create a utils file for operation_on_transactions and put the add transaction method in there and the
 DONE - delete, edit then use them in the add transaction screen
 DONE --- do the last step for the quick actions as well
 DONE - add a constant to check if it the first time to run the app or not it will save a shared preference variable
@@ -30,11 +30,11 @@ DONE - the user can go to the statistcs page by clicking the profile card itself
 DONE - make a profile statisctics widget which will show the statistics about a profile with it's id
 DONE --- that will be added to the statistics page that in the holder page
 DONE - the user can't add a transaction that is higher than his totalMoney
-DONE - to add a debt the user will find that option in the sideBar 
+DONE - to add a debt the user will find that option in the sideBar
 DONE - convert the transaction card to dismissible
 DONE - you might change the total Mony indication to the Savings indeication
-DONE - the savings worked different 
-DONE - the saving of today isn't equal to the income of that day minus the outcome in the same day 
+DONE - the savings worked different
+DONE - the saving of today isn't equal to the income of that day minus the outcome in the same day
 DONE - it equals to the savings of the pervious days + income of that day - outcome of that day= totalIncome-totalOutcome
 DONE - after chaning the theme restart the app programatically(Fixied with other solution)
 DONE - so the savings always equal to the total (income from the first day to the current day ) - (total outcome from the first day to the current day) it will make difference in the chart of the savings-- cause the savings of each day will equal to the income of the previous days - the outcome of the previous days
@@ -48,10 +48,10 @@ DONE - in the from json (transactions, profiles, quick actions) dates just make 
 DONE - cause this will convert the data from the firestore and the local database as well
 DONE - trimming the title name of transactions, profiles
 DONE - make the profile name textField focus when it appears and show the keyboard
-DONE - edit the custom error file to handle any type of objects and then turn it into a string 
+DONE - edit the custom error file to handle any type of objects and then turn it into a string
 DONE --- replace all rethrow with the throw CustomError
 DONE --- handle errors in the custom error and return error in a beatiful format depending on the error type or error name
-DONE --- create errors constant file with the following 
+DONE --- create errors constant file with the following
 DONE --- String networkErrorName = 'network_error' ==> the beautified version of the error is 'No Internet Connection'
 DONE --- log all the errors in the user device and from that custom error file to use them in the production version
 DONE --- add a method (log) for the custom erro and it will be used instead of the print in the production mode
@@ -63,28 +63,20 @@ DONE - add a method for each model to convert it to json or from json
 DONE --- i will use this methods to save the model to the database or fetch it from the data base
 DONE - start implementing the welcoming screens for the normal users to use the app and show them how to use the app
 DONE - start implemeting the transaction details screen , it might be a modal that show some info about the transaction, and the user can edit the data of the transaction from that modal
-
-
+DONE - skip checking that the transaction will make the savings with minus
+DONE - implement app auto update using fire base storage
 
 [Pending]
-add a lastActivatedDate to each profile 
+add a lastActivatedDate to each profile
 --then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)
 
-# skip checking that the transaction will make the savings with minus
-# and for the debts if the profile is minus then this is the debt 
-
-
+# and for the debts if the profile is minus then this is the debt
 
 # user the syncfusion date time picker to edit, pick date
-
-# implement app auto update using fire base storage
 
 # there is an error with syncing
 
 # edit the doShowChart in the profile details screen to handle if the age is greater than one but there is no transactions
-
-
-
 
 [Soon]
 when editing a profile the new profile is pushed to the start of the profiles
@@ -92,55 +84,45 @@ when editing a profile the new profile is pushed to the start of the profiles
 the dept will have a seperate screen that can be accessed from the sideBar (Debts)
 to fullfil a debt the can take it's amount from any current moey profile and it will be substracted from that profile
 the ability to a debt also will be implemented in the add transaction screen after showing the add a debt instead dialog the debt will be added to the debts screen which will be accissible from the sidebar debts
-make the transactions page (pageview so that the user can scroll between income, outcome, all) 
+make the transactions page (pageview so that the user can scroll between income, outcome, all)
 make the quick action page (pageview so that the user can scroll between income, outcome, all)
 and change the title(all, income, outcome ) after scrolling finishes
 add a property to profiles, transactions, quick actions called index
--- this property will be used to arrange them later 
--- for the quick actions it will  be used to arrange them in the favourite status( home screen )
--- for the profiles it will be used to arrange them after activating them 
+-- this property will be used to arrange them later
+-- for the quick actions it will be used to arrange them in the favourite status( home screen )
+-- for the profiles it will be used to arrange them after activating them
 -- when activating a profile it's index property will be greater than the whole profiles in the list
--- when fetching them arrange them according to the index 
--- control this ability from the settings to let the user decide how to arrange them 
+-- when fetching them arrange them according to the index
+-- control this ability from the settings to let the user decide how to arrange them
 -- for the quick actions allow the user to drag and rearrange them in the favorites(home screen) with the recordable list
-allow the user to open a profile even if it is still empty 
--- or show a dialog to delete empty profile when clicking  it's card if it is empty instead of opening it 
-
-
-
-
+allow the user to open a profile even if it is still empty
+-- or show a dialog to delete empty profile when clicking it's card if it is empty instead of opening it
 
 [Bad]
-if there is another user logged in don't ask him just delete after showing the dialog to delete 
+if there is another user logged in don't ask him just delete after showing the dialog to delete
 in the current implementation i will ask the user to delete or not
 because the user will log out first before logging in with a different account
 after fixing the login with another email button implement the deleting without asking the user if there is another email logged in and all the data synced
-
 
 [FAILD]
 FAILD - fix the problem with the user photo
 FAILD - when logging in to another user the user photo doesn's change until the user reopen the app
 
+# ------------[Start] critical changes in the app
 
-
-
-
-
-# ------------[Start] critical changes in the app 
 [HomeScreen] remove periods [D, W, M, Y]
 remove the income
 only show the outcome for the current day only and yesterday, the current money in the wallet
-you can also remove the yesterday outcome and only show the today outcome 
+you can also remove the yesterday outcome and only show the today outcome
 [StatisticsScreen]
 show all the details their
-simple first like income, outcome with periods (D, W, M, Y , and All)and other custom periods 
+simple first like income, outcome with periods (D, W, M, Y , and All)and other custom periods
 this will apply for all the statistics in the page
 -first card will show the (income, outcome, total current money in the wallet) for that period
--second card will show the (current money in the wallet or income, or outcome charts) 
+-second card will show the (current money in the wallet or income, or outcome charts)
+
 # for small periods like only one day show the details of that day with each transaction happend
+
 the default period will be one day and when setting a new period that period will be saved for the next time opening the statistics page
 
-# ------------[End] critical changes in the app 
-
-
-
+# ------------[End] critical changes in the app

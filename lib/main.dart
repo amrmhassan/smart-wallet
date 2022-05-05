@@ -25,7 +25,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FlutterDownloader.initialize(debug: true);
+  await FlutterDownloader.initialize(debug: false);
   await Firebase.initializeApp();
 
   runApp(const MyApp());
