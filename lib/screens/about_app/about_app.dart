@@ -194,7 +194,7 @@ class ProgressBar extends StatelessWidget {
       ),
       child: FractionallySizedBox(
         alignment: Alignment.centerLeft,
-        widthFactor: progress,
+        widthFactor: progress < 0 ? 0 : progress,
         child: Container(
           height: double.infinity,
           width: double.infinity,

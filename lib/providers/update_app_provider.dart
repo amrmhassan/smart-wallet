@@ -10,7 +10,11 @@ class UpdateAppProvider extends ChangeNotifier {
   bool downloaded = false;
 
   void setProgress(double p) {
-    downloadProgress = p;
+    if (p < 0) {
+      downloadProgress = 0;
+    } else {
+      downloadProgress = p;
+    }
     notifyListeners();
   }
 
@@ -56,9 +60,8 @@ class UpdateAppProvider extends ChangeNotifier {
     downloading = true;
     notifyListeners();
 
-    await dio.download(
-        'https://dw.uptodown.com/dwn/73JX1WRnu1UL5aYS5kLqLlC3tMw5WxJxzc3o27-00BULtyVsKFzsj4Ie8zgGcAILePryXRJ6AHi6zZsmEcuQ1tbcTvyMETDNKgGR2p1_IDNBgNSZszOt_4ltsvkom9vU/VVEPyjTx3LSG2MBqjtRFf2Y9ICY-c6FHE-H7GJYlUGLp3KffVWWAEuUA2IIKp5_k3NJs0BF0O3FecDCCrHlZbbLGAn5D9esXd18qSgSBlCSI7t-5UmOeGY-ThlCrlKSx/pu5I1gETCmHuz-dzVfo9sdF5wN540FIwDNMmRiCUUCm13TteUbwof9MFOOH7-grg/',
-        getUpdatedAPKFile.path, onReceiveProgress: ((count, total) {
+    await dio.download(downloadLink, getUpdatedAPKFile.path,
+        onReceiveProgress: ((count, total) {
       downloadProgress = count / total;
       notifyListeners();
     }));

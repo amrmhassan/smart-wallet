@@ -65,8 +65,12 @@ Future<Reference?> getDownloadRef() async {
 
 //? for deleting the app and it's directory
 Future<void> deleteApk() async {
-  if (getDownloadDirectory.existsSync()) {
-    await getDownloadDirectory.delete(recursive: true);
+  try {
+    if (getDownloadDirectory.existsSync()) {
+      await getDownloadDirectory.delete(recursive: true);
+    }
+  } catch (error) {
+    CustomError.log(error: error);
   }
 }
 
