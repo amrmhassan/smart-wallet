@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:smart_wallet/models/profile_model.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/utils/trans_periods_utils.dart';
 import '../constants/db_constants.dart';

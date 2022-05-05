@@ -5,7 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
+import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/transactions_screen/widgets/transaction_ratio.dart';
+import 'package:smart_wallet/utils/transactions_utils.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../providers/theme_provider.dart';
 import '../../../constants/sizes.dart';
@@ -71,10 +74,31 @@ class TransactionDetailsModal extends StatelessWidget {
             height: kDefaultPadding / 2,
           ),
           GestureDetector(
-            onTap: () {
+            onTap: () async {
+              DateTime? pickedDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime.now().subtract(Duration(days: 10)),
+                lastDate: DateTime.now(),
+              );
+              if (pickedDate == null) {
+                return;
+              }
+
+              TransactionModel newTransaction = TransactionModel(
+                id: transaction.id,
+                title: transaction.title,
+                description: transaction.description,
+                amount: transaction.amount,
+                createdAt: pickedDate,
+                transactionType: transaction.transactionType,
+                ratioToTotal: transaction.ratioToTotal,
+                profileId: transaction.profileId,
+              );
+              await Provider.of<TransactionProvider>(context, listen: false)
+                  .editTransaction(newTransaction: newTransaction);
               Navigator.pop(context);
-              showSnackBar(context, 'Open editing data page, or date picker',
-                  SnackBarType.info);
+              showSnackBar(context, 'Date edited', SnackBarType.info);
             },
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,

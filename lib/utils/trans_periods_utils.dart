@@ -140,9 +140,7 @@ class TransPeriodUtils {
               transaction.createdAt.isAfter(startDate)),
         )
         .toList();
-    print('===========================');
-    print(startDate);
-    print(endDate);
+
     return t;
   }
 }

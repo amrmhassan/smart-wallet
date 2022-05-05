@@ -70,7 +70,6 @@ DONE - implement app auto update using fire base storage
 add a lastActivatedDate to each profile
 --then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)
 
-# and for the debts if the profile is minus then this is the debt
 
 # user the syncfusion date time picker to edit, pick date
 
