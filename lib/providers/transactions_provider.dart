@@ -314,6 +314,9 @@ class TransactionProvider extends ChangeNotifier {
 
     int transactionIndex =
         _transactions.indexWhere((element) => element.id == newTransaction.id);
+    if (transactionIndex == -1) {
+      return;
+    }
     _transactions.removeWhere((element) => element.id == newTransaction.id);
     _transactions.insert(transactionIndex, newTransaction);
 

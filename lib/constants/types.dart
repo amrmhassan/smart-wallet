@@ -38,3 +38,9 @@ enum ProfileDetailsChartTypes {
   outcome,
   savings,
 }
+
+enum CustomChartType {
+  savings,
+  income,
+  outcome,
+}

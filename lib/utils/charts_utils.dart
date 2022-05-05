@@ -165,39 +165,27 @@ class TransactionsDatesUtils {
 //* 1] this will return the savings for each day and before it
   List<CustomChartData> getTotalSavingsData() {
     List<DateTime> days = getTransactionsDates(transactions);
-    return days
-        .map((day) {
-          double savingsForAday = getSavingsForADay(day);
-          return CustomChartData(amount: savingsForAday, dateTime: day);
-        })
-        .toList()
-        .reversed
-        .toList();
+    return days.map((day) {
+      double savingsForAday = getSavingsForADay(day);
+      return CustomChartData(amount: savingsForAday, dateTime: day);
+    }).toList();
   }
 
 //* 2] this will return the data of the income of a transactions
   List<CustomChartData> getEachDayIncomeData() {
     List<DateTime> days = getTransactionsDates(transactions);
-    return days
-        .map((day) {
-          double savingsForAday = getTotalIncomeForAday(day);
-          return CustomChartData(amount: savingsForAday, dateTime: day);
-        })
-        .toList()
-        .reversed
-        .toList();
+    return days.map((day) {
+      double savingsForAday = getTotalIncomeForAday(day);
+      return CustomChartData(amount: savingsForAday, dateTime: day);
+    }).toList();
   }
 
 //* 3] this will return the data of the outcome of a transactions
   List<CustomChartData> getEachDayOutcomeData() {
     List<DateTime> days = getTransactionsDates(transactions);
-    return days
-        .map((day) {
-          double savingsForAday = getTotalOutcomeForAday(day);
-          return CustomChartData(amount: savingsForAday, dateTime: day);
-        })
-        .toList()
-        .reversed
-        .toList();
+    return days.map((day) {
+      double savingsForAday = getTotalOutcomeForAday(day);
+      return CustomChartData(amount: savingsForAday, dateTime: day);
+    }).toList();
   }
 }

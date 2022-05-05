@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
+import 'package:smart_wallet/screens/home_screen/widgets/summary_period_icon.dart';
+import 'package:smart_wallet/screens/profile_details_screen/widgets/chart_type_filters.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:smart_wallet/utils/charts_utils.dart';
 import 'package:smart_wallet/constants/sizes.dart';
@@ -15,11 +17,20 @@ import '../../../providers/theme_provider.dart';
 class SummaryChart extends StatefulWidget {
   final ProfileModel profile;
   final List<TransactionModel> profileTransactions;
-  const SummaryChart({
-    Key? key,
-    required this.profile,
-    required this.profileTransactions,
-  }) : super(key: key);
+  final bool showChart;
+  final List<CustomChartData> chartData;
+  final CustomChartType activeChartType;
+  final void Function(CustomChartType chartType) setActiveChartType;
+
+  const SummaryChart(
+      {Key? key,
+      required this.profile,
+      required this.profileTransactions,
+      required this.showChart,
+      required this.chartData,
+      required this.activeChartType,
+      required this.setActiveChartType})
+      : super(key: key);
 
   @override
   State<SummaryChart> createState() => _SummaryChartState();
@@ -28,20 +39,15 @@ class SummaryChart extends StatefulWidget {
 class _SummaryChartState extends State<SummaryChart> {
   TooltipBehavior? _tooltipBehavior;
   ProfileDetailsChartTypes activeChartType = ProfileDetailsChartTypes.savings;
+  //* this var is used to show the chart if there is 2 days of usage or not
+  //* it must be true at first
+  bool manyData = true;
 
-  void setActiveChartType(ProfileDetailsChartTypes active) {
-    setState(() {
-      activeChartType = active;
-    });
-  }
-
-  List<CustomChartData> getViewedData() {
-    //? here swap the data when changing the active chart data
-    return TransactionsDatesUtils(
-      transactions: widget.profileTransactions,
-      firstDate: widget.profile.createdAt,
-    ).getTotalSavingsData();
-  }
+  // void setActiveChartType(ProfileDetailsChartTypes active) {
+  //   setState(() {
+  //     activeChartType = active;
+  //   });
+  // }
 
   @override
   void initState() {
@@ -54,95 +60,54 @@ class _SummaryChartState extends State<SummaryChart> {
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
 
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: kDefaultHorizontalPadding,
-        vertical: kDefaultVerticalPadding,
-      ),
-      decoration: BoxDecoration(
-        color: themeProvider.getThemeColor(ThemeColors.kCardBackgroundColor),
-        borderRadius: BorderRadius.circular(kDefaultBorderRadius / 2),
-        boxShadow: [
-          themeProvider.getBoxShadow(ThemeBoxShadow.kDefaultBoxShadow),
-        ],
-      ),
-      child: Column(
-        children: [
-          ChartTypesFilter(),
-          const SizedBox(
-            height: kDefaultPadding / 2,
-          ),
-          Expanded(
-            child: SfCartesianChart(
-              primaryXAxis: CategoryAxis(),
-              tooltipBehavior: _tooltipBehavior,
-              series: <SplineSeries<CustomChartData, String>>[
-                SplineSeries<CustomChartData, String>(
-                  dataSource: getViewedData(),
-                  xValueMapper: (CustomChartData chartData, ctx) =>
-                      chartData.date,
-                  yValueMapper: (CustomChartData chartData, _) =>
-                      chartData.amount,
-                )
+    return widget.showChart && manyData
+        ? Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: kDefaultHorizontalPadding,
+              vertical: kDefaultVerticalPadding,
+            ),
+            decoration: BoxDecoration(
+              color:
+                  themeProvider.getThemeColor(ThemeColors.kCardBackgroundColor),
+              borderRadius: BorderRadius.circular(kDefaultBorderRadius / 2),
+              boxShadow: [
+                themeProvider.getBoxShadow(ThemeBoxShadow.kDefaultBoxShadow),
               ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ChartTypesFilter extends StatelessWidget {
-  const ChartTypesFilter({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // var themeProvider = Provider.of<ThemeProvider>(context);
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        ChartTypeElement(
-          title: 'Savings',
-          active: true,
-        ),
-        ChartTypeElement(
-          title: 'Income',
-          active: false,
-        ),
-        ChartTypeElement(
-          title: 'Outcome',
-          active: false,
-        ),
-      ],
-    );
-  }
-}
-
-class ChartTypeElement extends StatelessWidget {
-  final String title;
-  final bool active;
-  const ChartTypeElement({
-    Key? key,
-    required this.title,
-    required this.active,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var themeProvider = Provider.of<ThemeProvider>(context);
-
-    return Text(
-      title,
-      style: active
-          ? themeProvider
-              .getTextStyle(ThemeTextStyles.kSmallTextPrimaryColorStyle)
-          : themeProvider.getTextStyle(
-              ThemeTextStyles.kSmallInActiveParagraphTextStyle,
+            child: Column(
+              children: [
+                ChartTypesFilter(
+                  activeChartType: widget.activeChartType,
+                  setActiveChartType: widget.setActiveChartType,
+                ),
+                const SizedBox(
+                  height: kDefaultPadding / 2,
+                ),
+                Expanded(
+                  child: SfCartesianChart(
+                    primaryXAxis: CategoryAxis(),
+                    tooltipBehavior: _tooltipBehavior,
+                    series: <SplineSeries<CustomChartData, String>>[
+                      SplineSeries<CustomChartData, String>(
+                        dataSource: widget.chartData,
+                        xValueMapper: (CustomChartData chartData, ctx) =>
+                            chartData.date,
+                        yValueMapper: (CustomChartData chartData, _) =>
+                            chartData.amount,
+                      )
+                    ],
+                  ),
+                ),
+              ],
             ),
-    );
+          )
+        : Container(
+            alignment: Alignment.center,
+            child: Text(
+              'A stat chart will be here after 2 days of usage',
+              style: themeProvider
+                  .getTextStyle(ThemeTextStyles.kInActiveParagraphTextStyle),
+            ),
+          );
   }
 }

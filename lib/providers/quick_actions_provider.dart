@@ -257,6 +257,9 @@ class QuickActionsProvider extends ChangeNotifier {
     }
     int quickActionIndex =
         _quickActions.indexWhere((element) => element.id == newQuickAction.id);
+    if (quickActionIndex == -1) {
+      return;
+    }
     _quickActions.removeWhere((element) => element.id == newQuickAction.id);
     _quickActions.insert(quickActionIndex, newQuickAction);
     notifyListeners();
