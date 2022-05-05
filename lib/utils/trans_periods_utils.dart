@@ -1,3 +1,6 @@
+import 'package:smart_wallet/constants/globals.dart';
+import 'package:smart_wallet/models/period_model.dart';
+
 import '../models/transaction_model.dart';
 
 class TransPeriodUtils {
@@ -11,88 +14,135 @@ class TransPeriodUtils {
     required this.transactions,
   });
 
-  Map<String, DateTime> setToday() {
+  PeriodModel setToday() {
     DateTime now = DateTime.now();
-    startDate = now.subtract(const Duration(days: 1));
+    startDate = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      defaultDayStart.hours,
+      defaultDayStart.minutes,
+    );
+
     endDate = now;
-    return {
-      'startDate': startDate,
-      'endDate': endDate,
-    };
+
+    return PeriodModel(
+      startDate: startDate,
+      endDate: endDate,
+    );
   }
 
-  Map<String, DateTime> setYesterday() {
+  PeriodModel setYesterday() {
     DateTime now = DateTime.now();
-    startDate = now.subtract(const Duration(days: 2));
-    endDate = now.subtract(const Duration(days: 1));
-    return {
-      'startDate': startDate,
-      'endDate': endDate,
-    };
+    startDate = DateTime(
+      now.year,
+      now.month,
+      now.day - 1,
+      defaultDayStart.hours,
+      defaultDayStart.minutes,
+    );
+    endDate = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      defaultDayStart.hours,
+      defaultDayStart.minutes,
+    );
+    return PeriodModel(
+      startDate: startDate,
+      endDate: endDate,
+    );
   }
 
-  Map<String, DateTime> setWeek() {
-    DateTime nowDate = DateTime.now();
-    startDate = nowDate.subtract(const Duration(days: 7));
-    endDate = nowDate;
-    return {
-      'startDate': startDate,
-      'endDate': endDate,
-    };
+  PeriodModel setWeek() {
+    DateTime now = DateTime.now();
+    startDate = DateTime(
+      now.year,
+      now.month,
+      now.day - 7,
+      defaultDayStart.hours,
+      defaultDayStart.minutes,
+    );
+    endDate = now;
+    return PeriodModel(
+      startDate: startDate,
+      endDate: endDate,
+    );
   }
 
-  Map<String, DateTime> setMonth() {
-    DateTime nowDate = DateTime.now();
-    startDate = nowDate.subtract(const Duration(days: 30));
-    endDate = nowDate;
-    return {
-      'startDate': startDate,
-      'endDate': endDate,
-    };
+  PeriodModel setMonth() {
+    DateTime now = DateTime.now();
+    startDate = DateTime(
+      now.year,
+      now.month - 1,
+      now.day,
+      defaultDayStart.hours,
+      defaultDayStart.minutes,
+    );
+    endDate = now;
+    return PeriodModel(
+      startDate: startDate,
+      endDate: endDate,
+    );
   }
 
-  Map<String, DateTime> setYear() {
-    DateTime nowDate = DateTime.now();
-    startDate = nowDate.subtract(const Duration(days: 365));
-    endDate = DateTime.now();
-    return {
-      'startDate': startDate,
-      'endDate': endDate,
-    };
+  PeriodModel setYear() {
+    DateTime now = DateTime.now();
+    startDate = DateTime(
+      now.year - 1,
+      now.month,
+      now.day,
+      defaultDayStart.hours,
+      defaultDayStart.minutes,
+    );
+    endDate = now;
+    return PeriodModel(
+      startDate: startDate,
+      endDate: endDate,
+    );
   }
 
-  Map<String, DateTime> setCustomPeriod({
+  PeriodModel setCustomPeriod({
     required DateTime newStartDate,
     required DateTime newEndDate,
   }) {
     startDate = newStartDate;
     endDate = newEndDate;
-    return {
-      'startDate': startDate,
-      'endDate': endDate,
-    };
+    return PeriodModel(
+      startDate: startDate,
+      endDate: endDate,
+    );
   }
 
-  Map<String, DateTime> setWithinLastDays(int days) {
+  PeriodModel setWithinLastDays(int days) {
     DateTime now = DateTime.now();
-    DateTime newStartDate = DateTime(now.year, now.month, now.day - days);
-    DateTime newEndDate = DateTime.now();
+    DateTime newStartDate = DateTime(
+      now.year,
+      now.month,
+      now.day - days,
+      defaultDayStart.hours,
+      defaultDayStart.minutes,
+    );
 
     startDate = newStartDate;
-    endDate = newEndDate;
+    endDate = now;
 
-    return {
-      'startDate': startDate,
-      'endDate': endDate,
-    };
+    return PeriodModel(
+      startDate: startDate,
+      endDate: endDate,
+    );
   }
 
   List<TransactionModel> getTransactionsWithinPeriod() {
-    return transactions
+    List<TransactionModel> t = transactions
         .where(
           (transaction) => (transaction.createdAt.isBefore(endDate) &&
               transaction.createdAt.isAfter(startDate)),
         )
         .toList();
+    print('===========================');
+    print(startDate);
+    print(endDate);
+    return t;
   }
 }

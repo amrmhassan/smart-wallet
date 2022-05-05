@@ -90,6 +90,11 @@ class QuickActionsProvider extends ChangeNotifier {
 
   //* for getting a quick actions by its id
   QuickActionModel getQuickById(String id) {
+    return _allQuickActions.firstWhere((element) => element.id == id);
+  }
+
+  //* for getting a quick actions by its id
+  QuickActionModel getActiveProfileQuickById(String id) {
     return _quickActions.firstWhere((element) => element.id == id);
   }
 
@@ -199,7 +204,7 @@ class QuickActionsProvider extends ChangeNotifier {
 // deleting a quickAction by id
   Future<void> deleteQuickActions(String id) async {
     //* if that transaction is income and deleting it will make the total by negative then throw an error that you can't delete that transaction , you can only edit it to a lower amount but not lower than the current total amount in that profile
-    QuickActionModel deletedQuickAction = getQuickById(id);
+    QuickActionModel deletedQuickAction = getActiveProfileQuickById(id);
     deletedQuickAction.deleted = true;
 
     if (deletedQuickAction.syncFlag == SyncFlags.add) {
@@ -212,7 +217,7 @@ class QuickActionsProvider extends ChangeNotifier {
 
 //! use this only with the syncing provider
   Future<void> changeSyncFlag(String id, SyncFlags newSyncFlag) async {
-    QuickActionModel quickAction = getQuickById(id);
+    QuickActionModel quickAction = getActiveProfileQuickById(id);
     quickAction.syncFlag = newSyncFlag;
 
     return editQuickAction(quickAction, true);
@@ -246,7 +251,7 @@ class QuickActionsProvider extends ChangeNotifier {
 
 //* for making a quick action favorite
   Future<void> toggleFavouriteQuickAction(String quickActionId) async {
-    QuickActionModel newQuickAction = getQuickById(quickActionId);
+    QuickActionModel newQuickAction = getActiveProfileQuickById(quickActionId);
     newQuickAction.isFavorite = !newQuickAction.isFavorite;
     if (newQuickAction.isFavorite) {
       //* i subtracted one to make the index 0, 1, 2...

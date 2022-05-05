@@ -112,40 +112,40 @@ class ProfileDetailsProvider extends ChangeNotifier {
       var date = transPeriodUtils.setToday();
       _viewedTransactions = transPeriodUtils.getTransactionsWithinPeriod();
       setDatesPeriod(
-        newStartingDate: date['startDate'],
-        newEndDate: date['endDate'],
+        newStartingDate: date.startDate,
+        newEndDate: date.endDate,
       );
     } else if (currentActivePeriod == TransPeriod.yesterday) {
       //* for yesterday's transactions
       var date = transPeriodUtils.setYesterday();
       _viewedTransactions = transPeriodUtils.getTransactionsWithinPeriod();
       setDatesPeriod(
-        newStartingDate: date['startDate'],
-        newEndDate: date['endDate'],
+        newStartingDate: date.startDate,
+        newEndDate: date.endDate,
       );
     } else if (currentActivePeriod == TransPeriod.week) {
       //* for returning that week transactions
       var date = transPeriodUtils.setWeek();
       _viewedTransactions = transPeriodUtils.getTransactionsWithinPeriod();
       setDatesPeriod(
-        newStartingDate: date['startDate'],
-        newEndDate: date['endDate'],
+        newStartingDate: date.startDate,
+        newEndDate: date.endDate,
       );
     } else if (currentActivePeriod == TransPeriod.month) {
       //* for returning that month transactions
       var date = transPeriodUtils.setMonth();
       _viewedTransactions = transPeriodUtils.getTransactionsWithinPeriod();
       setDatesPeriod(
-        newStartingDate: date['startDate'],
-        newEndDate: date['endDate'],
+        newStartingDate: date.startDate,
+        newEndDate: date.endDate,
       );
     } else if (currentActivePeriod == TransPeriod.year) {
       //* for returning that year transactions
       var date = transPeriodUtils.setYear();
       _viewedTransactions = transPeriodUtils.getTransactionsWithinPeriod();
       setDatesPeriod(
-        newStartingDate: date['startDate'],
-        newEndDate: date['endDate'],
+        newStartingDate: date.startDate,
+        newEndDate: date.endDate,
       );
     } else if (currentActivePeriod == TransPeriod.all) {
       //* for returning that all transactions

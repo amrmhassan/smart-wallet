@@ -127,6 +127,11 @@ class TransactionProvider extends ChangeNotifier {
     return _allTransactions.firstWhere((element) => element.id == id);
   }
 
+//? getting a transaction by id
+  TransactionModel getActiveProfileTransactionById(String id) {
+    return transactions.firstWhere((element) => element.id == id);
+  }
+
 //? getting the last transaction in the list
 //* this will be used to check if the current added transaction has the same amount and transaction type as the last transaction in the list
   TransactionModel getLastTransaction() {
@@ -239,7 +244,7 @@ class TransactionProvider extends ChangeNotifier {
 //? deleting a transaction by id
   Future<void> deleteTransaction(String id) async {
     //* if that transaction is income and deleting it will make the total by negative then throw an error that you can't delete that transaction , you can only edit it to a lower amount but not lower than the current total amount in that profile
-    TransactionModel deletedTransaction = getTransactionById(id);
+    TransactionModel deletedTransaction = getActiveProfileTransactionById(id);
     deletedTransaction.deleted = true;
     // bool deletingOutcome =
     //     deletedTransaction.transactionType == TransactionType.outcome;

@@ -155,7 +155,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       //* setting the transaction to edit
       editedTransaction =
           Provider.of<TransactionProvider>(context, listen: false)
-              .getTransactionById(widget.editingId as String);
+              .getActiveProfileTransactionById(widget.editingId as String);
       //* setting the text controllers to the transaction info
       _titleController.text = editedTransaction!.title;
       _descriptionController.text = editedTransaction!.description;
@@ -169,7 +169,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       //* setting the transaction to edit
       editedQuickAction =
           Provider.of<QuickActionsProvider>(context, listen: false)
-              .getQuickById(widget.editingId as String);
+              .getActiveProfileQuickById(widget.editingId as String);
 
       //* setting the text controllers to the transaction info
       _titleController.text = editedQuickAction!.title;

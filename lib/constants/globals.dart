@@ -7,4 +7,4 @@ const String loggingFileName = 'mainLogs.log';
 const bool showLoggingBanner = true;
 const bool showHelperSnackBars = false;
 
-const DayStart defaultDayStart = DayStart(hours: 0, minutes: 0);
+const DayStartModel defaultDayStart = DayStartModel(hours: 6, minutes: 0);
