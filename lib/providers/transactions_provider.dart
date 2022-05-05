@@ -124,9 +124,6 @@ class TransactionProvider extends ChangeNotifier {
 
 //? getting a transaction by id
   TransactionModel getTransactionById(String id) {
-    // "ce23b0e0-b8c7-40fd-9c09-98ec8eafcff7"
-    print(_allTransactions);
-
     return _allTransactions.firstWhere((element) => element.id == id);
   }
 
@@ -241,8 +238,6 @@ class TransactionProvider extends ChangeNotifier {
 
 //? deleting a transaction by id
   Future<void> deleteTransaction(String id) async {
-    // "ce23b0e0-b8c7-40fd-9c09-98ec8eafcff7"
-
     //* if that transaction is income and deleting it will make the total by negative then throw an error that you can't delete that transaction , you can only edit it to a lower amount but not lower than the current total amount in that profile
     TransactionModel deletedTransaction = getTransactionById(id);
     deletedTransaction.deleted = true;
