@@ -25,8 +25,8 @@ class SyncedDataProvider extends ChangeNotifier {
       logType: LogTypes.info,
     );
     await syncProfiles(profilesProvider);
-    await syncTransactions(transactionProvider);
-    await syncQuickActions(quickActionsProvider);
+    await syncTransactions(transactionProvider, profilesProvider);
+    await syncQuickActions(quickActionsProvider, profilesProvider);
     CustomError.log(
       error: 'finished syncing data',
       logType: LogTypes.info,
@@ -68,7 +68,8 @@ class SyncedDataProvider extends ChangeNotifier {
   }
 
   //# 2] sync transactions
-  Future<void> syncTransactions(TransactionProvider transactionProvider) async {
+  Future<void> syncTransactions(TransactionProvider transactionProvider,
+      ProfilesProvider profilesProvider) async {
     try {
       CustomError.log(
         error: 'start syncing transactions',
@@ -77,8 +78,8 @@ class SyncedDataProvider extends ChangeNotifier {
       for (var transaction in transactionProvider.notSyncedTransactions) {
         SyncFlags currentSyncFlag = transaction.syncFlag;
         transaction.syncFlag = SyncFlags.noSyncing;
-        await transactionProvider.changeSyncFlag(
-            transaction.id, SyncFlags.noSyncing);
+        await transactionProvider.changeSyncFlag(transaction.id,
+            SyncFlags.noSyncing, profilesProvider.activatedProfileId);
 
         if (currentSyncFlag == SyncFlags.add) {
           await addTransaction(transaction);
@@ -101,8 +102,8 @@ class SyncedDataProvider extends ChangeNotifier {
   }
 
   //# 3] sync quick Actions
-  Future<void> syncQuickActions(
-      QuickActionsProvider quickActionsProvider) async {
+  Future<void> syncQuickActions(QuickActionsProvider quickActionsProvider,
+      ProfilesProvider profilesProvider) async {
     try {
       CustomError.log(
         error: 'start syncing quick Actions',
@@ -110,8 +111,8 @@ class SyncedDataProvider extends ChangeNotifier {
       );
       for (var quickAction in quickActionsProvider.notSyncedQuickActions) {
         SyncFlags currentSyncFlag = quickAction.syncFlag;
-        await quickActionsProvider.changeSyncFlag(
-            quickAction.id, SyncFlags.noSyncing);
+        await quickActionsProvider.changeSyncFlag(quickAction.id,
+            SyncFlags.noSyncing, profilesProvider.activatedProfileId);
         quickAction.syncFlag = SyncFlags.noSyncing;
 
         if (currentSyncFlag == SyncFlags.add) {

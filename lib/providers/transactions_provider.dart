@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:smart_wallet/models/profile_model.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/utils/trans_periods_utils.dart';
 import '../constants/db_constants.dart';
@@ -263,22 +264,25 @@ class TransactionProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> changeSyncFlag(String id, SyncFlags newSyncFlag) async {
+  Future<void> changeSyncFlag(
+      String id, SyncFlags newSyncFlag, String activeProfileId) async {
     TransactionModel transaction = getTransactionById(id);
     transaction.syncFlag = newSyncFlag;
 
     return editTransaction(
       newTransaction: transaction,
       syncing: true,
+      activeProfileId: activeProfileId,
     );
   }
 
 //? editing a transaction
-  Future<void> editTransaction({
-    required TransactionModel newTransaction,
-    bool syncing = false,
-    // bool deletingOutcome = false,
-  }) async {
+  Future<void> editTransaction(
+      {required TransactionModel newTransaction,
+      bool syncing = false,
+      String? activeProfileId
+      // bool deletingOutcome = false,
+      }) async {
     //* checking if the transactin is outcome and the it is greater than the current total money
     //* this is the amount that should be compared to the amount of the newTransaction
     // if (!syncing && !deletingOutcome) {
@@ -303,6 +307,12 @@ class TransactionProvider extends ChangeNotifier {
     } catch (error, stackTrace) {
       CustomError.log(error: error, stackTrace: stackTrace);
     }
+    //? checking if the current transactions in the active profile or not to update the screen
+    if (activeProfileId != null &&
+        newTransaction.profileId != activeProfileId) {
+      return;
+    }
+
     int transactionIndex =
         _transactions.indexWhere((element) => element.id == newTransaction.id);
     _transactions.removeWhere((element) => element.id == newTransaction.id);

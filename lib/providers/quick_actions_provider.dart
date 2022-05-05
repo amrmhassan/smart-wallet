@@ -208,19 +208,24 @@ class QuickActionsProvider extends ChangeNotifier {
     deletedQuickAction.deleted = true;
 
     if (deletedQuickAction.syncFlag == SyncFlags.add) {
-      return editQuickAction(deletedQuickAction);
+      return editQuickAction(newQuickAction: deletedQuickAction);
     } else {
       deletedQuickAction.syncFlag = SyncFlags.delete;
-      return editQuickAction(deletedQuickAction);
+      return editQuickAction(newQuickAction: deletedQuickAction);
     }
   }
 
 //! use this only with the syncing provider
-  Future<void> changeSyncFlag(String id, SyncFlags newSyncFlag) async {
-    QuickActionModel quickAction = getActiveProfileQuickById(id);
+  Future<void> changeSyncFlag(
+      String id, SyncFlags newSyncFlag, String activeProfileId) async {
+    QuickActionModel quickAction = getQuickById(id);
     quickAction.syncFlag = newSyncFlag;
 
-    return editQuickAction(quickAction, true);
+    return editQuickAction(
+      newQuickAction: quickAction,
+      syncing: true,
+      activeProfileId: activeProfileId,
+    );
   }
 
   Future<void> editQuickActionOnDataBaseOnly(
@@ -233,8 +238,11 @@ class QuickActionsProvider extends ChangeNotifier {
   }
 
 //* for editing a quick action
-  Future<void> editQuickAction(QuickActionModel newQuickAction,
-      [bool syncing = false]) async {
+  Future<void> editQuickAction({
+    required QuickActionModel newQuickAction,
+    bool syncing = false,
+    String? activeProfileId,
+  }) async {
     if (syncing) {
       newQuickAction.syncFlag = SyncFlags.noSyncing;
     } else if (newQuickAction.syncFlag != SyncFlags.add) {
@@ -242,6 +250,11 @@ class QuickActionsProvider extends ChangeNotifier {
     }
     //* editing quick action on database first
     await editQuickActionOnDataBaseOnly(newQuickAction);
+    //? checking if the current transactions in the active profile or not to update the screen
+    if (activeProfileId != null &&
+        newQuickAction.profileId != activeProfileId) {
+      return;
+    }
     int quickActionIndex =
         _quickActions.indexWhere((element) => element.id == newQuickAction.id);
     _quickActions.removeWhere((element) => element.id == newQuickAction.id);
@@ -266,7 +279,7 @@ class QuickActionsProvider extends ChangeNotifier {
     // } else {
     //   newQuickAction.syncFlag = SyncFlags.edit;
     // }
-    return editQuickAction(newQuickAction);
+    return editQuickAction(newQuickAction: newQuickAction);
   }
 
 //* for changing the order of the favorite quick actions

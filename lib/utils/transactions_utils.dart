@@ -220,7 +220,9 @@ Future<void> editQuickAction({
   try {
     //* sending the updating info to the provider
     await Provider.of<QuickActionsProvider>(context, listen: false)
-        .editQuickAction(newQuickAction);
+        .editQuickAction(
+      newQuickAction: newQuickAction,
+    );
     showSnackBar(context, 'Quick Action Updated', SnackBarType.success);
     Navigator.pop(context);
   } catch (error, stackTrace) {
