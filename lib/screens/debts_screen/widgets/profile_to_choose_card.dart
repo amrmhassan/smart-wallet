@@ -23,40 +23,42 @@ class ProfileToChooseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
 
-    return Column(
-      children: [
-        CustomCard(
-          onTap: () => onChooseProfile(profileModel),
-          border: Border.all(
-            width: 1,
-            color: themeProvider
-                .getThemeColor(ThemeColors.kInactiveColor)
-                .withOpacity(.5),
+    return Opacity(
+      opacity: active ? 1 : .5,
+      child: Column(
+        children: [
+          CustomCard(
+            onTap: active ? () => onChooseProfile(profileModel) : null,
+            border: Border.all(
+              width: 1,
+              color: themeProvider
+                  .getThemeColor(ThemeColors.kInactiveColor)
+                  .withOpacity(.5),
+            ),
+            height: 100,
+            backgroundColor:
+                themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
+            child: Row(
+              children: [
+                Expanded(
+                    child: Text(
+                  profileModel.name,
+                  style: themeProvider
+                      .getTextStyle(ThemeTextStyles.kHeadingTextStyle),
+                )),
+                Icon(
+                  Icons.arrow_forward_ios_outlined,
+                  size: kDefaultIconSize,
+                  color: themeProvider.getThemeColor(ThemeColors.kMainColor),
+                )
+              ],
+            ),
           ),
-          height: 100,
-          backgroundColor: active
-              ? Colors.red
-              : themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
-          child: Row(
-            children: [
-              Expanded(
-                  child: Text(
-                profileModel.name,
-                style: themeProvider
-                    .getTextStyle(ThemeTextStyles.kHeadingTextStyle),
-              )),
-              Icon(
-                Icons.arrow_forward_ios_outlined,
-                size: kDefaultIconSize,
-                color: themeProvider.getThemeColor(ThemeColors.kMainColor),
-              )
-            ],
+          SizedBox(
+            height: kDefaultPadding,
           ),
-        ),
-        SizedBox(
-          height: kDefaultPadding,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

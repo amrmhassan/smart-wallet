@@ -22,7 +22,8 @@ class ChooseProfile extends StatelessWidget {
   }) : super(key: key);
 
   bool active(double profileTotalMoney) {
-    return considerAmount && amount != null && (amount! > profileTotalMoney);
+    bool r = considerAmount && amount != null && (amount! > profileTotalMoney);
+    return !r;
   }
 
   @override
@@ -56,8 +57,7 @@ class ChooseProfile extends StatelessWidget {
             ),
             ...profileProvider.profiles
                 .map((profile) => ProfileToChooseCard(
-                      active: considerAmount &&
-                          (amount == null || profile.totalMoney >= amount!),
+                      active: active(profile.totalMoney),
                       profileModel: profile,
                       onChooseProfile: (profile) {
                         //* this will return the profile id after popping this modal
