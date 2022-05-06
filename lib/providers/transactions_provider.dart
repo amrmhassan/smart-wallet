@@ -1,4 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:smart_wallet/models/add_transaction_message_model.dart';
+import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/utils/trans_periods_utils.dart';
 import '../constants/db_constants.dart';
@@ -138,18 +143,71 @@ class TransactionProvider extends ChangeNotifier {
     return transactions[transactions.length - 1];
   }
 
-  //? adding new transaction
-  Future<void> addTransaction(String title, String description, double amount,
-      TransactionType transactionType, String profileId) async {
-    //* checking if the transaction added will make the current balance negative
-    //* i removed this cause i will ask the user to add this even it is greater than his current money
-    // if (amount > totalMoney && transactionType == TransactionType.outcome) {
-    //   CustomError.log(
-    //     errorType: ErrorTypes.expenseIsLargeAddDebt,
-    //     rethrowError: true,
-    //   );
-    // }
+  //? advice for adding new transaction
+  Future<TransactionMsg> getAdvice({
+    required double ratioToTotal,
+    required TransactionType transactionType,
+    required BuildContext context,
+    required double amount,
+  }) async {
+    String? msg;
+    bool continueAdding = true;
+    //* income advices
+    if (transactionType == TransactionType.income) {
+      //* if it is greater than 100000 verify it is a real one
+      msg = 'Add this big amount?';
+      if (amount > 100000) {
+        await showDialog(
+            context: context,
+            msg: 'Add this big amount?',
+            onOk: () {},
+            onCancel: () {
+              continueAdding = false;
+            });
+      }
+    }
+    //* outcome advices
+    else {
+      if (amount > totalMoney) {
+        //* if it is greater than the total money
+        msg = 'This is larger than your balance! Add a debt instead.';
+        await showDialog(
+            context: context,
+            msg: 'This is larger than your balance! Add a debt instead.',
+            onOk: () {},
+            btnCancel: SizedBox(),
+            onCancel: () {
+              continueAdding = false;
+            });
+        continueAdding = false;
+      } else if (ratioToTotal > .3) {
+        //* if it is very big one
+        msg = 'This is very big expense!';
+        await showDialog(
+            context: context,
+            msg: 'This is very big expense!',
+            onOk: () {},
+            onCancel: () {
+              continueAdding = false;
+            });
+      }
+    }
 
+    return TransactionMsg(
+      continueAdding: continueAdding,
+      msg: msg,
+    );
+  }
+
+  //? adding new transaction
+  Future<bool> addTransaction({
+    required String description,
+    required String title,
+    required double amount,
+    required TransactionType transactionType,
+    required String profileId,
+    required BuildContext context,
+  }) async {
     //* initializing the transaction data like (createdAt, id, ratioToTotal...)
     String id = const Uuid().v4();
     DateTime createdAt = DateTime.now();
@@ -160,7 +218,19 @@ class TransactionProvider extends ChangeNotifier {
         : totalMoney - amount;
     double ratioToTotal = (amount / newTotalMoney).abs();
     //* this line is to ensure that .......
-    ratioToTotal = ratioToTotal == double.infinity ? 1 : ratioToTotal;
+    ratioToTotal = (ratioToTotal == double.infinity) ? 1 : ratioToTotal;
+
+    //* getting the advice
+    TransactionMsg transactionMsg = await getAdvice(
+      ratioToTotal: ratioToTotal,
+      transactionType: transactionType,
+      context: context,
+      amount: amount,
+    );
+
+    if (!transactionMsg.continueAdding) {
+      return transactionMsg.continueAdding;
+    }
 
     TransactionModel newTransaction = TransactionModel(
       id: id,
@@ -182,7 +252,9 @@ class TransactionProvider extends ChangeNotifier {
     }
 
     _transactions.add(newTransaction);
+
     notifyListeners();
+    return transactionMsg.continueAdding;
   }
 
   //? get  a profile transactions by its id
@@ -276,24 +348,24 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   //? editing a transaction
-  Future<void> editTransaction(
-      {required TransactionModel newTransaction,
-      bool syncing = false,
-      String? activeProfileId
-      // bool deletingOutcome = false,
-      }) async {
+  Future<void> editTransaction({
+    required TransactionModel newTransaction,
+    bool syncing = false,
+    String? activeProfileId,
+    bool checkAmount = false,
+  }) async {
     //* checking if the transactin is outcome and the it is greater than the current total money
     //* this is the amount that should be compared to the amount of the newTransaction
-    // if (!syncing && !deletingOutcome) {
-    //   double newAmount = totalMoney - newTransaction.amount;
-    //   if (newTransaction.amount > newAmount &&
-    //       newTransaction.transactionType == TransactionType.outcome) {
-    //     return CustomError.log(
-    //       errorType: ErrorTypes.expenseLargeNoDebt,
-    //       rethrowError: true,
-    //     );
-    //   }
-    // }
+    if (checkAmount) {
+      double newAmount = totalMoney - newTransaction.amount;
+      if (newTransaction.amount > newAmount &&
+          newTransaction.transactionType == TransactionType.outcome) {
+        return CustomError.log(
+          errorType: ErrorTypes.expenseLargeNoDebt,
+          rethrowError: true,
+        );
+      }
+    }
     if (syncing) {
       newTransaction.syncFlag = SyncFlags.noSyncing;
     } else if (newTransaction.syncFlag != SyncFlags.add) {

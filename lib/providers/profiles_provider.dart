@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:smart_wallet/constants/types.dart';
+import 'package:smart_wallet/models/transaction_model.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
 import 'package:smart_wallet/constants/shared_pref_constants.dart';
@@ -68,6 +69,11 @@ class ProfilesProvider extends ChangeNotifier {
         lastActivatedDate: DateTime.now(),
       );
     }
+  }
+
+  //? get profile income
+  double getProfileIncome(List<TransactionModel> transactions) {
+    return 0;
   }
 
 //? getting the highest profile with total money

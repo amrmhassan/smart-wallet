@@ -67,8 +67,14 @@ DONE - skip checking that the transaction will make the savings with minus
 DONE - implement app auto update using fire base storage
 
 [Pending]
-add a lastActivatedDate to each profile
---then use it to arrange the profiles in the profiles screen by their lastActivatedDate from the recent to the latest(recent at top)
+- 1] DONE - make the app provide advices when adding a new transaction and it is higher or take it's ratioToTotal is high
+- 2] add editing the start of the day to the settings screen and handle it from the user_prefs provider
+- 3] make a user_prefs provider and add all settings to it
+- 4] make the firebase handle the user settings
+- 5] make the profile stats to be calculated every time
+- 6] add the debts
+
+
 
 
 [Soon]

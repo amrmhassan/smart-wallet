@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
@@ -102,4 +103,30 @@ Future<bool> isOnline() async {
     online = false;
   }
   return online;
+}
+
+Future<void> showDialog({
+  required BuildContext context,
+  required String msg,
+  VoidCallback? onOk,
+  VoidCallback? onCancel,
+  String? okBtnText,
+  String? cancelBtnText,
+  DialogType? dialogType,
+  AnimType? animType,
+  Widget? btnOk,
+  Widget? btnCancel,
+}) async {
+  await AwesomeDialog(
+    context: context,
+    dialogType: dialogType ?? DialogType.WARNING,
+    animType: animType ?? AnimType.BOTTOMSLIDE,
+    title: msg,
+    btnCancelOnPress: onCancel ?? () {},
+    btnOkOnPress: onOk ?? () {},
+    btnOkText: okBtnText,
+    btnCancel: btnCancel,
+    btnOk: btnOk,
+    btnCancelText: cancelBtnText,
+  ).show();
 }

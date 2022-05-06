@@ -22,32 +22,32 @@ Future<void> showAddHighTransactionDialog({
   required ProfileModel activeProfile,
   required double amount,
 }) async {
-  double totalMoney = Provider.of<ProfilesProvider>(context, listen: false)
-      .getActiveProfile()
-      .totalMoney;
+  // double totalMoney = Provider.of<ProfilesProvider>(context, listen: false)
+  //     .getActiveProfile()
+  //     .totalMoney;
 
-  if (transactionType == TransactionType.outcome && amount > totalMoney) {
-    await AwesomeDialog(
-      context: context,
-      dialogType: DialogType.WARNING,
-      animType: AnimType.BOTTOMSLIDE,
-      title: 'Your balance is lower, add a debt instead?',
-      btnCancelOnPress: () {},
-      btnOkOnPress: () async {
-        //! here i will add the ability to add a debt to the debts providers which will be shown in the debts screen in the sidebar
-        showSnackBar(context, 'Dept added(Soon)', SnackBarType.success);
-      },
-    ).show();
-  } else {
-    addTransaction(
-      context: context,
-      title: title,
-      description: description,
-      transactionType: transactionType,
-      activeProfile: activeProfile,
-      amount: amount,
-    );
-  }
+  // if (transactionType == TransactionType.outcome && amount > totalMoney) {
+  //   await AwesomeDialog(
+  //     context: context,
+  //     dialogType: DialogType.WARNING,
+  //     animType: AnimType.BOTTOMSLIDE,
+  //     title: 'Your balance is lower, add a debt instead?',
+  //     btnCancelOnPress: () {},
+  //     btnOkOnPress: () async {
+  //       // here i will add the ability to add a debt to the debts providers which will be shown in the debts screen in the sidebar
+  //       showSnackBar(context, 'Dept added(Soon)', SnackBarType.success);
+  //     },
+  //   ).show();
+  // } else {
+  addTransaction(
+    context: context,
+    title: title,
+    description: description,
+    transactionType: transactionType,
+    activeProfile: activeProfile,
+    amount: amount,
+  );
+  // }
 }
 
 //? showing apply quick action dialog
@@ -76,19 +76,24 @@ Future<void> addTransaction({
   required double amount,
   bool allowSnackBar = true,
 }) async {
+  bool added = true;
   //* here the code for adding a new transaction
   String profileId =
       Provider.of<ProfilesProvider>(context, listen: false).activatedProfileId;
 
   try {
-    await Provider.of<TransactionProvider>(context, listen: false)
+    added = await Provider.of<TransactionProvider>(context, listen: false)
         .addTransaction(
-      title,
-      description,
-      amount,
-      transactionType,
-      profileId,
+      title: title,
+      description: description,
+      amount: amount,
+      transactionType: transactionType,
+      profileId: profileId,
+      context: context,
     );
+    if (!added) {
+      return;
+    }
 
     //* here i will edit the current active profile
     //* checking the added transaction type and then update the profile depending on that
@@ -168,7 +173,10 @@ Future<void> editTransaction({
   try {
     //* sending the updating info to the provider
     await Provider.of<TransactionProvider>(context, listen: false)
-        .editTransaction(newTransaction: newTransaction);
+        .editTransaction(
+      newTransaction: newTransaction,
+      checkAmount: true,
+    );
 
     //* editing the current money profile when editing a transaction
     if (transactionType == TransactionType.income) {
@@ -257,15 +265,20 @@ Future<void> deleteTransaction(
 //? 6] applying a quick action
 Future<void> applyQuickAction(
     BuildContext context, QuickActionModel quickAction) async {
+  bool added = true;
   try {
-    await Provider.of<TransactionProvider>(context, listen: false)
+    added = await Provider.of<TransactionProvider>(context, listen: false)
         .addTransaction(
-      quickAction.title,
-      quickAction.description,
-      quickAction.amount,
-      quickAction.transactionType,
-      quickAction.profileId,
+      title: quickAction.title,
+      description: quickAction.description,
+      amount: quickAction.amount,
+      transactionType: quickAction.transactionType,
+      profileId: quickAction.profileId,
+      context: context,
     );
+    if (!added) {
+      return;
+    }
 
     //* here i will edit the current active profile
     ProfileModel activeProfile =
