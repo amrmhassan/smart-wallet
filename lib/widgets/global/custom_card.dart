@@ -21,6 +21,7 @@ class CustomCard extends StatelessWidget {
   final VoidCallback? onTap;
   final Color? splashColor;
   final Color? highlightColor;
+  final double? width;
 
   const CustomCard({
     Key? key,
@@ -37,6 +38,7 @@ class CustomCard extends StatelessWidget {
     this.onTap,
     this.splashColor,
     this.highlightColor,
+    this.width,
   }) : super(key: key);
 
   @override
@@ -69,7 +71,7 @@ class CustomCard extends StatelessWidget {
                   vertical: kDefaultVerticalPadding,
                 ),
             constraints: constraints,
-            width: double.infinity,
+            width: width ?? double.infinity,
             height: height,
             child: child,
           ),

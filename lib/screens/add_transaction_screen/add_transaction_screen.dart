@@ -2,16 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/models/profile_model.dart';
-import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
-import 'package:smart_wallet/providers/theme_provider.dart';
-import 'package:smart_wallet/screens/add_transaction_screen/widgets/amount_viewer.dart';
-import 'package:smart_wallet/screens/add_transaction_screen/widgets/choose_borrowing_profile.dart';
 import 'package:smart_wallet/screens/add_transaction_screen/widgets/debt_controller.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
-import 'package:smart_wallet/widgets/global/stylized_text_field.dart';
 import '../../constants/sizes.dart';
 import '../../constants/types.dart';
 import '../../models/quick_action_model.dart';

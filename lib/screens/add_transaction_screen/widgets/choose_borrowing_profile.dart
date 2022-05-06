@@ -1,8 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/screens/debts_screen/widgets/choose_profile.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
 
 class ChooseBorrowingProfile extends StatelessWidget {
@@ -30,7 +33,14 @@ class ChooseBorrowingProfile extends StatelessWidget {
         Expanded(
           flex: 2,
           child: CustomCard(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (ctx) => ChooseProfile(),
+                ),
+              );
+            },
             border: Border.all(
               width: 1,
               color: themeProvider
