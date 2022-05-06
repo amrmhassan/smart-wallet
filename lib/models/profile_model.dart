@@ -1,8 +1,13 @@
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/db_shortage_constants.dart';
 import 'package:smart_wallet/constants/models_properties_constants.dart';
 import 'package:smart_wallet/constants/profiles_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/models/synced_elements_model.dart';
+import 'package:smart_wallet/models/transaction_model.dart';
+import 'package:smart_wallet/providers/profiles_provider.dart';
+import 'package:smart_wallet/providers/transactions_provider.dart';
 
 const double _goodLimit = .70; // when it is from 70% to 100% it will be good
 const double _moderateLimit =
@@ -54,6 +59,38 @@ class ProfileModel {
     } else {
       moneyAccountStatus = MoneyAccountStatus.critical;
     }
+  }
+  Future<List<TransactionModel>> getTransactions(BuildContext context) async {
+    List<TransactionModel> transactions =
+        await Provider.of<TransactionProvider>(context, listen: false)
+            .getProfileTransations(id);
+    return transactions;
+  }
+
+  Future<double> getIncome(BuildContext context) async {
+    List<TransactionModel> transactions = await getTransactions(context);
+    List<TransactionModel> incomeTransactions = transactions
+        .where((element) => element.transactionType == TransactionType.income)
+        .toList();
+    var calcIncome = Provider.of<ProfilesProvider>(context, listen: false)
+        .getProfileIncome(incomeTransactions);
+    return calcIncome;
+  }
+
+  Future<double> getOutcome(BuildContext context) async {
+    List<TransactionModel> transactions = await getTransactions(context);
+    List<TransactionModel> outcomeTransactions = transactions
+        .where((element) => element.transactionType == TransactionType.outcome)
+        .toList();
+    var calcIncome = Provider.of<ProfilesProvider>(context, listen: false)
+        .getProfileIncome(outcomeTransactions);
+    return calcIncome;
+  }
+
+  Future<double> getTotalMoney(BuildContext context) async {
+    double calcIncome = await getIncome(context);
+    double calcOutcome = await getOutcome(context);
+    return (calcIncome - calcOutcome);
   }
 
   Map<String, dynamic> toJSON() {

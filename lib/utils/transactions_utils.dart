@@ -95,18 +95,6 @@ Future<void> addTransaction({
       return;
     }
 
-    //* here i will edit the current active profile
-    //* checking the added transaction type and then update the profile depending on that
-    if (transactionType == TransactionType.income) {
-      //* if income then update income
-
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .editActiveProfile(income: activeProfile.income + amount);
-    } else if (transactionType == TransactionType.outcome) {
-      //* if outcome then update the outcome
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .editActiveProfile(outcome: activeProfile.outcome + amount);
-    }
     if (allowSnackBar) {
       showSnackBar(context, 'Transaction Added', SnackBarType.success);
     }
@@ -178,17 +166,6 @@ Future<void> editTransaction({
       checkAmount: true,
     );
 
-    //* editing the current money profile when editing a transaction
-    if (transactionType == TransactionType.income) {
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .editActiveProfile(
-              income: activeProfile.income - oldAmount + newAmount);
-    } else if (transactionType == TransactionType.outcome) {
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .editActiveProfile(
-              outcome: activeProfile.outcome - oldAmount + newAmount);
-    }
-
     showSnackBar(context, 'Transaction Updated', SnackBarType.success);
     Navigator.pop(context);
   } catch (error, stackTrace) {
@@ -242,24 +219,9 @@ Future<void> editQuickAction({
 //? 5] deleting a transaction
 Future<void> deleteTransaction(
     BuildContext context, TransactionModel transaction) async {
-  //* update the profile before deleting the transaction
-  //* getting the current deleted transaction amount and transaction type
-
   await Provider.of<TransactionProvider>(context, listen: false)
       .deleteTransaction(transaction.id);
   showSnackBar(context, 'Transaction Deleted', SnackBarType.info);
-
-  //* getting the curret active profile to update it
-  ProfileModel activeProfile =
-      Provider.of<ProfilesProvider>(context, listen: false).getActiveProfile();
-  //* checking the transaction type to update the profile according to that
-  if (transaction.transactionType == TransactionType.income) {
-    await Provider.of<ProfilesProvider>(context, listen: false)
-        .editActiveProfile(income: activeProfile.income - transaction.amount);
-  } else if (transaction.transactionType == TransactionType.outcome) {
-    await Provider.of<ProfilesProvider>(context, listen: false)
-        .editActiveProfile(outcome: activeProfile.outcome - transaction.amount);
-  }
 }
 
 //? 6] applying a quick action
@@ -280,23 +242,6 @@ Future<void> applyQuickAction(
       return;
     }
 
-    //* here i will edit the current active profile
-    ProfileModel activeProfile =
-        Provider.of<ProfilesProvider>(context, listen: false)
-            .getActiveProfile();
-    //* cheching the added transaction type and then update the profile depending on that
-
-    if (quickAction.transactionType == TransactionType.income) {
-      //* if income then update income
-
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .editActiveProfile(income: activeProfile.income + quickAction.amount);
-    } else if (quickAction.transactionType == TransactionType.outcome) {
-      //* if outcome then update the outcome
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .editActiveProfile(
-              outcome: activeProfile.outcome + quickAction.amount);
-    }
     showSnackBar(context, 'Transaction Added', SnackBarType.success, true);
   } catch (error, stackTrace) {
     CustomError.log(error: error, stackTrace: stackTrace);

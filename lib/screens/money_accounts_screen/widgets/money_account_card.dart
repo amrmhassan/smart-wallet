@@ -153,21 +153,10 @@ class _MoneyAccountCardState extends State<MoneyAccountCard> {
     setState(() {
       _loading = true;
     });
-    List<TransactionModel> transactionsProvider =
-        await Provider.of<TransactionProvider>(context, listen: false)
-            .getProfileTransations(widget.profileModel.id);
 
-    List<TransactionModel> incomeTransactions = transactionsProvider
-        .where((element) => element.transactionType == TransactionType.income)
-        .toList();
-    List<TransactionModel> outcomeTransactions = transactionsProvider
-        .where((element) => element.transactionType == TransactionType.outcome)
-        .toList();
+    double calcIncome = await widget.profileModel.getIncome(context);
+    double calcOutcome = await widget.profileModel.getOutcome(context);
 
-    var calcIncome = Provider.of<ProfilesProvider>(context, listen: false)
-        .getProfileIncome(incomeTransactions);
-    var calcOutcome = Provider.of<ProfilesProvider>(context, listen: false)
-        .getProfileOutcome(outcomeTransactions);
     setState(() {
       income = calcIncome;
       outcome = calcOutcome;
