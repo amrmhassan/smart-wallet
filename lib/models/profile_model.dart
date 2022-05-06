@@ -4,8 +4,10 @@ import 'package:smart_wallet/constants/db_shortage_constants.dart';
 import 'package:smart_wallet/constants/models_properties_constants.dart';
 import 'package:smart_wallet/constants/profiles_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
+import 'package:smart_wallet/models/debt_model.dart';
 import 'package:smart_wallet/models/synced_elements_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
+import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 
@@ -65,6 +67,26 @@ class ProfileModel {
         await Provider.of<TransactionProvider>(context, listen: false)
             .getProfileTransations(id);
     return transactions;
+  }
+
+  List<DebtModel> getDebts(BuildContext context) {
+    return Provider.of<DebtsProvider>(context, listen: false).debts;
+  }
+
+  double getBorrowedDebts(BuildContext context) {
+    List<DebtModel> borrowedDebts = getDebts(context)
+        .where((element) => element.borrowingProfileId == id)
+        .toList();
+    return borrowedDebts.fold(
+        0, (previousValue, element) => previousValue + element.amount);
+  }
+
+  double getFulfilledDebts(BuildContext context) {
+    List<DebtModel> borrowedDebts = getDebts(context)
+        .where((element) => element.fullfillingProfileId == id)
+        .toList();
+    return borrowedDebts.fold(
+        0, (previousValue, element) => previousValue + element.amount);
   }
 
   Future<double> getIncome(BuildContext context) async {

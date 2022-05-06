@@ -309,6 +309,13 @@ Future<void> addDebt({
   required String borrowingProfileId,
 }) async {
   try {
+    //* edit the borrowing profile to increase it's amount
+    var profile = Provider.of<ProfilesProvider>(context, listen: false)
+        .getProfileById(borrowingProfileId);
+    await Provider.of<ProfilesProvider>(context, listen: false)
+        .editProfile(id: borrowingProfileId, income: profile.income + amount);
+
+    //* adding the debt
     await Provider.of<DebtsProvider>(context, listen: false).addDebt(
       title,
       amount,
