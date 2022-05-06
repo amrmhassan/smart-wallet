@@ -23,7 +23,6 @@ class ChooseBorrowingProfile extends StatelessWidget {
       context: context,
       builder: (ctx) => ChooseProfile(),
       backgroundColor: Colors.transparent,
-      isScrollControlled: true,
     );
     //* this result is what is returned from the modal popping
     if (result != null) {

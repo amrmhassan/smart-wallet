@@ -11,11 +11,11 @@ class DebtModel {
   final String? fullfillingProfileId;
   final bool fulFilled;
   final DateTime createdAt;
-  final SyncFlags syncFlag;
-  final bool deleted;
+  SyncFlags syncFlag;
+  bool deleted;
   final String? userId;
 
-  const DebtModel({
+  DebtModel({
     required this.id,
     required this.title,
     required this.createdAt,

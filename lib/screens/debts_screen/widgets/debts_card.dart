@@ -7,6 +7,8 @@ import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/helpers/responsive.dart';
 import 'package:smart_wallet/models/debt_model.dart';
+import 'package:smart_wallet/providers/debts_provider.dart';
+import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
 import '../../../providers/quick_actions_provider.dart';
 
@@ -33,12 +35,23 @@ class DebtCard extends StatelessWidget {
       context: context,
       dialogType: DialogType.WARNING,
       animType: AnimType.BOTTOMSLIDE,
-      title: 'Delete Quick Action?',
+      title: 'Delete A Debt?',
       btnCancelOnPress: () {},
       btnOkOnPress: () async {
         try {
-          await Provider.of<QuickActionsProvider>(context, listen: false)
-              .deleteQuickActions(debtModel.id);
+          //* edit the borrowing profile to increase it's amount
+          var profile = Provider.of<ProfilesProvider>(context, listen: false)
+              .getProfileById(debtModel.borrowingProfileId);
+          await Provider.of<ProfilesProvider>(context, listen: false)
+              .editProfile(
+            id: debtModel.borrowingProfileId,
+            income: profile.income - debtModel.amount,
+          );
+
+          await Provider.of<DebtsProvider>(context, listen: false)
+              .deleteDebt(debtModel.id);
+          showSnackBar(
+              context, 'Debt Deleted Successfully', SnackBarType.success);
         } catch (error, stackTrace) {
           showSnackBar(context, error.toString(), SnackBarType.error);
           CustomError.log(error: error, stackTrace: stackTrace);
@@ -57,7 +70,6 @@ class DebtCard extends StatelessWidget {
     //* the main container of the card
     return Dismissible(
       direction: DismissDirection.endToStart,
-      // onDismissed: (direction) => deleteQuickAction(context),
       confirmDismiss: (direction) => showDeleteCustomDialog(context),
       background: const QuickActionCardBackground(),
       key: Key(debtModel.id),
@@ -85,12 +97,12 @@ class DebtCard extends StatelessWidget {
                   border: Border.all(
                     width: 2,
                     color:
-                        themeProvider.getThemeColor(ThemeColors.kOutcomeColor),
+                        themeProvider.getThemeColor(ThemeColors.kIncomeColor),
                   ),
                 ),
                 child: Icon(
-                  Icons.arrow_upward,
-                  color: themeProvider.getThemeColor(ThemeColors.kOutcomeColor),
+                  Icons.arrow_downward,
+                  color: themeProvider.getThemeColor(ThemeColors.kIncomeColor),
                   size: kDefaultIconSize,
                 ),
               ),
