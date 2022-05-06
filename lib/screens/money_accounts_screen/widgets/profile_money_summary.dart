@@ -7,27 +7,41 @@ import '../../../constants/sizes.dart';
 import 'profile_transactions_info.dart';
 
 class ProfileMoneySummary extends StatelessWidget {
-  final double income;
-  final double outcome;
-  final double totalMoney;
+  final double? income;
+  final double? outcome;
+  final double? totalMoney;
+  final bool loading;
 
   const ProfileMoneySummary({
     Key? key,
-    required this.income,
-    required this.outcome,
-    required this.totalMoney,
+    this.income,
+    this.outcome,
+    this.totalMoney,
+    required this.loading,
   }) : super(key: key);
 
   String get incomeString {
-    return income.toStringAsFixed(0);
+    if (income == null) {
+      return '...';
+    } else {
+      return income!.toStringAsFixed(0);
+    }
   }
 
   String get outcomeString {
-    return outcome.toStringAsFixed(0);
+    if (outcome == null) {
+      return '...';
+    } else {
+      return outcome!.toStringAsFixed(0);
+    }
   }
 
   String get totalMoneyString {
-    return totalMoney.toStringAsFixed(0);
+    if (totalMoney == null) {
+      return '...';
+    } else {
+      return totalMoney!.toStringAsFixed(0);
+    }
   }
 
   @override

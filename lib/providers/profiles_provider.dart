@@ -72,8 +72,15 @@ class ProfilesProvider extends ChangeNotifier {
   }
 
   //? get profile income
-  double getProfileIncome(List<TransactionModel> transactions) {
-    return 0;
+  double getProfileIncome(List<TransactionModel> incomeTransactions) {
+    return incomeTransactions.fold(
+        0, (previousValue, element) => (previousValue + element.amount));
+  }
+
+  //? get profile outcome
+  double getProfileOutcome(List<TransactionModel> outcomeTransactions) {
+    return outcomeTransactions.fold(
+        0, (previousValue, element) => previousValue + element.amount);
   }
 
 //? getting the highest profile with total money

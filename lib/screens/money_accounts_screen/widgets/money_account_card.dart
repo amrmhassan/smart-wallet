@@ -5,6 +5,7 @@ import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
+import 'package:smart_wallet/models/transaction_model.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
@@ -26,17 +27,27 @@ import 'profile_money_summary.dart';
 import 'profile_status.dart';
 import 'profile_status_progress_bar.dart';
 
-class MoneyAccountCard extends StatelessWidget {
+class MoneyAccountCard extends StatefulWidget {
   final ProfileModel profileModel;
   final bool activated;
 
-  MoneyAccountCard({
+  const MoneyAccountCard({
     Key? key,
     required this.profileModel,
     required this.activated,
   }) : super(key: key);
+
+  @override
+  State<MoneyAccountCard> createState() => _MoneyAccountCardState();
+}
+
+class _MoneyAccountCardState extends State<MoneyAccountCard> {
   final TextEditingController _editedProfileNameController =
       TextEditingController();
+  bool _loading = false;
+  double? income;
+  double? outcome;
+  double? totalMoney;
 
   void clearEditedProfileName() {
     _editedProfileNameController.text = '';
@@ -45,7 +56,7 @@ class MoneyAccountCard extends StatelessWidget {
   Future<void> changeActivatedProfile(BuildContext context) async {
     //? here set the loading to true and
     await Provider.of<ProfilesProvider>(context, listen: false)
-        .setActivatedProfile(profileModel.id);
+        .setActivatedProfile(widget.profileModel.id);
     String activeProfileId =
         Provider.of<ProfilesProvider>(context, listen: false)
             .activatedProfileId;
@@ -59,8 +70,8 @@ class MoneyAccountCard extends StatelessWidget {
   Future<void> showEditProfileModal(
     BuildContext context,
   ) async {
-    _editedProfileNameController.text = profileModel.name;
-    String oldName = profileModel.name;
+    _editedProfileNameController.text = widget.profileModel.name;
+    String oldName = widget.profileModel.name;
 
     await showModalBottomSheet(
       context: context,
@@ -91,7 +102,7 @@ class MoneyAccountCard extends StatelessWidget {
     try {
       //* editing the profile name
       await Provider.of<ProfilesProvider>(context, listen: false)
-          .editProfile(id: profileModel.id, name: newName);
+          .editProfile(id: widget.profileModel.id, name: newName);
       showSnackBar(
           context, "Profile Name edited Successfully", SnackBarType.success);
       Navigator.pop(context);
@@ -104,20 +115,22 @@ class MoneyAccountCard extends StatelessWidget {
 
 //* for navigating to the clicked profile card details
   void goToProfileDetailsPage(BuildContext context) {
-    if (profileModel.moneyAccountStatus != MoneyAccountStatus.empty) {
+    if (widget.profileModel.moneyAccountStatus != MoneyAccountStatus.empty) {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (ctx) => ProfileDetailsScreen(profileId: profileModel.id),
+            builder: (ctx) =>
+                ProfileDetailsScreen(profileId: widget.profileModel.id),
           ));
     } else {
       showDeleteProfileModal(
-          context, profileModel.id, 'This profile is empty, Delete it?');
+          context, widget.profileModel.id, 'This profile is empty, Delete it?');
     }
   }
 
   Color getStatusColor(ThemeProvider _themeProvider) {
-    MoneyAccountStatus moneyAccountStatus = profileModel.moneyAccountStatus;
+    MoneyAccountStatus moneyAccountStatus =
+        widget.profileModel.moneyAccountStatus;
 
     //? for setting the profileStatusColor
     if (moneyAccountStatus == MoneyAccountStatus.good) {
@@ -136,6 +149,39 @@ class MoneyAccountCard extends StatelessWidget {
     }
   }
 
+  Future<void> fetchData() async {
+    setState(() {
+      _loading = true;
+    });
+    List<TransactionModel> transactionsProvider =
+        await Provider.of<TransactionProvider>(context, listen: false)
+            .getProfileTransations(widget.profileModel.id);
+
+    List<TransactionModel> incomeTransactions = transactionsProvider
+        .where((element) => element.transactionType == TransactionType.income)
+        .toList();
+    List<TransactionModel> outcomeTransactions = transactionsProvider
+        .where((element) => element.transactionType == TransactionType.outcome)
+        .toList();
+
+    var calcIncome = Provider.of<ProfilesProvider>(context, listen: false)
+        .getProfileIncome(incomeTransactions);
+    var calcOutcome = Provider.of<ProfilesProvider>(context, listen: false)
+        .getProfileOutcome(outcomeTransactions);
+    setState(() {
+      income = calcIncome;
+      outcome = calcOutcome;
+      totalMoney = calcIncome - calcOutcome;
+      _loading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    fetchData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
@@ -147,9 +193,10 @@ class MoneyAccountCard extends StatelessWidget {
         //* these constrains are for the card holder
         constraints: BoxConstraints(
           minHeight: 300,
-          maxHeight: profileModel.moneyAccountStatus == MoneyAccountStatus.empty
-              ? 370
-              : 460,
+          maxHeight:
+              widget.profileModel.moneyAccountStatus == MoneyAccountStatus.empty
+                  ? 370
+                  : 460,
         ),
         padding: const EdgeInsets.only(
           right: kDefaultPadding / 4,
@@ -180,7 +227,7 @@ class MoneyAccountCard extends StatelessWidget {
                   width: kDefaultPadding / 2,
                 ),
                 ProfileDetailsButton(
-                  profileId: profileModel.id,
+                  profileId: widget.profileModel.id,
                   onTap: () => goToProfileDetailsPage(context),
                 ),
               ],
@@ -190,7 +237,7 @@ class MoneyAccountCard extends StatelessWidget {
               height: kDefaultPadding / 2,
             ),
             ProfileStatus(
-              moneyAccountStatus: profileModel.moneyAccountStatus,
+              moneyAccountStatus: widget.profileModel.moneyAccountStatus,
               profileStatusColor: getStatusColor(themeProvider),
             ),
             const SizedBox(
@@ -199,7 +246,7 @@ class MoneyAccountCard extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: 0.7,
               child: Text(
-                profileModel.name,
+                widget.profileModel.name,
                 style: themeProvider
                     .getTextStyle(ThemeTextStyles.kHeadingTextStyle),
                 overflow: TextOverflow.ellipsis,
@@ -220,29 +267,33 @@ class MoneyAccountCard extends StatelessWidget {
               onTap: () async {
                 await changeActivatedProfile(context);
               },
-              title: activated ? 'Activated' : 'Activate',
-              active: !activated,
+              title: widget.activated ? 'Activated' : 'Activate',
+              active: !widget.activated,
             ),
             SizedBox(
-              height:
-                  profileModel.moneyAccountStatus == MoneyAccountStatus.empty
-                      ? kDefaultPadding
-                      : kDefaultPadding / 2,
+              height: widget.profileModel.moneyAccountStatus ==
+                      MoneyAccountStatus.empty
+                  ? kDefaultPadding
+                  : kDefaultPadding / 2,
             ),
-            if (profileModel.moneyAccountStatus != MoneyAccountStatus.empty)
+            if (widget.profileModel.moneyAccountStatus !=
+                MoneyAccountStatus.empty)
               ProfileStatusProgressBar(
                 profileStatusColor: getStatusColor(themeProvider),
-                incomeRatio: profileModel.incomeRatio,
+                incomeRatio: widget.profileModel.incomeRatio,
               ),
-            if (profileModel.moneyAccountStatus != MoneyAccountStatus.empty)
+            if (widget.profileModel.moneyAccountStatus !=
+                MoneyAccountStatus.empty)
               const SizedBox(
                 height: kDefaultPadding / 2,
               ),
-            if (profileModel.moneyAccountStatus != MoneyAccountStatus.empty)
+            if (widget.profileModel.moneyAccountStatus !=
+                MoneyAccountStatus.empty)
               ProfileMoneySummary(
-                income: profileModel.income,
-                outcome: profileModel.outcome,
-                totalMoney: profileModel.totalMoney,
+                income: income,
+                outcome: outcome,
+                totalMoney: totalMoney,
+                loading: _loading,
               ),
           ],
         ),
