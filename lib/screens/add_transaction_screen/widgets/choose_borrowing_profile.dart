@@ -18,6 +18,19 @@ class ChooseBorrowingProfile extends StatelessWidget {
     required this.setBorrowingProfileId,
   }) : super(key: key);
 
+  Future<void> handleShowModal(BuildContext context) async {
+    var result = await showModalBottomSheet(
+      context: context,
+      builder: (ctx) => ChooseProfile(),
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+    );
+    //* this result is what is returned from the modal popping
+    if (result != null) {
+      setBorrowingProfileId(result);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var profileProvider = Provider.of<ProfilesProvider>(context, listen: false);
@@ -33,14 +46,7 @@ class ChooseBorrowingProfile extends StatelessWidget {
         Expanded(
           flex: 2,
           child: CustomCard(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (ctx) => ChooseProfile(),
-                ),
-              );
-            },
+            onTap: () async => await handleShowModal(context),
             border: Border.all(
               width: 1,
               color: themeProvider

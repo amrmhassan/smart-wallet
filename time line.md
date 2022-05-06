@@ -76,6 +76,7 @@ DONE - implement app auto update using fire base storage
 -- debts will add a money to a certain profile
 -- when fulfilling a debt it's money will be substracted from a profile
 -- adding a debt will need another screen for adding debts
+-- convert choose profile screen to a modal
 
 
 
