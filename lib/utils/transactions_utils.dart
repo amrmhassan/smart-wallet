@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/models/quick_action_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
+import 'package:smart_wallet/providers/debts_provider.dart';
 
 import '../constants/types.dart';
 import '../models/profile_model.dart';
@@ -298,5 +299,28 @@ Future<void> applyQuickAction(
   } catch (error, stackTrace) {
     CustomError.log(error: error, stackTrace: stackTrace);
     showSnackBar(context, error.toString(), SnackBarType.error, true);
+  }
+}
+
+Future<void> addDebt({
+  required BuildContext context,
+  required String title,
+  required double amount,
+  required String borrowingProfileId,
+}) async {
+  try {
+    await Provider.of<DebtsProvider>(context, listen: false).addDebt(
+      title,
+      amount,
+      borrowingProfileId,
+    );
+    var profileName = Provider.of<ProfilesProvider>(context, listen: false)
+        .getProfileById(borrowingProfileId)
+        .name;
+    showSnackBar(context, 'Debt amount added to "$profileName" profile',
+        SnackBarType.success);
+    Navigator.of(context).pop();
+  } catch (error) {
+    CustomError.log(error: error);
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/utils/general_utils.dart';
 
 import '../../../constants/sizes.dart';
 import '../../../constants/types.dart';
@@ -23,13 +24,13 @@ class RightSideAddTransaction extends StatelessWidget {
     required this.amount,
   }) : super(key: key);
 
-  String get amountToString {
-    String value = amount.toString();
-    if (value.endsWith('.0')) {
-      value = amount.toString().replaceAll('.0', '');
-    }
-    return value;
-  }
+  // String get amountToString {
+  //   String value = amount.toString();
+  //   if (value.endsWith('.0')) {
+  //     value = amount.toString().replaceAll('.0', '');
+  //   }
+  //   return value;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,7 @@ class RightSideAddTransaction extends StatelessWidget {
                 //* price text field
                 child: FittedBox(
                   child: Text(
-                    amountToString,
+                    doubleToString(amount),
                     style: themeProvider
                         .getTextStyle(ThemeTextStyles.kCalcTextStyle),
                   ),

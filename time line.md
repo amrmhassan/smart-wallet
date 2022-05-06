@@ -73,6 +73,9 @@ DONE - implement app auto update using fire base storage
 - 4] make the firebase handle the user settings
 - 5] DONE -  make the profile stats to be calculated every time
 - 6] add the debts
+-- debts will add a money to a certain profile
+-- when fulfilling a debt it's money will be substracted from a profile
+-- adding a debt will need another screen for adding debts
 
 
 

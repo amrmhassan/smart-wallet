@@ -21,7 +21,7 @@ class DBHelper {
             'CREATE TABLE $profilesTableName ($idString TEXT PRIMARY KEY,$nameString TEXT, $incomeString TEXT, $outcomeString TEXT, $createdAtString TEXT, $lastActivatedDateString TEXT , $syncFlagString TEXT, $deletedString TEXT, $userIdString TEXT)');
         //* creating debts table
         await db.execute(
-            'CREATE TABLE $debtsTableName ($idString TEXT PRIMARY KEY,$titleString TEXT,$amountString TEXT, $createdAtString TEXT, $profileIdString TEXT, $syncFlagString TEXT, $deletedString TEXT, $fulfilledString TEXT, $userIdString TEXT)');
+            'CREATE TABLE $debtsTableName ($idString TEXT PRIMARY KEY,$titleString TEXT,$amountString TEXT, $createdAtString TEXT, $fullfillingProfileIdString TEXT,$borrowingProfileIdString TEXT, $syncFlagString TEXT, $deletedString TEXT, $fulfilledString TEXT, $userIdString TEXT)');
         //* creating quick actions table
         return db.execute(
             'CREATE TABLE $quickActionsTableName ($idString TEXT PRIMARY KEY,$titleString TEXT, $descriptionString TEXT,$amountString TEXT, $createdAtString TEXT, $transactionTypeString TEXT,  $isFavoriteString TEXT, $profileIdString TEXT , $quickActionIndexString TEXT,$syncFlagString TEXT, $deletedString TEXT , $userIdString TEXT)');

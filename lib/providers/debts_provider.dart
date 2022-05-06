@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 class DebtsProvider extends ChangeNotifier {
   List<DebtModel> _debts = [];
   List<DebtModel> get debts {
-    return [..._debts];
+    return [..._debts].reversed.toList();
   }
 
   Future<void> fetchAndUpdateDebts() async {
@@ -32,7 +32,8 @@ class DebtsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addDebt(String title, double amount) async {
+  Future<void> addDebt(
+      String title, double amount, String borrowingProfileId) async {
     String id = Uuid().v4();
     DateTime createdAt = DateTime.now();
     DebtModel debtModel = DebtModel(
@@ -40,6 +41,7 @@ class DebtsProvider extends ChangeNotifier {
       title: title,
       amount: amount,
       createdAt: createdAt,
+      borrowingProfileId: borrowingProfileId,
     );
 
     //* here i will add the new transaction to the database

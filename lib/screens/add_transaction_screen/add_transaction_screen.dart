@@ -1,9 +1,17 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/screens/add_transaction_screen/widgets/amount_viewer.dart';
+import 'package:smart_wallet/screens/add_transaction_screen/widgets/choose_borrowing_profile.dart';
+import 'package:smart_wallet/screens/add_transaction_screen/widgets/debt_controller.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
+import 'package:smart_wallet/widgets/global/stylized_text_field.dart';
 import '../../constants/sizes.dart';
 import '../../constants/types.dart';
 import '../../models/quick_action_model.dart';
@@ -51,7 +59,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   TransactionModel? editedTransaction;
   QuickActionModel? editedQuickAction;
   double amount = 0;
-  bool showDesc = true;
 
   //* for setting the current active transaction type and it will be passed down to the widget that will use it
   void setcurrentActiveTransactionType(TransactionType transactionType) {
@@ -61,16 +68,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   }
 
   void setAmount(double result) {
-    //? this is nonuseful cause i will show a dialog to the user to
-    //* setting the currentActiveTransactionType to be income if the amount is greater than the current total money in the transaction
-    // double activeProfileTotalMoney =
-    //     Provider.of<ProfilesProvider>(context, listen: false)
-    //         .getActiveProfile
-    //         .totalMoney;
-    // if (result > activeProfileTotalMoney) {
-
-    //   setcurrentActiveTransactionType(TransactionType.income);
-    // }
     if (result == double.infinity) {
       return showSnackBar(
           context, 'You can\'t add infinity number', SnackBarType.error);
@@ -87,6 +84,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     String title = _titleController.text.isEmpty
         ? 'Empty Title'
         : _titleController.text.trim();
+    String debtTitle = _debtTitleController.text.isEmpty
+        ? 'Empty Title'
+        : _debtTitleController.text.trim();
     String description = _descriptionController.text.isEmpty
         ? 'Empty Description'
         : _descriptionController.text.trim();
@@ -94,6 +94,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     ProfileModel activeProfile =
         Provider.of<ProfilesProvider>(context, listen: false)
             .getActiveProfile();
+
+    if (amount <= 0) {
+      return;
+    }
 
     if (widget.addTransactionScreenOperations ==
         AddTransactionScreenOperations.addQuickAction) {
@@ -142,8 +146,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       );
     } else if (widget.addTransactionScreenOperations ==
         AddTransactionScreenOperations.addDebt) {
-      await Provider.of<DebtsProvider>(context, listen: false)
-          .addDebt(title, amount);
+      return addDebt(
+        context: context,
+        title: debtTitle,
+        amount: amount,
+        borrowingProfileId: borrowingProfileId,
+      );
       //* here adding the debt
     }
   }
@@ -151,6 +159,14 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   //* text inputs controller
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _debtTitleController = TextEditingController();
+  String borrowingProfileId = '';
+
+  void setBorrowingProfileId(String profileId) {
+    setState(() {
+      borrowingProfileId = profileId;
+    });
+  }
   // final TextEditingController _priceController = TextEditingController();
 
 //* this initState will provide the required data for this scree to edit
@@ -189,8 +205,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       setcurrentActiveTransactionType(editedQuickAction!.transactionType);
     } else if (widget.addTransactionScreenOperations ==
         AddTransactionScreenOperations.addDebt) {
+      //* setting the borrowing profile id to the active profile
+      String activeProfileId =
+          Provider.of<ProfilesProvider>(context, listen: false)
+              .activatedProfileId;
       setState(() {
-        showDesc = false;
+        borrowingProfileId = activeProfileId;
       });
     } else {
       //* 1] setting the current active transaction type according to the user adding a transaction from the transactions screen
@@ -257,30 +277,39 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       height: 40,
                     ),
                     //* the main container of the adding new transaction cart which will have the main padding around the edges of the screen
-                    CustomCard(
-                      padding: const EdgeInsets.all(kDefaultPadding / 2),
-                      height: 200,
-                      //* the row which will have the main sides of the cart
-                      child: Row(
-                        children: [
-                          //* the left side is for adding the title and description
-                          LeftSideAddTransaction(
-                            titleController: _titleController,
-                            descriptionController: _descriptionController,
-                            showDesc: showDesc,
-                          ),
-                          const Line(lineType: LineType.vertical),
-                          //* the right side is for adding the price and transaction type
-                          RightSideAddTransaction(
-                            currentActiveTransactionType:
-                                currentActiveTransactionType,
-                            setCurrentActiveTransactionType:
-                                setcurrentActiveTransactionType,
+                    widget.addTransactionScreenOperations ==
+                                AddTransactionScreenOperations.addDebt ||
+                            widget.addTransactionScreenOperations ==
+                                AddTransactionScreenOperations.editDebt
+                        ? DebtController(
+                            borrowingProfileId: borrowingProfileId,
                             amount: amount,
+                            debtTitleController: _debtTitleController,
+                            setBorrowingProfileId: setBorrowingProfileId,
+                          )
+                        : CustomCard(
+                            padding: const EdgeInsets.all(kDefaultPadding / 2),
+                            height: 200,
+                            //* the row which will have the main sides of the cart
+                            child: Row(
+                              children: [
+                                //* the left side is for adding the title and description
+                                LeftSideAddTransaction(
+                                  titleController: _titleController,
+                                  descriptionController: _descriptionController,
+                                ),
+                                const Line(lineType: LineType.vertical),
+                                //* the right side is for adding the price and transaction type
+                                RightSideAddTransaction(
+                                  currentActiveTransactionType:
+                                      currentActiveTransactionType,
+                                  setCurrentActiveTransactionType:
+                                      setcurrentActiveTransactionType,
+                                  amount: amount,
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
                     const SizedBox(
                       height: kDefaultPadding,
                     ),

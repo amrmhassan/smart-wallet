@@ -19,3 +19,5 @@ String isFavoriteString = 'isFavorite';
 String quickActionIndexString = 'quickActionIndex';
 
 String fulfilledString = 'debtFulfilled';
+String borrowingProfileIdString = 'borrowingProfileIdString';
+String fullfillingProfileIdString = 'fullfillingProfileIdString';

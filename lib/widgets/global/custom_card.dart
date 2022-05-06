@@ -15,6 +15,12 @@ class CustomCard extends StatelessWidget {
   final EdgeInsets? padding;
   final EdgeInsets? margin;
   final BoxConstraints? constraints;
+  final Color? backgroundColor;
+  final BorderRadius? borderRadius;
+  final Border? border;
+  final VoidCallback? onTap;
+  final Color? splashColor;
+  final Color? highlightColor;
 
   const CustomCard({
     Key? key,
@@ -25,6 +31,12 @@ class CustomCard extends StatelessWidget {
     this.padding,
     this.margin,
     this.constraints,
+    this.backgroundColor,
+    this.borderRadius,
+    this.border,
+    this.onTap,
+    this.splashColor,
+    this.highlightColor,
   }) : super(key: key);
 
   @override
@@ -32,24 +44,37 @@ class CustomCard extends StatelessWidget {
     var themeProvider = Provider.of<ThemeProvider>(context);
     return Container(
       clipBehavior: clipBehavior ?? Clip.hardEdge,
-      padding: padding ??
-          EdgeInsets.symmetric(
-            horizontal: kDefaultHorizontalPadding,
-            vertical: kDefaultVerticalPadding,
-          ),
       margin: margin,
-      constraints: constraints,
-      width: double.infinity,
-      height: height,
       decoration: BoxDecoration(
-        color: themeProvider.getThemeColor(ThemeColors.kCardBackgroundColor),
+        color: backgroundColor ??
+            themeProvider.getThemeColor(ThemeColors.kCardBackgroundColor),
         boxShadow: themeProvider.currentTheme == Themes.dark
             ? null
             : [themeProvider.getBoxShadow(ThemeBoxShadow.kCardBoxShadow)],
-        borderRadius: BorderRadius.circular(kDefaultBorderRadius),
+        borderRadius:
+            borderRadius ?? BorderRadius.circular(kDefaultBorderRadius),
         image: backgroundImage,
+        border: border,
       ),
-      child: child,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          highlightColor: highlightColor,
+          splashColor: splashColor,
+          onTap: onTap,
+          child: Container(
+            padding: padding ??
+                EdgeInsets.symmetric(
+                  horizontal: kDefaultHorizontalPadding,
+                  vertical: kDefaultVerticalPadding,
+                ),
+            constraints: constraints,
+            width: double.infinity,
+            height: height,
+            child: child,
+          ),
+        ),
+      ),
     );
   }
 }

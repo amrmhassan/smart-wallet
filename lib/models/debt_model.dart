@@ -7,7 +7,8 @@ class DebtModel {
   final String id;
   final String title;
   final double amount;
-  final String? profileId;
+  final String borrowingProfileId;
+  final String? fullfillingProfileId;
   final bool fulFilled;
   final DateTime createdAt;
   final SyncFlags syncFlag;
@@ -19,7 +20,8 @@ class DebtModel {
     required this.title,
     required this.createdAt,
     required this.amount,
-    this.profileId,
+    required this.borrowingProfileId,
+    this.fullfillingProfileId,
     this.fulFilled = false,
     this.deleted = false,
     this.userId,
@@ -32,7 +34,8 @@ class DebtModel {
       titleString: title,
       amountString: amount.toString(),
       createdAtString: createdAt.toIso8601String(),
-      profileIdString: profileId ?? dbNull,
+      fullfillingProfileIdString: fullfillingProfileId ?? dbNull,
+      borrowingProfileIdString: borrowingProfileId,
       syncFlagString: syncFlag.name,
       deletedString: deleted == true ? dbTrue : dbFalse,
       fulfilledString: fulFilled ? dbTrue : dbFalse,
@@ -43,6 +46,7 @@ class DebtModel {
   static DebtModel fromJSON(Map<String, dynamic> debtJSON) {
     String idJ = debtJSON[idString];
     String titleJ = debtJSON[titleString];
+    String borrowingProfileIdJ = debtJSON[borrowingProfileIdString];
     DateTime createdAtJ = DateTime.parse(debtJSON[createdAtString]);
     double amountJ = double.parse(debtJSON[amountString].toString());
 
@@ -52,7 +56,7 @@ class DebtModel {
         stringToSyncFlag(debtJSON[syncFlagString] ?? SyncFlags.noSyncing.name);
     String? userIdJ =
         debtJSON[userIdString] == dbNull ? null : debtJSON[userIdString];
-    String? profileIdJ =
+    String? fullfillingProfileIdJ =
         debtJSON[profileIdString] == dbNull ? null : debtJSON[profileIdString];
 
     return DebtModel(
@@ -64,7 +68,8 @@ class DebtModel {
       syncFlag: syncFlagsJ,
       userId: userIdJ,
       fulFilled: fulFilledJ,
-      profileId: profileIdJ,
+      fullfillingProfileId: fullfillingProfileIdJ,
+      borrowingProfileId: borrowingProfileIdJ,
     );
   }
 }
