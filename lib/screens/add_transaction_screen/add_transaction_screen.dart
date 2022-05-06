@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/models/profile_model.dart';
+import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
 import '../../constants/sizes.dart';
@@ -24,6 +25,8 @@ enum AddTransactionScreenOperations {
   addQuickAction,
   editTransaction,
   editQuickAction,
+  addDebt,
+  editDebt,
 }
 
 class AddTransactionScreen extends StatefulWidget {
@@ -48,6 +51,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   TransactionModel? editedTransaction;
   QuickActionModel? editedQuickAction;
   double amount = 0;
+  bool showDesc = true;
 
   //* for setting the current active transaction type and it will be passed down to the widget that will use it
   void setcurrentActiveTransactionType(TransactionType transactionType) {
@@ -136,6 +140,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         amount: amount,
         oldQuickaction: editedQuickAction!,
       );
+    } else if (widget.addTransactionScreenOperations ==
+        AddTransactionScreenOperations.addDebt) {
+      await Provider.of<DebtsProvider>(context, listen: false)
+          .addDebt(title, amount);
+      //* here adding the debt
     }
   }
 
@@ -178,6 +187,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         amount = editedQuickAction!.amount;
       });
       setcurrentActiveTransactionType(editedQuickAction!.transactionType);
+    } else if (widget.addTransactionScreenOperations ==
+        AddTransactionScreenOperations.addDebt) {
+      setState(() {
+        showDesc = false;
+      });
     } else {
       //* 1] setting the current active transaction type according to the user adding a transaction from the transactions screen
       //* if the current active transaction type is income then activate the income first else activate the outcome first
@@ -253,6 +267,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                           LeftSideAddTransaction(
                             titleController: _titleController,
                             descriptionController: _descriptionController,
+                            showDesc: showDesc,
                           ),
                           const Line(lineType: LineType.vertical),
                           //* the right side is for adding the price and transaction type
@@ -312,8 +327,14 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     } else if (widget.addTransactionScreenOperations ==
         AddTransactionScreenOperations.editQuickAction) {
       return 'Edit Quick Action';
+    } else if (widget.addTransactionScreenOperations ==
+        AddTransactionScreenOperations.addDebt) {
+      return 'Add Debt';
+    } else if (widget.addTransactionScreenOperations ==
+        AddTransactionScreenOperations.editDebt) {
+      return 'Edit Debt';
     } else {
-      return 'Edit Transaction';
+      return 'Unknown Operation';
     }
   }
 }

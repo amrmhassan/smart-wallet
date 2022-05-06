@@ -17,3 +17,5 @@ String profileIdString = 'profileId';
 
 String isFavoriteString = 'isFavorite';
 String quickActionIndexString = 'quickActionIndex';
+
+String fulfilledString = 'debtFulfilled';

@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:smart_wallet/models/add_transaction_message_model.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:uuid/uuid.dart';

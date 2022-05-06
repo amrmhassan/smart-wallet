@@ -7,15 +7,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/colors.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
-import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/helpers/db_helper.dart';
 import 'package:smart_wallet/helpers/shared_pref_helper.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/about_app/about_app.dart';
+import 'package:smart_wallet/screens/debts_screen/debts_screen.dart';
 import 'package:smart_wallet/screens/holder_screen/holder_screen.dart';
 import 'package:smart_wallet/screens/loading_data_screen.dart';
 import 'package:smart_wallet/screens/quick_actions_screen/quick_actions_screen.dart';
-import 'package:smart_wallet/utils/general_utils.dart';
 
 import 'widgets/drawer_list_item.dart';
 import 'widgets/drawer_logo.dart';
@@ -68,9 +67,9 @@ class CustomAppDrawer extends StatelessWidget {
                   ),
                   DrawerlistItem(
                     title: 'Debts',
-                    onTap: () {
-                      showSnackBar(context, 'Coming soon', SnackBarType.info);
+                    onTap: () async {
                       Navigator.of(context).pop();
+                      Navigator.of(context).pushNamed(DebtsScreen.routeName);
                     },
                     iconData: Icons.money_off,
                     color: kModerateProfileStatusColor,

@@ -3,6 +3,7 @@ const String dbName = 'my_wallet_app_production.db';
 const String transactionsTableName = 'transactions';
 const String quickActionsTableName = 'quickActions';
 const String profilesTableName = 'profilesTable';
+const String debtsTableName = 'debtsTable';
 //? firestore collection names
 const String usersCollectionName = 'users';
 const String profilesCollectionName = 'profiles';

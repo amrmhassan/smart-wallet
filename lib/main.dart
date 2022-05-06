@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/authentication_provider.dart';
+import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
 import 'package:smart_wallet/providers/synced_data_provider.dart';
@@ -12,6 +13,7 @@ import 'package:smart_wallet/providers/update_app_provider.dart';
 import 'package:smart_wallet/providers/utils/statistics_provider.dart';
 import 'package:smart_wallet/screens/about_app/about_app.dart';
 import 'package:smart_wallet/screens/authentication_screen/authentication_screen.dart';
+import 'package:smart_wallet/screens/debts_screen/debts_screen.dart';
 import 'package:smart_wallet/screens/intro_screen/intro_screen.dart';
 import 'package:smart_wallet/screens/loading_data_screen.dart';
 import 'package:smart_wallet/screens/logging_screen/logging_screen.dart';
@@ -53,6 +55,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (ctx) => ProfileDetailsProvider()),
         ChangeNotifierProvider(create: (ctx) => UpdateAppProvider()),
         ChangeNotifierProvider(create: (ctx) => StatisticsProvider()),
+        ChangeNotifierProvider(create: (ctx) => DebtsProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -67,6 +70,7 @@ class _MyAppState extends State<MyApp> {
           LoggingScreen.routeName: (ctx) => LoggingScreen(),
           IntroScreen.routeName: (ctx) => IntroScreen(),
           AboutApp.routeName: (ctx) => AboutApp(),
+          DebtsScreen.routeName: (ctx) => DebtsScreen(),
         },
       ),
     );

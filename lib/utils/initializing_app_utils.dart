@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/checkers/theme_checker.dart';
 import 'package:smart_wallet/helpers/shared_pref_helper.dart';
 import 'package:smart_wallet/providers/authentication_provider.dart';
+import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/synced_data_provider.dart';
@@ -79,6 +80,9 @@ Future<void> fetchAndUpdatingDataFromSqlite(BuildContext context) async {
   //* 5] fetching the quick actions
   await Provider.of<QuickActionsProvider>(context, listen: false)
       .fetchAndUpdateProfileQuickActions(activeProfileId);
+  //*6] fetch user debts
+  await Provider.of<DebtsProvider>(context, listen: false)
+      .fetchAndUpdateDebts();
 }
 
 //? syncing data from the firestore

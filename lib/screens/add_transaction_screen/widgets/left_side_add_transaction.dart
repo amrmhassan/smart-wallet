@@ -9,11 +9,13 @@ class LeftSideAddTransaction extends StatelessWidget {
   //* widget needed controllers from the parent
   final TextEditingController titleController;
   final TextEditingController descriptionController;
+  final bool showDesc;
 
   const LeftSideAddTransaction({
     Key? key,
     required this.titleController,
     required this.descriptionController,
+    this.showDesc = true,
   }) : super(key: key);
 
   @override
@@ -32,74 +34,81 @@ class LeftSideAddTransaction extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 //* this is the title holder and it will take 2/5 of the column
-                StylizedTextField(
-                  controller: titleController,
-                  hintStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: themeProvider.getThemeColor(ThemeColors.kMainColor),
-                  ),
-                  maxLines: 1,
-                  hintText: 'Enter a title',
-                  onChanged: (value) {},
-                  keyboardType: TextInputType.text,
-                  textStyle: TextStyle(
-                    color: themeProvider.getThemeColor(ThemeColors.kMainColor),
-                  ),
-                  fillColor: themeProvider
-                      .getThemeColor(ThemeColors.kTextFieldInputColor),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(kDefaultBorderRadius / 2),
-                    borderSide: BorderSide(
-                      color: themeProvider
-                          .getThemeColor(ThemeColors.kMainBackgroundColor),
-                      width: 1,
+                Expanded(
+                  child: StylizedTextField(
+                    controller: titleController,
+                    hintStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color:
+                          themeProvider.getThemeColor(ThemeColors.kMainColor),
                     ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(kDefaultBorderRadius / 2),
-                    borderSide: BorderSide(
-                      color: Colors.white.withOpacity(0.3),
-                      width: 1,
+                    maxLines: 1,
+                    hintText: 'Enter a title',
+                    onChanged: (value) {},
+                    keyboardType: TextInputType.text,
+                    textStyle: TextStyle(
+                      color:
+                          themeProvider.getThemeColor(ThemeColors.kMainColor),
+                    ),
+                    fillColor: themeProvider
+                        .getThemeColor(ThemeColors.kTextFieldInputColor),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(kDefaultBorderRadius / 2),
+                      borderSide: BorderSide(
+                        color: themeProvider
+                            .getThemeColor(ThemeColors.kMainBackgroundColor),
+                        width: 1,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(kDefaultBorderRadius / 2),
+                      borderSide: BorderSide(
+                        color: Colors.white.withOpacity(0.3),
+                        width: 1,
+                      ),
                     ),
                   ),
                 ),
 
                 //* this is the description input
-                StylizedTextField(
-                  controller: descriptionController,
-                  hintText: 'Description',
-                  hintStyle: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    color: themeProvider.getThemeColor(ThemeColors.kMainColor),
-                  ),
-                  maxLines: 3,
-                  onChanged: (value) {},
-                  keyboardType: TextInputType.multiline,
-                  textStyle: TextStyle(
-                    color: themeProvider.getThemeColor(ThemeColors.kMainColor),
-                  ),
-                  fillColor: themeProvider
-                      .getThemeColor(ThemeColors.kTextFieldInputColor),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(kDefaultBorderRadius / 2),
-                    borderSide: BorderSide(
-                      color: themeProvider
-                          .getThemeColor(ThemeColors.kMainBackgroundColor),
-                      width: 1,
+                if (showDesc)
+                  StylizedTextField(
+                    controller: descriptionController,
+                    hintText: 'Description',
+                    hintStyle: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color:
+                          themeProvider.getThemeColor(ThemeColors.kMainColor),
+                    ),
+                    maxLines: 3,
+                    onChanged: (value) {},
+                    keyboardType: TextInputType.multiline,
+                    textStyle: TextStyle(
+                      color:
+                          themeProvider.getThemeColor(ThemeColors.kMainColor),
+                    ),
+                    fillColor: themeProvider
+                        .getThemeColor(ThemeColors.kTextFieldInputColor),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(kDefaultBorderRadius / 2),
+                      borderSide: BorderSide(
+                        color: themeProvider
+                            .getThemeColor(ThemeColors.kMainBackgroundColor),
+                        width: 1,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(kDefaultBorderRadius / 2),
+                      borderSide: BorderSide(
+                        color: Colors.white.withOpacity(0.3),
+                        width: 1,
+                      ),
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(kDefaultBorderRadius / 2),
-                    borderSide: BorderSide(
-                      color: Colors.white.withOpacity(0.3),
-                      width: 1,
-                    ),
-                  ),
-                ),
               ],
             ),
           ),

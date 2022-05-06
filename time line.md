@@ -71,7 +71,7 @@ DONE - implement app auto update using fire base storage
 - 2] add editing the start of the day to the settings screen and handle it from the user_prefs provider
 - 3] make a user_prefs provider and add all settings to it
 - 4] make the firebase handle the user settings
-- 5] make the profile stats to be calculated every time
+- 5] DONE -  make the profile stats to be calculated every time
 - 6] add the debts
 
 
