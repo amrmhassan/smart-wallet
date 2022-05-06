@@ -1,4 +1,3 @@
-//* 1] this method will add a new transaction
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -302,6 +301,7 @@ Future<void> applyQuickAction(
   }
 }
 
+//? 7] add a debt
 Future<void> addDebt({
   required BuildContext context,
   required String title,
@@ -329,5 +329,41 @@ Future<void> addDebt({
     Navigator.of(context).pop();
   } catch (error) {
     CustomError.log(error: error);
+  }
+}
+
+//? 8] editing a debt
+Future<void> editDebt({
+  required BuildContext context,
+  required String title,
+  required double amount,
+  required String borrowingProfileId,
+  required String id,
+}) async {
+  var oldDebt =
+      Provider.of<DebtsProvider>(context, listen: false).getDebtById(id);
+  if (oldDebt.fulFilled) {
+    //? show a warning snack bar
+    return showSnackBar(
+        context, 'You can\'t edit a fulfilled debt', SnackBarType.error);
+  }
+  try {
+    //* edit the borrowing profile to increase it's amount
+    var profile = Provider.of<ProfilesProvider>(context, listen: false)
+        .getProfileById(borrowingProfileId);
+    await Provider.of<ProfilesProvider>(context, listen: false).editProfile(
+        id: borrowingProfileId,
+        income: profile.income - oldDebt.amount + amount);
+    await Provider.of<DebtsProvider>(context, listen: false).editDebt(
+      id: id,
+      title: title,
+      amount: amount,
+      borrowingProfileId: borrowingProfileId,
+    );
+    showSnackBar(context, 'Debt edited Successfully', SnackBarType.success);
+    Navigator.pop(context);
+  } catch (error) {
+    CustomError.log(error: error);
+    showSnackBar(context, error.toString(), SnackBarType.error);
   }
 }

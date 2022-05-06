@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/models/debt_model.dart';
 import 'package:smart_wallet/models/profile_model.dart';
+import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/screens/add_transaction_screen/widgets/debt_controller.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
@@ -52,6 +54,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   TransactionType currentActiveTransactionType = TransactionType.outcome;
   TransactionModel? editedTransaction;
   QuickActionModel? editedQuickAction;
+  DebtModel? editedDebt;
   double amount = 0;
 
   //* for setting the current active transaction type and it will be passed down to the widget that will use it
@@ -140,13 +143,22 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       );
     } else if (widget.addTransactionScreenOperations ==
         AddTransactionScreenOperations.addDebt) {
+      //* add debt
       return addDebt(
         context: context,
         title: debtTitle,
         amount: amount,
         borrowingProfileId: borrowingProfileId,
       );
-      //* here adding the debt
+    } else if (widget.addTransactionScreenOperations ==
+        AddTransactionScreenOperations.editDebt) {
+      return editDebt(
+        context: context,
+        title: debtTitle,
+        amount: amount,
+        borrowingProfileId: borrowingProfileId,
+        id: widget.editingId!,
+      );
     }
   }
 
@@ -206,6 +218,15 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       setState(() {
         borrowingProfileId = activeProfileId;
       });
+    } else if (widget.editingId != null &&
+        widget.addTransactionScreenOperations ==
+            AddTransactionScreenOperations.editDebt) {
+      editedDebt = Provider.of<DebtsProvider>(context, listen: false)
+          .getDebtById(widget.editingId as String);
+
+      _debtTitleController.text = editedDebt!.title;
+      setAmount(editedDebt!.amount);
+      setBorrowingProfileId(editedDebt!.borrowingProfileId);
     } else {
       //* 1] setting the current active transaction type according to the user adding a transaction from the transactions screen
       //* if the current active transaction type is income then activate the income first else activate the outcome first

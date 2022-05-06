@@ -10,7 +10,6 @@ import 'package:smart_wallet/models/debt_model.dart';
 import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
-import '../../../providers/quick_actions_provider.dart';
 
 import '../../../providers/theme_provider.dart';
 import '../../../constants/sizes.dart';
@@ -152,8 +151,7 @@ class DebtCard extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (ctx) => AddTransactionScreen(
                               addTransactionScreenOperations:
-                                  AddTransactionScreenOperations
-                                      .editQuickAction,
+                                  AddTransactionScreenOperations.editDebt,
                               editingId: debtModel.id,
                             ),
                           ),
