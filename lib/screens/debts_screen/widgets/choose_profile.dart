@@ -3,22 +3,32 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/sizes.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/debts_screen/widgets/profile_to_choose_card.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
 
 class ChooseProfile extends StatelessWidget {
   final double? amount;
-  final bool? considerAmount;
+  final bool considerAmount;
+  final String? title;
 
   const ChooseProfile({
     Key? key,
     this.amount,
-    this.considerAmount,
+    this.considerAmount = false,
+    this.title,
   }) : super(key: key);
+
+  bool active(double profileTotalMoney) {
+    return considerAmount && amount != null && (amount! > profileTotalMoney);
+  }
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     var profileProvider = Provider.of<ProfilesProvider>(context, listen: false);
     return GestureDetector(
       onPanUpdate: (details) {
@@ -35,11 +45,19 @@ class ChooseProfile extends StatelessWidget {
         child: ListView(
           physics: const BouncingScrollPhysics(),
           children: [
+            if (title != null)
+              Text(
+                title.toString(),
+                style: themeProvider
+                    .getTextStyle(ThemeTextStyles.kParagraphTextStyle),
+              ),
             SizedBox(
-              height: kDefaultPadding * 2,
+              height: title == null ? kDefaultPadding * 2 : kDefaultPadding,
             ),
             ...profileProvider.profiles
                 .map((profile) => ProfileToChooseCard(
+                      active: considerAmount &&
+                          (amount == null || profile.totalMoney >= amount!),
                       profileModel: profile,
                       onChooseProfile: (profile) {
                         //* this will return the profile id after popping this modal

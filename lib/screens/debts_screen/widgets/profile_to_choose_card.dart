@@ -10,11 +10,13 @@ import 'package:smart_wallet/widgets/global/custom_card.dart';
 
 class ProfileToChooseCard extends StatelessWidget {
   final ProfileModel profileModel;
+  final bool active;
   final Function(ProfileModel profileModel) onChooseProfile;
   const ProfileToChooseCard({
     Key? key,
     required this.profileModel,
     required this.onChooseProfile,
+    required this.active,
   }) : super(key: key);
 
   @override
@@ -32,8 +34,9 @@ class ProfileToChooseCard extends StatelessWidget {
                 .withOpacity(.5),
           ),
           height: 100,
-          backgroundColor:
-              themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
+          backgroundColor: active
+              ? Colors.red
+              : themeProvider.getThemeColor(ThemeColors.kMainBackgroundColor),
           child: Row(
             children: [
               Expanded(

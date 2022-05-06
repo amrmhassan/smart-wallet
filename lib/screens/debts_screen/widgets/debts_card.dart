@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
@@ -9,6 +11,8 @@ import 'package:smart_wallet/helpers/responsive.dart';
 import 'package:smart_wallet/models/debt_model.dart';
 import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
+import 'package:smart_wallet/screens/debts_screen/widgets/choose_profile.dart';
+import 'package:smart_wallet/utils/transactions_utils.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
 
 import '../../../providers/theme_provider.dart';
@@ -62,15 +66,54 @@ class DebtCard extends StatelessWidget {
     return confirmDelete;
   }
 
+  Future<void> fulfilDebt(BuildContext context) async {
+    if (debtModel.fulFilled) {
+      return;
+    }
+    var fulfillingProfileId = await showModalBottomSheet(
+      context: context,
+      builder: (ctx) => ChooseProfile(
+        title: 'Fulfil A Debt',
+        considerAmount: true,
+        amount: debtModel.amount,
+      ),
+      backgroundColor: Colors.transparent,
+    );
+    if (fulfillingProfileId == null) {
+      return;
+    }
+    try {
+      //* editing the debt
+      await Provider.of<DebtsProvider>(context, listen: false)
+          .fulfilDebt(debtModel.id, fulfillingProfileId);
+
+      //* editing the profile
+      var profileProvider =
+          Provider.of<ProfilesProvider>(context, listen: false);
+      var fulfillingProfile =
+          profileProvider.getProfileById(fulfillingProfileId);
+      await profileProvider.editProfile(
+          id: fulfillingProfile.id,
+          outcome: fulfillingProfile.outcome + debtModel.amount);
+      showSnackBar(
+          context, 'Debt fulfilled successfully', SnackBarType.success);
+    } catch (error) {
+      CustomError.log(error: error);
+      showSnackBar(context, error.toString(), SnackBarType.error);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
 
     //* the main container of the card
     return Dismissible(
-      direction: DismissDirection.endToStart,
+      direction: debtModel.fulFilled
+          ? DismissDirection.none
+          : DismissDirection.endToStart,
       confirmDismiss: (direction) => showDeleteCustomDialog(context),
-      background: const QuickActionCardBackground(),
+      background: const DebtCardBackground(),
       key: Key(debtModel.id),
       child: CustomCard(
         clipBehavior: Clip.hardEdge,
@@ -141,22 +184,55 @@ class DebtCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     //* for opening the screen to edit the quick action
-                    CardActionButton(
-                      iconData: FontAwesomeIcons.pen,
-                      color:
-                          themeProvider.getThemeColor(ThemeColors.kMainColor),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (ctx) => AddTransactionScreen(
-                              addTransactionScreenOperations:
-                                  AddTransactionScreenOperations.editDebt,
-                              editingId: debtModel.id,
+                    if (!debtModel.fulFilled)
+                      CardActionButton(
+                        iconData: FontAwesomeIcons.pen,
+                        color:
+                            themeProvider.getThemeColor(ThemeColors.kMainColor),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (ctx) => AddTransactionScreen(
+                                addTransactionScreenOperations:
+                                    AddTransactionScreenOperations.editDebt,
+                                editingId: debtModel.id,
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
+
+                    GestureDetector(
+                      onTap: () async => await fulfilDebt(context),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 25,
+                        height: 25,
+                        decoration: BoxDecoration(
+                          color: debtModel.fulFilled
+                              ? themeProvider
+                                  .getThemeColor(ThemeColors.kIncomeColor)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(1000),
+                          border: debtModel.fulFilled
+                              ? null
+                              : Border.all(
+                                  width: 2,
+                                  color: themeProvider.getThemeColor(
+                                    ThemeColors.kMainColor,
+                                  ),
+                                ),
+                        ),
+                        child: debtModel.fulFilled
+                            ? Icon(
+                                Icons.check,
+                                color: Colors.white,
+                                // size: kDefaultIconS
+                                // ize,
+                              )
+                            : null,
+                      ),
                     ),
                     const SizedBox(
                       width: kDefaultPadding / 4,
@@ -172,8 +248,8 @@ class DebtCard extends StatelessWidget {
   }
 }
 
-class QuickActionCardBackground extends StatelessWidget {
-  const QuickActionCardBackground({
+class DebtCardBackground extends StatelessWidget {
+  const DebtCardBackground({
     Key? key,
   }) : super(key: key);
 

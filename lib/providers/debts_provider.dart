@@ -66,6 +66,11 @@ class DebtsProvider extends ChangeNotifier {
     return _debts.firstWhere((element) => element.id == id);
   }
 
+  Future<void> fulfilDebt(String debtId, String fulfillingProfileId) async {
+    return editDebt(
+        id: debtId, fulfilled: true, fullfillingProfileId: fulfillingProfileId);
+  }
+
   Future<void> deleteDebt(String id) async {
     DebtModel deletedDebt = getDebtById(id);
 
