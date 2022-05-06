@@ -8,6 +8,7 @@ import 'package:smart_wallet/models/synced_elements_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 const double _goodLimit = .70; // when it is from 70% to 100% it will be good
 const double _moderateLimit =

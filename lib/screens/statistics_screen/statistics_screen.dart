@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/providers/utils/statistics_provider.dart';
 import 'package:smart_wallet/screens/profile_details_screen/profile_details_screen.dart';
 import 'package:smart_wallet/screens/statistics_screen/widgets/statistics_money_summary.dart';
 
@@ -20,6 +22,7 @@ class StatisticsScreen extends StatefulWidget {
 }
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
+  bool _loading = false;
   void handleOpenRichestProfile() {
     Navigator.push(
       context,
@@ -31,12 +34,33 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     );
   }
 
+  Future<void> fetchData() async {
+    setState(() {
+      _loading = true;
+    });
+    List<ProfileModel> profiles =
+        Provider.of<ProfilesProvider>(context, listen: false).profiles;
+    await Provider.of<StatisticsProvider>(context, listen: false)
+        .updateStatisticsData(profiles: profiles, context: context);
+
+    setState(() {
+      _loading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    fetchData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var profilesProvider = Provider.of<ProfilesProvider>(context);
     var themeProvider = Provider.of<ThemeProvider>(context);
     var highestProfile =
         Provider.of<ProfilesProvider>(context).highestProfile();
+
+    var statProvider = Provider.of<StatisticsProvider>(context, listen: false);
 
     return Stack(
       alignment: Alignment.bottomRight,
@@ -51,7 +75,10 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               SizedBox(
                 height: kDefaultPadding,
               ),
-              StatisticsMoneySummary(profilesProvider: profilesProvider),
+              StatisticsMoneySummary(
+                statProvider: statProvider,
+                loading: _loading,
+              ),
               SizedBox(height: kDefaultPadding / 2),
               if (!(highestProfile.income == 0 && highestProfile.outcome == 0))
                 GestureDetector(
