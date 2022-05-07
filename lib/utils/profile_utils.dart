@@ -39,6 +39,8 @@ Future<void> addProfile(
     //* clearing the text field content
     _profileNameController.text = '';
     //* showing a success snack bar
+    await recalculateProfilesData(context);
+
     showSnackBar(
       context,
       'Profile Added',

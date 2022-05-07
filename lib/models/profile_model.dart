@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/db_shortage_constants.dart';
 import 'package:smart_wallet/constants/models_properties_constants.dart';
-import 'package:smart_wallet/constants/profiles_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/models/synced_elements_model.dart';
 import 'package:smart_wallet/providers/debts_provider.dart';

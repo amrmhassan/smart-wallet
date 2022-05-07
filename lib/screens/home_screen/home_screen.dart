@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SizedBox(height: kDefaultPadding),
               //* this has the summery of the current active profile like (outcome, income of this day or month or year..., and the current total amount that currently exist in the profile)
-              if (true) const ProfileSummary(),
+              const ProfileSummary(),
               SizedBox(height: kDefaultPadding / 2),
 
               if (Provider.of<QuickActionsProvider>(context)

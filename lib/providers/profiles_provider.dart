@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:smart_wallet/constants/types.dart';
-import 'package:smart_wallet/models/debt_model.dart';
 import 'package:smart_wallet/models/profile_data.dart';
-import 'package:smart_wallet/models/transaction_model.dart';
 import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:uuid/uuid.dart';

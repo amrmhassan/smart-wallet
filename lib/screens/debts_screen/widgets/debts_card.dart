@@ -1,23 +1,17 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
-import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/helpers/responsive.dart';
 import 'package:smart_wallet/models/debt_model.dart';
-import 'package:smart_wallet/providers/debts_provider.dart';
-import 'package:smart_wallet/providers/profiles_provider.dart';
-import 'package:smart_wallet/screens/debts_screen/widgets/choose_profile.dart';
 import 'package:smart_wallet/utils/transactions_utils.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
 
 import '../../../providers/theme_provider.dart';
 import '../../../constants/sizes.dart';
-import '../../../constants/types.dart';
 import '../../../utils/general_utils.dart';
 import '../../add_transaction_screen/add_transaction_screen.dart';
 import '../../../widgets/global/card_action_button.dart';
