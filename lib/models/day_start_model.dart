@@ -1,12 +1,26 @@
 //
 //* this will be used in calculating the start date
 
-class DayStartModel {
-  final int hours;
-  final int minutes;
+// ignore_for_file: constant_identifier_names
 
-  const DayStartModel({
-    this.hours = 0,
-    this.minutes = 0,
-  });
+import 'package:flutter/material.dart';
+
+class DayStartModel extends TimeOfDay {
+  const DayStartModel({required int hour, required int minute})
+      : super(hour: hour, minute: minute);
+
+  String numToString(int num) {
+    if (num < 10) {
+      return '0$num';
+    } else {
+      return '$num';
+    }
+  }
+
+  @override
+  String toString() {
+    return '${numToString(hourOfPeriod)}:${numToString(minute)} ${period.name.toUpperCase()}';
+  }
 }
+
+enum HoursPeriods { am, pm }

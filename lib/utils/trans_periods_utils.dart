@@ -20,8 +20,8 @@ class TransPeriodUtils {
       now.year,
       now.month,
       now.day,
-      defaultDayStart.hours,
-      defaultDayStart.minutes,
+      defaultDayStart.hour,
+      defaultDayStart.minute,
     );
 
     endDate = now;
@@ -38,15 +38,15 @@ class TransPeriodUtils {
       now.year,
       now.month,
       now.day - 1,
-      defaultDayStart.hours,
-      defaultDayStart.minutes,
+      defaultDayStart.hour,
+      defaultDayStart.minute,
     );
     endDate = DateTime(
       now.year,
       now.month,
       now.day,
-      defaultDayStart.hours,
-      defaultDayStart.minutes,
+      defaultDayStart.hour,
+      defaultDayStart.minute,
     );
     return PeriodModel(
       startDate: startDate,
@@ -60,8 +60,8 @@ class TransPeriodUtils {
       now.year,
       now.month,
       now.day - 7,
-      defaultDayStart.hours,
-      defaultDayStart.minutes,
+      defaultDayStart.hour,
+      defaultDayStart.minute,
     );
     endDate = now;
     return PeriodModel(
@@ -76,8 +76,8 @@ class TransPeriodUtils {
       now.year,
       now.month - 1,
       now.day,
-      defaultDayStart.hours,
-      defaultDayStart.minutes,
+      defaultDayStart.hour,
+      defaultDayStart.minute,
     );
     endDate = now;
     return PeriodModel(
@@ -92,8 +92,8 @@ class TransPeriodUtils {
       now.year - 1,
       now.month,
       now.day,
-      defaultDayStart.hours,
-      defaultDayStart.minutes,
+      defaultDayStart.hour,
+      defaultDayStart.minute,
     );
     endDate = now;
     return PeriodModel(
@@ -120,8 +120,8 @@ class TransPeriodUtils {
       now.year,
       now.month,
       now.day - days,
-      defaultDayStart.hours,
-      defaultDayStart.minutes,
+      defaultDayStart.hour,
+      defaultDayStart.minute,
     );
 
     startDate = newStartDate;

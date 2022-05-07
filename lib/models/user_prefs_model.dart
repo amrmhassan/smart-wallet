@@ -12,6 +12,6 @@ class UserPrefsModel {
     this.activeTheme = Themes.dark,
     this.activeProfileId,
   }) {
-    defaultPeriod = DayStartModel(hours: 0, minutes: 0);
+    defaultPeriod = DayStartModel(hour: 0, minute: 0);
   }
 }

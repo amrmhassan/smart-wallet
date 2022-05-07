@@ -1,10 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/models/day_start_model.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
-import 'package:smart_wallet/screens/settings_screen/widgets/setting_element.dart';
+import 'package:smart_wallet/providers/user_prefs_provider.dart';
+import 'package:smart_wallet/screens/settings_screen/widgets/appearance_settings_row.dart';
+import 'package:smart_wallet/widgets/global/custom_card.dart';
 import '../../constants/sizes.dart';
 import '../../widgets/app_bar/home_heading.dart';
 
@@ -16,6 +20,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  late DayStartModel timeToView;
+
   void changeTheme() {
     //? this will toggle the theme from dark to basic and vice versa
     Themes theme =
@@ -28,8 +34,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   @override
+  void initState() {
+    timeToView = defaultDayStart;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
+    var userPrefsProvider = Provider.of<UserPrefsProvider>(context);
 
     return Stack(
       alignment: Alignment.bottomRight,
@@ -49,31 +62,48 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   clipBehavior: Clip.hardEdge,
                   decoration: BoxDecoration(),
                   padding: EdgeInsets.all(kDefaultPadding / 2),
-                  child: GridView(
-                    clipBehavior: Clip.none,
+                  child: ListView(
+                    // mainAxisSize: MainAxisSize.min,
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: kDefaultPadding / 2,
-                      mainAxisSpacing: kDefaultPadding / 2,
-                      childAspectRatio: 1.4,
-                    ),
                     children: [
-                      //! type the theme name and preview it
-                      SettingElement(
-                        onTap: changeTheme,
-                        iconPath: 'assets/icons/themes.png',
-                        title: 'Themes',
-                        value: themeProvider.currentTheme == Themes.basic
-                            ? 'Basic'
-                            : 'Dark',
-                      ),
-                      SettingElement(
-                        onTap: () {},
-                        iconPath: 'assets/icons/vision.png',
-                        title: 'Look',
-                        value: 'Default',
+                      AppearanceSettingsRow(changeTheme: changeTheme),
+                      SizedBox(height: kDefaultPadding),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomCard(
+                                onTap: () async {
+                                  TimeOfDay? timeOfDay = await showTimePicker(
+                                    context: context,
+                                    initialTime: userPrefsProvider.dayStart,
+                                  );
+                                  if (timeOfDay != null) {
+                                    setState(() {
+                                      timeToView = DayStartModel(
+                                          hour: timeOfDay.hour,
+                                          minute: timeOfDay.minute);
+                                    });
+                                  }
+                                },
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Day Start',
+                                      style: themeProvider.getTextStyle(
+                                          ThemeTextStyles.kParagraphTextStyle),
+                                    ),
+                                    Text(
+                                      timeToView.toString(),
+                                      style: themeProvider.getTextStyle(
+                                          ThemeTextStyles.kHeadingTextStyle),
+                                    ),
+                                  ],
+                                )),
+                          ),
+                        ],
                       ),
                     ],
                   ),

@@ -26,6 +26,7 @@ class SettingElement extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CustomCard(
+        height: 130,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
