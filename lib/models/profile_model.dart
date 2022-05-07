@@ -62,53 +62,30 @@ class ProfileModel {
       moneyAccountStatus = MoneyAccountStatus.critical;
     }
   }
-  Future<List<TransactionModel>> getTransactions(BuildContext context) async {
-    List<TransactionModel> transactions =
-        await Provider.of<TransactionProvider>(context, listen: false)
-            .getProfileTransations(id);
-    return transactions;
-  }
 
-  List<DebtModel> getDebts(BuildContext context) {
-    return Provider.of<DebtsProvider>(context, listen: false).debts;
-  }
-
-  double getBorrowedDebts(BuildContext context) {
-    List<DebtModel> borrowedDebts = getDebts(context)
-        .where((element) => element.borrowingProfileId == id)
-        .toList();
-    return borrowedDebts.fold(
-        0, (previousValue, element) => previousValue + element.amount);
-  }
-
-  double getFulfilledDebts(BuildContext context) {
-    List<DebtModel> borrowedDebts = getDebts(context)
-        .where((element) => element.fullfillingProfileId == id)
-        .toList();
-    return borrowedDebts.fold(
-        0, (previousValue, element) => previousValue + element.amount);
-  }
-
+//? giving the total income( transactions & debts)
   Future<double> getIncome(BuildContext context) async {
-    List<TransactionModel> transactions = await getTransactions(context);
-    List<TransactionModel> incomeTransactions = transactions
-        .where((element) => element.transactionType == TransactionType.income)
-        .toList();
-    var calcIncome = Provider.of<ProfilesProvider>(context, listen: false)
-        .getProfileIncome(incomeTransactions);
+    var transactionProvider =
+        Provider.of<TransactionProvider>(context, listen: false);
+    var debtsProvider = Provider.of<DebtsProvider>(context, listen: false);
+    double calcIncome =
+        await Provider.of<ProfilesProvider>(context, listen: false)
+            .getProfileIncome(transactionProvider, debtsProvider, id);
     return calcIncome;
   }
 
+//? giving the total outcome( transactions & debts)
   Future<double> getOutcome(BuildContext context) async {
-    List<TransactionModel> transactions = await getTransactions(context);
-    List<TransactionModel> outcomeTransactions = transactions
-        .where((element) => element.transactionType == TransactionType.outcome)
-        .toList();
-    var calcIncome = Provider.of<ProfilesProvider>(context, listen: false)
-        .getProfileIncome(outcomeTransactions);
-    return calcIncome;
+    var transactionProvider =
+        Provider.of<TransactionProvider>(context, listen: false);
+    var debtsProvider = Provider.of<DebtsProvider>(context, listen: false);
+    double calcOutcome =
+        await Provider.of<ProfilesProvider>(context, listen: false)
+            .getProfileOutcome(transactionProvider, debtsProvider, id);
+    return calcOutcome;
   }
 
+//? giving the total money in the profile
   Future<double> getTotalMoney(BuildContext context) async {
     double calcIncome = await getIncome(context);
     double calcOutcome = await getOutcome(context);

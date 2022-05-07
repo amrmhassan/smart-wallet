@@ -82,6 +82,9 @@ Future<void> addTransaction({
       Provider.of<ProfilesProvider>(context, listen: false).activatedProfileId;
 
   try {
+    var debtsProvider = Provider.of<DebtsProvider>(context, listen: false);
+    var profilesProvider =
+        Provider.of<ProfilesProvider>(context, listen: false);
     added = await Provider.of<TransactionProvider>(context, listen: false)
         .addTransaction(
       title: title,
@@ -90,6 +93,8 @@ Future<void> addTransaction({
       transactionType: transactionType,
       profileId: profileId,
       context: context,
+      debtsProvider: debtsProvider,
+      profilesProvider: profilesProvider,
     );
     if (!added) {
       return;
@@ -264,6 +269,10 @@ Future<void> applyQuickAction(
     BuildContext context, QuickActionModel quickAction) async {
   bool added = true;
   try {
+    var debtsProvider = Provider.of<DebtsProvider>(context, listen: false);
+    var profilesProvider =
+        Provider.of<ProfilesProvider>(context, listen: false);
+
     added = await Provider.of<TransactionProvider>(context, listen: false)
         .addTransaction(
       title: quickAction.title,
@@ -272,6 +281,8 @@ Future<void> applyQuickAction(
       transactionType: quickAction.transactionType,
       profileId: quickAction.profileId,
       context: context,
+      debtsProvider: debtsProvider,
+      profilesProvider: profilesProvider,
     );
     if (!added) {
       return;

@@ -155,14 +155,11 @@ class _MoneyAccountCardState extends State<MoneyAccountCard> {
 
     double calcIncome = await widget.profileModel.getIncome(context);
     double calcOutcome = await widget.profileModel.getOutcome(context);
-    double calcBorrowedDebts = widget.profileModel.getBorrowedDebts(context);
-    double calcFulfilledDebts = widget.profileModel.getFulfilledDebts(context);
 
     setState(() {
-      income = calcIncome + calcBorrowedDebts;
-      outcome = calcOutcome + calcFulfilledDebts;
-      totalMoney =
-          (calcIncome + calcBorrowedDebts) - (calcOutcome + calcFulfilledDebts);
+      income = calcIncome;
+      outcome = calcOutcome;
+      totalMoney = (calcIncome) - (calcOutcome);
       _loading = false;
     });
   }

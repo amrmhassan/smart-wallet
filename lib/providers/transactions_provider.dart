@@ -2,6 +2,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:smart_wallet/models/add_transaction_message_model.dart';
+import 'package:smart_wallet/providers/debts_provider.dart';
+import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/utils/trans_periods_utils.dart';
@@ -142,12 +144,24 @@ class TransactionProvider extends ChangeNotifier {
     return transactions[transactions.length - 1];
   }
 
+  double getProfileDebtsAddedAmount(
+      DebtsProvider debtsProvider, String profileId) {
+    return debtsProvider.debts.fold(
+        0,
+        (previousValue, element) => element.borrowingProfileId == profileId
+            ? previousValue + element.amount
+            : previousValue);
+  }
+
   //? advice for adding new transaction
   Future<TransactionMsg> getAdvice({
     required double ratioToTotal,
     required TransactionType transactionType,
     required BuildContext context,
     required double amount,
+    required DebtsProvider debtsProvider,
+    required ProfilesProvider profilesProvider,
+    required String profileId,
   }) async {
     String? msg;
     bool continueAdding = true;
@@ -167,7 +181,10 @@ class TransactionProvider extends ChangeNotifier {
     }
     //* outcome advices
     else {
-      if (amount > totalMoney) {
+      double debtsAddedAmount =
+          getProfileDebtsAddedAmount(debtsProvider, profileId);
+
+      if (amount > totalMoney + debtsAddedAmount) {
         //* if it is greater than the total money
         msg = 'This is larger than your balance! Add a debt instead.';
         await showDialog(
@@ -206,16 +223,21 @@ class TransactionProvider extends ChangeNotifier {
     required TransactionType transactionType,
     required String profileId,
     required BuildContext context,
+    required DebtsProvider debtsProvider,
+    required ProfilesProvider profilesProvider,
   }) async {
     //* initializing the transaction data like (createdAt, id, ratioToTotal...)
     String id = const Uuid().v4();
     DateTime createdAt = DateTime.now();
     double newTotalMoney = totalMoney;
+    double debtsAddedAmount =
+        getProfileDebtsAddedAmount(debtsProvider, profileId);
     //* this line is to ensure that ......
     newTotalMoney = transactionType == TransactionType.income
         ? totalMoney + amount
         : totalMoney - amount;
-    double ratioToTotal = (amount / newTotalMoney).abs();
+    double ratioToTotal = (amount / (newTotalMoney + debtsAddedAmount)).abs();
+
     //* this line is to ensure that .......
     ratioToTotal = (ratioToTotal == double.infinity) ? 1 : ratioToTotal;
 
@@ -225,6 +247,9 @@ class TransactionProvider extends ChangeNotifier {
       transactionType: transactionType,
       context: context,
       amount: amount,
+      debtsProvider: debtsProvider,
+      profilesProvider: profilesProvider,
+      profileId: profileId,
     );
 
     if (!transactionMsg.continueAdding) {

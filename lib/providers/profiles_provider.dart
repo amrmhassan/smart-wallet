@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:smart_wallet/constants/types.dart';
+import 'package:smart_wallet/models/debt_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
+import 'package:smart_wallet/providers/debts_provider.dart';
+import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
 import 'package:smart_wallet/constants/shared_pref_constants.dart';
@@ -72,15 +75,39 @@ class ProfilesProvider extends ChangeNotifier {
   }
 
   //? get profile income
-  double getProfileIncome(List<TransactionModel> incomeTransactions) {
-    return incomeTransactions.fold(
-        0, (previousValue, element) => (previousValue + element.amount));
+  Future<double> getProfileIncome(
+    TransactionProvider transactionProvider,
+    DebtsProvider debtsProvider,
+    String profileId,
+  ) async {
+    double incomeTransactions = (await transactionProvider
+            .getProfileTransations(profileId))
+        .where((element) => element.transactionType == TransactionType.income)
+        .fold(0, (previousValue, element) => previousValue + element.amount);
+
+    double borrowedDebts = debtsProvider.debts
+        .where((element) => element.borrowingProfileId == profileId)
+        .fold(0, (previousValue, element) => element.amount);
+
+    return incomeTransactions + borrowedDebts;
   }
 
-  //? get profile outcome
-  double getProfileOutcome(List<TransactionModel> outcomeTransactions) {
-    return outcomeTransactions.fold(
-        0, (previousValue, element) => previousValue + element.amount);
+  //? get profile income
+  Future<double> getProfileOutcome(
+    TransactionProvider transactionProvider,
+    DebtsProvider debtsProvider,
+    String profileId,
+  ) async {
+    double outcomeTransactions = (await transactionProvider
+            .getProfileTransations(profileId))
+        .where((element) => element.transactionType == TransactionType.outcome)
+        .fold(0, (previousValue, element) => previousValue + element.amount);
+
+    double fulfilledDebts = debtsProvider.debts
+        .where((element) => element.fullfillingProfileId == profileId)
+        .fold(0, (previousValue, element) => element.amount);
+
+    return outcomeTransactions + fulfilledDebts;
   }
 
 //? getting the highest profile with total money

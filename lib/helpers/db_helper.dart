@@ -7,6 +7,7 @@ import '../constants/db_constants.dart';
 class DBHelper {
   static Future<sql.Database> database(String table) async {
     final databasePathDir = await sql.getDatabasesPath();
+
     String finalPath = path.join(databasePathDir, dbName);
 
     return sql.openDatabase(
