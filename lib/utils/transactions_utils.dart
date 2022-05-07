@@ -2,9 +2,11 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
+import 'package:smart_wallet/models/debt_model.dart';
 import 'package:smart_wallet/models/quick_action_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
 import 'package:smart_wallet/providers/debts_provider.dart';
+import 'package:smart_wallet/screens/debts_screen/widgets/choose_profile.dart';
 
 import '../constants/types.dart';
 import '../models/profile_model.dart';
@@ -22,23 +24,6 @@ Future<void> showAddHighTransactionDialog({
   required ProfileModel activeProfile,
   required double amount,
 }) async {
-  // double totalMoney = Provider.of<ProfilesProvider>(context, listen: false)
-  //     .getActiveProfile()
-  //     .totalMoney;
-
-  // if (transactionType == TransactionType.outcome && amount > totalMoney) {
-  //   await AwesomeDialog(
-  //     context: context,
-  //     dialogType: DialogType.WARNING,
-  //     animType: AnimType.BOTTOMSLIDE,
-  //     title: 'Your balance is lower, add a debt instead?',
-  //     btnCancelOnPress: () {},
-  //     btnOkOnPress: () async {
-  //       // here i will add the ability to add a debt to the debts providers which will be shown in the debts screen in the sidebar
-  //       showSnackBar(context, 'Dept added(Soon)', SnackBarType.success);
-  //     },
-  //   ).show();
-  // } else {
   addTransaction(
     context: context,
     title: title,
@@ -47,7 +32,6 @@ Future<void> showAddHighTransactionDialog({
     activeProfile: activeProfile,
     amount: amount,
   );
-  // }
 }
 
 //? showing apply quick action dialog
@@ -85,8 +69,9 @@ Future<void> addTransaction({
     var debtsProvider = Provider.of<DebtsProvider>(context, listen: false);
     var profilesProvider =
         Provider.of<ProfilesProvider>(context, listen: false);
-    added = await Provider.of<TransactionProvider>(context, listen: false)
-        .addTransaction(
+    var transactionProvider =
+        Provider.of<TransactionProvider>(context, listen: false);
+    added = await transactionProvider.addTransaction(
       title: title,
       description: description,
       amount: amount,
@@ -96,22 +81,12 @@ Future<void> addTransaction({
       debtsProvider: debtsProvider,
       profilesProvider: profilesProvider,
     );
+
     if (!added) {
       return;
     }
 
-    //* here i will edit the current active profile
-    //* checking the added transaction type and then update the profile depending on that
-    if (transactionType == TransactionType.income) {
-      //* if income then update income
-
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .editActiveProfile(income: activeProfile.income + amount);
-    } else if (transactionType == TransactionType.outcome) {
-      //* if outcome then update the outcome
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .editActiveProfile(outcome: activeProfile.outcome + amount);
-    }
+    await recalculateProfilesData(context);
     if (allowSnackBar) {
       showSnackBar(context, 'Transaction Added', SnackBarType.success);
     }
@@ -161,8 +136,6 @@ Future<void> editTransaction({
   DateTime createdAt = oldTransaction.createdAt;
   double ratioToTotal = oldTransaction.ratioToTotal;
   String profileId = oldTransaction.profileId;
-  double oldAmount = oldTransaction.amount;
-  double newAmount = amount;
 
   TransactionModel newTransaction = TransactionModel(
     id: id,
@@ -177,19 +150,11 @@ Future<void> editTransaction({
 
   try {
     //* sending the updating info to the provider
-    await Provider.of<TransactionProvider>(context, listen: false)
-        .editTransaction(newTransaction: newTransaction);
+    var transactionProvider =
+        Provider.of<TransactionProvider>(context, listen: false);
+    await transactionProvider.editTransaction(newTransaction: newTransaction);
 
-    //* editing the current money profile when editing a transaction
-    if (transactionType == TransactionType.income) {
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .editActiveProfile(
-              income: activeProfile.income - oldAmount + newAmount);
-    } else if (transactionType == TransactionType.outcome) {
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .editActiveProfile(
-              outcome: activeProfile.outcome - oldAmount + newAmount);
-    }
+    await recalculateProfilesData(context);
 
     showSnackBar(context, 'Transaction Updated', SnackBarType.success);
     Navigator.pop(context);
@@ -249,19 +214,9 @@ Future<void> deleteTransaction(
 
   await Provider.of<TransactionProvider>(context, listen: false)
       .deleteTransaction(transaction.id);
-  showSnackBar(context, 'Transaction Deleted', SnackBarType.info);
 
-  //* getting the curret active profile to update it
-  ProfileModel activeProfile =
-      Provider.of<ProfilesProvider>(context, listen: false).getActiveProfile();
-  //* checking the transaction type to update the profile according to that
-  if (transaction.transactionType == TransactionType.income) {
-    await Provider.of<ProfilesProvider>(context, listen: false)
-        .editActiveProfile(income: activeProfile.income - transaction.amount);
-  } else if (transaction.transactionType == TransactionType.outcome) {
-    await Provider.of<ProfilesProvider>(context, listen: false)
-        .editActiveProfile(outcome: activeProfile.outcome - transaction.amount);
-  }
+  await recalculateProfilesData(context);
+  showSnackBar(context, 'Transaction Deleted', SnackBarType.info);
 }
 
 //? 6] applying a quick action
@@ -288,23 +243,8 @@ Future<void> applyQuickAction(
       return;
     }
 
-    //* here i will edit the current active profile
-    ProfileModel activeProfile =
-        Provider.of<ProfilesProvider>(context, listen: false)
-            .getActiveProfile();
-    //* cheching the added transaction type and then update the profile depending on that
+    await recalculateProfilesData(context);
 
-    if (quickAction.transactionType == TransactionType.income) {
-      //* if income then update income
-
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .editActiveProfile(income: activeProfile.income + quickAction.amount);
-    } else if (quickAction.transactionType == TransactionType.outcome) {
-      //* if outcome then update the outcome
-      await Provider.of<ProfilesProvider>(context, listen: false)
-          .editActiveProfile(
-              outcome: activeProfile.outcome + quickAction.amount);
-    }
     showSnackBar(context, 'Transaction Added', SnackBarType.success, true);
   } catch (error, stackTrace) {
     CustomError.log(error: error, stackTrace: stackTrace);
@@ -320,18 +260,15 @@ Future<void> addDebt({
   required String borrowingProfileId,
 }) async {
   try {
-    //* edit the borrowing profile to increase it's amount
-    var profile = Provider.of<ProfilesProvider>(context, listen: false)
-        .getProfileById(borrowingProfileId);
-    await Provider.of<ProfilesProvider>(context, listen: false)
-        .editProfile(id: borrowingProfileId, income: profile.income + amount);
-
     //* adding the debt
     await Provider.of<DebtsProvider>(context, listen: false).addDebt(
       title,
       amount,
       borrowingProfileId,
     );
+
+    await recalculateProfilesData(context);
+
     var profileName = Provider.of<ProfilesProvider>(context, listen: false)
         .getProfileById(borrowingProfileId)
         .name;
@@ -359,22 +296,86 @@ Future<void> editDebt({
         context, 'You can\'t edit a fulfilled debt', SnackBarType.error);
   }
   try {
-    //* edit the borrowing profile to increase it's amount
-    var profile = Provider.of<ProfilesProvider>(context, listen: false)
-        .getProfileById(borrowingProfileId);
-    await Provider.of<ProfilesProvider>(context, listen: false).editProfile(
-        id: borrowingProfileId,
-        income: profile.income - oldDebt.amount + amount);
     await Provider.of<DebtsProvider>(context, listen: false).editDebt(
       id: id,
       title: title,
       amount: amount,
       borrowingProfileId: borrowingProfileId,
     );
+
+    await recalculateProfilesData(context);
+
     showSnackBar(context, 'Debt edited Successfully', SnackBarType.success);
     Navigator.pop(context);
   } catch (error) {
     CustomError.log(error: error);
     showSnackBar(context, error.toString(), SnackBarType.error);
   }
+}
+
+//?9] fulfil debt
+Future<void> fulfilDebt(BuildContext context, DebtModel debtModel) async {
+  if (debtModel.fulFilled) {
+    return;
+  }
+  var fulfillingProfileId = await showModalBottomSheet(
+    context: context,
+    builder: (ctx) => ChooseProfile(
+      title: 'Fulfil A Debt',
+      considerAmount: true,
+      amount: debtModel.amount,
+    ),
+    backgroundColor: Colors.transparent,
+  );
+  if (fulfillingProfileId == null) {
+    return;
+  }
+  try {
+    //* editing the debt
+    await Provider.of<DebtsProvider>(context, listen: false)
+        .fulfilDebt(debtModel.id, fulfillingProfileId);
+    await recalculateProfilesData(context);
+
+    showSnackBar(context, 'Debt fulfilled successfully', SnackBarType.success);
+  } catch (error) {
+    CustomError.log(error: error);
+    showSnackBar(context, error.toString(), SnackBarType.error);
+  }
+}
+
+//? 10] delete a debt
+Future<bool> showDeleteCustomDialog(
+    BuildContext context, DebtModel debtModel) async {
+  bool confirmDelete = false;
+  await AwesomeDialog(
+    context: context,
+    dialogType: DialogType.WARNING,
+    animType: AnimType.BOTTOMSLIDE,
+    title: 'Delete A Debt?',
+    btnCancelOnPress: () {},
+    btnOkOnPress: () async {
+      try {
+        await Provider.of<DebtsProvider>(context, listen: false)
+            .deleteDebt(debtModel.id);
+        await recalculateProfilesData(context);
+
+        showSnackBar(
+            context, 'Debt Deleted Successfully', SnackBarType.success);
+      } catch (error, stackTrace) {
+        showSnackBar(context, error.toString(), SnackBarType.error);
+        CustomError.log(error: error, stackTrace: stackTrace);
+      }
+      confirmDelete = true;
+    },
+  ).show();
+
+  return confirmDelete;
+}
+
+Future<void> recalculateProfilesData(BuildContext context) async {
+  var transactionProvider =
+      Provider.of<TransactionProvider>(context, listen: false);
+  var profilesProvider = Provider.of<ProfilesProvider>(context, listen: false);
+  var debtsProvider = Provider.of<DebtsProvider>(context, listen: false);
+  await profilesProvider.calcProfilesData(transactionProvider, debtsProvider);
 }

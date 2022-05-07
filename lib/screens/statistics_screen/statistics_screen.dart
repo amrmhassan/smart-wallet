@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/models/profile_model.dart';
+import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/providers/utils/statistics_provider.dart';
 import 'package:smart_wallet/screens/profile_details_screen/profile_details_screen.dart';
 import 'package:smart_wallet/screens/statistics_screen/widgets/statistics_money_summary.dart';
@@ -23,12 +25,12 @@ class StatisticsScreen extends StatefulWidget {
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
   bool _loading = false;
-  void handleOpenRichestProfile() {
+  void handleOpenRichestProfile(ProfileModel highestProfile) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (ctx) => ProfileDetailsScreen(
-          profileId: Provider.of<ProfilesProvider>(context).highestProfile().id,
+          profileId: highestProfile.id,
         ),
       ),
     );
@@ -57,8 +59,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
-    var highestProfile =
-        Provider.of<ProfilesProvider>(context).highestProfile();
+    var transactionProvider =
+        Provider.of<TransactionProvider>(context, listen: false);
+    var debtsProvider = Provider.of<DebtsProvider>(context, listen: false);
+    var highestProfile = Provider.of<ProfilesProvider>(context)
+        .highestProfile(transactionProvider, debtsProvider);
 
     var statProvider = Provider.of<StatisticsProvider>(context, listen: false);
 
@@ -82,7 +87,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               SizedBox(height: kDefaultPadding / 2),
               if (!(highestProfile.income == 0 && highestProfile.outcome == 0))
                 GestureDetector(
-                  onTap: handleOpenRichestProfile,
+                  onTap: () =>
+                      handleOpenRichestProfile(highestProfile.profileModel),
                   child: CustomCard(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -96,9 +102,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           height: kDefaultPadding / 2,
                         ),
                         Text(
-                          Provider.of<ProfilesProvider>(context)
-                              .highestProfile()
-                              .name,
+                          highestProfile.profileModel.name,
                           style: themeProvider.getTextStyle(
                               ThemeTextStyles.kParagraphTextStyle),
                           overflow: TextOverflow.ellipsis,

@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
+import 'package:smart_wallet/utils/transactions_utils.dart';
 
 import '../constants/types.dart';
 import '../providers/profiles_provider.dart';
@@ -88,6 +89,7 @@ Future<void> showDeleteProfileModal(BuildContext context, String profileId,
           context,
           listen: false,
         ).deleteProfile(profileId);
+        await recalculateProfilesData(context);
         showSnackBar(context, 'Profile deleted', SnackBarType.info);
       } catch (error, stackTrace) {
         CustomError.log(error: error, stackTrace: stackTrace);

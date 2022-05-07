@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/constants/models_properties_constants.dart';
 import 'package:smart_wallet/models/debt_model.dart';
 import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/providers/debts_provider.dart';
@@ -241,9 +242,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       }
 
       //* 2] making the current active transaction type to be income if the current active profile total money is lower 0
+      String activeProfileId =
+          Provider.of<ProfilesProvider>(context, listen: false)
+              .activatedProfileId;
       double currentActiveProfileTotalMoney =
           Provider.of<ProfilesProvider>(context, listen: false)
-              .getActiveProfile()
+              .getProfileDataById(activeProfileId)
               .totalMoney;
       if (currentActiveProfileTotalMoney <= 0) {
         setcurrentActiveTransactionType(TransactionType.income);

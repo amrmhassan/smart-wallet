@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_wallet/models/add_transaction_message_model.dart';
 import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
@@ -181,10 +182,11 @@ class TransactionProvider extends ChangeNotifier {
     }
     //* outcome advices
     else {
-      double debtsAddedAmount =
-          getProfileDebtsAddedAmount(debtsProvider, profileId);
+      double profileTotalMoney =
+          await Provider.of<ProfilesProvider>(context, listen: false)
+              .getProfileTotalMoney(this, debtsProvider, profileId);
 
-      if (amount > totalMoney + debtsAddedAmount) {
+      if (amount > profileTotalMoney) {
         //* if it is greater than the total money
         msg = 'This is larger than your balance! Add a debt instead.';
         await showDialog(
@@ -229,14 +231,13 @@ class TransactionProvider extends ChangeNotifier {
     //* initializing the transaction data like (createdAt, id, ratioToTotal...)
     String id = const Uuid().v4();
     DateTime createdAt = DateTime.now();
-    double newTotalMoney = totalMoney;
-    double debtsAddedAmount =
-        getProfileDebtsAddedAmount(debtsProvider, profileId);
+    double profileTotalMoney =
+        await Provider.of<ProfilesProvider>(context, listen: false)
+            .getProfileTotalMoney(this, debtsProvider, profileId);
+
     //* this line is to ensure that ......
-    newTotalMoney = transactionType == TransactionType.income
-        ? totalMoney + amount
-        : totalMoney - amount;
-    double ratioToTotal = (amount / (newTotalMoney + debtsAddedAmount)).abs();
+
+    double ratioToTotal = (amount / profileTotalMoney).abs();
 
     //* this line is to ensure that .......
     ratioToTotal = (ratioToTotal == double.infinity) ? 1 : ratioToTotal;
@@ -276,7 +277,6 @@ class TransactionProvider extends ChangeNotifier {
     }
 
     _transactions.add(newTransaction);
-
     notifyListeners();
     return transactionMsg.continueAdding;
   }

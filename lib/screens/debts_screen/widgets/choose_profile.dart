@@ -55,16 +55,20 @@ class ChooseProfile extends StatelessWidget {
             SizedBox(
               height: title == null ? kDefaultPadding * 2 : kDefaultPadding,
             ),
-            ...profileProvider.profiles
-                .map((profile) => ProfileToChooseCard(
-                      active: active(profile.totalMoney),
-                      profileModel: profile,
-                      onChooseProfile: (profile) {
-                        //* this will return the profile id after popping this modal
-                        Navigator.pop(context, profile.id);
-                      },
-                    ))
-                .toList(),
+            ...profileProvider.profiles.map((profile) {
+              double profileTotalMoney =
+                  Provider.of<ProfilesProvider>(context, listen: false)
+                      .getProfileDataById(profile.id)
+                      .totalMoney;
+              return ProfileToChooseCard(
+                active: active(profileTotalMoney),
+                profileModel: profile,
+                onChooseProfile: (profile) {
+                  //* this will return the profile id after popping this modal
+                  Navigator.pop(context, profile.id);
+                },
+              );
+            }).toList(),
           ],
         ),
       ),

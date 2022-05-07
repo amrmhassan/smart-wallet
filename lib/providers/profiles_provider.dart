@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/models/debt_model.dart';
+import 'package:smart_wallet/models/profile_data.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
 import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
@@ -17,6 +18,8 @@ import '../helpers/db_helper.dart';
 class ProfilesProvider extends ChangeNotifier {
   //? all user profiles
   List<ProfileModel> _profiles = [];
+  List<ProfilesData> profilesData = [];
+
   //? active profile id
   String _activatedProfileId = '';
 
@@ -66,8 +69,8 @@ class ProfilesProvider extends ChangeNotifier {
       return ProfileModel(
         id: 'id',
         name: 'name',
-        income: 0,
-        outcome: 0,
+        // income: 0,
+        // outcome: 0,
         createdAt: DateTime.now(),
         lastActivatedDate: DateTime.now(),
       );
@@ -87,7 +90,7 @@ class ProfilesProvider extends ChangeNotifier {
 
     double borrowedDebts = debtsProvider.debts
         .where((element) => element.borrowingProfileId == profileId)
-        .fold(0, (previousValue, element) => element.amount);
+        .fold(0, (previousValue, element) => element.amount + previousValue);
 
     return incomeTransactions + borrowedDebts;
   }
@@ -105,35 +108,52 @@ class ProfilesProvider extends ChangeNotifier {
 
     double fulfilledDebts = debtsProvider.debts
         .where((element) => element.fullfillingProfileId == profileId)
-        .fold(0, (previousValue, element) => element.amount);
+        .fold(0, (previousValue, element) => element.amount + previousValue);
 
     return outcomeTransactions + fulfilledDebts;
   }
 
+//? get profile total money
+  Future<double> getProfileTotalMoney(TransactionProvider transactionProvider,
+      DebtsProvider debtsProvider, String profileId) async {
+    double profileIncome =
+        await getProfileIncome(transactionProvider, debtsProvider, profileId);
+    double profileOutcome =
+        await getProfileOutcome(transactionProvider, debtsProvider, profileId);
+    return profileIncome - profileOutcome;
+  }
+
 //? getting the highest profile with total money
-  ProfileModel highestProfile() {
-    List<ProfileModel> arrangedProfiles = [...profiles];
-    //* this will arrage the profile with the lowest first
-    arrangedProfiles.sort((a, b) => a.totalMoney.compareTo(b.totalMoney));
-    return arrangedProfiles.last;
+  ProfilesData highestProfile(
+      TransactionProvider transactionProvider, DebtsProvider debtsProvider) {
+    profilesData.sort((a, b) => a.totalMoney.compareTo(b.totalMoney));
+    // arrangedProfiles.sort((a, b) => a.totalMoney.compareTo(b.totalMoney));
+
+    return profilesData.last;
   }
 
   //? getting the total money in all profiles
   double getTotalMoney() {
-    return profiles.fold(
-        0, (previousValue, profile) => previousValue + profile.totalMoney);
+    // return profiles.fold(
+    //     0, (previousValue, profile) => previousValue + profile.totalMoney);
+    return profilesData.fold(
+        0, (previousValue, element) => element.totalMoney + previousValue);
   }
 
   //? getting the total income for all profiles
   double getTotalIncome() {
-    return profiles.fold(
-        0, (previousValue, profile) => previousValue + profile.income);
+    // return profiles.fold(
+    //     0, (previousValue, profile) => previousValue + profile.income);
+    return profilesData.fold(
+        0, (previousValue, element) => element.income + previousValue);
   }
 
 //? getting total outcome for all profiles
   double getTotalOutcome() {
-    return profiles.fold(
-        0, (previousValue, profile) => previousValue + profile.outcome);
+    // return profiles.fold(
+    //     0, (previousValue, profile) => previousValue + profile.outcome);
+    return profilesData.fold(
+        0, (previousValue, element) => element.outcome + previousValue);
   }
 
 //? getting a profile by id
@@ -183,6 +203,58 @@ class ProfilesProvider extends ChangeNotifier {
     } catch (error, stackTrace) {
       CustomError.log(error: error, stackTrace: stackTrace);
     }
+  }
+
+//? getting profile data by it's id
+  ProfilesData getProfileDataById(String id) {
+    return profilesData.firstWhere((element) => element.profileId == id);
+  }
+
+  MoneyAccountStatus getProfileMoneyAccountStatus(
+      double income, double outcome) {
+    const double _goodLimit =
+        .70; // when it is from 70% to 100% it will be good
+    const double _moderateLimit =
+        .55; // when it is from 55% to 70% it will be moderate
+    double incomeRatio = income / outcome;
+    if (income == 0 && outcome == 0) {
+      return MoneyAccountStatus.empty;
+    } else if (incomeRatio >= _goodLimit) {
+      return MoneyAccountStatus.good;
+    } else if (incomeRatio > _moderateLimit && incomeRatio < _goodLimit) {
+      return MoneyAccountStatus.moderate;
+    } else {
+      return MoneyAccountStatus.critical;
+    }
+  }
+
+//? for updating the profiles data when ever a transaction, debt updated
+  Future<void> calcProfilesData(
+    TransactionProvider transactionProvider,
+    DebtsProvider debtsProvider,
+  ) async {
+    profilesData.clear();
+    for (var p in profiles) {
+      double profileIncome =
+          await getProfileIncome(transactionProvider, debtsProvider, p.id);
+      double profileOutcome =
+          await getProfileOutcome(transactionProvider, debtsProvider, p.id);
+      double profileTotalMoney = profileIncome - profileOutcome;
+      MoneyAccountStatus accountStatus =
+          getProfileMoneyAccountStatus(profileIncome, profileOutcome);
+
+      profilesData.add(
+        ProfilesData(
+          income: profileIncome,
+          profileModel: p,
+          totalMoney: profileTotalMoney,
+          outcome: profileOutcome,
+          moneyAccountStatus: accountStatus,
+          incomeRatio: profileIncome / (profileOutcome + profileIncome),
+        ),
+      );
+    }
+    notifyListeners();
   }
 
   //? fetching and updating profiles from database
@@ -245,8 +317,8 @@ class ProfilesProvider extends ChangeNotifier {
     ProfileModel newProfile = ProfileModel(
       id: id,
       name: name,
-      income: 0,
-      outcome: 0,
+      // income: 0,
+      // outcome: 0,
       createdAt: createdAt,
       syncFlag: SyncFlags.add,
       deleted: false,
@@ -313,8 +385,8 @@ class ProfilesProvider extends ChangeNotifier {
     }
 
     String newName = name ?? editedProfile.name;
-    double newIncome = income ?? editedProfile.income;
-    double newOutcome = outcome ?? editedProfile.outcome;
+    // double newIncome = income ?? editedProfile.income;
+    // double newOutcome = outcome ?? editedProfile.outcome;
     DateTime createdAt = editedProfile.createdAt;
     DateTime? newLastActiveDate =
         lastActivatedDate ?? editedProfile.lastActivatedDate;
@@ -329,8 +401,8 @@ class ProfilesProvider extends ChangeNotifier {
     ProfileModel newProfile = ProfileModel(
       id: id,
       name: newName,
-      income: newIncome,
-      outcome: newOutcome,
+      // income: newIncome,
+      // outcome: newOutcome,
       createdAt: createdAt,
       lastActivatedDate: newLastActiveDate,
       syncFlag: newSyncFlag,

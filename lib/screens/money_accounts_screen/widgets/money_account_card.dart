@@ -5,6 +5,7 @@ import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
+import 'package:smart_wallet/models/profile_data.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
@@ -47,6 +48,8 @@ class _MoneyAccountCardState extends State<MoneyAccountCard> {
   double? income;
   double? outcome;
   double? totalMoney;
+  late double incomeRatio;
+  late MoneyAccountStatus moneyAccountStatus;
 
   void clearEditedProfileName() {
     _editedProfileNameController.text = '';
@@ -114,7 +117,7 @@ class _MoneyAccountCardState extends State<MoneyAccountCard> {
 
 //* for navigating to the clicked profile card details
   void goToProfileDetailsPage(BuildContext context) {
-    if (widget.profileModel.moneyAccountStatus != MoneyAccountStatus.empty) {
+    if (moneyAccountStatus != MoneyAccountStatus.empty) {
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -128,9 +131,6 @@ class _MoneyAccountCardState extends State<MoneyAccountCard> {
   }
 
   Color getStatusColor(ThemeProvider _themeProvider) {
-    MoneyAccountStatus moneyAccountStatus =
-        widget.profileModel.moneyAccountStatus;
-
     //? for setting the profileStatusColor
     if (moneyAccountStatus == MoneyAccountStatus.good) {
       return kGoodProfileStatusColor;
@@ -153,13 +153,16 @@ class _MoneyAccountCardState extends State<MoneyAccountCard> {
       _loading = true;
     });
 
-    double calcIncome = await widget.profileModel.getIncome(context);
-    double calcOutcome = await widget.profileModel.getOutcome(context);
+    ProfilesData profileData =
+        Provider.of<ProfilesProvider>(context, listen: false)
+            .getProfileDataById(widget.profileModel.id);
 
     setState(() {
-      income = calcIncome;
-      outcome = calcOutcome;
-      totalMoney = (calcIncome) - (calcOutcome);
+      income = profileData.income;
+      outcome = profileData.outcome;
+      totalMoney = profileData.totalMoney;
+      moneyAccountStatus = profileData.moneyAccountStatus;
+      incomeRatio = profileData.incomeRatio;
       _loading = false;
     });
   }
@@ -172,6 +175,7 @@ class _MoneyAccountCardState extends State<MoneyAccountCard> {
 
   @override
   Widget build(BuildContext context) {
+    fetchData();
     var themeProvider = Provider.of<ThemeProvider>(context);
 
     //? if any confusion when clicking the card and go to the details page just remove that and make it only happen when clicking on the status circle
@@ -181,10 +185,7 @@ class _MoneyAccountCardState extends State<MoneyAccountCard> {
         //* these constrains are for the card holder
         constraints: BoxConstraints(
           minHeight: 300,
-          maxHeight:
-              widget.profileModel.moneyAccountStatus == MoneyAccountStatus.empty
-                  ? 370
-                  : 460,
+          maxHeight: moneyAccountStatus == MoneyAccountStatus.empty ? 370 : 460,
         ),
         padding: const EdgeInsets.only(
           right: kDefaultPadding / 4,
@@ -225,7 +226,7 @@ class _MoneyAccountCardState extends State<MoneyAccountCard> {
               height: kDefaultPadding / 2,
             ),
             ProfileStatus(
-              moneyAccountStatus: widget.profileModel.moneyAccountStatus,
+              moneyAccountStatus: moneyAccountStatus,
               profileStatusColor: getStatusColor(themeProvider),
             ),
             const SizedBox(
@@ -259,24 +260,20 @@ class _MoneyAccountCardState extends State<MoneyAccountCard> {
               active: !widget.activated,
             ),
             SizedBox(
-              height: widget.profileModel.moneyAccountStatus ==
-                      MoneyAccountStatus.empty
+              height: moneyAccountStatus == MoneyAccountStatus.empty
                   ? kDefaultPadding
                   : kDefaultPadding / 2,
             ),
-            if (widget.profileModel.moneyAccountStatus !=
-                MoneyAccountStatus.empty)
+            if (moneyAccountStatus != MoneyAccountStatus.empty)
               ProfileStatusProgressBar(
                 profileStatusColor: getStatusColor(themeProvider),
-                incomeRatio: widget.profileModel.incomeRatio,
+                incomeRatio: incomeRatio,
               ),
-            if (widget.profileModel.moneyAccountStatus !=
-                MoneyAccountStatus.empty)
+            if (moneyAccountStatus != MoneyAccountStatus.empty)
               const SizedBox(
                 height: kDefaultPadding / 2,
               ),
-            if (widget.profileModel.moneyAccountStatus !=
-                MoneyAccountStatus.empty)
+            if (moneyAccountStatus != MoneyAccountStatus.empty)
               ProfileMoneySummary(
                 income: income,
                 outcome: outcome,

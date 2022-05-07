@@ -12,6 +12,7 @@ import 'package:smart_wallet/models/debt_model.dart';
 import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/screens/debts_screen/widgets/choose_profile.dart';
+import 'package:smart_wallet/utils/transactions_utils.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
 
 import '../../../providers/theme_provider.dart';
@@ -31,77 +32,6 @@ class DebtCard extends StatelessWidget {
 //* this function will show a dialog to delete and after confirming deleting it will be deleted
 //* or if cancel was clicked the card will come back and won't be deleted
 
-  Future<bool> showDeleteCustomDialog(BuildContext context) async {
-    bool confirmDelete = false;
-    await AwesomeDialog(
-      context: context,
-      dialogType: DialogType.WARNING,
-      animType: AnimType.BOTTOMSLIDE,
-      title: 'Delete A Debt?',
-      btnCancelOnPress: () {},
-      btnOkOnPress: () async {
-        try {
-          //* edit the borrowing profile to increase it's amount
-          var profile = Provider.of<ProfilesProvider>(context, listen: false)
-              .getProfileById(debtModel.borrowingProfileId);
-          await Provider.of<ProfilesProvider>(context, listen: false)
-              .editProfile(
-            id: debtModel.borrowingProfileId,
-            income: profile.income - debtModel.amount,
-          );
-
-          await Provider.of<DebtsProvider>(context, listen: false)
-              .deleteDebt(debtModel.id);
-          showSnackBar(
-              context, 'Debt Deleted Successfully', SnackBarType.success);
-        } catch (error, stackTrace) {
-          showSnackBar(context, error.toString(), SnackBarType.error);
-          CustomError.log(error: error, stackTrace: stackTrace);
-        }
-        confirmDelete = true;
-      },
-    ).show();
-
-    return confirmDelete;
-  }
-
-  Future<void> fulfilDebt(BuildContext context) async {
-    if (debtModel.fulFilled) {
-      return;
-    }
-    var fulfillingProfileId = await showModalBottomSheet(
-      context: context,
-      builder: (ctx) => ChooseProfile(
-        title: 'Fulfil A Debt',
-        considerAmount: true,
-        amount: debtModel.amount,
-      ),
-      backgroundColor: Colors.transparent,
-    );
-    if (fulfillingProfileId == null) {
-      return;
-    }
-    try {
-      //* editing the debt
-      await Provider.of<DebtsProvider>(context, listen: false)
-          .fulfilDebt(debtModel.id, fulfillingProfileId);
-
-      //* editing the profile
-      var profileProvider =
-          Provider.of<ProfilesProvider>(context, listen: false);
-      var fulfillingProfile =
-          profileProvider.getProfileById(fulfillingProfileId);
-      await profileProvider.editProfile(
-          id: fulfillingProfile.id,
-          outcome: fulfillingProfile.outcome + debtModel.amount);
-      showSnackBar(
-          context, 'Debt fulfilled successfully', SnackBarType.success);
-    } catch (error) {
-      CustomError.log(error: error);
-      showSnackBar(context, error.toString(), SnackBarType.error);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
@@ -111,7 +41,7 @@ class DebtCard extends StatelessWidget {
       direction: debtModel.fulFilled
           ? DismissDirection.none
           : DismissDirection.endToStart,
-      confirmDismiss: (direction) => showDeleteCustomDialog(context),
+      confirmDismiss: (direction) => showDeleteCustomDialog(context, debtModel),
       background: const DebtCardBackground(),
       key: Key(debtModel.id),
       child: CustomCard(
@@ -203,7 +133,7 @@ class DebtCard extends StatelessWidget {
                       ),
 
                     GestureDetector(
-                      onTap: () async => await fulfilDebt(context),
+                      onTap: () async => await fulfilDebt(context, debtModel),
                       child: Container(
                         alignment: Alignment.center,
                         width: 25,

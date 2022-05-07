@@ -80,6 +80,7 @@ DONE - implement app auto update using fire base storage
 -- DONE -  fulfill , edit, delete debts
 -- sync debts to firebase
 -- add a debt count for each profile
+- 7] back up the app then delete the income, outcome props from the profile model and their followers
 
 
 

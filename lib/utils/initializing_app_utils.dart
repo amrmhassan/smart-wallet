@@ -83,6 +83,11 @@ Future<void> fetchAndUpdatingDataFromSqlite(BuildContext context) async {
   //*6] fetch user debts
   await Provider.of<DebtsProvider>(context, listen: false)
       .fetchAndUpdateDebts();
+  //* 7] updating profiles data
+  await Provider.of<ProfilesProvider>(context, listen: false).calcProfilesData(
+    Provider.of<TransactionProvider>(context, listen: false),
+    Provider.of<DebtsProvider>(context, listen: false),
+  );
 }
 
 //? syncing data from the firestore
