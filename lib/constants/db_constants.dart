@@ -4,6 +4,8 @@ const String transactionsTableName = 'transactions';
 const String quickActionsTableName = 'quickActions';
 const String profilesTableName = 'profilesTable';
 const String debtsTableName = 'debtsTable';
+const String userPrefsTableName = 'userPrefsTable';
+
 //? firestore collection names
 const String usersCollectionName = 'users';
 const String profilesCollectionName = 'profiles';

@@ -9,6 +9,7 @@ import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/synced_data_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
+import 'package:smart_wallet/providers/user_prefs_provider.dart';
 import 'package:smart_wallet/screens/holder_screen/holder_screen.dart';
 import 'package:smart_wallet/screens/intro_screen/intro_screen.dart';
 import 'package:smart_wallet/utils/synced_data_utils.dart';
@@ -58,6 +59,10 @@ Future<void> handleInitialzingApp(BuildContext context) async {
 
 //? fetching and updating the data from the sqlite
 Future<void> fetchAndUpdatingDataFromSqlite(BuildContext context) async {
+  //* 0] fetching and updating user settings
+  await Provider.of<UserPrefsProvider>(context, listen: false)
+      .fetchAndSetUserSettings();
+
   //* 1]  fetching the active theme
   await Provider.of<ThemeProvider>(context, listen: false)
       .fetchAndSetActiveTheme();

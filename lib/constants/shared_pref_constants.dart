@@ -1,4 +1,7 @@
+//? user settings keys
 const String kActivatedProfileIdKey = 'activatedProtileIdKey';
-const String kFirstTimeRunKey = 'firstTimeRunKey';
+const String kDayStartKey = 'dayStartKey';
 const String kCurrentActiveTheme = 'kCurrentActiveTheme';
-const String kNeedSyncDownKey = 'needsyncdownkeyname';
+
+//? other keys
+const String kFirstTimeRunKey = 'firstTimeRunKey';

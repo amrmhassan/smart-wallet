@@ -1,7 +1,5 @@
 String idString = 'id';
 String nameString = 'name';
-String incomeString = 'income';
-String outcomeString = 'outcome';
 String createdAtString = 'createdAt';
 String lastActivatedDateString = 'lastActivatedDate';
 String userIdString = 'userId';
@@ -21,3 +19,6 @@ String quickActionIndexString = 'quickActionIndex';
 String fulfilledString = 'debtFulfilled';
 String borrowingProfileIdString = 'borrowingProfileIdString';
 String fullfillingProfileIdString = 'fullfillingProfileIdString';
+
+String dayStartHoursString = 'dayStartHoursString';
+String dayStartMinutesString = 'dayStartMinutesString';

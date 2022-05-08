@@ -70,9 +70,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     initialTime: userPrefsProvider.dayStart,
                                   );
                                   if (timeOfDay != null) {
-                                    userPrefsProvider.setDayStart(DayStartModel(
-                                        hour: timeOfDay.hour,
-                                        minute: timeOfDay.minute));
+                                    await userPrefsProvider.setDayStart(
+                                        DayStartModel(
+                                            hour: timeOfDay.hour,
+                                            minute: timeOfDay.minute));
                                   }
                                 },
                                 child: Row(

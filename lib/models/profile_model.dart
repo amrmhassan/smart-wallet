@@ -25,19 +25,7 @@ class ProfileModel {
     this.userId,
     this.syncFlag = SyncFlags.noSyncing,
     this.deleted = false,
-  }) {
-    //? for setting the total money
-    //* the total money equals to income - outcome
-    // totalMoney = income - outcome;
-    //* the incomeRatio may have 3 outcomes
-    //* 1] income higher than the outcome
-    //* -- a] the ratio will be greater than 0.6 => good
-    //* -- b] the ratio will be between 0.5 and 0.6 => moderate
-    //* 2] income is lower than outcome (totalMoney will be negative) => critical
-    //? for setting the incomeRatio
-    // incomeRatio = income / (outcome + income);
-    //? for setting the moneyAccountStatus
-  }
+  });
 
 //? giving the total income( transactions & debts)
   Future<double> getIncome(BuildContext context) async {
@@ -72,8 +60,6 @@ class ProfileModel {
     return {
       idString: id,
       nameString: name,
-      // incomeString: income,
-      // outcomeString: outcome,
       createdAtString: createdAt.toIso8601String(),
       lastActivatedDateString: lastActivatedDate == null
           ? dbNull
@@ -87,8 +73,6 @@ class ProfileModel {
   static ProfileModel fromJSON(Map<String, dynamic> profileJSON) {
     String idJ = profileJSON[idString];
     String nameJ = profileJSON[nameString];
-    // double incomeJ = double.parse(profileJSON[incomeString].toString());
-    // double outcomeJ = double.parse(profileJSON[outcomeString].toString());
     DateTime createdAtJ = DateTime.parse(profileJSON[createdAtString]);
     DateTime? lastActivatedDateJ =
         profileJSON[lastActivatedDateString] == null ||
@@ -103,8 +87,6 @@ class ProfileModel {
     return ProfileModel(
       id: idJ,
       name: nameJ,
-      // income: incomeJ,
-      // outcome: outcomeJ,
       createdAt: createdAtJ,
       deleted: deletedJ,
       lastActivatedDate: lastActivatedDateJ,
