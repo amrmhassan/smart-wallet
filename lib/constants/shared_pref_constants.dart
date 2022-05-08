@@ -5,3 +5,4 @@ const String kCurrentActiveTheme = 'kCurrentActiveTheme';
 
 //? other keys
 const String kFirstTimeRunKey = 'firstTimeRunKey';
+const String kUserPrefsNeedSyncingKey = 'kUserPrefsNeedSyncingKey';

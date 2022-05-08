@@ -466,7 +466,7 @@ class ProfilesProvider extends ChangeNotifier {
   }
 
   //? setting the active profile id
-  Future<void> setActivatedProfile(String id, [BuildContext? context]) async {
+  Future<void> setActivatedProfile(String id) async {
     try {
       await SharedPrefHelper.setString(kActivatedProfileIdKey, id);
 

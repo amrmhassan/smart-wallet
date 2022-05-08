@@ -93,6 +93,10 @@ Future<void> fetchAndUpdatingDataFromSqlite(BuildContext context) async {
     Provider.of<TransactionProvider>(context, listen: false),
     Provider.of<DebtsProvider>(context, listen: false),
   );
+
+  //* 8] setting the user prefs need syncing
+  await Provider.of<UserPrefsProvider>(context, listen: false)
+      .fetchAndUpdateUserPrefsNeedSyncing();
 }
 
 //? syncing data from the firestore
@@ -111,8 +115,5 @@ Future<void> syncDown(BuildContext context) async {
   //* 0] getting all the data if online, first time open the app, and logged in
   //* deleting the data
   return Provider.of<SyncedDataProvider>(context, listen: false).getAllData(
-    profilesProvider,
-    transactionProvider,
-    quickActionsProvider,
-  );
+      profilesProvider, transactionProvider, quickActionsProvider, context);
 }

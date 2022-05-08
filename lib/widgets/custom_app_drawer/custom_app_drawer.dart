@@ -9,12 +9,14 @@ import 'package:smart_wallet/constants/colors.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
 import 'package:smart_wallet/helpers/db_helper.dart';
 import 'package:smart_wallet/helpers/shared_pref_helper.dart';
+import 'package:smart_wallet/providers/synced_data_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/about_app/about_app.dart';
 import 'package:smart_wallet/screens/debts_screen/debts_screen.dart';
 import 'package:smart_wallet/screens/holder_screen/holder_screen.dart';
 import 'package:smart_wallet/screens/loading_data_screen.dart';
 import 'package:smart_wallet/screens/quick_actions_screen/quick_actions_screen.dart';
+import 'package:smart_wallet/utils/initializing_app_utils.dart';
 
 import 'widgets/drawer_list_item.dart';
 import 'widgets/drawer_logo.dart';
@@ -98,6 +100,34 @@ class CustomAppDrawer extends StatelessWidget {
                     title: 'About App',
                     onTap: () async {
                       Navigator.pushNamed(context, AboutApp.routeName);
+                    },
+                    iconData: FontAwesomeIcons.info,
+                    color: kModerateProfileStatusColor,
+                  ),
+                  DrawerlistItem(
+                    title: 'User settings',
+                    onTap: () async {
+                      // String activeProfileId =
+                      //     Provider.of<ProfilesProvider>(context, listen: false)
+                      //         .activatedProfileId;
+                      // Themes activeUserTheme =
+                      //     Provider.of<ThemeProvider>(context, listen: false)
+                      //         .currentTheme;
+                      // DayStartModel dayStartModel =
+                      //     Provider.of<UserPrefsProvider>(context, listen: false)
+                      //         .dayStart;
+
+                      // String userPrefs = Provider.of<UserPrefsProvider>(context,
+                      //         listen: false)
+                      //     .getUserPrefs(
+                      //         activeProfileId, activeUserTheme, dayStartModel);
+                      // print(userPrefs);
+                      // var testData = await Provider.of<UserPrefsProvider>(
+                      //         context,
+                      //         listen: false)
+                      //     .setUserPrefsFromString(userPrefs);
+                      // print(testData);
+                      await syncDown(context);
                     },
                     iconData: FontAwesomeIcons.info,
                     color: kModerateProfileStatusColor,

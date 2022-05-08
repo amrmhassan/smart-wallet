@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
@@ -10,7 +12,9 @@ import 'package:smart_wallet/models/quick_action_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
+import 'package:smart_wallet/providers/user_prefs_provider.dart';
 
 class SyncedDataProvider extends ChangeNotifier {
   //# ********* Syncing data to firestore **********#//
@@ -19,18 +23,12 @@ class SyncedDataProvider extends ChangeNotifier {
     ProfilesProvider profilesProvider,
     TransactionProvider transactionProvider,
     QuickActionsProvider quickActionsProvider,
+    String userPrefsString,
   ) async {
-    CustomError.log(
-      error: 'Start syncing data',
-      logType: LogTypes.info,
-    );
     await syncProfiles(profilesProvider);
     await syncTransactions(transactionProvider, profilesProvider);
     await syncQuickActions(quickActionsProvider, profilesProvider);
-    CustomError.log(
-      error: 'finished syncing data',
-      logType: LogTypes.info,
-    );
+    await syncUserData(userPrefsString);
   }
 
   //# 1] sync profiles
@@ -132,6 +130,20 @@ class SyncedDataProvider extends ChangeNotifier {
           error: 'Error syncing quick Actions $error',
           rethrowError: true,
           stackTrace: stackTrace);
+    }
+  }
+
+  //# 4] sync user data
+  Future<void> syncUserData(String userPrefsString) async {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    var dbRef = FirebaseFirestore.instance;
+    try {
+      await dbRef
+          .collection(usersCollectionName)
+          .doc(userId)
+          .set({userPrefsCollectionName: userPrefsString});
+    } catch (error) {
+      CustomError.log(error: error);
     }
   }
 
@@ -256,12 +268,27 @@ class SyncedDataProvider extends ChangeNotifier {
   Future<void> getAllData(
     ProfilesProvider profilesProvider,
     TransactionProvider transactionProvider,
-    QuickActionsProvider quickActionsProvider, [
+    QuickActionsProvider quickActionsProvider,
+    BuildContext context, [
     bool delete = false,
   ]) async {
     List<ProfileModel> profiles = await getProfiles();
     List<TransactionModel> transactions = await getTransactions();
     List<QuickActionModel> quickActions = await getQuickActions();
+    String? userPrefs = await getUserPrefs();
+    if (userPrefs != null) {
+      var setUserPrefsFromString =
+          Provider.of<UserPrefsProvider>(context, listen: false)
+              .setUserPrefsFromString;
+      var setActivatedProfile =
+          Provider.of<ProfilesProvider>(context, listen: false)
+              .setActivatedProfile;
+      var setTheme =
+          Provider.of<ThemeProvider>(context, listen: false).setTheme;
+
+      await setUserPrefsFromString(userPrefs, setActivatedProfile, setTheme);
+    }
+
 //? i will only delete the data if the user chose to when logging in and there is no logged in user already
     if (delete) {
       profilesProvider.clearAllProfiles();
@@ -328,5 +355,31 @@ class SyncedDataProvider extends ChangeNotifier {
       },
     ).toList();
     return fetchedQuickActions;
+  }
+
+  // Future<void> syncUserData(String userPrefsString) async {
+  //   String userId = FirebaseAuth.instance.currentUser!.uid;
+  //   var dbRef = FirebaseFirestore.instance;
+  //   try {
+  //     await dbRef
+  //         .collection(usersCollectionName)
+  //         .doc(userId)
+  //         .set({userPrefsCollectionName: userPrefsString});
+  //   } catch (error) {
+  //     CustomError.log(error: error);
+  //   }
+  // }
+  Future<String?> getUserPrefs() async {
+    var dbRef = FirebaseFirestore.instance;
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    var data = await dbRef.collection(usersCollectionName).doc(userId).get();
+    String userData;
+    try {
+      userData = data.get(userPrefsCollectionName);
+      return userData;
+    } catch (error) {
+      CustomError.log(error: error);
+    }
+    return null;
   }
 }

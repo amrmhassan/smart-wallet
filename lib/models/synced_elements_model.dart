@@ -1,3 +1,4 @@
+import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
 
 SyncFlags stringToSyncFlag(String string) {
@@ -10,4 +11,8 @@ SyncFlags stringToSyncFlag(String string) {
   } else {
     return SyncFlags.delete;
   }
+}
+
+Themes stringToThemes(String string) {
+  return Themes.values.firstWhere((element) => element.name == string);
 }

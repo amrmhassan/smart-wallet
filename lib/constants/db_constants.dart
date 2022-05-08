@@ -11,7 +11,7 @@ const String usersCollectionName = 'users';
 const String profilesCollectionName = 'profiles';
 const String transactionsCollectionName = 'transactions';
 const String quickActionsCollectionName = 'quickActions';
-const String userPreferencesCollectionName = 'userPreferences';
+const String userPrefsCollectionName = 'userPreferences';
 
 //? keys on the user preference collection on firestore
 const String activeProfileFireStoreKeyName = 'activeProfile';

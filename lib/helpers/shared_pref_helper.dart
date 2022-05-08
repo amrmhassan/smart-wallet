@@ -8,6 +8,16 @@ class SharedPrefHelper {
     return prefs.setString(key, value);
   }
 
+  static Future<bool> setBool(String key, bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.setBool(key, value);
+  }
+
+  static Future<bool?> getBool(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(key);
+  }
+
   static Future<bool> removeKey(String key) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.remove(key);

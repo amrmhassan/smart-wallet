@@ -8,6 +8,7 @@ import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
+import 'package:smart_wallet/providers/user_prefs_provider.dart';
 
 class SyncDataButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -32,10 +33,14 @@ class SyncDataButton extends StatelessWidget {
         .notSyncedTransactions;
     var quickActions = Provider.of<QuickActionsProvider>(context, listen: false)
         .notSyncedQuickActions;
+    var userPrefsNeedSyncing =
+        Provider.of<UserPrefsProvider>(context, listen: false)
+            .userPrefsNeedSyncing;
 
     return profiles.isNotEmpty ||
         transactions.isNotEmpty ||
-        quickActions.isNotEmpty;
+        quickActions.isNotEmpty ||
+        userPrefsNeedSyncing;
   }
 
   bool allDataSynced(BuildContext context) {

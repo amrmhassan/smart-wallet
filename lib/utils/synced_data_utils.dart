@@ -89,6 +89,7 @@ Future googleLogin(BuildContext context) async {
     profileProvider,
     transactionProvider,
     quickActionsProvider,
+    context,
     deleteAfterLoggingIn,
   );
 }

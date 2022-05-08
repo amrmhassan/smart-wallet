@@ -7,13 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
 import 'package:smart_wallet/constants/sizes.dart';
+import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/synced_data_provider.dart';
+import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
+import 'package:smart_wallet/providers/user_prefs_provider.dart';
 import 'package:smart_wallet/screens/money_accounts_screen/widgets/custom_button.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/data_card.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/login_user_options.dart';
@@ -50,6 +53,16 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
         _syncing = true;
       });
 
+      String activeProfileId =
+          Provider.of<ProfilesProvider>(context, listen: false)
+              .activatedProfileId;
+      Themes activeUserTheme =
+          Provider.of<ThemeProvider>(context, listen: false).currentTheme;
+      String userPrefsString =
+          Provider.of<UserPrefsProvider>(context, listen: false).getUserPrefs(
+        activeProfileId,
+        activeUserTheme,
+      );
       await Provider.of<SyncedDataProvider>(
         context,
         listen: false,
@@ -57,6 +70,7 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
         profilesProvider,
         transactionProvider,
         quickActionsProvider,
+        userPrefsString,
       );
 
       setState(() {
