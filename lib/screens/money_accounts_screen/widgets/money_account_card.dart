@@ -8,6 +8,7 @@ import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/models/profile_data.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
+import 'package:smart_wallet/providers/user_prefs_provider.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/utils/profile_utils.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
@@ -57,10 +58,14 @@ class _MoneyAccountCardState extends State<MoneyAccountCard> {
 
   Future<void> changeActivatedProfile(BuildContext context) async {
     //? here set the loading to true and
-    await Provider.of<ProfilesProvider>(context, listen: false)
-        .setActivatedProfile(widget.profileModel.id);
-    String activeProfileId =
+    var editLastActivatedForProfile =
         Provider.of<ProfilesProvider>(context, listen: false)
+            .editLastActivatedForProfile;
+    await Provider.of<UserPrefsProvider>(context, listen: false)
+        .setActivatedProfile(
+            widget.profileModel.id, editLastActivatedForProfile);
+    String activeProfileId =
+        Provider.of<UserPrefsProvider>(context, listen: false)
             .activatedProfileId;
     await Provider.of<TransactionProvider>(context, listen: false)
         .fetchAndUpdateProfileTransactions(activeProfileId);

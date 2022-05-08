@@ -6,6 +6,7 @@ import 'package:smart_wallet/constants/sizes.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
+import 'package:smart_wallet/providers/user_prefs_provider.dart';
 import 'package:smart_wallet/screens/holder_screen/widgets/testing_element.dart';
 
 class TestingLengthsWidget extends StatelessWidget {
@@ -29,7 +30,7 @@ class TestingLengthsWidget extends StatelessWidget {
           ),
           TestingElement(
             title: 'Active id',
-            value: Provider.of<ProfilesProvider>(context).activatedProfileId,
+            value: Provider.of<UserPrefsProvider>(context).activatedProfileId,
           ),
           ...Provider.of<ProfilesProvider>(context)
               .profiles

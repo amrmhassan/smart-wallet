@@ -16,6 +16,7 @@ import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/synced_data_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
+import 'package:smart_wallet/providers/user_prefs_provider.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
 
 //? 1] google login
@@ -65,8 +66,6 @@ Future googleLogin(BuildContext context) async {
   }
   await handleDownloadUserPhoto(context);
 
-  var profileProvider = Provider.of<ProfilesProvider>(context, listen: false);
-
   var transactionProvider =
       Provider.of<TransactionProvider>(context, listen: false);
 
@@ -85,9 +84,21 @@ Future googleLogin(BuildContext context) async {
     },
   ).show();
 
+  var profilesProvider = Provider.of<ProfilesProvider>(context, listen: false);
+  var userPrefsProvider =
+      Provider.of<UserPrefsProvider>(context, listen: false);
+  var setActivatedProfile =
+      Provider.of<UserPrefsProvider>(context, listen: false)
+          .setActivatedProfile;
+  var editLastActivatedForProfile =
+      Provider.of<ProfilesProvider>(context, listen: false)
+          .editLastActivatedForProfile;
   await Provider.of<SyncedDataProvider>(context, listen: false).getAllData(
-    profileProvider,
+    profilesProvider,
     transactionProvider,
+    userPrefsProvider,
+    setActivatedProfile,
+    editLastActivatedForProfile,
     quickActionsProvider,
     deleteAfterLoggingIn,
   );
@@ -120,7 +131,8 @@ Future<void> logOut(BuildContext context) async {
   // ).show();
 
   var profileProvider = Provider.of<ProfilesProvider>(context, listen: false);
-
+  var userPrefsProvider =
+      Provider.of<UserPrefsProvider>(context, listen: false);
   var transactionProvider =
       Provider.of<TransactionProvider>(context, listen: false);
 
@@ -136,9 +148,16 @@ Future<void> logOut(BuildContext context) async {
   }
   await handleDeleteUserPhoto(context);
 
-  await profileProvider.fetchAndUpdateProfiles();
-  await profileProvider.fetchAndUpdateActivatedProfileId();
-  String activeProfileId = profileProvider.activatedProfileId;
+  var setActivatedProfile =
+      Provider.of<UserPrefsProvider>(context, listen: false)
+          .setActivatedProfile;
+  var editLastActivatedForProfile =
+      Provider.of<ProfilesProvider>(context, listen: false)
+          .editLastActivatedForProfile;
+  await profileProvider.fetchAndUpdateProfiles(setActivatedProfile);
+  await userPrefsProvider.fetchAndUpdateActivatedProfileId(
+      profileProvider.profiles, editLastActivatedForProfile);
+  String activeProfileId = userPrefsProvider.activatedProfileId;
   await transactionProvider.fetchAndUpdateProfileTransactions(activeProfileId);
   await quickActionsProvider.fetchAndUpdateProfileQuickActions(activeProfileId);
   await transactionProvider.fetchAndUpdateAllTransactions();

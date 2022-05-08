@@ -6,6 +6,7 @@ import 'package:smart_wallet/models/debt_model.dart';
 import 'package:smart_wallet/models/quick_action_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
 import 'package:smart_wallet/providers/debts_provider.dart';
+import 'package:smart_wallet/providers/user_prefs_provider.dart';
 import 'package:smart_wallet/screens/debts_screen/widgets/choose_profile.dart';
 
 import '../constants/types.dart';
@@ -63,7 +64,7 @@ Future<void> addTransaction({
   bool added = true;
   //* here the code for adding a new transaction
   String profileId =
-      Provider.of<ProfilesProvider>(context, listen: false).activatedProfileId;
+      Provider.of<UserPrefsProvider>(context, listen: false).activatedProfileId;
 
   try {
     var debtsProvider = Provider.of<DebtsProvider>(context, listen: false);
@@ -108,7 +109,7 @@ Future<void> addQuickAction({
   required double amount,
 }) async {
   try {
-    String profileId = Provider.of<ProfilesProvider>(context, listen: false)
+    String profileId = Provider.of<UserPrefsProvider>(context, listen: false)
         .activatedProfileId;
     //* here i will add the new quick action
     await Provider.of<QuickActionsProvider>(context, listen: false)
