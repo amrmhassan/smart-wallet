@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/models/day_start_model.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
+import 'package:smart_wallet/providers/user_prefs_provider.dart';
 
 import 'summary_period_icon.dart';
 
@@ -16,17 +18,18 @@ class SammeryPeriodContainer extends StatefulWidget {
 }
 
 class _SammeryPeriodContainerState extends State<SammeryPeriodContainer> {
-  void setPeriod(TransPeriod transPeriod) {
+  void setPeriod(TransPeriod transPeriod, DayStartModel defaultDayStart) {
     Provider.of<ProfileDetailsProvider>(
       context,
       listen: false,
-    ).setPeriod(transPeriod);
+    ).setPeriod(transPeriod, defaultDayStart);
   }
 
   @override
   Widget build(BuildContext context) {
     TransPeriod currenActivePeriod =
         Provider.of<ProfileDetailsProvider>(context).currentActivePeriod;
+    final userPrefsProvider = Provider.of<UserPrefsProvider>(context);
 
     List<PeriodIcon> periodIcons = [
       const PeriodIcon(
@@ -57,7 +60,7 @@ class _SammeryPeriodContainerState extends State<SammeryPeriodContainer> {
         children: periodIcons.map((e) {
           return SummaryPeriodIcon(
             title: e.letter,
-            onTap: () => setPeriod(e.transPeriod),
+            onTap: () => setPeriod(e.transPeriod, userPrefsProvider.dayStart),
             active: currenActivePeriod == e.transPeriod,
             enabled: widget.profileAge >= e.showFrom,
           );

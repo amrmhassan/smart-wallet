@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/models/add_transaction_message_model.dart';
+import 'package:smart_wallet/models/day_start_model.dart';
 import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
@@ -76,12 +77,12 @@ class TransactionProvider extends ChangeNotifier {
   }
 
 //? getting today's outcome only
-  double get todayOutcome {
+  double todayOutcome(DayStartModel defaultDayStart) {
     TransPeriodUtils transPeriodUtils = TransPeriodUtils(
-      startDate: DateTime.now(),
-      endDate: DateTime.now(),
-      transactions: _outcomeTransactions,
-    );
+        startDate: DateTime.now(),
+        endDate: DateTime.now(),
+        transactions: _outcomeTransactions,
+        defaultDayStart: defaultDayStart);
     transPeriodUtils.setToday();
     double todayAmount =
         foldTransactions(transPeriodUtils.getTransactionsWithinPeriod());
@@ -89,12 +90,12 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   //? getting yesterday's outcome only
-  double get yesterdayOutcome {
+  double yesterdayOutcome(DayStartModel defaultDayStart) {
     TransPeriodUtils transPeriodUtils = TransPeriodUtils(
-      startDate: DateTime.now(),
-      endDate: DateTime.now(),
-      transactions: _outcomeTransactions,
-    );
+        startDate: DateTime.now(),
+        endDate: DateTime.now(),
+        transactions: _outcomeTransactions,
+        defaultDayStart: defaultDayStart);
     transPeriodUtils.setYesterday();
     double yesterdayAmount =
         foldTransactions(transPeriodUtils.getTransactionsWithinPeriod());

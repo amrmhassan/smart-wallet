@@ -1,4 +1,4 @@
-import 'package:smart_wallet/constants/globals.dart';
+import 'package:smart_wallet/models/day_start_model.dart';
 import 'package:smart_wallet/models/period_model.dart';
 
 import '../models/transaction_model.dart';
@@ -7,11 +7,13 @@ class TransPeriodUtils {
   DateTime startDate;
   DateTime endDate;
   List<TransactionModel> transactions;
+  DayStartModel defaultDayStart;
 
   TransPeriodUtils({
     required this.startDate,
     required this.endDate,
     required this.transactions,
+    required this.defaultDayStart,
   });
 
   PeriodModel setToday() {

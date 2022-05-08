@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/models/day_start_model.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
+import 'package:smart_wallet/providers/user_prefs_provider.dart';
 
 import '../../../constants/sizes.dart';
 
@@ -18,7 +20,8 @@ class DatePickerButton extends StatelessWidget {
     required this.dateType,
   }) : super(key: key);
 
-  Future<void> pickCustomDate(BuildContext context) async {
+  Future<void> pickCustomDate(
+      BuildContext context, DayStartModel defaultDayStart) async {
     DateTime firstDate = Provider.of<ProfilesProvider>(context, listen: false)
         .getActiveProfile()
         .createdAt;
@@ -36,13 +39,19 @@ class DatePickerButton extends StatelessWidget {
     //* setting the date
     if (dateType == DateTypes.startDate) {
       Provider.of<ProfileDetailsProvider>(context, listen: false)
-          .setDatesPeriod(newStartingDate: pickedDate, update: true);
+          .setDatesPeriod(
+              newStartingDate: pickedDate,
+              update: true,
+              defaultDayStart: defaultDayStart);
     } else if (dateType == DateTypes.endDate) {
       Provider.of<ProfileDetailsProvider>(context, listen: false)
-          .setDatesPeriod(newEndDate: pickedDate, update: true);
+          .setDatesPeriod(
+              newEndDate: pickedDate,
+              update: true,
+              defaultDayStart: defaultDayStart);
     }
     Provider.of<ProfileDetailsProvider>(context, listen: false)
-        .setPeriod(TransPeriod.custom);
+        .setPeriod(TransPeriod.custom, defaultDayStart);
 
     //? here setting the starting or ending date
   }
@@ -50,6 +59,7 @@ class DatePickerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
+    final userPrefsProvider = Provider.of<UserPrefsProvider>(context);
 
     DateTime rawDate = dateType == DateTypes.startDate
         ? Provider.of<ProfileDetailsProvider>(context).startingDate
@@ -57,7 +67,8 @@ class DatePickerButton extends StatelessWidget {
     String formattedDate = DateFormat('yyyy-MM-dd').format(rawDate);
 
     return GestureDetector(
-      onTap: () async => await pickCustomDate(context),
+      onTap: () async =>
+          await pickCustomDate(context, userPrefsProvider.dayStart),
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: kDefaultHorizontalPadding / 5,

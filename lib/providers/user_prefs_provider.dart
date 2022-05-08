@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/models/day_start_model.dart';
 
@@ -22,7 +21,6 @@ class UserPrefsProvider extends ChangeNotifier {
 
   void setDayStart(DayStartModel newDayStart) {
     dayStart = newDayStart;
-    defaultDayStart = newDayStart;
     notifyListeners();
   }
 }

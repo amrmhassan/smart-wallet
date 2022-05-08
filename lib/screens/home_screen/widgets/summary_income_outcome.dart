@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/types.dart';
+import 'package:smart_wallet/providers/user_prefs_provider.dart';
 import '../../../providers/transactions_provider.dart';
 
 import '../../../constants/sizes.dart';
@@ -18,6 +19,7 @@ class SummaryIncomeOutcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final transactionData = Provider.of<TransactionProvider>(context);
+    final userPrefsProvider = Provider.of<UserPrefsProvider>(context);
     return Container(
       padding: EdgeInsets.only(
           left: kDefaultHorizontalPadding,
@@ -28,7 +30,7 @@ class SummaryIncomeOutcome extends StatelessWidget {
           Expanded(
             child: ProfileSummaryElement(
               title: 'Today',
-              amount: transactionData.todayOutcome,
+              amount: transactionData.todayOutcome(userPrefsProvider.dayStart),
               transactionType: TransactionType.outcome,
               size: 20,
             ),
@@ -36,7 +38,8 @@ class SummaryIncomeOutcome extends StatelessWidget {
           Expanded(
             child: ProfileSummaryElement(
               title: 'Yesterday',
-              amount: transactionData.yesterdayOutcome,
+              amount:
+                  transactionData.yesterdayOutcome(userPrefsProvider.dayStart),
               transactionType: TransactionType.outcome,
               size: 18,
             ),

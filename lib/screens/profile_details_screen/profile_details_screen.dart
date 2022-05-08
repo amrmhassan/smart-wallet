@@ -8,6 +8,7 @@ import 'package:smart_wallet/models/quick_action_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
 import 'package:smart_wallet/providers/profile_details_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
+import 'package:smart_wallet/providers/user_prefs_provider.dart';
 import 'package:smart_wallet/screens/home_screen/widgets/background.dart';
 import 'package:smart_wallet/screens/profile_details_screen/widgets/delete_profile_icon.dart';
 import 'package:smart_wallet/screens/profile_details_screen/widgets/summary_chart.dart';
@@ -131,9 +132,12 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
         ).getProfileById(widget.profileId);
         profileTransactions = pTransactions;
       });
+      final userPrefsProvider =
+          Provider.of<UserPrefsProvider>(context, listen: false);
 
       await Provider.of<ProfileDetailsProvider>(context, listen: false)
-          .fetchTransactions(pTransactions, profile);
+          .fetchTransactions(
+              pTransactions, profile, userPrefsProvider.dayStart);
 
       profileAge = Provider.of<ProfilesProvider>(context, listen: false)
           .getProfileAgeInDays(profile);
@@ -149,7 +153,6 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // var themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: loading

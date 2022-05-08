@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
+import 'package:smart_wallet/models/day_start_model.dart';
 import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
 
@@ -35,11 +36,13 @@ class ProfileDetailsProvider extends ChangeNotifier {
   Future<void> fetchTransactions(
     List<TransactionModel> pTransactions,
     ProfileModel profile,
+    DayStartModel defaultDayStart,
   ) async {
     _setProfile(profile);
     profileTransactions = pTransactions;
 
-    fetchAndUpdateViewedTransactions(notifyListers: false);
+    fetchAndUpdateViewedTransactions(
+        notifyListers: false, defaultDayStart: defaultDayStart);
     notifyListeners();
   }
 
@@ -100,11 +103,13 @@ class ProfileDetailsProvider extends ChangeNotifier {
 //? filtering transactions according to the period selected(the current active period)
   void fetchAndUpdateViewedTransactions({
     bool notifyListers = true,
+    required DayStartModel defaultDayStart,
   }) {
     TransPeriodUtils transPeriodUtils = TransPeriodUtils(
       transactions: profileTransactions,
       startDate: startingDate,
       endDate: endDate,
+      defaultDayStart: defaultDayStart,
     );
 
     if (currentActivePeriod == TransPeriod.today) {
@@ -114,6 +119,7 @@ class ProfileDetailsProvider extends ChangeNotifier {
       setDatesPeriod(
         newStartingDate: date.startDate,
         newEndDate: date.endDate,
+        defaultDayStart: defaultDayStart,
       );
     } else if (currentActivePeriod == TransPeriod.yesterday) {
       //* for yesterday's transactions
@@ -122,6 +128,7 @@ class ProfileDetailsProvider extends ChangeNotifier {
       setDatesPeriod(
         newStartingDate: date.startDate,
         newEndDate: date.endDate,
+        defaultDayStart: defaultDayStart,
       );
     } else if (currentActivePeriod == TransPeriod.week) {
       //* for returning that week transactions
@@ -130,6 +137,7 @@ class ProfileDetailsProvider extends ChangeNotifier {
       setDatesPeriod(
         newStartingDate: date.startDate,
         newEndDate: date.endDate,
+        defaultDayStart: defaultDayStart,
       );
     } else if (currentActivePeriod == TransPeriod.month) {
       //* for returning that month transactions
@@ -138,6 +146,7 @@ class ProfileDetailsProvider extends ChangeNotifier {
       setDatesPeriod(
         newStartingDate: date.startDate,
         newEndDate: date.endDate,
+        defaultDayStart: defaultDayStart,
       );
     } else if (currentActivePeriod == TransPeriod.year) {
       //* for returning that year transactions
@@ -146,6 +155,7 @@ class ProfileDetailsProvider extends ChangeNotifier {
       setDatesPeriod(
         newStartingDate: date.startDate,
         newEndDate: date.endDate,
+        defaultDayStart: defaultDayStart,
       );
     } else if (currentActivePeriod == TransPeriod.all) {
       //* for returning that all transactions
@@ -153,6 +163,7 @@ class ProfileDetailsProvider extends ChangeNotifier {
       setDatesPeriod(
         newStartingDate: profile!.createdAt,
         newEndDate: DateTime.now(),
+        defaultDayStart: defaultDayStart,
       );
     } else {
       //* i set the period to custom to disable the period buttons if there is another period is set by the user
@@ -171,17 +182,17 @@ class ProfileDetailsProvider extends ChangeNotifier {
   }
 
 //? setting the current active period then fetching the transactions according to that period
-  void setPeriod(TransPeriod period) {
+  void setPeriod(TransPeriod period, DayStartModel defaultDayStart) {
     currentActivePeriod = period;
-    fetchAndUpdateViewedTransactions();
+    fetchAndUpdateViewedTransactions(defaultDayStart: defaultDayStart);
   }
 
 //? setting the period(custom period by the dates selectors)
-  void setDatesPeriod({
-    DateTime? newStartingDate,
-    DateTime? newEndDate,
-    bool update = false,
-  }) {
+  void setDatesPeriod(
+      {DateTime? newStartingDate,
+      DateTime? newEndDate,
+      bool update = false,
+      required DayStartModel defaultDayStart}) {
     if (newStartingDate == null && newEndDate == null) {
       CustomError.log(
         error: 'You must specify one date at least',
@@ -194,7 +205,10 @@ class ProfileDetailsProvider extends ChangeNotifier {
     if (newEndDate != null) {
       endDate = newEndDate;
     }
-    if (update) fetchAndUpdateViewedTransactions(notifyListers: false);
+    if (update) {
+      fetchAndUpdateViewedTransactions(
+          notifyListers: false, defaultDayStart: defaultDayStart);
+    }
     notifyListeners();
   }
 }

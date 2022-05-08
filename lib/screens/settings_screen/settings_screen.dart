@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/models/day_start_model.dart';
@@ -20,8 +19,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  late DayStartModel timeToView;
-
   void changeTheme() {
     //? this will toggle the theme from dark to basic and vice versa
     Themes theme =
@@ -31,12 +28,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } else {
       Provider.of<ThemeProvider>(context, listen: false).setTheme(Themes.basic);
     }
-  }
-
-  @override
-  void initState() {
-    timeToView = defaultDayStart;
-    super.initState();
   }
 
   @override
@@ -79,11 +70,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     initialTime: userPrefsProvider.dayStart,
                                   );
                                   if (timeOfDay != null) {
-                                    setState(() {
-                                      timeToView = DayStartModel(
-                                          hour: timeOfDay.hour,
-                                          minute: timeOfDay.minute);
-                                    });
+                                    userPrefsProvider.setDayStart(DayStartModel(
+                                        hour: timeOfDay.hour,
+                                        minute: timeOfDay.minute));
                                   }
                                 },
                                 child: Row(
@@ -96,7 +85,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                           ThemeTextStyles.kParagraphTextStyle),
                                     ),
                                     Text(
-                                      timeToView.toString(),
+                                      userPrefsProvider.dayStart.toString(),
                                       style: themeProvider.getTextStyle(
                                           ThemeTextStyles.kHeadingTextStyle),
                                     ),

@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
-import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
@@ -112,9 +111,6 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var profileProvider = Provider.of<ProfilesProvider>(context);
-    var transactionProvider = Provider.of<TransactionProvider>(context);
-    var quickActionsProvider = Provider.of<QuickActionsProvider>(context);
     var themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
