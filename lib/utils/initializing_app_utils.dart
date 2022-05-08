@@ -61,30 +61,22 @@ Future<void> handleInitialzingApp(BuildContext context) async {
 Future<void> fetchAndUpdatingDataFromSqlite(BuildContext context) async {
   //* 0] fetching and updating user settings
   await Provider.of<UserPrefsProvider>(context, listen: false)
-      .fetchAndSetDayStart();
+      .fetchAndSetUserSettings();
 
   //* 1]  fetching the active theme
   await Provider.of<ThemeProvider>(context, listen: false)
       .fetchAndSetActiveTheme();
 
   //* 2] fetching the profiles
-  var setActivatedProfile =
-      Provider.of<UserPrefsProvider>(context, listen: false)
-          .setActivatedProfile;
   await Provider.of<ProfilesProvider>(context, listen: false)
-      .fetchAndUpdateProfiles(setActivatedProfile, context);
+      .fetchAndUpdateProfiles(context);
 
   //* 3] fetching the active profile id
-  var editLastActivatedForProfile =
-      Provider.of<ProfilesProvider>(context, listen: false)
-          .editLastActivatedForProfile;
-  var profiles = Provider.of<ProfilesProvider>(context, listen: false).profiles;
-  Provider.of<UserPrefsProvider>(context, listen: false);
-  await Provider.of<UserPrefsProvider>(context, listen: false)
-      .fetchAndUpdateActivatedProfileId(profiles, editLastActivatedForProfile);
+  await Provider.of<ProfilesProvider>(context, listen: false)
+      .fetchAndUpdateActivatedProfileId();
 
   String activeProfileId =
-      Provider.of<UserPrefsProvider>(context, listen: false).activatedProfileId;
+      Provider.of<ProfilesProvider>(context, listen: false).activatedProfileId;
 
   //* 4] fetching the transactions from the database
   await Provider.of<TransactionProvider>(context, listen: false)
@@ -118,20 +110,9 @@ Future<void> syncDown(BuildContext context) async {
 
   //* 0] getting all the data if online, first time open the app, and logged in
   //* deleting the data
-  var userPrefsProvider =
-      Provider.of<UserPrefsProvider>(context, listen: false);
-  var setActivatedProfile =
-      Provider.of<UserPrefsProvider>(context, listen: false)
-          .setActivatedProfile;
-  var editLastActivatedForProfile =
-      Provider.of<ProfilesProvider>(context, listen: false)
-          .editLastActivatedForProfile;
   return Provider.of<SyncedDataProvider>(context, listen: false).getAllData(
     profilesProvider,
     transactionProvider,
-    userPrefsProvider,
-    setActivatedProfile,
-    editLastActivatedForProfile,
     quickActionsProvider,
   );
 }

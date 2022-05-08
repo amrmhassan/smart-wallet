@@ -14,7 +14,6 @@ import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/synced_data_provider.dart';
 import 'package:smart_wallet/providers/transactions_provider.dart';
-import 'package:smart_wallet/providers/user_prefs_provider.dart';
 import 'package:smart_wallet/screens/money_accounts_screen/widgets/custom_button.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/data_card.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/login_user_options.dart';
@@ -44,7 +43,6 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
   late TransactionProvider transactionProvider;
   late QuickActionsProvider quickActionsProvider;
   late DebtsProvider debtsProvider;
-  late UserPrefsProvider userPrefsProvider;
 
   Future syncData(BuildContext context) async {
     try {
@@ -59,7 +57,6 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
         profilesProvider,
         transactionProvider,
         quickActionsProvider,
-        userPrefsProvider,
       );
 
       setState(() {
@@ -86,7 +83,6 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
         Provider.of<QuickActionsProvider>(context, listen: false);
 
     debtsProvider = Provider.of<DebtsProvider>(context, listen: false);
-    userPrefsProvider = Provider.of<UserPrefsProvider>(context, listen: false);
   }
 
   @override

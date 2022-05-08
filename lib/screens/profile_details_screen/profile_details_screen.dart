@@ -85,7 +85,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
 //? getting the active profile data(transactions)
   Future<void> setActiveProfileData() async {
     String activeProfileId =
-        Provider.of<UserPrefsProvider>(context, listen: false)
+        Provider.of<ProfilesProvider>(context, listen: false)
             .activatedProfileId;
     List<TransactionModel> activePTransactions =
         await Provider.of<TransactionProvider>(context, listen: false)

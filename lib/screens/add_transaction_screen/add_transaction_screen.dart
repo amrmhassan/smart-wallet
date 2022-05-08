@@ -6,7 +6,6 @@ import 'package:smart_wallet/models/debt_model.dart';
 import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
-import 'package:smart_wallet/providers/user_prefs_provider.dart';
 import 'package:smart_wallet/screens/add_transaction_screen/widgets/debt_controller.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
 import '../../constants/sizes.dart';
@@ -89,12 +88,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         ? 'Empty Description'
         : _descriptionController.text.trim();
     TransactionType transactionType = currentActiveTransactionType;
-    String activatedProfileId =
-        Provider.of<UserPrefsProvider>(context, listen: false)
-            .activatedProfileId;
     ProfileModel activeProfile =
         Provider.of<ProfilesProvider>(context, listen: false)
-            .getActiveProfile(activatedProfileId);
+            .getActiveProfile();
 
     if (amount <= 0) {
       return;
@@ -217,7 +213,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         AddTransactionScreenOperations.addDebt) {
       //* setting the borrowing profile id to the active profile
       String activeProfileId =
-          Provider.of<UserPrefsProvider>(context, listen: false)
+          Provider.of<ProfilesProvider>(context, listen: false)
               .activatedProfileId;
       setState(() {
         borrowingProfileId = activeProfileId;
@@ -246,7 +242,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 
       //* 2] making the current active transaction type to be income if the current active profile total money is lower 0
       String activeProfileId =
-          Provider.of<UserPrefsProvider>(context, listen: false)
+          Provider.of<ProfilesProvider>(context, listen: false)
               .activatedProfileId;
       double currentActiveProfileTotalMoney =
           Provider.of<ProfilesProvider>(context, listen: false)

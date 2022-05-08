@@ -19,13 +19,18 @@ class ProfilesProvider extends ChangeNotifier {
   List<ProfilesData> profilesData = [];
 
   //? active profile id
-  // String _activatedProfileId = '';
+  String _activatedProfileId = '';
 
 //? need syncing profiles
   List<ProfileModel> get notSyncedProfiles {
     return _profiles
         .where((element) => element.syncFlag != SyncFlags.noSyncing)
         .toList();
+  }
+
+  //? getting the active profile id
+  String get activatedProfileId {
+    return _activatedProfileId;
   }
 
   //? getting not deleted profiles
@@ -45,7 +50,7 @@ class ProfilesProvider extends ChangeNotifier {
   }
 
   //? getting the active profile info
-  ProfileModel getActiveProfile(String activatedProfileId) {
+  ProfileModel getActiveProfile() {
     //* fixed by setting the currentActiveId when fetching profile and there is no profiles
     //* and by adding the loading to the holder screen to prevent showing the home screen that will ask for the current active id
     //* before loading them from the database
@@ -179,6 +184,25 @@ class ProfilesProvider extends ChangeNotifier {
     return diff.inDays;
   }
 
+  //? getting the active profile id from the shared preferences
+  Future<void> fetchAndUpdateActivatedProfileId() async {
+    String activatedId;
+
+    try {
+      String? savedActivatedId =
+          await SharedPrefHelper.getString(kActivatedProfileIdKey);
+      if (savedActivatedId == null) {
+        activatedId = profiles[0].id;
+        await setActivatedProfile(activatedId);
+      } else {
+        activatedId = savedActivatedId;
+      }
+      _activatedProfileId = activatedId;
+    } catch (error, stackTrace) {
+      CustomError.log(error: error, stackTrace: stackTrace);
+    }
+  }
+
 //? getting profile data by it's id
   ProfilesData getProfileDataById(String id) {
     return profilesData.firstWhere((element) => element.profileId == id);
@@ -232,14 +256,7 @@ class ProfilesProvider extends ChangeNotifier {
   }
 
   //? fetching and updating profiles from database
-  Future<void> fetchAndUpdateProfiles(
-      Future<void> Function(
-              String id,
-              Future<void> Function(String activatedProfileId)
-                  editLastActivatedForProfile,
-              [BuildContext? context])
-          setActivatedProfile,
-      [BuildContext? context]) async {
+  Future<void> fetchAndUpdateProfiles([BuildContext? context]) async {
     try {
       List<Map<String, dynamic>> data =
           await DBHelper.getData(profilesTableName);
@@ -259,7 +276,7 @@ class ProfilesProvider extends ChangeNotifier {
       //* if there is no profile yet just create the default one and add it to the _profiles
       if (isEmpty) {
         String id = await addProfile(defaultProfile.name);
-        return setActivatedProfile(id, editLastActivatedForProfile);
+        return setActivatedProfile(id);
       }
       //* getting the profiles again after adding the default profile
 
@@ -405,12 +422,12 @@ class ProfilesProvider extends ChangeNotifier {
   }
 
   //? editing the current active profile
-  Future<void> editActiveProfile(
-      {String? name,
-      double? income,
-      double? outcome,
-      DateTime? lastActivatedDate,
-      required String activatedProfileId}) async {
+  Future<void> editActiveProfile({
+    String? name,
+    double? income,
+    double? outcome,
+    DateTime? lastActivatedDate,
+  }) async {
     //* setting the active profile to the current active profile
     return editProfile(
       id: activatedProfileId,
@@ -422,8 +439,7 @@ class ProfilesProvider extends ChangeNotifier {
   }
 
   //? deleting a profile
-  Future<void> deleteProfile(
-      String profileId, String activatedProfileId) async {
+  Future<void> deleteProfile(String profileId) async {
     //* checking if the deleted profile is the active profile
     if (profileId == activatedProfileId) {
       CustomError.log(
@@ -441,14 +457,29 @@ class ProfilesProvider extends ChangeNotifier {
   }
 
   //? edit the last active property when activating a profile
-  Future<void> editLastActivatedForProfile(String activatedProfileId) async {
+  Future<void> editLastActivatedForProfile() async {
     try {
-      return editActiveProfile(
-          lastActivatedDate: DateTime.now(),
-          activatedProfileId: activatedProfileId);
+      return editActiveProfile(lastActivatedDate: DateTime.now());
     } catch (error, stackTrace) {
       CustomError.log(error: error, stackTrace: stackTrace);
     }
+  }
+
+  //? setting the active profile id
+  Future<void> setActivatedProfile(String id, [BuildContext? context]) async {
+    try {
+      await SharedPrefHelper.setString(kActivatedProfileIdKey, id);
+
+      _activatedProfileId = id;
+
+      notifyListeners();
+    } catch (error, stackTrace) {
+      CustomError.log(error: error, stackTrace: stackTrace);
+    }
+
+    //* edit the lastActivated property in the profile
+    // add that code to the first created profile
+    return editLastActivatedForProfile();
   }
 
 //? clear the active profile id from the shared preferences
