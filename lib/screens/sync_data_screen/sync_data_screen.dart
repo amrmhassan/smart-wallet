@@ -193,18 +193,10 @@ class _SyncDataScreenState extends State<SyncDataScreen> {
                                   return LoggedInUserData(
                                     online: _isOnline,
                                     user: user,
-                                    profiles: profileProvider,
-                                    transactions: transactionProvider,
-                                    quickActions: quickActionsProvider,
                                     googleLogIn: handleGoogleLogIn,
                                   );
                                 } else {
                                   return NotLoggedInUserData(
-                                    profiles: profileProvider.notSyncedProfiles,
-                                    transactions: transactionProvider
-                                        .notSyncedTransactions,
-                                    quickActions: quickActionsProvider
-                                        .notSyncedQuickActions,
                                     googleLogIn: handleGoogleLogIn,
                                     online: _isOnline,
                                   );

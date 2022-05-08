@@ -1,35 +1,56 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/sizes.dart';
-import 'package:smart_wallet/models/profile_model.dart';
-import 'package:smart_wallet/models/quick_action_model.dart';
-import 'package:smart_wallet/models/transaction_model.dart';
+import 'package:smart_wallet/providers/debts_provider.dart';
+import 'package:smart_wallet/providers/profiles_provider.dart';
+import 'package:smart_wallet/providers/quick_actions_provider.dart';
+import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/data_card.dart';
 import 'package:smart_wallet/screens/sync_data_screen/widgets/login_user_options.dart';
 
-class NotLoggedInUserData extends StatelessWidget {
+class NotLoggedInUserData extends StatefulWidget {
   final Future<void> Function() googleLogIn;
   final bool online;
   const NotLoggedInUserData({
     Key? key,
-    required this.profiles,
-    required this.transactions,
-    required this.quickActions,
     required this.googleLogIn,
     required this.online,
   }) : super(key: key);
 
-  final List<ProfileModel> profiles;
-  final List<TransactionModel> transactions;
-  final List<QuickActionModel> quickActions;
+  @override
+  State<NotLoggedInUserData> createState() => _NotLoggedInUserDataState();
+}
+
+class _NotLoggedInUserDataState extends State<NotLoggedInUserData> {
+  late ProfilesProvider profilesProvider;
+  late TransactionProvider transactionProvider;
+  late QuickActionsProvider quickActionsProvider;
+  late DebtsProvider debtsProvider;
+
+  void fetchData() {
+    profilesProvider = Provider.of<ProfilesProvider>(context, listen: false);
+    transactionProvider =
+        Provider.of<TransactionProvider>(context, listen: false);
+    quickActionsProvider =
+        Provider.of<QuickActionsProvider>(context, listen: false);
+
+    debtsProvider = Provider.of<DebtsProvider>(context, listen: false);
+  }
+
+  @override
+  void initState() {
+    fetchData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         LogInUserOptions(
-          googleLogin: () async => await googleLogIn(),
+          googleLogin: () async => await widget.googleLogIn(),
           // isOnline: online,
         ),
         SizedBox(
@@ -40,9 +61,10 @@ class NotLoggedInUserData extends StatelessWidget {
         DataCard(
           title: 'Not Synced Data',
           data: {
-            'Profiles': profiles.length,
-            'Transactions': transactions.length,
-            'Quick Actions': quickActions.length,
+            'Profiles': profilesProvider.profiles.length,
+            'Transactions': transactionProvider.transactions.length,
+            'Quick Actions': quickActionsProvider.quickActions.length,
+            'Debts': debtsProvider.debts.length,
           },
         ),
       ],

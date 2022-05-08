@@ -65,22 +65,24 @@ DONE - start implementing the welcoming screens for the normal users to use the 
 DONE - start implemeting the transaction details screen , it might be a modal that show some info about the transaction, and the user can edit the data of the transaction from that modal
 DONE - skip checking that the transaction will make the savings with minus
 DONE - implement app auto update using fire base storage
+DONE -  make the profile stats to be calculated every time
+DONE - add the debts
+DONE -  debts will add a money to a certain profile
+DONE -  when fulfilling a debt it's money will be substracted from a profile
+DONE -  adding a debt will need another screen for adding debts
+DONE -  convert choose profile screen to a modal
+DONE -  fulfill , edit, delete debts
+DONE - make the app provide advices when adding a new transaction and it is higher or take it's ratioToTotal is high
+DONE - add editing the start of the day to the settings screen 
+
 
 [Pending]
-- 1] DONE - make the app provide advices when adding a new transaction and it is higher or take it's ratioToTotal is high
-- 2] add editing the start of the day to the settings screen and handle it from the user_prefs provider
-- 3] make a user_prefs provider and add all settings to it
-- 4] make the firebase handle the user settings
-- 5] DONE -  make the profile stats to be calculated every time
-- 6] DONE - add the debts
--- DONE -  debts will add a money to a certain profile
--- DONE -  when fulfilling a debt it's money will be substracted from a profile
--- DONE -  adding a debt will need another screen for adding debts
--- DONE -  convert choose profile screen to a modal
--- DONE -  fulfill , edit, delete debts
--- sync debts to firebase
--- add a debt count for each profile
-- 7] back up the app then delete the income, outcome props from the profile model and their followers
+- make a user_prefs provider and add all settings to it
+- make the firebase handle the user settings
+- sync debts to firebase
+- add a debt count for each profile
+- back up the app then delete the income, outcome props from the profile model and their followers
+- let day start settings become from the user prefs provider not from the constant
 
 
 
@@ -114,22 +116,3 @@ after fixing the login with another email button implement the deleting without 
 [FAILD]
 FAILD - fix the problem with the user photo
 FAILD - when logging in to another user the user photo doesn's change until the user reopen the app
-
-# ------------[Start] critical changes in the app
-
-[HomeScreen] remove periods [D, W, M, Y]
-remove the income
-only show the outcome for the current day only and yesterday, the current money in the wallet
-you can also remove the yesterday outcome and only show the today outcome
-[StatisticsScreen]
-show all the details their
-simple first like income, outcome with periods (D, W, M, Y , and All)and other custom periods
-this will apply for all the statistics in the page
--first card will show the (income, outcome, total current money in the wallet) for that period
--second card will show the (current money in the wallet or income, or outcome charts)
-
-# for small periods like only one day show the details of that day with each transaction happend
-
-the default period will be one day and when setting a new period that period will be saved for the next time opening the statistics page
-
-# ------------[End] critical changes in the app

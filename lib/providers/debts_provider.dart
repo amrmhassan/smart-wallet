@@ -19,6 +19,12 @@ class DebtsProvider extends ChangeNotifier {
         .toList();
   }
 
+  List<DebtModel> get notSyncedDebts {
+    return debts
+        .where((element) => element.syncFlag != SyncFlags.noSyncing)
+        .toList();
+  }
+
   Future<void> fetchAndUpdateDebts() async {
     try {
       List<Map<String, dynamic>> data = await DBHelper.getData(debtsTableName);
