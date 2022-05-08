@@ -9,7 +9,6 @@ import 'package:smart_wallet/constants/colors.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
 import 'package:smart_wallet/helpers/db_helper.dart';
 import 'package:smart_wallet/helpers/shared_pref_helper.dart';
-import 'package:smart_wallet/providers/synced_data_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/about_app/about_app.dart';
 import 'package:smart_wallet/screens/debts_screen/debts_screen.dart';

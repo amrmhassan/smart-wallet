@@ -20,6 +20,8 @@ class UserPrefsProvider extends ChangeNotifier {
   //? setting the need syncing
   Future<void> setUserPrefsNeedSyncing(bool value) async {
     await SharedPrefHelper.setBool(kUserPrefsNeedSyncingKey, value);
+    userPrefsNeedSyncing = value;
+    notifyListeners();
   }
 
   //? fetching and setting the user prefs need syncing

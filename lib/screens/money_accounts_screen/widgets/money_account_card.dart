@@ -1,5 +1,7 @@
 //* this is the profile card
 
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +13,7 @@ import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/utils/profile_utils.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
+import 'package:smart_wallet/widgets/global/main_loading.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/profiles_constants.dart';
@@ -179,110 +182,113 @@ class _MoneyAccountCardState extends State<MoneyAccountCard> {
     var themeProvider = Provider.of<ThemeProvider>(context);
 
     //? if any confusion when clicking the card and go to the details page just remove that and make it only happen when clicking on the status circle
-    return GestureDetector(
-      onTap: () => goToProfileDetailsPage(context),
-      child: CustomCard(
-        //* these constrains are for the card holder
-        constraints: BoxConstraints(
-          minHeight: 300,
-          maxHeight: moneyAccountStatus == MoneyAccountStatus.empty ? 370 : 460,
-        ),
-        padding: const EdgeInsets.only(
-          right: kDefaultPadding / 4,
-          left: kDefaultPadding / 4,
-          top: kDefaultPadding / 2,
-          bottom: 0,
-        ),
-        margin: const EdgeInsets.only(bottom: kDefaultPadding / 2),
+    return _loading
+        ? CustomCard(child: MainLoading())
+        : GestureDetector(
+            onTap: () => goToProfileDetailsPage(context),
+            child: CustomCard(
+              //* these constrains are for the card holder
+              constraints: BoxConstraints(
+                minHeight: 300,
+                maxHeight:
+                    moneyAccountStatus == MoneyAccountStatus.empty ? 370 : 460,
+              ),
+              padding: const EdgeInsets.only(
+                right: kDefaultPadding / 4,
+                left: kDefaultPadding / 4,
+                top: kDefaultPadding / 2,
+                bottom: 0,
+              ),
+              margin: const EdgeInsets.only(bottom: kDefaultPadding / 2),
 
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            //? that was for previewing the lastActivated date on each profile card for testing
-            // Text(
-            //   profileModel.lastActivatedDate == null
-            //        ? dbFalse
-            //       : profileModel.lastActivatedDate!.toIso8601String(),
-            // ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                EditProfileButton(
-                  onTap: () async {
-                    await showEditProfileModal(context);
-                  },
-                ),
-                const SizedBox(
-                  width: kDefaultPadding / 2,
-                ),
-                ProfileDetailsButton(
-                  profileId: widget.profileModel.id,
-                  onTap: () => goToProfileDetailsPage(context),
-                ),
-              ],
-            ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  //? that was for previewing the lastActivated date on each profile card for testing
+                  // Text(
+                  //   profileModel.lastActivatedDate == null
+                  //        ? dbFalse
+                  //       : profileModel.lastActivatedDate!.toIso8601String(),
+                  // ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      EditProfileButton(
+                        onTap: () async {
+                          await showEditProfileModal(context);
+                        },
+                      ),
+                      const SizedBox(
+                        width: kDefaultPadding / 2,
+                      ),
+                      ProfileDetailsButton(
+                        profileId: widget.profileModel.id,
+                        onTap: () => goToProfileDetailsPage(context),
+                      ),
+                    ],
+                  ),
 
-            const SizedBox(
-              height: kDefaultPadding / 2,
-            ),
-            ProfileStatus(
-              moneyAccountStatus: moneyAccountStatus,
-              profileStatusColor: getStatusColor(themeProvider),
-            ),
-            const SizedBox(
-              height: kDefaultPadding / 2,
-            ),
-            FractionallySizedBox(
-              widthFactor: 0.7,
-              child: Text(
-                widget.profileModel.name,
-                style: themeProvider
-                    .getTextStyle(ThemeTextStyles.kHeadingTextStyle),
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
+                  const SizedBox(
+                    height: kDefaultPadding / 2,
+                  ),
+                  ProfileStatus(
+                    moneyAccountStatus: moneyAccountStatus,
+                    profileStatusColor: getStatusColor(themeProvider),
+                  ),
+                  const SizedBox(
+                    height: kDefaultPadding / 2,
+                  ),
+                  FractionallySizedBox(
+                    widthFactor: 0.7,
+                    child: Text(
+                      widget.profileModel.name,
+                      style: themeProvider
+                          .getTextStyle(ThemeTextStyles.kHeadingTextStyle),
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: kDefaultPadding / 2,
+                  ),
+                  // activated
+                  //     ? const ActivatedProfileButton()
+                  //     : NotActivateProfileButton(
+                  //         onTap: () async {
+                  //           await changeActivatedProfile(context);
+                  //         },
+                  //       ),
+                  CustomButton(
+                    onTap: () async {
+                      await changeActivatedProfile(context);
+                    },
+                    title: widget.activated ? 'Activated' : 'Activate',
+                    active: !widget.activated,
+                  ),
+                  SizedBox(
+                    height: moneyAccountStatus == MoneyAccountStatus.empty
+                        ? kDefaultPadding
+                        : kDefaultPadding / 2,
+                  ),
+                  if (moneyAccountStatus != MoneyAccountStatus.empty)
+                    ProfileStatusProgressBar(
+                      profileStatusColor: getStatusColor(themeProvider),
+                      incomeRatio: incomeRatio,
+                    ),
+                  if (moneyAccountStatus != MoneyAccountStatus.empty)
+                    const SizedBox(
+                      height: kDefaultPadding / 2,
+                    ),
+                  if (moneyAccountStatus != MoneyAccountStatus.empty)
+                    ProfileMoneySummary(
+                      income: income,
+                      outcome: outcome,
+                      totalMoney: totalMoney,
+                      loading: _loading,
+                    ),
+                ],
               ),
             ),
-            const SizedBox(
-              height: kDefaultPadding / 2,
-            ),
-            // activated
-            //     ? const ActivatedProfileButton()
-            //     : NotActivateProfileButton(
-            //         onTap: () async {
-            //           await changeActivatedProfile(context);
-            //         },
-            //       ),
-            CustomButton(
-              onTap: () async {
-                await changeActivatedProfile(context);
-              },
-              title: widget.activated ? 'Activated' : 'Activate',
-              active: !widget.activated,
-            ),
-            SizedBox(
-              height: moneyAccountStatus == MoneyAccountStatus.empty
-                  ? kDefaultPadding
-                  : kDefaultPadding / 2,
-            ),
-            if (moneyAccountStatus != MoneyAccountStatus.empty)
-              ProfileStatusProgressBar(
-                profileStatusColor: getStatusColor(themeProvider),
-                incomeRatio: incomeRatio,
-              ),
-            if (moneyAccountStatus != MoneyAccountStatus.empty)
-              const SizedBox(
-                height: kDefaultPadding / 2,
-              ),
-            if (moneyAccountStatus != MoneyAccountStatus.empty)
-              ProfileMoneySummary(
-                income: income,
-                outcome: outcome,
-                totalMoney: totalMoney,
-                loading: _loading,
-              ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }

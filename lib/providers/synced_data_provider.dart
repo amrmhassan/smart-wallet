@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/db_constants.dart';
 import 'package:smart_wallet/constants/types.dart';
@@ -24,11 +23,12 @@ class SyncedDataProvider extends ChangeNotifier {
     TransactionProvider transactionProvider,
     QuickActionsProvider quickActionsProvider,
     String userPrefsString,
+    BuildContext context,
   ) async {
     await syncProfiles(profilesProvider);
     await syncTransactions(transactionProvider, profilesProvider);
     await syncQuickActions(quickActionsProvider, profilesProvider);
-    await syncUserData(userPrefsString);
+    await syncUserData(userPrefsString, context);
   }
 
   //# 1] sync profiles
@@ -134,7 +134,8 @@ class SyncedDataProvider extends ChangeNotifier {
   }
 
   //# 4] sync user data
-  Future<void> syncUserData(String userPrefsString) async {
+  Future<void> syncUserData(
+      String userPrefsString, BuildContext context) async {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     var dbRef = FirebaseFirestore.instance;
     try {
@@ -142,6 +143,9 @@ class SyncedDataProvider extends ChangeNotifier {
           .collection(usersCollectionName)
           .doc(userId)
           .set({userPrefsCollectionName: userPrefsString});
+      //? make user data need syncing to be false
+      // await Provider.of<UserPrefsProvider>(context, listen: false)
+      //     .setUserPrefsNeedSyncing(false);
     } catch (error) {
       CustomError.log(error: error);
     }

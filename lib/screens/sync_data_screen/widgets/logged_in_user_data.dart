@@ -71,6 +71,7 @@ class _LoggedInUserDataState extends State<LoggedInUserData> {
         transactionProvider,
         quickActionsProvider,
         userPrefsString,
+        context,
       );
 
       setState(() {

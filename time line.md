@@ -83,6 +83,7 @@ DONE - add editing the start of the day to the settings screen
 - add a debt count for each profile
 - back up the app then delete the income, outcome props from the profile model and their followers
 - let day start settings become from the user prefs provider not from the constant
+- make the user prefs need syncing only when changing one of them , else let them be false
 
 
 
