@@ -59,7 +59,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     shrinkWrap: true,
                     children: [
                       AppearanceSettingsRow(changeTheme: changeTheme),
-                      SizedBox(height: kDefaultPadding),
+                      SizedBox(
+                        height: kDefaultPadding,
+                      ),
                       Row(
                         children: [
                           Expanded(

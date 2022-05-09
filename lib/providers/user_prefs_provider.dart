@@ -17,7 +17,8 @@ class UserPrefsProvider extends ChangeNotifier {
   DayStartModel dayStart = DayStartModel(hour: 6, minute: 0);
   String activeProfile = '';
   bool userPrefsNeedSyncing = true;
-  HomeSummaryCollection homeSummaryCollection = defaultHomeSummaryCollection;
+  // HomeSummaryCollection homeSummaryCollection = defaultHomeSummaryCollection;
+  List<HomeSummaryModel> defaultHomeSummaryList = allHomeSummaries;
 
   //? setting the need syncing
   Future<void> setUserPrefsNeedSyncing(bool value) async {

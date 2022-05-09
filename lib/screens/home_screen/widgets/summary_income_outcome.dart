@@ -18,9 +18,9 @@ class SummaryIncomeOutcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userPrefsProvider = Provider.of<UserPrefsProvider>(context);
-    var first = userPrefsProvider.homeSummaryCollection.first;
-    var second = userPrefsProvider.homeSummaryCollection.second;
-    var third = userPrefsProvider.homeSummaryCollection.third;
+    var first = userPrefsProvider.defaultHomeSummaryList[0];
+    var second = userPrefsProvider.defaultHomeSummaryList[1];
+    var third = userPrefsProvider.defaultHomeSummaryList[2];
 
     return Container(
       padding: EdgeInsets.only(
