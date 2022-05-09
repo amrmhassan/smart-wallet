@@ -17,21 +17,37 @@ class HomeSummarySettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return CustomCard(
-      child: ReorderableList(
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
-        itemBuilder: (BuildContext context, int index) {
-          return HomeSummarySettingsElement(
-            index: index,
-            key: UniqueKey(),
-          );
-        },
-        itemCount: allHomeSummaries.length,
-        onReorder: (int oldIndex, int newIndex) {
-          print(oldIndex);
-          print(newIndex);
-        },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Drag & drop to change',
+            style:
+                themeProvider.getTextStyle(ThemeTextStyles.kHeadingTextStyle),
+          ),
+          SizedBox(
+            height: kDefaultPadding,
+          ),
+          ReorderableList(
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (BuildContext context, int index) {
+              return HomeSummarySettingsElement(
+                index: index,
+                key: Key(index.toString()),
+              );
+            },
+            itemCount: allHomeSummaries.length,
+            onReorder: (int oldIndex, int newIndex) {
+              // print(oldIndex);
+              // print(newIndex);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -51,8 +67,6 @@ class HomeSummarySettingsElement extends StatelessWidget {
     return Opacity(
       opacity: index + 1 > 3 ? .5 : 1,
       child: CustomCard(
-        onTap: () {},
-        key: UniqueKey(),
         margin: EdgeInsets.only(bottom: kDefaultPadding / 2),
         border: Border.all(
           width: 1,

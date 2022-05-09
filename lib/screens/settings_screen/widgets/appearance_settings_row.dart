@@ -7,7 +7,6 @@ import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
 import 'package:smart_wallet/screens/settings_screen/widgets/look_settings_options.dart';
 import 'package:smart_wallet/screens/settings_screen/widgets/setting_element.dart';
-import 'package:smart_wallet/widgets/global/custom_card.dart';
 
 class AppearanceSettingsRow extends StatelessWidget {
   final VoidCallback changeTheme;
@@ -35,19 +34,12 @@ class AppearanceSettingsRow extends StatelessWidget {
         Expanded(
           child: SettingElement(
             onTap: () async {
+              //? this is the main modal of the look
               await showModalBottomSheet(
                   backgroundColor: Colors.transparent,
                   context: context,
                   builder: (ctx) {
-                    return CustomCard(
-                      child: ListView(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        children: [
-                          LookSettingsOptions(ctx: ctx),
-                        ],
-                      ),
-                    );
+                    return LookSettingsOptions(ctx: ctx);
                   });
             },
             iconPath: 'assets/icons/vision.png',
