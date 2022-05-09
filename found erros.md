@@ -3,4 +3,5 @@ i don't know what is it , and this happens before fetching the profiles from the
 I think this happens because somewhere in the app i forgot to add the await 
 so the app calls the getActiveProfile before fetching the profiles from the database
 
-ratio to total error
+# new error 
+after logging in and visiting the profiles page their is no profiles to view there

@@ -9,6 +9,7 @@ import 'package:smart_wallet/helpers/db_helper.dart';
 import 'package:smart_wallet/models/profile_model.dart';
 import 'package:smart_wallet/models/quick_action_model.dart';
 import 'package:smart_wallet/models/transaction_model.dart';
+import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
 import 'package:smart_wallet/providers/quick_actions_provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
@@ -280,6 +281,7 @@ class SyncedDataProvider extends ChangeNotifier {
     List<TransactionModel> transactions = await getTransactions();
     List<QuickActionModel> quickActions = await getQuickActions();
     String? userPrefs = await getUserPrefs();
+    var debtsProvider = Provider.of<DebtsProvider>(context, listen: false);
     if (userPrefs != null) {
       var setUserPrefsFromString =
           Provider.of<UserPrefsProvider>(context, listen: false)
@@ -315,6 +317,8 @@ class SyncedDataProvider extends ChangeNotifier {
         .fetchAndUpdateProfileQuickActions(activeProfileId);
     await transactionProvider.fetchAndUpdateAllTransactions();
     await quickActionsProvider.fetchAndUpdateAllQuickActions();
+
+    await profilesProvider.calcProfilesData(transactionProvider, debtsProvider);
   }
 
   Future<List<ProfileModel>> getProfiles() async {

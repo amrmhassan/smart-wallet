@@ -13,7 +13,6 @@ import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/utils/profile_utils.dart';
 import 'package:smart_wallet/widgets/global/custom_card.dart';
-import 'package:smart_wallet/widgets/global/main_loading.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/profiles_constants.dart';
@@ -155,17 +154,22 @@ class _MoneyAccountCardState extends State<MoneyAccountCard> {
     setState(() {
       _loading = true;
     });
-
-    ProfilesData profileData =
-        Provider.of<ProfilesProvider>(context, listen: false)
-            .getProfileDataById(widget.profileModel.id);
+    try {
+      ProfilesData profileData =
+          Provider.of<ProfilesProvider>(context, listen: false)
+              .getProfileDataById(widget.profileModel.id);
+      setState(() {
+        income = profileData.income;
+        outcome = profileData.outcome;
+        totalMoney = profileData.totalMoney;
+        moneyAccountStatus = profileData.moneyAccountStatus;
+        incomeRatio = profileData.incomeRatio;
+      });
+    } catch (error) {
+      CustomError.log(error: error);
+    }
 
     setState(() {
-      income = profileData.income;
-      outcome = profileData.outcome;
-      totalMoney = profileData.totalMoney;
-      moneyAccountStatus = profileData.moneyAccountStatus;
-      incomeRatio = profileData.incomeRatio;
       _loading = false;
     });
   }
@@ -183,7 +187,15 @@ class _MoneyAccountCardState extends State<MoneyAccountCard> {
 
     //? if any confusion when clicking the card and go to the details page just remove that and make it only happen when clicking on the status circle
     return _loading
-        ? CustomCard(child: MainLoading())
+        ? CustomCard(
+            width: 100,
+            height: 300,
+            child: Text(
+              'Loading',
+              style: themeProvider.getTextStyle(
+                ThemeTextStyles.kHeadingTextStyle,
+              ),
+            ))
         : GestureDetector(
             onTap: () => goToProfileDetailsPage(context),
             child: CustomCard(

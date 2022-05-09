@@ -205,7 +205,8 @@ class ProfilesProvider extends ChangeNotifier {
 
 //? getting profile data by it's id
   ProfilesData getProfileDataById(String id) {
-    return profilesData.firstWhere((element) => element.profileId == id);
+    var data = profilesData.firstWhere((element) => element.profileId == id);
+    return data;
   }
 
   MoneyAccountStatus getProfileMoneyAccountStatus(

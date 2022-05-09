@@ -11,6 +11,11 @@ class MoneyAccountsScreen extends StatefulWidget {
 }
 
 class _MoneyAccountsScreenState extends State<MoneyAccountsScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
 //* this is the build method of this widget
   @override
   Widget build(BuildContext context) {

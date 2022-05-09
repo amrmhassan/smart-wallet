@@ -74,16 +74,17 @@ DONE -  convert choose profile screen to a modal
 DONE -  fulfill , edit, delete debts
 DONE - make the app provide advices when adding a new transaction and it is higher or take it's ratioToTotal is high
 DONE - add editing the start of the day to the settings screen 
+DONE -  make a user_prefs provider and add all settings to it
+DONE - make the firebase handle the user settings
+DONE - back up the app then delete the income, outcome props from the profile model and their followers
+DONE - let day start settings become from the user prefs provider not from the constant
 
 
 [Pending]
-- make a user_prefs provider and add all settings to it
-- make the firebase handle the user settings
-- sync debts to firebase
-- add a debt count for each profile
-- back up the app then delete the income, outcome props from the profile model and their followers
-- let day start settings become from the user prefs provider not from the constant
-- make the user prefs need syncing only when changing one of them , else let them be false
+# fix the errors in the files found errors.md
+- sync debts to firebase 
+- add a debt count for each profile 
+- BAD make the user prefs need syncing only when changing one of them , else let them be false 
 
 
 
