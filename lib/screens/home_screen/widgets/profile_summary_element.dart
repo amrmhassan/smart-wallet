@@ -31,20 +31,26 @@ class ProfileSummaryElement extends StatelessWidget {
     }
   }
 
+  Color getColor(
+      TransactionType? transactionType, ThemeProvider themeProvider) {
+    return transactionType == null || transactionType == TransactionType.all
+        ? themeProvider.getThemeColor(ThemeColors.kSavingsColor)
+        : transactionType == TransactionType.income
+            ? themeProvider.getThemeColor(ThemeColors.kIncomeColor)
+            : themeProvider.getThemeColor(ThemeColors.kOutcomeColor);
+  }
+
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
           style: TextStyle(
-            color: transactionType == null
-                ? themeProvider.getThemeColor(ThemeColors.kSavingsColor)
-                : transactionType == TransactionType.income
-                    ? themeProvider.getThemeColor(ThemeColors.kIncomeColor)
-                    : themeProvider.getThemeColor(ThemeColors.kOutcomeColor),
+            color: getColor(transactionType, themeProvider),
             fontWeight: FontWeight.bold,
             fontSize: size,
           ),
@@ -54,11 +60,7 @@ class ProfileSummaryElement extends StatelessWidget {
             '${amountString(doubleToString(amount))} $currency',
             textAlign: TextAlign.right,
             style: TextStyle(
-              color: transactionType == null
-                  ? themeProvider.getThemeColor(ThemeColors.kSavingsColor)
-                  : transactionType == TransactionType.income
-                      ? themeProvider.getThemeColor(ThemeColors.kIncomeColor)
-                      : themeProvider.getThemeColor(ThemeColors.kOutcomeColor),
+              color: getColor(transactionType, themeProvider),
               fontWeight: FontWeight.bold,
               fontSize: size,
             ),

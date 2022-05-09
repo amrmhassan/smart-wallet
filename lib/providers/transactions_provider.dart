@@ -76,7 +76,7 @@ class TransactionProvider extends ChangeNotifier {
     return foldTransactions(_outcomeTransactions);
   }
 
-//? getting today's outcome only
+//? 1] getting today's outcome only
   double todayOutcome(DayStartModel defaultDayStart) {
     TransPeriodUtils transPeriodUtils = TransPeriodUtils(
         startDate: DateTime.now(),
@@ -89,7 +89,7 @@ class TransactionProvider extends ChangeNotifier {
     return todayAmount;
   }
 
-  //? getting yesterday's outcome only
+  //? 2] getting yesterday's outcome only
   double yesterdayOutcome(DayStartModel defaultDayStart) {
     TransPeriodUtils transPeriodUtils = TransPeriodUtils(
         startDate: DateTime.now(),
@@ -102,7 +102,33 @@ class TransactionProvider extends ChangeNotifier {
     return yesterdayAmount;
   }
 
-  //? getting total money for a profile, (savings)
+  //? 3] getting yesterday's outcome only
+  double todayIncome(DayStartModel defaultDayStart) {
+    TransPeriodUtils transPeriodUtils = TransPeriodUtils(
+        startDate: DateTime.now(),
+        endDate: DateTime.now(),
+        transactions: _incomeTransactions,
+        defaultDayStart: defaultDayStart);
+    transPeriodUtils.setToday();
+    double todayAmount =
+        foldTransactions(transPeriodUtils.getTransactionsWithinPeriod());
+    return todayAmount;
+  }
+
+  //? 4] getting yesterday's outcome only
+  double yesterdayIncome(DayStartModel defaultDayStart) {
+    TransPeriodUtils transPeriodUtils = TransPeriodUtils(
+        startDate: DateTime.now(),
+        endDate: DateTime.now(),
+        transactions: _incomeTransactions,
+        defaultDayStart: defaultDayStart);
+    transPeriodUtils.setYesterday();
+    double yesterdayAmount =
+        foldTransactions(transPeriodUtils.getTransactionsWithinPeriod());
+    return yesterdayAmount;
+  }
+
+  //? 5] getting total money for a profile, (savings)
   double get totalMoney {
     return totalIncome - totalOutcome;
   }

@@ -8,6 +8,7 @@ import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:smart_wallet/helpers/custom_error.dart';
 import 'package:smart_wallet/helpers/shared_pref_helper.dart';
 import 'package:smart_wallet/models/day_start_model.dart';
+import 'package:smart_wallet/models/home_summary_model.dart';
 import 'package:smart_wallet/models/synced_elements_model.dart';
 
 //? this provider is responsible for collecting the user settings to update them to the firebase
@@ -16,6 +17,7 @@ class UserPrefsProvider extends ChangeNotifier {
   DayStartModel dayStart = DayStartModel(hour: 6, minute: 0);
   String activeProfile = '';
   bool userPrefsNeedSyncing = true;
+  HomeSummaryCollection homeSummaryCollection = defaultHomeSummaryCollection;
 
   //? setting the need syncing
   Future<void> setUserPrefsNeedSyncing(bool value) async {
