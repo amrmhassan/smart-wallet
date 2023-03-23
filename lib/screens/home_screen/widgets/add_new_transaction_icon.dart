@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_wallet/constants/user_helpers_constants.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
@@ -15,6 +16,7 @@ class AddNewTransactionIcon extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Container(
+      key: addTransactionKey,
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),

@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_wallet/constants/user_helpers_constants.dart';
 import 'package:smart_wallet/constants/sizes.dart';
+import 'package:smart_wallet/providers/user_helpers_provider.dart';
 import 'package:smart_wallet/screens/home_screen/widgets/add_new_transaction_icon.dart';
 
 import '../../../widgets/global/custom_card.dart';
@@ -50,7 +53,15 @@ class ProfileSummary extends StatelessWidget {
             flex: 1,
             child: Center(
               child: AddNewTransactionIcon(
-                  onTap: () => openTransactionScreen(context)),
+                onTap: () {
+                  Provider.of<UserHelpersProvider>(context, listen: false)
+                      .setCurrentActiveKey(addQuickActionKey);
+                  Provider.of<UserHelpersProvider>(context, listen: false)
+                      .setCurrentHelperString(addQuickActionHelperString);
+
+                  openTransactionScreen(context);
+                },
+              ),
             ),
           ),
         ],

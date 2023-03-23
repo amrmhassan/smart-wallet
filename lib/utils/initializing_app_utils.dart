@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/checkers/theme_checker.dart';
 import 'package:smart_wallet/helpers/shared_pref_helper.dart';
+import 'package:smart_wallet/providers/app_state_provider.dart';
 import 'package:smart_wallet/providers/authentication_provider.dart';
 import 'package:smart_wallet/providers/debts_provider.dart';
 import 'package:smart_wallet/providers/profiles_provider.dart';
@@ -23,8 +24,11 @@ Future<void> fetchUserPhoto(BuildContext context) async {
 }
 
 //? initializing required data for the app on the first load
-Future<void> handleInitialzingApp(BuildContext context) async {
+Future<void> handleInitializingApp(BuildContext context) async {
   bool firstTimeOpenApp = await SharedPrefHelper.firstTimeRunApp();
+  Provider.of<AppStateProvider>(context, listen: false)
+      .setFirstTimeRunApp(firstTimeOpenApp);
+
   bool loggedIn =
       Provider.of<AuthenticationProvider>(context, listen: false).loggedIn();
 

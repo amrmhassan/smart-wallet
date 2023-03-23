@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_wallet/constants/globals.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
@@ -22,7 +23,7 @@ class _LoadingDataScreenState extends State<LoadingDataScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero).then((value) async {
-      await handleInitialzingApp(context);
+      await handleInitializingApp(context);
     });
   }
 

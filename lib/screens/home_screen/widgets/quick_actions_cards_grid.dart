@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart';
 import 'package:flutter_reorderable_grid_view/widgets/reorderable_builder.dart';
+import 'package:smart_wallet/constants/user_helpers_constants.dart';
 import 'package:smart_wallet/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_wallet/providers/user_helpers_provider.dart';
 import 'package:smart_wallet/screens/quick_actions_screen/quick_actions_screen.dart';
 import '../../../models/quick_action_model.dart';
 import '../../../providers/quick_actions_provider.dart';
@@ -90,11 +92,17 @@ class _QuickActionsCardsGridState extends State<QuickActionsCardsGrid> {
         ),
         child: quickActions.isEmpty
             ? Column(
+                key: addQuickActionKey,
                 children: [
                   InkWell(
                     splashColor: Colors.transparent,
                     overlayColor: MaterialStateProperty.all(Colors.transparent),
-                    onTap: () => openAddQuickActionScreen(context),
+                    onTap: () {
+                      openAddQuickActionScreen(context);
+
+                      Provider.of<UserHelpersProvider>(context, listen: false)
+                          .setActive(false);
+                    },
                     child: EmptyTransactions(
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

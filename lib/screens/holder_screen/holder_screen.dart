@@ -1,14 +1,18 @@
 //? this screen is for holding the other main screen that will be controller by the bottom nav bar
 
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_wallet/constants/globals.dart';
+import 'package:smart_wallet/constants/sizes.dart';
+import 'package:smart_wallet/global/helper_widget.dart';
+import 'package:smart_wallet/providers/app_state_provider.dart';
+import 'package:smart_wallet/providers/user_helpers_provider.dart';
 import 'package:smart_wallet/screens/holder_screen/widgets/holder_screen.dart';
 import 'package:smart_wallet/screens/money_accounts_screen/money_accounts_screen.dart';
 import 'package:smart_wallet/screens/settings_screen/settings_screen.dart';
 import 'package:smart_wallet/utils/general_utils.dart';
-import 'package:smart_wallet/utils/update_app_utils.dart';
 import 'package:smart_wallet/widgets/global/open_logging_screen.dart';
 import '../home_screen/home_screen.dart';
 import '../transactions_screen/transactions_screen.dart';
@@ -57,25 +61,24 @@ class _HolderScreenState extends State<HolderScreen> {
     }
   }
 
-  Future<void> updateApp() async {
-    bool online = await isOnline();
+  // Future<void> updateApp() async {
+  //   bool online = await isOnline();
 
-    //* checking if there is an update for the app
-    if (online) {
-      bool doUpdate = await needUpdate();
-      if (doUpdate) {
-        await updateAndInstall(context, true);
-      }
-    }
-  }
+  //   //* checking if there is an update for the app
+  //   // if (online) {
+  //   //   bool doUpdate = await needUpdate();
+  //   //   if (doUpdate) {
+  //   //     await updateAndInstall(context, true);
+  //   //   }
+  //   // }
+  // }
 
   @override
   void initState() {
     _pageController = PageController(
       initialPage: _activeBottomNavBarIndex,
     );
-    updateApp();
-
+    // updateApp();
     super.initState();
   }
 
@@ -100,6 +103,9 @@ class _HolderScreenState extends State<HolderScreen> {
 //* this is the build method of this widget
   @override
   Widget build(BuildContext context) {
+    bool firstTimeRunApp =
+        Provider.of<AppStateProvider>(context).firstTimeRunApp;
+    var helperProvider = Provider.of<UserHelpersProvider>(context);
     return Scaffold(
       key: _key,
       extendBodyBehindAppBar: true,
@@ -144,7 +150,6 @@ class _HolderScreenState extends State<HolderScreen> {
                         _key.currentState!.openDrawer();
                       } else {
                         //? this will be executed when ever the user swipes left
-
                       }
                     },
                     //! at the end remove this column , container, expanded and leave only the page viewer
@@ -152,7 +157,7 @@ class _HolderScreenState extends State<HolderScreen> {
                       children: [
                         Expanded(
                           child: PageView(
-                            //* prevented the user from scrolling by himself(to enable transactions dimissible)
+                            //* prevented the user from scrolling by himself(to enable transactions dismissible)
                             // physics: const BouncingScrollPhysics(),
                             physics: const NeverScrollableScrollPhysics(),
                             onPageChanged: (index) {
@@ -185,6 +190,21 @@ class _HolderScreenState extends State<HolderScreen> {
             setActiveBottomNavBarIcon: _setActiveNavBarIconIndex,
           ),
           if (showLoggingBanner) OpenLoggingScreen(),
+          HelperWidget(
+            show: firstTimeRunApp && helperProvider.active,
+            backgroundColor: Colors.black.withOpacity(.8),
+            widgetKey: helperProvider.currentActiveKey,
+            padding: EdgeInsets.all(5),
+            topOverlayChild: Container(
+              padding:
+                  EdgeInsets.symmetric(horizontal: kDefaultHorizontalPadding),
+              alignment: Alignment.bottomRight,
+              child: Text(
+                helperProvider.currentHelperString,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
         ],
       ),
     );

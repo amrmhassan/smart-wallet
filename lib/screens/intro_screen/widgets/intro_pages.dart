@@ -166,7 +166,7 @@ class Page1 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Keep Track Of Your Expenses!',
+            'Keep Tracking Of Your Expenses!',
             style: TextStyle(
               color: Colors.white,
               fontSize: 22,

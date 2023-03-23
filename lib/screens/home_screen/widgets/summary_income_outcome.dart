@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_wallet/models/home_summary_model.dart';
+import 'package:smart_wallet/providers/transactions_provider.dart';
 import 'package:smart_wallet/providers/user_prefs_provider.dart';
 
 import '../../../constants/sizes.dart';
@@ -17,6 +18,8 @@ class SummaryIncomeOutcome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //! don't remove this line cause it will update the profile summary after adding a new transaction
+    Provider.of<TransactionProvider>(context);
     final userPrefsProvider = Provider.of<UserPrefsProvider>(context);
     var first = userPrefsProvider.defaultHomeSummaryList[0];
     var second = userPrefsProvider.defaultHomeSummaryList[1];

@@ -10,7 +10,6 @@ import 'package:smart_wallet/constants/db_constants.dart';
 import 'package:smart_wallet/helpers/db_helper.dart';
 import 'package:smart_wallet/helpers/shared_pref_helper.dart';
 import 'package:smart_wallet/providers/theme_provider.dart';
-import 'package:smart_wallet/screens/about_app/about_app.dart';
 import 'package:smart_wallet/screens/debts_screen/debts_screen.dart';
 import 'package:smart_wallet/screens/holder_screen/holder_screen.dart';
 import 'package:smart_wallet/screens/loading_data_screen.dart';
@@ -94,14 +93,14 @@ class CustomAppDrawer extends StatelessWidget {
                       iconData: FontAwesomeIcons.bolt,
                       color: kModerateProfileStatusColor,
                     ),
-                  DrawerlistItem(
-                    title: 'About App',
-                    onTap: () async {
-                      Navigator.pushNamed(context, AboutApp.routeName);
-                    },
-                    iconData: FontAwesomeIcons.info,
-                    color: kModerateProfileStatusColor,
-                  ),
+                  // DrawerlistItem(
+                  //   title: 'About App',
+                  //   onTap: () async {
+                  //     Navigator.pushNamed(context, AboutApp.routeName);
+                  //   },
+                  //   iconData: FontAwesomeIcons.info,
+                  //   color: kModerateProfileStatusColor,
+                  // ),
                   // DrawerlistItem(
                   //   title: 'User settings',
                   //   onTap: () async {

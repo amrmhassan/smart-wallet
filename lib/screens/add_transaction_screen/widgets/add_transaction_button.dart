@@ -20,7 +20,8 @@ class AddTransactionButton extends StatelessWidget {
       height: 60,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: themeProvider.getThemeColor(ThemeColors.kMainColor)),
+            backgroundColor:
+                themeProvider.getThemeColor(ThemeColors.kMainColor)),
         onPressed: addTransaction,
         child: Text(
           saveButtonText,

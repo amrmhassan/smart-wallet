@@ -5,7 +5,7 @@ import 'package:path/path.dart' as path;
 import '../constants/db_constants.dart';
 
 class DBHelper {
-  static Future<sql.Database> database(String table) async {
+  static Future<sql.Database> database() async {
     final databasePathDir = await sql.getDatabasesPath();
 
     String finalPath = path.join(databasePathDir, dbName);
@@ -35,7 +35,7 @@ class DBHelper {
     String table,
     Map<String, dynamic> data,
   ) async {
-    final db = await DBHelper.database(table);
+    final db = await DBHelper.database();
 
     await db.insert(
       table,
@@ -46,13 +46,13 @@ class DBHelper {
   }
 
   static Future<List<Map<String, dynamic>>> getData(String table) async {
-    final db = await DBHelper.database(table);
+    final db = await DBHelper.database();
     return await db.query(table);
   }
 
   static Future<List<Map<String, dynamic>>> getDataWhere(
       String table, String check, String profileId) async {
-    final db = await DBHelper.database(table);
+    final db = await DBHelper.database();
     return db.query(table, where: '$check = ?', whereArgs: [profileId]);
   }
 
@@ -63,7 +63,7 @@ class DBHelper {
   }
 
   static Future<void> deleteById(String id, String table) async {
-    final db = await DBHelper.database(table);
+    final db = await DBHelper.database();
     return db.execute("DELETE FROM $table WHERE id='$id'");
   }
 }
