@@ -28,6 +28,7 @@ class QuickActionsCardsGrid extends StatefulWidget {
 }
 
 class _QuickActionsCardsGridState extends State<QuickActionsCardsGrid> {
+  // ScrollController scrollController = ScrollController();
   void openAddQuickActionScreen(BuildContext context) {
     var quickActions = Provider.of<QuickActionsProvider>(
       context,
@@ -131,7 +132,6 @@ class _QuickActionsCardsGridState extends State<QuickActionsCardsGrid> {
                     )
                   ],
                 ),
-                children: generatedQuickActions,
                 onReorder: (List<OrderUpdateEntity> orderUpdateEntities) async {
                   for (final orderUpdateEntity in orderUpdateEntities) {
                     //* this will run only one time on the updated quick action
@@ -149,12 +149,10 @@ class _QuickActionsCardsGridState extends State<QuickActionsCardsGrid> {
                 longPressDelay: Duration(
                   milliseconds: 200,
                 ),
-                builder: (children, scrollController) {
+                builder: (children) {
                   return GridView(
                     clipBehavior: Clip.none,
                     physics: const BouncingScrollPhysics(),
-                    controller: scrollController,
-                    children: children,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -162,8 +160,11 @@ class _QuickActionsCardsGridState extends State<QuickActionsCardsGrid> {
                       mainAxisSpacing: kDefaultPadding / 2,
                       childAspectRatio: 1,
                     ),
+                    // controller: scrollController,
+                    children: children,
                   );
                 },
+                children: generatedQuickActions,
               ),
       ),
     );

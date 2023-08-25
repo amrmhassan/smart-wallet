@@ -12,7 +12,6 @@ import 'package:smart_wallet/providers/user_helpers_provider.dart';
 import 'package:smart_wallet/screens/holder_screen/widgets/holder_screen.dart';
 import 'package:smart_wallet/screens/money_accounts_screen/money_accounts_screen.dart';
 import 'package:smart_wallet/screens/settings_screen/settings_screen.dart';
-import 'package:smart_wallet/utils/general_utils.dart';
 import 'package:smart_wallet/widgets/global/open_logging_screen.dart';
 import '../home_screen/home_screen.dart';
 import '../transactions_screen/transactions_screen.dart';
